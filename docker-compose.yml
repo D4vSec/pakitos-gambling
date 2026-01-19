@@ -1,0 +1,74 @@
+networks:
+    app-network:
+        driver: bridge
+
+services:
+    database:
+        image: postgres:15-alpine
+        container_name: postgres_db
+        environment:
+            POSTGRES_DB: ${DB_NAME}
+            POSTGRES_USER: ${DB_USER}
+            POSTGRES_PASSWORD: ${DB_PASSWORD}
+        volumes:
+            - ./docker/sql/postgres_data:/var/lib/postgresql/data:Z
+        expose:
+            - 5432
+        networks:
+            - app-network
+        restart: always
+
+    apache_frontend:
+        build:
+            context: ./docker
+            dockerfile: Dockerfile.apache
+        container_name: apache_frontend
+        volumes:
+            - ./frontend/dist:/var/www/html:ro
+            - ./docker/apache/apache2.conf:/etc/apache2/apache2.conf:ro
+            - ./docker/apache/000-default.conf:/etc/apache2/sites-enabled/000-default.conf:ro
+            - ./docker/apache/security.conf:/etc/apache2/conf-enabled/security.conf:ro
+        ports:
+            - "80:80"
+            # - "443:443" # SSL
+        depends_on:
+            - backend
+        networks:
+            - app-network
+        restart: always
+
+    backend:
+        build:
+            context: .
+            dockerfile: docker/Dockerfile.backend
+        container_name: node_backend
+        environment:
+            DB_HOST: database
+            DB_PORT: 5432
+            DB_NAME: ${DB_NAME}
+            DB_USER: ${DB_USER}
+            DB_PASSWORD: ${DB_PASSWORD}
+            JWT_SECRET: ${JWT_SECRET}
+            API_PORT: ${API_PORT}
+            CORS_ORIGIN: ${CORS_ORIGIN}
+        expose:
+            - 3000
+        depends_on:
+            - database
+        networks:
+            - app-network
+        restart: always
+
+    pgadmin:
+        image: dpage/pgadmin4
+        container_name: pgadmin
+        environment:
+            PGADMIN_DEFAULT_EMAIL: ${PG_ADMIN_USER}
+            PGADMIN_DEFAULT_PASSWORD: ${PG_ADMIN_PASSWD}
+        ports:
+            - "${PGADMIN_PORT:-5050}:80"
+        depends_on:
+            - database
+        networks:
+            - app-network
+        restart: always
