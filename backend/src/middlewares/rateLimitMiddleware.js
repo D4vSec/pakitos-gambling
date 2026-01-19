@@ -1,44 +1,44 @@
-const rateLimit = require("express-rate-limit")
-const config = require("@config/ratelimit")
+import rateLimit from "express-rate-limit"
+import rateLimitConfig from "#config/ratelimit"
 
 const authLimiter = rateLimit({
-    windowMs: config.auth.windowMs,
-    max: config.auth.max,
-    message: { error: config.auth.message },
-    standardHeaders: true,
-    legacyHeaders: false,
+	windowMs: rateLimitConfig.auth.windowMs,
+	max: rateLimitConfig.auth.max,
+	message: { error: rateLimitConfig.auth.message },
+	standardHeaders: true,
+	legacyHeaders: false,
 })
 
 const registrationLimiter = rateLimit({
-    windowMs: config.registration.windowMs,
-    max: config.registration.max,
-    message: { error: config.registration.message },
-    standardHeaders: true,
-    legacyHeaders: false,
+	windowMs: rateLimitConfig.registration.windowMs,
+	max: rateLimitConfig.registration.max,
+	message: { error: rateLimitConfig.registration.message },
+	standardHeaders: true,
+	legacyHeaders: false,
 })
 
 const gameLimiter = rateLimit({
-    windowMs: config.games.windowMs,
-    max: config.games.max,
-    message: { error: config.games.message },
-    standardHeaders: true,
-    legacyHeaders: false,
+	windowMs: rateLimitConfig.games.windowMs,
+	max: rateLimitConfig.games.max,
+	message: { error: rateLimitConfig.games.message },
+	standardHeaders: true,
+	legacyHeaders: false,
 })
 
 const historyLimiter = rateLimit({
-    windowMs: config.history.windowMs,
-    max: config.history.max,
-    message: { error: config.history.message },
-    standardHeaders: true,
-    legacyHeaders: false,
+	windowMs: rateLimitConfig.history.windowMs,
+	max: rateLimitConfig.history.max,
+	message: { error: rateLimitConfig.history.message },
+	standardHeaders: true,
+	legacyHeaders: false,
 })
 
 const globalLimiter = rateLimit({
-    windowMs: config.global.windowMs,
-    max: config.global.max,
-    message: { error: config.global.message },
-    standardHeaders: true,
-    legacyHeaders: false,
+	windowMs: rateLimitConfig.global.windowMs,
+	max: rateLimitConfig.global.max,
+	message: { error: rateLimitConfig.global.message },
+	standardHeaders: true,
+	legacyHeaders: false,
 })
 
-module.exports = { authLimiter, registrationLimiter, gameLimiter, historyLimiter, globalLimiter }
+export { authLimiter, registrationLimiter, gameLimiter, historyLimiter, globalLimiter }

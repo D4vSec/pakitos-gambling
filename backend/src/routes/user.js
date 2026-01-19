@@ -1,9 +1,9 @@
-const express = require("express")
-const router = express.Router()
+import express from "express"
+const userRoutes = express.Router()
 
-router.get("/", (req, res) => {
+userRoutes.get("/", (req, res) => {
     // TODO: Bussiness Logic, Controller
     res.status(200).json({ message: "Hello User!" })
 })
 
-module.exports = router
+export default userRoutes
