@@ -1,4 +1,4 @@
-import { comparePassword, hashPassword } from "#utils/password"
+import { hashPassword, comparePassword } from "#utils/password"
 import db from "#config/db"
 
 const createUser = async ({ username, email, password }) => {
@@ -26,10 +26,4 @@ const verifyPassword = async (hashedPassword, plainPassword) => {
     return await comparePassword(hashedPassword, plainPassword)
 }
 
-export default {
-    createUser,
-    findUserByEmail,
-    findUserById,
-    findAllUsers,
-    verifyPassword,
-}
+export default { createUser, findUserByEmail, findUserById, findAllUsers, verifyPassword }

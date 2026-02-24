@@ -24,9 +24,4 @@ const verifyTokenMatch = async (sessions, refreshToken) => {
     return null
 }
 
-export default {
-    createSession,
-    getActiveSessionsByUserId,
-    revokeSession,
-    verifyTokenMatch,
-}
+export default { createSession, getActiveSessionsByUserId, revokeSession, verifyTokenMatch }
