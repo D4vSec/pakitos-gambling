@@ -20,9 +20,9 @@ services:
             context: .
             dockerfile: docker/Dockerfile.frontend.dev
         container_name: frontend_dev
-        user: "${CURRENT_UID:-1000}:${CURRENT_GID:-1000}"
         volumes:
             - ./frontend:/app
+            - /app/node_modules
         ports:
             - "5173:5173"
         environment:
@@ -51,7 +51,7 @@ services:
             REFRESH_SECRET: ${REFRESH_SECRET}
             API_PORT: 3000
             CORS_ORIGIN: http://localhost:5173
-            CHOKIDAR_USEPOLLING: true
+            CHOKIDAR_USEPOLLING: 1
         depends_on:
             - database
         networks:
