@@ -1,14 +1,17 @@
-import db from "#config/db"
+import User from "#models/userModel"
 
 const getProfile = async (req, res) => {
     try {
-        const [rows] = await db.query("SELECT username, email FROM users WHERE id = ?", [req.user.id])
+        const user = await User.findUserById(req.user.id)
 
-        if (rows.length === 0) {
-            return res.status(404).json({ message: "User not found" })
-        }
+        if (!user) return res.status(404).json({ message: "User not found" })
 
-        res.json(rows[0])
+        res.json({
+            id: user.id,
+            username: user.username,
+            email: user.email,
+            role: user.role,
+        })
     } catch (err) {
         console.error(err)
         res.status(500).json({ message: "Server error" })
@@ -17,9 +20,8 @@ const getProfile = async (req, res) => {
 
 const getAllUsers = async (req, res) => {
     try {
-        const [rows] = await db.query("SELECT id, username, email FROM users")
-
-        res.json(rows)
+        const users = await User.findAllUsers()
+        res.json(users || [])
     } catch (err) {
         console.error(err)
         res.status(500).json({ message: "Server error" })
