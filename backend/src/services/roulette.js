@@ -1,5 +1,6 @@
 import { randomInt } from "#utils/rng"
 
+//This factory contains all the necessary functions to manage the logic of the roulette
 const createRoulette = () => {
     const twelveNumbers = [
         [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
@@ -23,6 +24,17 @@ const createRoulette = () => {
     const spinRoulette = () => randomInt(0, 37) //0-36 for numbers, 37 for 00
     const isZero = (bet) => bet === 0
     const isZeroZero = (bet) => bet === 37
+
+    //The following functions check the kind of bet the player made
+    const isNumberBet = (bet) => bet === "number"
+    const isColorBet = (bet) => bet === "red" || bet === "black"
+    const isOddBet = (bet) => bet === "odd" || bet === "even"
+    const isTwelveBet = (bet) =>
+        bet === "1-12" || bet === "13-24" || bet === "25-36"
+    const isRowBet = (bet) =>
+        bet === "row1" || bet === "row2" || bet === "row3"
+
+    //The following functions check if the bet is a winner based on the winning number
     const isNumberWinner = (bet, winningNumber) => bet === winningNumber
 
     const isColorWinner = (bet, winningNumber) => {
