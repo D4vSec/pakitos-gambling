@@ -3,7 +3,7 @@ const app = express()
 
 import { globalLimiter } from "#middlewares/rateLimitMiddleware"
 import userRoutes from "#routes/user"
-import authRoutes from "./routes/auth"
+import authRoutes from "#routes/auth"
 
 const API_VERSION = "v1"
 
