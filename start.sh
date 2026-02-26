@@ -13,7 +13,7 @@ export CURRENT_GID=$(id -g 2>/dev/null || echo 1000)
 
 if [ "$1" == "dev" ]; then
     echo "--- MODO DESARROLLO (HOT RELOAD ACTIVO) ---"
-    docker-compose -f docker-compose.dev.yml up -d --build
+    docker compose -f docker-compose.dev.yml up -d --build
 
     echo -e "\n¡Entorno de desarrollo listo!"
     echo "Frontend (Vite): http://localhost:5173"
