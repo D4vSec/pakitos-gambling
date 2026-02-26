@@ -3,6 +3,7 @@ const app = express()
 
 import { globalLimiter } from "#middlewares/rateLimitMiddleware"
 import userRoutes from "#routes/user"
+import authRoutes from "./routes/auth"
 
 const API_VERSION = "v1"
 
@@ -14,11 +15,12 @@ app.disable("x-powered-by")
 
 app.use(`/${API_VERSION}`, globalLimiter)
 app.use(`/${API_VERSION}/user`, userRoutes)
+app.use(`/${API_VERSION}/auth`, authRoutes)
 
 app.use((req, res) => {
-    res.status(404).json({
-        error: "Not Found",
-    })
+	res.status(404).json({
+		error: "Not Found",
+	})
 })
 
 export default app
