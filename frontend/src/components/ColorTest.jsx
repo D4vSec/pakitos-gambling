@@ -30,7 +30,7 @@ const ColorTest = () => {
     }
 
     return (
-        <div className="p-8 space-y-4 bg-base-100 min-h-screen">
+        <div className="p-8 space-y-4 ">
             <h1 className="text-3xl font-bold text-base-content">DaisyUI Theme Colors</h1>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {colors.map((color) => (

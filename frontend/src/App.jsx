@@ -4,7 +4,7 @@ import "./App.css"
 
 const App = () => {
     return (
-        <div className="h-full">
+        <div className="bg-base-200 w-dvw h-dvh">
             <h1>App</h1>
             <Router />
         </div>
