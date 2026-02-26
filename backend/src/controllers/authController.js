@@ -15,6 +15,9 @@ const generateTokens = (user) => {
 }
 
 const register = async (req, res) => {
+	if (!req.body)
+		return res.status(400).json({ code: "AUTH_NO_DATA_PROVIDED", message: "No data provided" })
+
 	try {
 		let { username, email, password } = req.body
 		email = email?.toLowerCase().trim()
@@ -46,6 +49,8 @@ const register = async (req, res) => {
 				code: "AUTH_EMAIL_ALREADY_REGISTERED",
 				message: "Email already registered",
 			})
+
+		console.error(err)
 		res.status(500).json({ code: "AUTH_SERVER_ERROR", message: "Server error" })
 	}
 }
