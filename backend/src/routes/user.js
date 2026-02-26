@@ -1,5 +1,5 @@
 import express from "express"
-import { getProfile, getAllUsers, deleteSelf, updateSelf } from "#controllers/userController"
+import { getProfile, getAllUsers, deleteSelf, updateSelf, getUserById, updateUserById, deleteUserById } from "#controllers/userController"
 import authMiddleware from "#middlewares/authMiddleware"
 import adminMiddleware from "#middlewares/adminMiddleware"
 
@@ -10,8 +10,8 @@ userRoutes.put("/me", authMiddleware, updateSelf)
 userRoutes.delete("/me", authMiddleware, deleteSelf)
 
 userRoutes.get("/", authMiddleware, adminMiddleware, getAllUsers)
-userRoutes.get("/:id", authMiddleware, adminMiddleware)
-userRoutes.put("/:id", authMiddleware, adminMiddleware)
-userRoutes.delete("/:id", authMiddleware, adminMiddleware)
+userRoutes.get("/:id", authMiddleware, adminMiddleware, getUserById)
+userRoutes.put("/:id", authMiddleware, adminMiddleware, updateUserById)
+userRoutes.delete("/:id", authMiddleware, adminMiddleware, deleteUserById)
 
 export default userRoutes

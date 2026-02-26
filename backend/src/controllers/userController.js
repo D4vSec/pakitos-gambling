@@ -1,5 +1,6 @@
 import User from "#models/userModel"
 import * as z from "zod"
+import { hashPassword } from "#utils/password"
 
 const getProfile = async (req, res) => {
 	try {
@@ -59,6 +60,11 @@ const updateSelf = async (req, res) => {
 			.strict()
 
 		const data = schema.parse(req.body)
+
+		if (data.password) {
+			data.password = await hashPassword(data.password)
+		}
+
 		const updated = await User.updateUser(userId, data)
 
 		if (!updated)
@@ -76,4 +82,69 @@ const updateSelf = async (req, res) => {
 	}
 }
 
-export { getProfile, getAllUsers, deleteSelf, updateSelf }
+const getUserById = async (req, res) => {
+	try {
+		const { id } = req.params
+		const user = await User.findUserById(id)
+
+		if (!user) return res.status(404).json({ message: "User not found" })
+
+		res.json({ id: user.id, username: user.username, email: user.email, role: user.role })
+	} catch (err) {
+		console.error(err)
+		res.status(500).json({ message: "Server error" })
+	}
+}
+
+const updateUserById = async (req, res) => {
+	try {
+		const { id } = req.params
+
+		const schema = z
+			.object({
+				username: z.string().min(3).max(50).optional(),
+				email: z.string().email().optional(),
+				password: z.string().min(8).optional(),
+				role: z.enum(["user", "admin"]).optional(),
+			})
+			.strict()
+
+		const data = schema.parse(req.body)
+
+		if (data.password) {
+			data.password = await hashPassword(data.password)
+		}
+
+		const updated = await User.updateUser(id, data)
+
+		if (!updated)
+			return res
+				.status(404)
+				.json({ status: "error", message: "User not found or update failed" })
+
+		res.status(200).json({ message: "success" })
+	} catch (err) {
+		if (err instanceof z.ZodError) {
+			return res.status(400).json({ status: "error", errors: err.errors })
+		}
+		console.error(err)
+		res.status(500).json({ status: "error", message: "Server error" })
+	}
+}
+
+const deleteUserById = async (req, res) => {
+	try {
+		const { id } = req.params
+		const deleted = await User.deleteUser(id)
+
+		if (!deleted)
+			return res.status(404).json({ status: "error", message: "User not found or already deleted" })
+
+		res.status(204).send()
+	} catch (err) {
+		console.error(err)
+		res.status(500).json({ status: "error", message: "Server error" })
+	}
+}
+
+export { getProfile, getAllUsers, deleteSelf, updateSelf, getUserById, updateUserById, deleteUserById }
