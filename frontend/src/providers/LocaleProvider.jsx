@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react"
+import React, { createContext, useContext, useEffect, useState } from "react"
 
 const LocaleContext = createContext()
 
@@ -28,6 +28,10 @@ export const LocaleProvider = ({ children }) => {
         })
         return text
     }
+
+    useEffect(() => {
+        loadLocale("en")
+    }, [])
 
     return <LocaleContext value={{ t, loadLocale, loading }}>{children}</LocaleContext>
 }

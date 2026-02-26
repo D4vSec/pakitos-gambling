@@ -1,4 +1,9 @@
 {
     "admin": {},
-    "user": {}
+    "user": {},
+    "general": {
+        "navbar": {
+            "home": "Home"
+        }
+    }
 }

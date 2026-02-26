@@ -1,0 +1,6 @@
+@import "tailwindcss";
+@tailwind utilities;
+
+:root {
+    font-family: sans-serif;
+}

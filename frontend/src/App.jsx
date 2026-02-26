@@ -1,11 +1,12 @@
 import React from "react"
 import Router from "./router/Router"
+import Navbar from "./components/layout/Navbar"
 import "./App.css"
 
 const App = () => {
     return (
-        <div className="bg-base-200 w-dvw h-dvh">
-            <h1>App</h1>
+        <div data-theme="mytheme" className="bg-base-200 w-dvw h-dvh">
+            <Navbar />
             <Router />
         </div>
     )
