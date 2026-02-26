@@ -31,8 +31,7 @@ const createRoulette = () => {
     const isOddBet = (bet) => bet === "odd" || bet === "even"
     const isTwelveBet = (bet) =>
         bet === "1-12" || bet === "13-24" || bet === "25-36"
-    const isRowBet = (bet) =>
-        bet === "row1" || bet === "row2" || bet === "row3"
+    const isRowBet = (bet) => bet === "row1" || bet === "row2" || bet === "row3"
 
     //The following functions check if the bet is a winner based on the winning number
     const isNumberWinner = (bet, winningNumber) => bet === winningNumber
@@ -74,6 +73,11 @@ const createRoulette = () => {
         isOddWinner,
         isTwelveWinner,
         isRowWinner,
+        isNumberBet,
+        isColorBet,
+        isOddBet,
+        isTwelveBet,
+        isRowBet,
     }
 }
 
