@@ -20,9 +20,13 @@ const register = async (req, res) => {
 		email = email?.toLowerCase().trim()
 
 		const registerSchema = z.object({
-			username: z.string().min(3, { message: "Invalid username" }),
-			email: z.string().email({ message: "Invalid email" }),
-			password: z.string().min(8, { message: "Password too short" }),
+			username: z
+				.string()
+				.min(3, { code: "AUTH_INVALID_USERNAME", message: "Invalid username" }),
+			email: z.string().email({ code: "AUTH_INVALID_EMAIL", message: "Invalid email" }),
+			password: z
+				.string()
+				.min(8, { code: "AUTH_PASSWORD_TOO_SHORT", message: "Password too short" }),
 		})
 
 		const result = registerSchema.safeParse({ username, email, password })
@@ -32,11 +36,17 @@ const register = async (req, res) => {
 		}
 
 		await User.createUser({ username, email, password })
-		res.status(201).json({ message: "User registered successfully" })
+		res.status(201).json({
+			code: "AUTH_USER_REGISTERED",
+			message: "User registered successfully",
+		})
 	} catch (err) {
 		if (err.code === "ER_DUP_ENTRY")
-			return res.status(409).json({ message: "Email already registered" })
-		res.status(500).json({ message: "Server error" })
+			return res.status(409).json({
+				code: "AUTH_EMAIL_ALREADY_REGISTERED",
+				message: "Email already registered",
+			})
+		res.status(500).json({ code: "AUTH_SERVER_ERROR", message: "Server error" })
 	}
 }
 
@@ -45,7 +55,9 @@ const login = async (req, res) => {
 	try {
 		const user = await User.findUserByEmail(email)
 		if (!user || !(await User.verifyPassword(user.password, password))) {
-			return res.status(401).json({ message: "Invalid credentials" })
+			return res
+				.status(401)
+				.json({ code: "AUTH_INVALID_CREDENTIALS", message: "Invalid credentials" })
 		}
 
 		const tokens = generateTokens(user)
@@ -58,7 +70,10 @@ const login = async (req, res) => {
 
 const refresh = async (req, res) => {
 	const { refreshToken } = req.body
-	if (!refreshToken) return res.status(401).json({ message: "No token provided" })
+	if (!refreshToken)
+		return res
+			.status(401)
+			.json({ code: "AUTH_NO_TOKEN_PROVIDED", message: "No token provided" })
 
 	try {
 		const decoded = jwt.verify(refreshToken, refreshSecret)
@@ -66,7 +81,9 @@ const refresh = async (req, res) => {
 		const validSession = await Session.verifyTokenMatch(sessions, refreshToken)
 
 		if (!validSession || new Date(validSession.expires_at) < new Date()) {
-			return res.status(401).json({ message: "Invalid or expired session" })
+			return res
+				.status(401)
+				.json({ code: "AUTH_INVALID_SESSION", message: "Invalid or expired session" })
 		}
 
 		await Session.revokeSession(validSession.id)
@@ -76,7 +93,10 @@ const refresh = async (req, res) => {
 
 		res.json(tokens)
 	} catch (err) {
-		res.status(401).json({ message: "Invalid refresh token" })
+		res.status(401).json({
+			code: "AUTH_INVALID_REFRESH_TOKEN",
+			message: "Invalid refresh token",
+		})
 	}
 }
 

@@ -6,7 +6,8 @@ const getProfile = async (req, res) => {
 	try {
 		const user = await User.findUserById(req.user.id)
 
-		if (!user) return res.status(404).json({ message: "User not found" })
+		if (!user)
+			return res.status(404).json({ code: "USER_NOT_FOUND", message: "User not found" })
 
 		res.json({
 			id: user.id,
@@ -38,12 +39,12 @@ const deleteSelf = async (req, res) => {
 		if (!deleted)
 			return res
 				.status(404)
-				.json({ status: "error", message: "User not found or already deleted" })
+				.json({ code: "USER_NOT_FOUND", message: "User not found or already deleted" })
 
 		res.status(204).send()
 	} catch (err) {
 		console.error(err)
-		res.status(500).json({ status: "error", message: "Server error" })
+		res.status(500).json({ message: "Server error" })
 	}
 }
 
@@ -70,15 +71,15 @@ const updateSelf = async (req, res) => {
 		if (!updated)
 			return res
 				.status(404)
-				.json({ status: "error", message: "User not found or update failed" })
+				.json({ code: "USER_NOT_FOUND", message: "User not found or update failed" })
 
 		res.status(200).json({ message: "success" })
 	} catch (err) {
 		if (err instanceof z.ZodError) {
-			return res.status(400).json({ status: "error", errors: err.errors })
+			return res.status(400).json({ errors: err.errors })
 		}
 		console.error(err)
-		res.status(500).json({ status: "error", message: "Server error" })
+		res.status(500).json({ message: "Server error" })
 	}
 }
 
@@ -87,7 +88,8 @@ const getUserById = async (req, res) => {
 		const { id } = req.params
 		const user = await User.findUserById(id)
 
-		if (!user) return res.status(404).json({ message: "User not found" })
+		if (!user)
+			return res.status(404).json({ code: "USER_NOT_FOUND", message: "User not found" })
 
 		res.json({ id: user.id, username: user.username, email: user.email, role: user.role })
 	} catch (err) {
@@ -120,15 +122,15 @@ const updateUserById = async (req, res) => {
 		if (!updated)
 			return res
 				.status(404)
-				.json({ status: "error", message: "User not found or update failed" })
+				.json({ code: "USER_NOT_FOUND", message: "User not found or update failed" })
 
 		res.status(200).json({ message: "success" })
 	} catch (err) {
 		if (err instanceof z.ZodError) {
-			return res.status(400).json({ status: "error", errors: err.errors })
+			return res.status(400).json({ errors: err.errors })
 		}
 		console.error(err)
-		res.status(500).json({ status: "error", message: "Server error" })
+		res.status(500).json({ message: "Server error" })
 	}
 }
 
@@ -137,14 +139,21 @@ const deleteUserById = async (req, res) => {
 		const { id } = req.params
 		const deleted = await User.deleteUser(id)
 
-		if (!deleted)
-			return res.status(404).json({ status: "error", message: "User not found or already deleted" })
+		if (!deleted) return res.status(404).json({ message: "User not found or already deleted" })
 
 		res.status(204).send()
 	} catch (err) {
 		console.error(err)
-		res.status(500).json({ status: "error", message: "Server error" })
+		res.status(500).json({ message: "Server error" })
 	}
 }
 
-export { getProfile, getAllUsers, deleteSelf, updateSelf, getUserById, updateUserById, deleteUserById }
+export {
+	getProfile,
+	getAllUsers,
+	deleteSelf,
+	updateSelf,
+	getUserById,
+	updateUserById,
+	deleteUserById,
+}
