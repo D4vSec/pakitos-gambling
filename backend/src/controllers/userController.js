@@ -14,6 +14,7 @@ const getProfile = async (req, res) => {
 			username: user.username,
 			email: user.email,
 			role: user.role,
+			balance: user.balance,
 		})
 	} catch (err) {
 		console.error(err)
@@ -91,7 +92,13 @@ const getUserById = async (req, res) => {
 		if (!user)
 			return res.status(404).json({ code: "USER_NOT_FOUND", message: "User not found" })
 
-		res.json({ id: user.id, username: user.username, email: user.email, role: user.role })
+		res.json({
+			id: user.id,
+			username: user.username,
+			email: user.email,
+			role: user.role,
+			balance: user.balance,
+		})
 	} catch (err) {
 		console.error(err)
 		res.status(500).json({ message: "Server error" })
