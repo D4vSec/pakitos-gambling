@@ -3,6 +3,7 @@ import Stats from "../components/landingPage/Stats";
 import HeroSection from "../components/landingPage/HeroSection";
 import CTA from "../components/landingPage/CTA";
 import ImagesGrid from "../components/landingPage/ImagesGrid";
+import Features from "../components/landingPage/Features";
 
 const LandingPage = () => {
   return (
@@ -22,6 +23,7 @@ const LandingPage = () => {
           </p>
         </div>
         {/*Features Grid*/}
+        <Features/>
 
       </section>
 
