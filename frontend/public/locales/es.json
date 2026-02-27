@@ -3,7 +3,20 @@
     "user": {},
     "general": {
         "navbar": {
-            "home": "Inicio"
-        }
+            "menu": "Menú",
+            "home": "Inicio",
+            "allGames": "Todos los juegos",
+            "favourites": "Favoritos",
+            "login": "Iniciar sesión",
+            "register": "Registrarse",
+            "userPill": {
+                "guest": "Invitado",
+                "settings": "Configuración de usuario",
+                "coupon": "Introducir cupón",
+                "logout": "Cerrar sesión"
+            }
+        },
+            "copyright": "Todos los derechos reservados a la Mafia del Fondo"
+
     }
 }

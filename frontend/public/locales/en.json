@@ -3,7 +3,19 @@
     "user": {},
     "general": {
         "navbar": {
-            "home": "Home"
-        }
+            "menu": "Menu",
+            "home": "Home",
+            "allGames": "All Games",
+            "favourites": "Favourites",
+            "login": "Sign In",
+            "register": "Sign Up",
+            "userPill": {
+                "guest": "Guest",
+                "settings": "User Settings",
+                "coupon": "Enter Coupon",
+                "logout": "Logout"
+            }
+        },
+        "copyright": "All right reserved by The Mafia at the Back"
     }
 }

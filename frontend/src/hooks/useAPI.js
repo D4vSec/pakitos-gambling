@@ -1,1 +1,53 @@
 "use strict"
+
+import { useState } from "react"
+
+const useAPI = () => {
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState(null)
+
+    const isPayloadMethod = (method) => ["POST", "PUT", "PATCH"].includes(method.toUpperCase())
+    const isMethodValid = (method) =>
+        ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"].includes(method.toUpperCase())
+
+    const request = async (url, options = {}) => {
+        setLoading(true)
+        setError(null)
+
+        try {
+            if (!options.method || !isMethodValid(options.method)) {
+                throw new Error("Método invalido o no especificado")
+            }
+
+            const response = await fetch(url, {
+                method: options.method,
+                headers: {
+                    ...(isPayloadMethod(options.method) && { "Content-Type": "application/json" }),
+                    ...options.headers,
+                },
+                ...(isPayloadMethod(options.method) && {
+                    body: options.body ? JSON.stringify(options.body) : undefined,
+                }),
+            })
+
+            if (!response.ok) throw new Error(response.status)
+
+            return await response.json()
+        } catch (error) {
+            setError(error.message || "Ocurrió un error al conectar con el servidor")
+            throw error
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const get = async (url) => await request(url, { method: "GET" })
+    const post = async (url, body) => await request(url, { method: "POST", body: body })
+    const put = async (url, body) => await request(url, { method: "PUT", body: body })
+    const patch = async (url, body) => await request(url, { method: "PATCH", body: body })
+    const destroy = async (url) => await request(url, { method: "DELETE" })
+
+    return { get, post, put, patch, destroy, loading, error }
+}
+
+export default useAPI
