@@ -24,12 +24,15 @@ const findUserByEmail = async (email) => {
 }
 
 const findUserById = async (id) => {
-	const result = await db.query("SELECT id, username, email, role FROM users WHERE id = $1", [id])
+	const result = await db.query(
+		"SELECT id, username, email, role, balance FROM users WHERE id = $1",
+		[id],
+	)
 	return result.rows[0] || null
 }
 
 const findAllUsers = async () => {
-	const result = await db.query("SELECT id, username, email, role FROM users")
+	const result = await db.query("SELECT id, username, email, role, balance FROM users")
 	return result.rows
 }
 
