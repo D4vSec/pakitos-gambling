@@ -8,7 +8,7 @@ import Session from "#models/sessionModel"
 const { secret, refreshSecret, accessExpiresIn, refreshExpiresIn } = jwtConfig
 
 const generateTokens = (user) => {
-	const payload = { id: user.id, role: user.role }
+	const payload = { id: user.id }
 	const accessToken = jwt.sign(payload, secret, { expiresIn: accessExpiresIn })
 	const refreshToken = jwt.sign(payload, refreshSecret, { expiresIn: refreshExpiresIn })
 	return { accessToken, refreshToken }
