@@ -20,7 +20,12 @@ const authMiddleware = async (req, res, next) => {
 
 	try {
 		const decoded = jwt.verify(accessToken, secret)
-		req.user = decoded
+		const user = await User.findUserById(decoded.id)
+		if (!user) {
+			return res.status(401).json({ code: "AUTH_INVALID_TOKEN", message: "Invalid token" })
+		}
+
+		req.user = { id: user.id, role: user.role }
 		return next()
 	} catch (err) {
 		if (err.name === "TokenExpiredError") {

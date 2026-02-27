@@ -8,7 +8,7 @@ import Session from "#models/sessionModel"
 const { secret, refreshSecret, accessExpiresIn, refreshExpiresIn } = jwtConfig
 
 const generateTokens = (user) => {
-	const payload = { id: user.id, role: user.role }
+	const payload = { id: user.id }
 	const accessToken = jwt.sign(payload, secret, { expiresIn: accessExpiresIn })
 	const refreshToken = jwt.sign(payload, refreshSecret, { expiresIn: refreshExpiresIn })
 	return { accessToken, refreshToken }
@@ -20,31 +20,42 @@ const register = async (req, res) => {
 
 	try {
 		let { username, email, password } = req.body
+
+		if (!username || !email || !password)
+			return res.status(400).json({
+				code: "AUTH_MISSING_FIELDS",
+				message: "Username, email, and password are required",
+			})
+
 		email = email?.toLowerCase().trim()
 
 		const registerSchema = z.object({
-			username: z
-				.string()
-				.min(3, { code: "AUTH_INVALID_USERNAME", message: "Invalid username" }),
-			email: z.string().email({ code: "AUTH_INVALID_EMAIL", message: "Invalid email" }),
-			password: z
-				.string()
-				.min(8, { code: "AUTH_PASSWORD_TOO_SHORT", message: "Password too short" }),
+			username: z.string().min(3, { message: "Invalid username" }),
+			email: z.string().email({ message: "Invalid email" }),
+			password: z.string().min(8, { message: "Password too short" }),
 		})
 
 		const result = registerSchema.safeParse({ username, email, password })
 		if (!result.success) {
-			const message = result.error.errors[0]?.message || "Invalid input"
-			return res.status(400).json({ message })
+			const issue = result.error.issues[0]
+			const path = issue.path && issue.path.length ? issue.path[0] : null
+
+			let code = "AUTH_INVALID_INPUT"
+			if (path === "username") code = "AUTH_INVALID_USERNAME"
+			if (path === "email") code = "AUTH_INVALID_EMAIL"
+			if (path === "password") code = "AUTH_PASSWORD_TOO_SHORT"
+
+			return res.status(400).json({ code, message: issue.message })
 		}
 
 		await User.createUser({ username, email, password })
+
 		res.status(201).json({
 			code: "AUTH_USER_REGISTERED",
 			message: "User registered successfully",
 		})
 	} catch (err) {
-		if (err.code === "ER_DUP_ENTRY")
+		if (err && (err.code === "ER_DUP_ENTRY" || err.code === "23505"))
 			return res.status(409).json({
 				code: "AUTH_EMAIL_ALREADY_REGISTERED",
 				message: "Email already registered",
@@ -56,7 +67,17 @@ const register = async (req, res) => {
 }
 
 const login = async (req, res) => {
+	if (!req.body)
+		return res.status(400).json({ code: "AUTH_NO_DATA_PROVIDED", message: "No data provided" })
+
 	const { email, password } = req.body
+
+	if (!email || !password)
+		return res.status(400).json({
+			code: "AUTH_MISSING_FIELDS",
+			message: "Email, and password are required",
+		})
+
 	try {
 		const user = await User.findUserByEmail(email)
 		if (!user || !(await User.verifyPassword(user.password, password))) {

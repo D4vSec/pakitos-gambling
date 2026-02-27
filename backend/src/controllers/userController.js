@@ -14,6 +14,7 @@ const getProfile = async (req, res) => {
 			username: user.username,
 			email: user.email,
 			role: user.role,
+			balance: user.balance,
 		})
 	} catch (err) {
 		console.error(err)
@@ -91,7 +92,13 @@ const getUserById = async (req, res) => {
 		if (!user)
 			return res.status(404).json({ code: "USER_NOT_FOUND", message: "User not found" })
 
-		res.json({ id: user.id, username: user.username, email: user.email, role: user.role })
+		res.json({
+			id: user.id,
+			username: user.username,
+			email: user.email,
+			role: user.role,
+			balance: user.balance,
+		})
 	} catch (err) {
 		console.error(err)
 		res.status(500).json({ message: "Server error" })
@@ -151,6 +158,125 @@ const deleteUserById = async (req, res) => {
 	}
 }
 
+const getSelfBalance = async (req, res) => {
+	try {
+		const userId = req.user.id
+		const balance = await User.getUserBalance(userId)
+
+		if (balance === null)
+			return res.status(404).json({ code: "USER_NOT_FOUND", message: "User not found" })
+
+		res.json({ balance })
+	} catch (err) {
+		console.error(err)
+		res.status(500).json({ message: "Server error" })
+	}
+}
+
+const getTransactions = async (req, res) => {
+	try {
+		const schema = z
+			.object({
+				page: z.preprocess((v) => parseInt(v, 10), z.number().int().positive()).optional(),
+				limit: z.preprocess((v) => parseInt(v, 10), z.number().int().positive()).optional(),
+			})
+			.strict()
+
+		const { page = 1, limit = 20 } = schema.parse(req.query)
+
+		const txs = await User.findTransactionsByUser(req.user.id, page, limit)
+		res.json({ page, limit, transactions: txs })
+	} catch (err) {
+		if (err instanceof z.ZodError) return res.status(400).json({ errors: err.errors })
+		console.error(err)
+		res.status(500).json({ message: "Server error" })
+	}
+}
+
+const createTransaction = async (req, res) => {
+	try {
+		const schema = z
+			.object({
+				type: z.enum(["deposit", "withdrawal"]),
+				amount: z.number().positive(),
+			})
+			.strict()
+
+		if (!req.body || Object.keys(req.body).length === 0) {
+			return res.status(400).json({
+				code: "INVALID_TRANSACTION_DATA",
+				message: "Type (deposit/withdrawal) and amount are required",
+			})
+		}
+
+		const parseResult = schema.safeParse(req.body)
+		if (!parseResult.success) {
+			return res.status(400).json({
+				code: "INVALID_TRANSACTION_DATA",
+				message: "Type (deposit/withdrawal) and amount are required",
+				errors: parseResult.error.issues,
+			})
+		}
+
+		const { type, amount } = parseResult.data
+
+		if (!type || !amount)
+			return res.status(400).json({
+				code: "INVALID_TRANSACTION_DATA",
+				message: "Type (deposit/withdrawal) and amount are required",
+			})
+
+		const userId = req.user.id
+
+		const user = await User.findUserById(userId)
+		if (!user)
+			return res.status(404).json({ code: "USER_NOT_FOUND", message: "User not found" })
+
+		const signedAmount = type === "deposit" ? amount : -amount
+		const newBalance = await User.updateUserBalance(userId, signedAmount)
+
+		if (newBalance === null) {
+			if (type === "withdrawal") {
+				return res
+					.status(400)
+					.json({ code: "INSUFFICIENT_FUNDS", message: "Insufficient funds" })
+			}
+			return res.status(500).json({ message: "Failed to update balance" })
+		}
+
+		res.status(200).json({ balance: newBalance })
+	} catch (err) {
+		if (err instanceof z.ZodError) return res.status(400).json({ errors: err.errors })
+		console.error(err)
+		res.status(500).json({ message: "Server error" })
+	}
+}
+
+const getTransactionsByUserId = async (req, res) => {
+	try {
+		const { id } = req.params
+		const schema = z
+			.object({
+				page: z.preprocess((v) => parseInt(v, 10), z.number().int().positive()).optional(),
+				limit: z.preprocess((v) => parseInt(v, 10), z.number().int().positive()).optional(),
+			})
+			.strict()
+
+		const { page = 1, limit = 20 } = schema.parse(req.query)
+
+		const user = await User.findUserById(id)
+		if (!user)
+			return res.status(404).json({ code: "USER_NOT_FOUND", message: "User not found" })
+
+		const txs = await User.findTransactionsByUser(id, page, limit)
+		res.json({ page, limit, transactions: txs })
+	} catch (err) {
+		if (err instanceof z.ZodError) return res.status(400).json({ errors: err.errors })
+		console.error(err)
+		res.status(500).json({ message: "Server error" })
+	}
+}
+
 export {
 	getProfile,
 	getAllUsers,
@@ -159,4 +285,8 @@ export {
 	getUserById,
 	updateUserById,
 	deleteUserById,
+	getSelfBalance,
+	getTransactions,
+	createTransaction,
+	getTransactionsByUserId,
 }
