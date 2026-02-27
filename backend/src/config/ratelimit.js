@@ -1,13 +1,13 @@
 const rateLimitConfig = {
 	auth: {
 		windowMs: 15 * 60 * 1000,
-		max: 5,
+		max: 10,
 		message:
 			"Has excedido el número de intentos de inicio de sesión. Por favor, espera un momento antes de volver a intentarlo.",
 	},
 	registration: {
 		windowMs: 60 * 60 * 1000,
-		max: 3,
+		max: 10,
 		message: "Has alcanzado el límite de creación de cuentas. Intenta registrarte más tarde.",
 	},
 	games: {
