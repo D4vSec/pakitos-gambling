@@ -30,7 +30,11 @@ const createBlackJack = () => {
     }
 
     const shuffleDeck = (deck) => {
-        //TODO: Implement Fisher Yates algorithm
+        for (let i = deck.length - 1; i > 0; i--) {
+            const j = randomInt(0, i + 1)
+            ;[deck[i], deck[j]] = [deck[j], deck[i]]
+        }
+        return deck
     }
 
     const calculateHandValue = (hand) => {
@@ -42,7 +46,7 @@ const createBlackJack = () => {
                 aceCount += 1
                 value += 11
             }
-            if (card.rank === "J" || "Q" || "K") value += 10
+            if (["J", "Q", "K"].includes(card.rank)) value += 10
             value = parseInt(card.rank)
         }
         //Due the ace value can be 1 or 11 if the value exceed 21 it will count as 1 instead of 11
@@ -54,7 +58,7 @@ const createBlackJack = () => {
         return value
     }
 
-    //Dealer logic
+    //First two cards for player and dealer
     const getInitialHand = (deck) => {
         let hand = []
         for (let i = 0; i < 2; i++) {
@@ -64,13 +68,13 @@ const createBlackJack = () => {
         return hand
     }
 
+    //Player decisions
     const hit = (deck, hand) => {
         hand = [...hand, deck[0]]
         deck.shift()
+        return hand
     }
-    return hand
 
-    //Player decisions
     const stand = (playerPlaying) => (playerPlaying = false)
 
     const double = (deck, hand, playerPlaying) => {
@@ -87,6 +91,23 @@ const createBlackJack = () => {
 
     const surrender = (playerPlaying) => (playerPlaying = false)
 
+    //Dealer logic
+    const dealerPlay = (deck, dealerHand) => {
+        while (calculateHandValue(dealerHand) < 17) {
+            dealerHand = [...dealerHand, deck[0]]
+            deck.shift()
+        }
+        return dealerHand
+    }
+
+    const determinateWinner = (playerHandValue, dealerHandValue) => {
+        if (playerHandValue > 21) return "Dealer"
+        if (dealerHandValue > 21) return "Player"
+        if (playerHandValue > dealerHandValue) return "Player"
+        if (playerHandValue < dealerHandValue) return "Dealer"
+        return "Tie"
+    }
+
     return {
         createDeck,
         shuffleDeck,
@@ -97,5 +118,9 @@ const createBlackJack = () => {
         double,
         split,
         surrender,
+        dealerPlay,
+        determinateWinner,
     }
 }
+
+export default createBlackJack
