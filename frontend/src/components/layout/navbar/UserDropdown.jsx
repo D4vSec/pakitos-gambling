@@ -1,6 +1,6 @@
 import React from "react"
-import UserSVG from "../svg/UserSVG"
-import { useLocale } from "../../providers/LocaleProvider"
+import UserSVG from "@/components/svg/UserSVG"
+import { useLocale } from "@/providers/LocaleProvider"
 
 const UserDropdown = ({ vertical = false }) => {
     const { t } = useLocale()

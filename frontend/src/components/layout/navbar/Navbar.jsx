@@ -1,23 +1,19 @@
 import React from "react"
-import CherrySVG from "../svg/CherrySVG"
-import MenuSVG from "../svg/MenuSVG"
-import CardsSVG from "../svg/CardsSVG"
-import HomeSVG from "../svg/HomeSVG"
-import StarSVG from "../svg/StarSVG"
-import CloseSVG from "../svg/CloseSVG"
-import UserSVG from "../svg/UserSVG"
-import { useLocale } from "../../providers/LocaleProvider"
-import Button from "../buttons/Button"
-import { useNavigate } from "react-router-dom"
+import CherrySVG from "@/components/svg/CherrySVG"
+import MenuSVG from "@/components/svg/MenuSVG"
+import CloseSVG from "@/components/svg/CloseSVG"
+import Button from "@/components/buttons/Button"
 import NavbarLinks from "./NavbarLinks"
 import NavbarBtns from "./NavbarBtns"
+import { useLocale } from "@/providers/LocaleProvider"
+import { useNavigate } from "react-router-dom"
 
 const Navbar = () => {
     const { t } = useLocale()
     const navigate = useNavigate()
 
     return (
-        <div className="drawer">
+        <div className="drawer sticky top-0 z-10 m">
             <input id="main-drawer" type="checkbox" className="drawer-toggle" />
             <div className="drawer-content flex flex-col">
                 <div className="navbar bg-base-100 shadow-sm flex justify-between items-center">

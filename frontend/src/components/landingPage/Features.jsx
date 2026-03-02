@@ -1,6 +1,6 @@
 import React from "react";
 import Card from "./Card";
-import { useLocale } from "../../providers/LocaleProvider";
+import { useLocale } from "@/providers/LocaleProvider";
 
 const Features = () => {
   const { t } = useLocale();
