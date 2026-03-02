@@ -12,7 +12,7 @@ const variants = [
     "ghost",
 ]
 
-const Button = ({ children, variant = "primary", className, size, onClick, svg }) => {
+const Button = ({ children, variant = "primary", className = "", size = "md", onClick, svg }) => {
     const safeVariant = variants.includes(variant) ? variant : "primary"
     return (
         <button

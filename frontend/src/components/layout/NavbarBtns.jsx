@@ -50,6 +50,7 @@ const NavbarBtns = ({ className = "", vertical = false }) => {
             </div>
 
             <UserDropdown vertical={vertical} />
+
         </div>
     )
 }
