@@ -1,16 +1,18 @@
 import React from "react";
 import Card from "./Card";
+import { useLocale } from "../../providers/LocaleProvider";
 
 const ImagesGrid = () => {
+  const { t } = useLocale();
+
   return (
     <section className="mb-16">
       <div className="text-center mb-12">
         <h2 className="text-3xl md:text-4xl font-bold mb-4">
-          Experiencia de Juego Inigualable con Pakito's Gambling
+          {t("general.landingPage.imagesGrid.title")}
         </h2>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-          Disfruta de la mejor experiencia de juego con gráficos impresionantes
-          y una interfaz intuitiva diseñada para tu entretenimiento.
+          {t("general.landingPage.imagesGrid.text")}
         </p>
       </div>
 
@@ -26,10 +28,10 @@ const ImagesGrid = () => {
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
               <div className="absolute bottom-0 left-0 right-0 p-6">
                 <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                  Celebra Tus Victorias
+                  {t("general.landingPage.imagesGrid.image1Title")}
                 </h3>
                 <p className="text-lg text-white/90 mb-6">
-                  Gana grandes premios y disfruta cada momento
+                  {t("general.landingPage.imagesGrid.image1Text")}
                 </p>
               </div>
             </div>
@@ -46,10 +48,10 @@ const ImagesGrid = () => {
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
               <div className="absolute bottom-0 left-0 right-0 p-6">
                 <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                  Ambiente premium
+                  {t("general.landingPage.imagesGrid.image2Title")}
                 </h3>
                 <p className="text-lg text-white/90 mb-6">
-                  Disfruta de un ambiente de casino auténtico con gráficos
+                  {t("general.landingPage.imagesGrid.image2Text")}
                 </p>
               </div>
             </div>
@@ -67,12 +69,10 @@ const ImagesGrid = () => {
             <div className="absolute inset-0 flex items-center">
               <div className="p-8 md:p-12 max-w-2xl">
                 <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                  Juega Donde Quieras
+                  {t("general.landingPage.imagesGrid.image3Title")}
                 </h3>
                 <p className="text-lg text-white/90 mb-6">
-                  Accede a todos tus juegos favoritos desde cualquier
-                  dispositivo. Diseño responsive para móvil, tablet y
-                  escritorio.
+                  {t("general.landingPage.imagesGrid.image3Text")}
                 </p>
               </div>
             </div>

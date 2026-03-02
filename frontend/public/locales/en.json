@@ -16,6 +16,52 @@
                 "logout": "Logout"
             }
         },
-        "copyright": "All right reserved by The Mafia at the Back"
+        "copyright": "All right reserved by The Mafia at the Back",
+        "landingPage": {
+            "heroContent": {
+                "title": "Welcome to Pakito's Gambling",
+                "text": "The best online casino experience with hundreds of exciting games, incredible bonuses, and the chance to win big prizes. Join our community of winners today.",
+                "join": "Join",
+                "seeGames": "View Games"
+            },
+            "cta": {
+                "title": "Ready to Start Your Adventure?",
+                "text": "Join thousands of players who are already enjoying the best online casino experience. Get your 200% welcome bonus today.",
+                "join": "Join Now",
+                "exploreGames": "Explore Games"
+            },
+            "imagesGrid": {
+                "title": "Play Wherever You Want",
+                "text": "Access all your favorite games from any device. Responsive design for mobile, tablet, and desktop.",
+                "image1Title": "Celebrate Your Wins",
+                "image1Text": "Win big prizes and enjoy every moment",
+                "image2Title": "Premium Atmosphere",
+                "image2Text": "Enjoy an authentic casino atmosphere with high-quality graphics",
+                "image3Title": "Play Wherever You Want",
+                "image3Text": "Access all your favorite games from any device. Responsive design for mobile, tablet, and desktop."
+            },
+            "stats": {
+                "games": "Games",
+                "players": "Players",
+                "support": "Support",
+                "prizes": "Prizes"
+            },
+            "features": {
+                "title": "Why Choose Pakito's Gambling?",
+                "text": "We offer a premium casino experience with the best features on the market and a total commitment to player satisfaction.",
+                "item1_title": "Variety of Games",
+                "item1_description": "Over 100 premium casino games including slots, roulette, blackjack, and more.",
+                "item2_title": "Safe and Reliable",
+                "item2_description": "Secure platform with the best encryption and protection technologies.",
+                "item3_title": "Big Prizes",
+                "item3_description": "Win big prizes with our progressive jackpots and exclusive tournaments.",
+                "item4_title": "Fast Experience",
+                "item4_description": "Games optimized for a smooth experience on any device.",
+                "item5_title": "Active Community",
+                "item5_description": "Join thousands of players in our vibrant casino community.",
+                "item6_title": "Exclusive Bonuses",
+                "item6_description": "Receive welcome bonuses and special promotions regularly."
+            }
+        }
     }
 }

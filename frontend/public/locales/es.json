@@ -16,7 +16,53 @@
                 "logout": "Cerrar sesión"
             }
         },
-            "copyright": "Todos los derechos reservados a la Mafia del Fondo"
+            "copyright": "Todos los derechos reservados a la Mafia del Fondo",
 
+        "landingPage": {
+            "heroContent": {
+                "title": "Bienvenido a Pakito's Gambling",
+                "text": "La mejor experiencia de casino online con cientos de juegos emocionantes, bonos increíbles y la oportunidad de ganar grandes premios. Únete a nuestra comunidad de ganadores hoy mismo.",
+                "join": "Unirse",
+                "seeGames": "Ver juegos"
+            },
+            "cta" : {
+                "title": "¿Listo para comenzar tu aventura?",
+                "text": "Únete a miles de jugadores que ya disfrutan de la mejor experiencia de casino online. Obtén tu bono de bienvenida del 200% hoy mismo.",
+                "join": "Unirse ahora",
+                "exploreGames": "Explorar juegos"
+            },
+            "imagesGrid": {
+                "title": "Juega Donde Quieras",
+                "text": "Accede a todos tus juegos favoritos desde cualquier dispositivo. Diseño responsive para móvil, tablet y escritorio.",
+                "image1Title": "Celebra Tus Victorias",
+                "image1Text": "Gana grandes premios y disfruta cada momento",
+                "image2Title": "Ambiente premium",
+                "image2Text": "Disfruta de un ambiente de casino auténtico con gráficos",
+                "image3Title": "Juega Donde Quieras",
+                "image3Text": "Accede a todos tus juegos favoritos desde cualquier dispositivo. Diseño responsive para móvil, tablet y escritorio."
+            },
+            "stats" : {
+                "games" : "Juegos",
+                "players" : "Jugadores",
+                "support" : "Soporte",
+                "prizes" : "Premios"
+            }, 
+           "features": {
+                "title": "¿Por Qué Elegir Pakito's Gambling?",
+                "text": "Ofrecemos una experiencia de casino premium con las mejores características del mercado y un compromiso total con la satisfacción del jugador.",
+                "item1_title": "Variedad de Juegos",
+                "item1_description": "Más de 100 juegos de casino premium incluyendo slots, ruleta, blackjack y más.",
+                "item2_title": "Seguro y Confiable",
+                "item2_description": "Plataforma segura con las mejores tecnologías de encriptación y protección.",
+                "item3_title": "Grandes Premios",
+                "item3_description": "Gana grandes premios con nuestros jackpots progresivos y torneos exclusivos.",
+                "item4_title": "Experiencia Rápida",
+                "item4_description": "Juegos optimizados para una experiencia fluida en cualquier dispositivo.",
+                "item5_title": "Comunidad Activa",
+                "item5_description": "Únete a miles de jugadores en nuestra vibrante comunidad de casino.",
+                "item6_title": "Bonos Exclusivos",
+                "item6_description": "Recibe bonos de bienvenida y promociones especiales regularmente."
+            }
+        }
     }
 }

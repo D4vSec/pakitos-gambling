@@ -6,26 +6,14 @@ import ImagesGrid from "../components/landingPage/ImagesGrid";
 import Features from "../components/landingPage/Features";
 
 const LandingPage = () => {
+
   return (
-    <div>
+    <div className="px-4 md:px-6 lg:px-8">
       {/*Hero Section*/}
       <HeroSection />
 
-      <section className="mb-16">
-        <div>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            ¿Por Qué Elegir Pakito's Gambling?
-          </h2>
-          <p className="text-lg text-muted-foreground">
-            Ofrecemos una experiencia de casino premium con las mejores
-            características del mercado y un compromiso total con la
-            satisfacción del jugador.
-          </p>
-        </div>
-        {/*Features Grid*/}
-        <Features/>
-
-      </section>
+      {/* Features Section */}
+      <Features />
 
       {/* Image Gallery Section */}
       <ImagesGrid />
