@@ -4,6 +4,7 @@ const app = express()
 import { globalLimiter } from "#middlewares/rateLimitMiddleware"
 import userRoutes from "#routes/user"
 import authRoutes from "#routes/auth"
+import rouletteRoutes from "#routes/roulette"
 
 const API_VERSION = "v1"
 
@@ -16,6 +17,7 @@ app.disable("x-powered-by")
 app.use(`/${API_VERSION}`, globalLimiter)
 app.use(`/${API_VERSION}/user`, userRoutes)
 app.use(`/${API_VERSION}/auth`, authRoutes)
+app.use(`/${API_VERSION}/roulette`, rouletteRoutes)
 
 app.use((req, res) => {
 	res.status(404).json({
