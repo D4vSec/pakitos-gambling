@@ -1,7 +1,13 @@
-import React from "react"
-
+import React from "react";
+import CarrouselBanner from "../components/home/CarrouselBanner.jsx";
 const Home = () => {
-    return <div id="home">Home</div>
-}
+  return (
+    <div className="min-h-full">
+      <CarrouselBanner />
 
-export default Home
+      <div></div>
+    </div>
+  );
+};
+
+export default Home;

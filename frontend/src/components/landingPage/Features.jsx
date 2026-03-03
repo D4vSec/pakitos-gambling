@@ -31,9 +31,6 @@ const Features = () => {
               key={num}
               className="p-6 hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10"
             >
-              <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
-                {/*ADD ICON HERE*/}
-              </div>
               <h3 className="text-xl font-bold mb-2">{title}</h3>
               <p className="text-muted-foreground leading-relaxed">{description}</p>
             </Card>
