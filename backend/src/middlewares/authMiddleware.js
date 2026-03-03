@@ -32,7 +32,7 @@ const authMiddleware = async (req, res, next) => {
 			if (!refreshToken) {
 				return res
 					.status(401)
-					.json({ code: "AUTH_NO_TOKEN_PROVIDED", message: "No token provided" })
+					.json({ code: "AUTH_NO_TOKEN_PROVIDED" })
 			}
 
 			try {
@@ -62,11 +62,11 @@ const authMiddleware = async (req, res, next) => {
 			} catch (refreshErr) {
 				return res
 					.status(401)
-					.json({ code: "AUTH_SESSION_EXPIRED", message: "Session expired" })
+					.json({ code: "AUTH_SESSION_EXPIRED" })
 			}
 		}
 
-		return res.status(401).json({ code: "AUTH_INVALID_TOKEN", message: "Invalid token" })
+		return res.status(401).json({ code: "AUTH_INVALID_TOKEN" })
 	}
 }
 

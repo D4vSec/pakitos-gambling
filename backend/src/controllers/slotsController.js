@@ -15,30 +15,23 @@ const createSlot = async (req, res) => {
 		const { type = "3x5", amount } = req.body
 
 		if (!amount || amount <= 0) {
-			return res
-				.status(400)
-				.json({ code: "INVALID_AMOUNT", message: "Amount must be greater than 0" })
+			return res.status(400).json({ code: "INVALID_AMOUNT" })
 		}
 
 		if (!MACHINE_TYPES[type]) {
 			return res.status(400).json({
 				code: "INVALID_MACHINE_TYPE",
-				message: `Invalid machine type. Valid types: ${Object.keys(MACHINE_TYPES).join(", ")}`,
 			})
 		}
 
 		const balance = await User.getUserBalance(userId)
 		if (balance === null || balance < amount) {
-			return res
-				.status(400)
-				.json({ code: "INSUFFICIENT_FUNDS", message: "Insufficient funds" })
+			return res.status(400).json({ code: "INSUFFICIENT_FUNDS" })
 		}
 
 		const newBalance = await User.updateUserBalance(userId, -amount)
 		if (newBalance === null) {
-			return res
-				.status(400)
-				.json({ code: "INSUFFICIENT_FUNDS", message: "Insufficient funds" })
+			return res.status(400).json({ code: "INSUFFICIENT_FUNDS" })
 		}
 
 		const game = createSlots(type)
@@ -66,9 +59,7 @@ const createSlot = async (req, res) => {
 		})
 	} catch (error) {
 		console.error(error)
-		return res
-			.status(500)
-			.json({ code: "INTERNAL_SERVER_ERROR", message: "Internal server error" })
+		return res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
 	}
 }
 
@@ -85,43 +76,32 @@ const spinSlot = async (req, res) => {
 		const session = activeGames.get(gameId)
 
 		if (!session) {
-			return res
-				.status(404)
-				.json({ code: "GAME_NOT_FOUND", message: "Game session not found" })
+			return res.status(404).json({ code: "GAME_NOT_FOUND" })
 		}
 
 		if (session.userId !== userId) {
-			return res
-				.status(403)
-				.json({ code: "FORBIDDEN", message: "This game does not belong to you" })
+			return res.status(403).json({ code: "NO_PERMISSION" })
 		}
 
 		const { game, bet } = session
 
-		// Check and deduct balance for this spin
 		const balance = await User.getUserBalance(userId)
 		if (balance === null || balance < bet) {
-			return res
-				.status(400)
-				.json({ code: "INSUFFICIENT_FUNDS", message: "Insufficient funds" })
+			return res.status(400).json({ code: "INSUFFICIENT_FUNDS" })
 		}
 
 		const newBalance = await User.updateUserBalance(userId, -bet)
 		if (newBalance === null) {
-			return res
-				.status(400)
-				.json({ code: "INSUFFICIENT_FUNDS", message: "Insufficient funds" })
+			return res.status(400).json({ code: "INSUFFICIENT_FUNDS" })
 		}
 
 		const result = game.spin(bet)
 
-		// Credit payout to the user if they won
 		let finalBalance = newBalance
 		if (result.payout > 0) {
 			finalBalance = await User.updateUserBalance(userId, result.payout)
 		}
 
-		// Track spin in the session
 		session.spins.push({
 			spinNumber: session.spins.length + 1,
 			grid: result.grid,
@@ -146,9 +126,7 @@ const spinSlot = async (req, res) => {
 		})
 	} catch (error) {
 		console.error(error)
-		return res
-			.status(500)
-			.json({ code: "INTERNAL_SERVER_ERROR", message: "Internal server error" })
+		return res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
 	}
 }
 
@@ -164,15 +142,11 @@ const getSlotSession = async (req, res) => {
 		const session = activeGames.get(gameId)
 
 		if (!session) {
-			return res
-				.status(404)
-				.json({ code: "GAME_NOT_FOUND", message: "Game session not found" })
+			return res.status(404).json({ code: "GAME_NOT_FOUND" })
 		}
 
 		if (session.userId !== userId) {
-			return res
-				.status(403)
-				.json({ code: "FORBIDDEN", message: "This game does not belong to you" })
+			return res.status(403).json({ code: "NO_PERMISSION" })
 		}
 
 		return res.json({
@@ -187,9 +161,7 @@ const getSlotSession = async (req, res) => {
 		})
 	} catch (error) {
 		console.error(error)
-		return res
-			.status(500)
-			.json({ code: "INTERNAL_SERVER_ERROR", message: "Internal server error" })
+		return res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
 	}
 }
 
@@ -205,15 +177,11 @@ const endSlotSession = async (req, res) => {
 		const session = activeGames.get(gameId)
 
 		if (!session) {
-			return res
-				.status(404)
-				.json({ code: "GAME_NOT_FOUND", message: "Game session not found" })
+			return res.status(404).json({ code: "GAME_NOT_FOUND" })
 		}
 
 		if (session.userId !== userId) {
-			return res
-				.status(403)
-				.json({ code: "FORBIDDEN", message: "This game does not belong to you" })
+			return res.status(403).json({ code: "NO_PERMISSION" })
 		}
 
 		const summary = {
@@ -233,9 +201,7 @@ const endSlotSession = async (req, res) => {
 		return res.json(summary)
 	} catch (error) {
 		console.error(error)
-		return res
-			.status(500)
-			.json({ code: "INTERNAL_SERVER_ERROR", message: "Internal server error" })
+		return res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
 	}
 }
 

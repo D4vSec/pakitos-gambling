@@ -18,7 +18,7 @@ const getProfile = async (req, res) => {
 		})
 	} catch (err) {
 		console.error(err)
-		res.status(500).json({ message: "Server error" })
+		res.status(500).json({ code: "SERVER_ERROR" })
 	}
 }
 
@@ -28,7 +28,7 @@ const getAllUsers = async (req, res) => {
 		res.json(users || [])
 	} catch (err) {
 		console.error(err)
-		res.status(500).json({ message: "Server error" })
+		res.status(500).json({ code: "SERVER_ERROR" })
 	}
 }
 
@@ -37,15 +37,12 @@ const deleteSelf = async (req, res) => {
 		const userId = req.user.id
 		const deleted = await User.deleteUser(userId)
 
-		if (!deleted)
-			return res
-				.status(404)
-				.json({ code: "USER_NOT_FOUND", message: "User not found or already deleted" })
+		if (!deleted) return res.status(404).json({ code: "USER_NOT_FOUND" })
 
 		res.status(204).send()
 	} catch (err) {
 		console.error(err)
-		res.status(500).json({ message: "Server error" })
+		res.status(500).json({ code: "SERVER_ERROR" })
 	}
 }
 
@@ -69,10 +66,7 @@ const updateSelf = async (req, res) => {
 
 		const updated = await User.updateUser(userId, data)
 
-		if (!updated)
-			return res
-				.status(404)
-				.json({ code: "USER_NOT_FOUND", message: "User not found or update failed" })
+		if (!updated) return res.status(404).json({ code: "USER_NOT_FOUND" })
 
 		res.status(200).json({ message: "success" })
 	} catch (err) {
@@ -80,7 +74,7 @@ const updateSelf = async (req, res) => {
 			return res.status(400).json({ errors: err.errors })
 		}
 		console.error(err)
-		res.status(500).json({ message: "Server error" })
+		res.status(500).json({ code: "SERVER_ERROR" })
 	}
 }
 
@@ -89,8 +83,7 @@ const getUserById = async (req, res) => {
 		const { id } = req.params
 		const user = await User.findUserById(id)
 
-		if (!user)
-			return res.status(404).json({ code: "USER_NOT_FOUND", message: "User not found" })
+		if (!user) return res.status(404).json({ code: "USER_NOT_FOUND" })
 
 		res.json({
 			id: user.id,
@@ -101,7 +94,7 @@ const getUserById = async (req, res) => {
 		})
 	} catch (err) {
 		console.error(err)
-		res.status(500).json({ message: "Server error" })
+		res.status(500).json({ code: "SERVER_ERROR" })
 	}
 }
 
@@ -137,7 +130,7 @@ const updateUserById = async (req, res) => {
 			return res.status(400).json({ errors: err.errors })
 		}
 		console.error(err)
-		res.status(500).json({ message: "Server error" })
+		res.status(500).json({ code: "SERVER_ERROR" })
 	}
 }
 
@@ -154,7 +147,7 @@ const deleteUserById = async (req, res) => {
 		res.status(204).send()
 	} catch (err) {
 		console.error(err)
-		res.status(500).json({ message: "Server error" })
+		res.status(500).json({ code: "SERVER_ERROR" })
 	}
 }
 
@@ -169,7 +162,7 @@ const getSelfBalance = async (req, res) => {
 		res.json({ balance })
 	} catch (err) {
 		console.error(err)
-		res.status(500).json({ message: "Server error" })
+		res.status(500).json({ code: "SERVER_ERROR" })
 	}
 }
 
@@ -189,7 +182,7 @@ const getTransactions = async (req, res) => {
 	} catch (err) {
 		if (err instanceof z.ZodError) return res.status(400).json({ errors: err.errors })
 		console.error(err)
-		res.status(500).json({ message: "Server error" })
+		res.status(500).json({ code: "SERVER_ERROR" })
 	}
 }
 
@@ -205,7 +198,6 @@ const createTransaction = async (req, res) => {
 		if (!req.body || Object.keys(req.body).length === 0) {
 			return res.status(400).json({
 				code: "INVALID_TRANSACTION_DATA",
-				message: "Type (deposit/withdrawal) and amount are required",
 			})
 		}
 
@@ -213,8 +205,6 @@ const createTransaction = async (req, res) => {
 		if (!parseResult.success) {
 			return res.status(400).json({
 				code: "INVALID_TRANSACTION_DATA",
-				message: "Type (deposit/withdrawal) and amount are required",
-				errors: parseResult.error.issues,
 			})
 		}
 
@@ -223,32 +213,28 @@ const createTransaction = async (req, res) => {
 		if (!type || !amount)
 			return res.status(400).json({
 				code: "INVALID_TRANSACTION_DATA",
-				message: "Type (deposit/withdrawal) and amount are required",
 			})
 
 		const userId = req.user.id
 
 		const user = await User.findUserById(userId)
-		if (!user)
-			return res.status(404).json({ code: "USER_NOT_FOUND", message: "User not found" })
+		if (!user) return res.status(404).json({ code: "USER_NOT_FOUND" })
 
 		const signedAmount = type === "deposit" ? amount : -amount
 		const newBalance = await User.updateUserBalance(userId, signedAmount)
 
 		if (newBalance === null) {
 			if (type === "withdrawal") {
-				return res
-					.status(400)
-					.json({ code: "INSUFFICIENT_FUNDS", message: "Insufficient funds" })
+				return res.status(400).json({ code: "INSUFFICIENT_FUNDS" })
 			}
-			return res.status(500).json({ message: "Failed to update balance" })
+			return res.status(500).json({ code: "ERROR_UPDATING_BALANCE" })
 		}
 
 		res.status(200).json({ balance: newBalance })
 	} catch (err) {
 		if (err instanceof z.ZodError) return res.status(400).json({ errors: err.errors })
 		console.error(err)
-		res.status(500).json({ message: "Server error" })
+		res.status(500).json({ code: "SERVER_ERROR" })
 	}
 }
 
@@ -265,15 +251,14 @@ const getTransactionsByUserId = async (req, res) => {
 		const { page = 1, limit = 20 } = schema.parse(req.query)
 
 		const user = await User.findUserById(id)
-		if (!user)
-			return res.status(404).json({ code: "USER_NOT_FOUND", message: "User not found" })
+		if (!user) return res.status(404).json({ code: "USER_NOT_FOUND" })
 
 		const txs = await User.findTransactionsByUser(id, page, limit)
 		res.json({ page, limit, transactions: txs })
 	} catch (err) {
 		if (err instanceof z.ZodError) return res.status(400).json({ errors: err.errors })
 		console.error(err)
-		res.status(500).json({ message: "Server error" })
+		res.status(500).json({ code: "SERVER_ERROR" })
 	}
 }
 
