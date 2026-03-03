@@ -15,10 +15,26 @@ const createSlots = (machineType = "3x5") => {
 		Array(Math.round(symbol.weight)).fill(symbol.name),
 	)
 
-	const spinReel = () => symbolPool[randomInt(0, symbolPool.length)]
+	const spinReel = (exclude = null) => {
+		let symbol
+		do {
+			symbol = symbolPool[randomInt(0, symbolPool.length)]
+		} while (symbol === exclude)
+		return symbol
+	}
 
-	const spinGrid = () =>
-		Array.from({ length: ROWS }, () => Array.from({ length: COLS }, () => spinReel()))
+	const spinGrid = () => {
+		const grid = Array.from({ length: ROWS }, () => Array(COLS).fill(null))
+
+		for (let c = 0; c < COLS; c++) {
+			for (let r = 0; r < ROWS; r++) {
+				const above = r > 0 ? grid[r - 1][c] : null
+				grid[r][c] = spinReel(above)
+			}
+		}
+
+		return grid
+	}
 
 	const getLineSymbols = (grid, payline) => payline.positions.map(([row, col]) => grid[row][col])
 
