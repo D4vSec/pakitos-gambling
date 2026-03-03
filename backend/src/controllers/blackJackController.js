@@ -1,15 +1,23 @@
 //TODO: Implement the game logic
-import { createBlackJack } from "../services/blackJack.js"
-
-const blackJack = createBlackJack()
+import createBlackJack from "#services/blackJack"
+import User from "#models/userModel"
 
 const games = new Map()
 //This will definitely not be like that I'm still cooking rn
 export const startGame = (req, res) => {
+    const id = req.user.id
+    const wallet = User.getUserBalance(id)
+    const { amount } = req.body
+    if (amount > wallet) {
+        return res.status(400).json({ code: "INSUFFICIENT_BALANCE" })
+    }
+
+    const blackJack = createBlackJack()
     const gameId = crypto.randomUUID()
 
     try {
-        const { amount } = req.body
+        User.updateUserBalance(id, -amount)
+
         const deck = blackJack.shuffleDeck(blackJack.createDeck())
         const playerHand = blackJack.getInitialHand(deck)
         const dealerHand = blackJack.getInitialHand(deck)
@@ -19,6 +27,7 @@ export const startGame = (req, res) => {
             game: "blackjack",
             status: "ongoing", // ongoing | finished
             createdAt: new Date().toISOString(),
+            amount,
             player: {
                 hand: playerHand,
                 value: blackJack.calculateHandValue(playerHand),
@@ -44,22 +53,124 @@ export const startGame = (req, res) => {
                 blackJack.calculateHandValue(dealerFinalHand),
             )
             game.winner = winner
+
+            const payout = game.winner === "Player" ? amount * 1.5 : 0
+
+            if (game.winner === "Player") User.updateUserBalance(id, payout)
             games.set(gameId, game)
         }
-        
+
         res.json(game)
+    } catch (error) {
+        res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
+    }
+}
+
+export const hit = (req, res) => {
+    const blackJack = createBlackJack()
+    try {
+        const { gameId } = req.params
+        if (!games.has(gameId)) {
+            return res.status(404).json({ code: "GAME_NOT_FOUND" })
+        }
+        const game = games.get(gameId)
+        if (game.status === "finished") {
+            return res.status(400).json({ code: "GAME_ALREADY_FINISHED" })
+        }
+
+        game.player.hand = blackJack.hit(game.deck, game.player.hand)
+        game.player.value = blackJack.calculateHandValue(game.player.hand)
+        game.player.bust = game.player.value > 21
+
+        if (game.player.bust) {
+            game.status = "finished"
+            game.winner = "Dealer"
+        }
+
+        games.set(gameId, game)
+        res.json(game)
+    } catch (error) {
+        res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
+    }
+}
+
+export const stand = (req, res) => {
+    const id = req.user.id
+    const blackJack = createBlackJack()
+    try {
+        const { gameId } = req.params
+        if (!games.has(gameId)) {
+            return res.status(404).json({ code: "GAME_NOT_FOUND" })
+        }
+        const game = games.get(gameId)
+        if (game.status === "finished") {
+            return res.status(400).json({ code: "GAME_ALREADY_FINISHED" })
+        }
+
+        const dealerFinalHand = blackJack.dealerPlay(
+            game.deck,
+            game.dealer.hand,
+            game.player.hand,
+        )
+        game.dealer.hand = dealerFinalHand
+        game.dealer.value = blackJack.calculateHandValue(dealerFinalHand)
+
+        const winner = blackJack.determinateWinner(
+            game.player.value,
+            game.dealer.value,
+        )
+        game.winner = winner
+        game.status = "finished"
+
+        const payout = game.winner === "Player" ? game.amount * 1.5 : 0
+
+        if (game.winner === "Player") User.updateUserBalance(id, payout)
+
+        games.set(gameId, game)
+        res.json(game)
+    } catch (error) {
+        res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
+    }
+}
+
+export const double = (req, res) => {
+    const id = req.user.id
+    const blackJack = createBlackJack()
+    try {
+        const { gameId } = req.params
+        if (!games.has(gameId)) {
+            return res.status(404).json({ code: "GAME_NOT_FOUND" })
+        }
+        const game = games.get(gameId)
+        if (game.status === "finished") {
+            return res.status(400).json({ code: "GAME_ALREADY_FINISHED" })
+        }
+
+        game.player.hand = blackJack.hit(game.deck, game.player.hand)
+        game.player.value = blackJack.calculateHandValue(game.player.hand)
+        game.player.bust = game.player.value > 21
+
+        if (game.player.bust) {
+            game.status = "finished"
+            game.winner = "Dealer"
+            games.set(gameId, game)
+            res.json(game)
+        }
+
         
     } catch (error) {
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
 }
-           
-export const hit = (req, res) => {
+
+export const deleteGame = (req, res) => {
     try {
-        const { playerHand, dealerHand } = req.body
-        const newHand = blackJack.hit(deck, hand)
-        const handValue = blackJack.calculateHandValue(newHand)
-        res.json({ newHand, handValue })
+        const { gameId } = req.params
+        if (!games.has(gameId)) {
+            return res.status(404).json({ code: "GAME_NOT_FOUND" })
+        }
+        games.delete(gameId)
+        res.json({ message: "Game deleted successfully" })
     } catch (error) {
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }

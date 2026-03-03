@@ -75,13 +75,10 @@ const createBlackJack = () => {
         return hand
     }
 
-    const stand = (playerPlaying) => (playerPlaying = false)
-
-    const double = (deck, hand, playerPlaying) => {
-        hand = [...hand, deck[0]]
+    const double = (deck, playerHand) => {
+        playerHand = [...playerHand, deck[0]]
         deck.shift()
-        playerPlaying = false
-        return hand
+        return playerHand
     }
 
     const split = (hand, splitHand) => {
@@ -89,10 +86,10 @@ const createBlackJack = () => {
         return [[hand[0]], [hand[1]]]
     }
 
-    const surrender = (playerPlaying) => (playerPlaying = false)
-
     //Dealer logic
-    const dealerPlay = (deck, dealerHand) => {
+    const dealerPlay = (deck, dealerHand, playerHand) => {
+        if (calculateHandValue(playerHand) < calculateHandValue(dealerHand))
+            return dealerHand
         while (calculateHandValue(dealerHand) < 17) {
             dealerHand = [...dealerHand, deck[0]]
             deck.shift()
