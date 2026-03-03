@@ -1,6 +1,6 @@
 import React from "react"
-import Button from "../buttons/Button"
-import { useLocale } from "../../providers/LocaleProvider"
+import Button from "@/components/buttons/Button"
+import { useLocale } from "@/providers/LocaleProvider"
 import { useNavigate } from "react-router-dom"
 import UserDropdown from "./UserDropdown"
 
@@ -25,18 +25,10 @@ const NavbarBtns = ({ className = "", vertical = false }) => {
 
     return (
         <div
-            className={`
-                flex gap-3
-                ${vertical ? "flex-col w-full" : "items-center"}
-                ${className}
+            className={`flex gap-3 ${vertical ? "flex-col w-full" : "items-center"} ${className}
             `}
         >
-            <div
-                className={`
-                    flex gap-2
-                    ${vertical ? "flex-col w-full" : "items-center"}
-                `}
-            >
+            <div className={`flex gap-2 ${vertical ? "flex-col w-full" : "items-center"}`}>
                 {buttons.map(({ key, variant, label, path }) => (
                     <Button
                         key={key}
@@ -50,7 +42,6 @@ const NavbarBtns = ({ className = "", vertical = false }) => {
             </div>
 
             <UserDropdown vertical={vertical} />
-
         </div>
     )
 }

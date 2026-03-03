@@ -1,8 +1,9 @@
 import React from "react"
 import Router from "./router/Router"
-import Navbar from "./components/layout/Navbar"
+import Navbar from "./components/layout/navbar/Navbar"
 import Footer from "./components/layout/Footer"
 import "./App.css"
+import MyComponent from "./components/MyComponent"
 
 const App = () => {
     return (

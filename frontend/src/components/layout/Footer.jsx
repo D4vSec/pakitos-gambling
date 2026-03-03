@@ -1,5 +1,5 @@
 import React from "react"
-import { useLocale } from "../../providers/LocaleProvider"
+import { useLocale } from "@/providers/LocaleProvider"
 
 const Footer = () => {
     const { t } = useLocale()

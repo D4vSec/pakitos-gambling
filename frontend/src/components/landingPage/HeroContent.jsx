@@ -1,6 +1,6 @@
 import React from "react";
-import Button from "../buttons/Button";
-import { useLocale } from "../../providers/LocaleProvider";
+import Button from "@/components/buttons/Button";
+import { useLocale } from "@/providers/LocaleProvider";
 
 const HeroContent = () => {
   const { t } = useLocale();

@@ -1,7 +1,7 @@
-import HomeSVG from "../svg/HomeSVG"
-import CardsSVG from "../svg/CardsSVG"
-import StarSVG from "../svg/StarSVG"
-import { useLocale } from "../../providers/LocaleProvider"
+import HomeSVG from "@/components/svg/HomeSVG"
+import CardsSVG from "@/components/svg/CardsSVG"
+import StarSVG from "@/components/svg/StarSVG"
+import { useLocale } from "@/providers/LocaleProvider"
 import { useNavigate } from "react-router-dom"
 
 const NavbarLinks = ({ className = "" }) => {
