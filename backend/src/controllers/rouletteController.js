@@ -1,12 +1,21 @@
-//TODO: Implement the game logic
-import { createRoulette } from "../services/roulette.js"
+import createRoulette from "#services/roulette"
+import User from "#models/userModel"
+import crypto from "crypto"
 
-const roulette = createRoulette()
-//TODO: All the wallet logic
-export const spinRoulette = (req, res) => {
+const spinRoulette = (req, res) => {
+    const { type, bet, amount } = req.body
+    const id = req.user.id
+    const wallet = User.getUserBalance(id)
+
+    if (amount > wallet) {
+        return res.status(400).json({ code: "INSUFFICIENT_BALANCE" })
+    }
+
+    const roulette = createRoulette()
+
     try {
-        const { type, bet, amount } = req.body
-        const wallet = null //I will take this from the DB
+        User.updateUserBalance(id, -amount)
+
         const winningNumber = roulette.spinRoulette()
 
         let isWinner = false
@@ -34,6 +43,8 @@ export const spinRoulette = (req, res) => {
 
         const payout = isWinner ? amount * multiplier : 0
 
+        if (payout > 0) User.updateUserBalance(id, payout)
+
         const color = roulette.isColorWinner("red", winningNumber)
             ? "red"
             : roulette.isColorWinner("black", winningNumber)
@@ -59,6 +70,8 @@ export const spinRoulette = (req, res) => {
             },
         })
     } catch (error) {
-        res.status(500).json({ status: "error", error: error.message })
+        res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
 }
+
+export default spinRoulette

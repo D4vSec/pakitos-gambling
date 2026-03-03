@@ -22,16 +22,15 @@ const createRoulette = () => {
     ]
 
     const spinRoulette = () => randomInt(0, 37) //0-36 for numbers, 37 for 00
-    const isZero = (bet) => bet === 0
-    const isZeroZero = (bet) => bet === 37
+    const isZero = (type) => type === 0
+    const isZeroZero = (type) => type === 37
 
     //The following functions check the kind of bet the player made
-    const isNumberBet = (bet) => bet === "number"
-    const isColorBet = (bet) => bet === "red" || bet === "black"
-    const isOddBet = (bet) => bet === "odd" || bet === "even"
-    const isTwelveBet = (bet) =>
-        bet === "1-12" || bet === "13-24" || bet === "25-36"
-    const isRowBet = (bet) => bet === "row1" || bet === "row2" || bet === "row3"
+    const isNumberBet = (type) => type === "number"
+    const isColorBet = (type) => type === "color"
+    const isOddBet = (type) => type === "odd/even"
+    const isTwelveBet = (type) => type === "Twelve"
+    const isRowBet = (type) => type === "row"
 
     //The following functions check if the bet is a winner based on the winning number
     const isNumberWinner = (bet, winningNumber) => bet === winningNumber
