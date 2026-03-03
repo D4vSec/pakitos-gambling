@@ -62,6 +62,28 @@
                 "item6_title": "Exclusive Bonuses",
                 "item6_description": "Receive welcome bonuses and special promotions regularly."
             }
+        },
+        "form": {
+            "username": {
+                "label": "Username",
+                "placeholder": "Coolusername123"
+            },
+            "email": {
+                "label": "Email",
+                "placeholder": "example@mail.com"
+            },
+            "password": {
+                "label": "Password",
+                "placeholder": "*****"
+            },
+            "confirmPassword": {
+                "label": "Confirm password",
+                "placeholder": "*****"
+            },
+            "buttons": {
+                "login": "Login",
+                "register": "Register"
+            }
         }
     }
 }

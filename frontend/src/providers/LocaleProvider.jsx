@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react"
 
 const LocaleContext = createContext()
 
-export const LocaleProvider = ({ children }) => {
+const LocaleProvider = ({ children }) => {
     const [localeData, setLocaleData] = useState({})
     const [loading, setLoading] = useState(true)
 
@@ -35,6 +35,8 @@ export const LocaleProvider = ({ children }) => {
 
     return <LocaleContext value={{ t, loadLocale, loading }}>{children}</LocaleContext>
 }
+
+export default LocaleProvider
 
 export const useLocale = () => {
     const context = useContext(LocaleContext)
