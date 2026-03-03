@@ -54,7 +54,7 @@ export const startGame = (req, res) => {
             )
             game.winner = winner
 
-            const payout = game.winner === "Player" ? amount * 1.5 : 0
+            const payout = game.winner === "Player" ? amount * 1.5 + amount : 0
 
             if (game.winner === "Player") User.updateUserBalance(id, payout)
             games.set(gameId, game)
@@ -122,7 +122,7 @@ export const stand = (req, res) => {
         game.winner = winner
         game.status = "finished"
 
-        const payout = game.winner === "Player" ? game.amount * 1.5 : 0
+        const payout = game.winner === "Player" ? game.amount + game.amount : 0
 
         if (game.winner === "Player") User.updateUserBalance(id, payout)
 
@@ -153,15 +153,32 @@ export const double = (req, res) => {
         if (game.player.bust) {
             game.status = "finished"
             game.winner = "Dealer"
-            games.set(gameId, game)
-            res.json(game)
-        }
+        } else {
+            const dealerFinalHand = blackJack.dealerPlay(
+                game.deck,
+                game.dealer.hand,
+                game.player.hand,
+            )
+            const winner = blackJack.determinateWinner(
+                game.player.value,
+                game.dealer.value,
+            )
+            game.winner = winner
+            game.status = "finished"
 
-        
+            if (game.winner === "Player") {
+                const payout = game.amount * 2 + game.amount
+                User.updateUserBalance(id, payout)
+            }
+        }
+        games.set(gameId, game)
+        res.json(game)
     } catch (error) {
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
 }
+
+//TODO: Implement split in a future update
 
 export const deleteGame = (req, res) => {
     try {
@@ -175,3 +192,13 @@ export const deleteGame = (req, res) => {
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
 }
+//This method is just for testing purposes, it will not be here in the final version
+export const getGames = (req, res) => {
+    try {
+        const gamesArray = Array.from(games.values())
+        res.json(gamesArray)
+    } catch (error) {
+        res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
+    }
+}
+

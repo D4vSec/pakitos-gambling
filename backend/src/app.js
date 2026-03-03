@@ -20,11 +20,12 @@ app.use(`/${API_VERSION}/user`, userRoutes)
 app.use(`/${API_VERSION}/auth`, authRoutes)
 app.use(`/${API_VERSION}/roulette`, rouletteRoutes)
 app.use(`/${API_VERSION}/slots`, slotsRoutes)
+app.use(`/${API_VERSION}/blackjack`, blackJackRoutes)
 
 app.use((req, res) => {
-	res.status(404).json({
-		error: "Not Found",
-	})
+    res.status(404).json({
+        error: "Not Found",
+    })
 })
 
 export default app
