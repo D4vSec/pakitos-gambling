@@ -3,17 +3,19 @@ import { createBlackJack } from "../services/blackJack.js"
 
 const blackJack = createBlackJack()
 
-let currentGame = null
+const games = new Map()
 //This will definitely not be like that I'm still cooking rn
 export const startGame = (req, res) => {
+    const gameId = crypto.randomUUID()
+
     try {
         const { amount } = req.body
         const deck = blackJack.shuffleDeck(blackJack.createDeck())
         const playerHand = blackJack.getInitialHand(deck)
         const dealerHand = blackJack.getInitialHand(deck)
 
-        currentGame = {
-            gameId: crypto.randomUUID(),
+        const game = {
+            gameId,
             game: "blackjack",
             status: "ongoing", // ongoing | finished
             createdAt: new Date().toISOString(),
@@ -28,31 +30,30 @@ export const startGame = (req, res) => {
                 value: blackJack.calculateHandValue(dealerHand),
             },
             deck: deck,
-            result: null,
+            winner: null,
         }
+
+        games.set(gameId, game)
+
         //If the player hits a blackJack
         if (blackJack.calculateHandValue(playerHand) === 21) {
-            currentGame.status = "finished"
+            game.status = "finished"
             const dealerFinalHand = blackJack.dealerPlay(deck, dealerHand)
             const winner = blackJack.determinateWinner(
                 blackJack.calculateHandValue(playerHand),
                 blackJack.calculateHandValue(dealerFinalHand),
             )
-            return res.json({
-                playerHand,
-                dealerHand: dealerFinalHand,
-                winner,
-            })
+            game.winner = winner
+            games.set(gameId, game)
         }
-        res.json({
-            playerHand,
-            dealerHand: [dealerHand[0], { suit: "hidden", rank: "hidden" }],
-        })
+        
+        res.json(game)
+        
     } catch (error) {
-        res.status(500).json({ error: error.message })
+        res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
 }
-
+           
 export const hit = (req, res) => {
     try {
         const { playerHand, dealerHand } = req.body
@@ -60,6 +61,6 @@ export const hit = (req, res) => {
         const handValue = blackJack.calculateHandValue(newHand)
         res.json({ newHand, handValue })
     } catch (error) {
-        res.status(500).json({ error: error.message })
+        res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
 }
