@@ -5,55 +5,54 @@
         "navbar": {
             "menu": "Menú",
             "home": "Inicio",
-            "allGames": "Todos los juegos",
+            "allGames": "Todos los Juegos",
             "favourites": "Favoritos",
-            "login": "Iniciar sesión",
+            "login": "Iniciar Sesión",
             "register": "Registrarse",
             "userPill": {
                 "guest": "Invitado",
-                "settings": "Configuración de usuario",
-                "coupon": "Introducir cupón",
-                "logout": "Cerrar sesión"
+                "settings": "Configuración de Usuario",
+                "coupon": "Ingresar Cupón",
+                "logout": "Cerrar Sesión"
             }
         },
-            "copyright": "Todos los derechos reservados a la Mafia del Fondo",
-
+        "copyright": "Todos los derechos reservados por The Mafia at the Back",
         "landingPage": {
             "heroContent": {
                 "title": "Bienvenido a Pakito's Gambling",
-                "text": "La mejor experiencia de casino online con cientos de juegos emocionantes, bonos increíbles y la oportunidad de ganar grandes premios. Únete a nuestra comunidad de ganadores hoy mismo.",
+                "text": "La mejor experiencia de casino online con cientos de juegos emocionantes, increíbles bonos y la oportunidad de ganar grandes premios. Únete hoy a nuestra comunidad de ganadores.",
                 "join": "Unirse",
-                "seeGames": "Ver juegos"
+                "seeGames": "Ver Juegos"
             },
-            "cta" : {
-                "title": "¿Listo para comenzar tu aventura?",
+            "cta": {
+                "title": "¿Listo para Comenzar tu Aventura?",
                 "text": "Únete a miles de jugadores que ya disfrutan de la mejor experiencia de casino online. Obtén tu bono de bienvenida del 200% hoy mismo.",
-                "join": "Unirse ahora",
-                "exploreGames": "Explorar juegos"
+                "join": "Unirse Ahora",
+                "exploreGames": "Explorar Juegos"
             },
             "imagesGrid": {
                 "title": "Juega Donde Quieras",
                 "text": "Accede a todos tus juegos favoritos desde cualquier dispositivo. Diseño responsive para móvil, tablet y escritorio.",
-                "image1Title": "Celebra Tus Victorias",
+                "image1Title": "Celebra tus Ganancias",
                 "image1Text": "Gana grandes premios y disfruta cada momento",
-                "image2Title": "Ambiente premium",
-                "image2Text": "Disfruta de un ambiente de casino auténtico con gráficos",
+                "image2Title": "Ambiente Premium",
+                "image2Text": "Disfruta de un ambiente de casino auténtico con gráficos de alta calidad",
                 "image3Title": "Juega Donde Quieras",
                 "image3Text": "Accede a todos tus juegos favoritos desde cualquier dispositivo. Diseño responsive para móvil, tablet y escritorio."
             },
-            "stats" : {
-                "games" : "Juegos",
-                "players" : "Jugadores",
-                "support" : "Soporte",
-                "prizes" : "Premios"
-            }, 
-           "features": {
+            "stats": {
+                "games": "Juegos",
+                "players": "Jugadores",
+                "support": "Soporte",
+                "prizes": "Premios"
+            },
+            "features": {
                 "title": "¿Por Qué Elegir Pakito's Gambling?",
                 "text": "Ofrecemos una experiencia de casino premium con las mejores características del mercado y un compromiso total con la satisfacción del jugador.",
                 "item1_title": "Variedad de Juegos",
-                "item1_description": "Más de 100 juegos de casino premium incluyendo slots, ruleta, blackjack y más.",
+                "item1_description": "Más de 100 juegos de casino premium, incluyendo tragamonedas, ruleta, blackjack y más.",
                 "item2_title": "Seguro y Confiable",
-                "item2_description": "Plataforma segura con las mejores tecnologías de encriptación y protección.",
+                "item2_description": "Plataforma segura con las mejores tecnologías de cifrado y protección.",
                 "item3_title": "Grandes Premios",
                 "item3_description": "Gana grandes premios con nuestros jackpots progresivos y torneos exclusivos.",
                 "item4_title": "Experiencia Rápida",
@@ -62,6 +61,37 @@
                 "item5_description": "Únete a miles de jugadores en nuestra vibrante comunidad de casino.",
                 "item6_title": "Bonos Exclusivos",
                 "item6_description": "Recibe bonos de bienvenida y promociones especiales regularmente."
+            }
+        },
+        "form": {
+            "username": {
+                "label": "Nombre de usuario",
+                "placeholder": "Nombre de usuario",
+                "required": "El nombre de usuario es obligatorio",
+                "minLength": "El nombre de usuario debe tener al menos 3 caracteres",
+                "maxLength": "El nombre de usuario debe tener como máximo 25 caracteres"
+            },
+            "email": {
+                "label": "Correo electrónico",
+                "placeholder": "Correo electrónico",
+                "required": "El correo electrónico es obligatorio",
+                "pattern": "Formato de correo electrónico inválido"
+            },
+            "password": {
+                "label": "Contraseña",
+                "placeholder": "Contraseña",
+                "required": "La contraseña es obligatoria",
+                "pattern": "La contraseña debe tener al menos 8 caracteres, incluir 1 mayúscula, 1 minúscula y 1 número o carácter especial"
+            },
+            "confirmPassword": {
+                "label": "Confirmar contraseña",
+                "placeholder": "Confirmar contraseña",
+                "required": "Confirmar la contraseña es obligatorio",
+                "match": "La confirmación de la contraseña no coincide"
+            },
+            "buttons": {
+                "login": "Iniciar Sesión",
+                "register": "Registrarse"
             }
         }
     }

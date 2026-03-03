@@ -66,19 +66,28 @@
         "form": {
             "username": {
                 "label": "Username",
-                "placeholder": "Coolusername123"
+                "placeholder": "Username",
+                "required": "Username is required",
+                "minLength": "Username must be at least 3 characters",
+                "maxLength": "Username must be at most 25 characters"
             },
             "email": {
                 "label": "Email",
-                "placeholder": "example@mail.com"
+                "placeholder": "Email",
+                "required": "Email is required",
+                "pattern": "Email format is invalid"
             },
             "password": {
                 "label": "Password",
-                "placeholder": "*****"
+                "placeholder": "Password",
+                "required": "Password is required",
+                "pattern": "Password must be at least 8 characters, include 1 uppercase, 1 lowercase and 1 number or special character"
             },
             "confirmPassword": {
                 "label": "Confirm password",
-                "placeholder": "*****"
+                "placeholder": "Confirm password",
+                "required": "Confirm password is required",
+                "match": "Confirm password does not match password"
             },
             "buttons": {
                 "login": "Login",
