@@ -5,6 +5,7 @@ import { globalLimiter } from "#middlewares/rateLimitMiddleware"
 import userRoutes from "#routes/user"
 import authRoutes from "#routes/auth"
 import rouletteRoutes from "#routes/roulette"
+import slotsRoutes from "#routes/slots"
 
 const API_VERSION = "v1"
 
@@ -18,6 +19,7 @@ app.use(`/${API_VERSION}`, globalLimiter)
 app.use(`/${API_VERSION}/user`, userRoutes)
 app.use(`/${API_VERSION}/auth`, authRoutes)
 app.use(`/${API_VERSION}/roulette`, rouletteRoutes)
+app.use(`/${API_VERSION}/slots`, slotsRoutes)
 
 app.use((req, res) => {
 	res.status(404).json({
