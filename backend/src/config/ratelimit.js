@@ -12,7 +12,7 @@ const rateLimitConfig = {
 	},
 	games: {
 		windowMs: 1000,
-		max: 1,
+		max: 5,
 		message: "Solo puedes realizar un giro por segundo. ¡Tómalo con calma!",
 	},
 	history: {

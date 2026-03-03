@@ -8,10 +8,12 @@ const createSlots = (machineType = "3x5") => {
 		)
 	}
 
-	const { rows: ROWS, cols: COLS } = MACHINE_TYPES[machineType]
+	const { rows: ROWS, cols: COLS, minConsecutive: MIN_CONSECUTIVE } = MACHINE_TYPES[machineType]
 	const PAYLINES = generatePaylines(ROWS, COLS)
 
-	const symbolPool = SYMBOLS.flatMap((symbol) => Array(symbol.weight).fill(symbol.name))
+	const symbolPool = SYMBOLS.flatMap((symbol) =>
+		Array(Math.round(symbol.weight)).fill(symbol.name),
+	)
 
 	const spinReel = () => symbolPool[randomInt(0, symbolPool.length)]
 
@@ -30,20 +32,19 @@ const createSlots = (machineType = "3x5") => {
 			else break
 		}
 
-		if (consecutive < 3) return null
+		if (consecutive < MIN_CONSECUTIVE) return null
 
 		const symbolData = SYMBOLS.find((s) => s.name === first)
-		const consecutiveBonus = consecutive - 2
-
-		const isWinner = consecutive >= 3
+		// Scale: 0 extra → ×1, 1 extra → ×2, 2 extra → ×3
+		const consecutiveScale = 1 + (consecutive - MIN_CONSECUTIVE)
 
 		return {
 			paylineId: payline.id,
 			symbol: first,
 			consecutive,
 			basePayout: symbolData.payout,
-			multiplier: symbolData.payout * consecutiveBonus,
-			isWinner,
+			consecutiveScale,
+			lineMultiplier: symbolData.payout * consecutiveScale,
 		}
 	}
 
@@ -58,12 +59,17 @@ const createSlots = (machineType = "3x5") => {
 		return winningLines
 	}
 
+	const HOUSE_EDGE = 0.05
+
 	const calculatePayout = (winningLines, bet) => {
 		if (winningLines.length === 0) return 0
 
-		const totalMultiplier = winningLines.reduce((acc, line) => acc + line.multiplier, 0)
+		const total = winningLines.reduce((acc, line) => acc + bet * line.lineMultiplier, 0)
 
-		return Math.floor(bet * totalMultiplier)
+		const maxPayout = bet * 500
+		const afterEdge = total * (1 - HOUSE_EDGE)
+
+		return Math.max(1, Math.floor(Math.min(afterEdge, maxPayout)))
 	}
 
 	const spin = (bet) => {

@@ -10,6 +10,10 @@ const activeGames = new Map()
  * Body: { type: "3x3" | "3x5" | "5x5", amount: number }
  */
 const createSlot = async (req, res) => {
+	if (!req.body || typeof req.body !== "object") {
+		return res.status(400).json({ code: "AUTH_SLOTS_DATA_PROVIDED" })
+	}
+
 	try {
 		const userId = req.user.id
 		const { type = "3x5", amount } = req.body
@@ -99,7 +103,7 @@ const spinSlot = async (req, res) => {
 
 		let finalBalance = newBalance
 		if (result.payout > 0) {
-			finalBalance = await User.updateUserBalance(userId, result.payout)
+			finalBalance = await User.updateUserBalance(userId, bet + result.payout)
 		}
 
 		session.spins.push({
