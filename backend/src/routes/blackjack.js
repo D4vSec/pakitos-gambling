@@ -2,13 +2,13 @@ import express from "express"
 import { gameLimiter } from "#middlewares/rateLimitMiddleware"
 import authMiddleware from "#middlewares/authMiddleware"
 import {
-    startGame,
-    hit,
-    stand,
-    double,
-    deleteGame,
-    getGames,
-} from "#controllers/blackJackController"
+	startGame,
+	hit,
+	stand,
+	double,
+	deleteGame,
+	getGames,
+} from "#@/controllers/blackjackController"
 
 const blackJackRoutes = express.Router()
 
