@@ -64,6 +64,10 @@
             }
         },
         "form": {
+            "page": {
+                "register" : "Sign Up",
+                "login" : "Login"
+            },
             "username": {
                 "label": "Username",
                 "placeholder": "Username",
@@ -92,6 +96,39 @@
             "buttons": {
                 "login": "Login",
                 "register": "Register"
+            }
+        },
+        "home": {
+            "playNow":"Play now",
+            "slots": {
+                "title" : "Slots",
+                "starwars": {
+                    "title": "Star Wars",
+                    "description": "Star Wars themed slot game."
+                },
+                "stardewValley": {
+                    "title": "Stardew Valley",
+                    "description": "Stardew Valley themed slot game."
+                },
+                "beer": {
+                    "title": "Beer-Man",
+                    "description": "A slot game inspired by the best drink in the world."
+                }
+            },
+            "roulette": {
+                "title" : "Roulette",
+                "classic": {
+                    "title": "Classic Roulette",
+                    "description": "Traditional roulette game."
+                },
+                "american": {
+                    "title": "American Roulette",
+                    "description": "American-style roulette game."
+                }
+            },
+            "blackjack": {
+                "title": "Blackjack",
+                "description": "Classic blackjack card game."
             }
         }
     }
