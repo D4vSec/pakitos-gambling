@@ -7,7 +7,7 @@ import userRoutes from "#routes/user"
 import authRoutes from "#routes/auth"
 import rouletteRoutes from "#routes/roulette"
 import slotsRoutes from "#routes/slots"
-import blackJackRoutes from "#routes/blackJack"
+import blackJackRoutes from "#/routes/blackjack"
 import corsConfig from "#config/cors"
 
 const API_VERSION = "v1"
