@@ -28,7 +28,7 @@ const createBlackJack = () => {
         }
         return deck
     }
-
+    //Fisher-Yates shuffle algorithm
     const shuffleDeck = (deck) => {
         for (let i = deck.length - 1; i > 0; i--) {
             const j = randomInt(0, i + 1)
@@ -96,7 +96,7 @@ const createBlackJack = () => {
         }
         return dealerHand
     }
-
+    //The function determinate the winner based on the hand values of the player and the dealer
     const determinateWinner = (playerHandValue, dealerHandValue) => {
         if (playerHandValue > 21) return "Dealer"
         if (dealerHandValue > 21) return "Player"

@@ -63,6 +63,12 @@ const createRoulette = () => {
         return false
     }
 
+    const getColor = (winningNumber) => {
+        if (redNumbers.includes(winningNumber)) return "red"
+        if (blackNumbers.includes(winningNumber)) return "black"
+        return "green"
+    }
+
     return {
         spinRoulette,
         isZero,
@@ -77,6 +83,7 @@ const createRoulette = () => {
         isOddBet,
         isTwelveBet,
         isRowBet,
+        getColor,
     }
 }
 

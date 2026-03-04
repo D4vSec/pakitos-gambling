@@ -1,9 +1,7 @@
-//TODO: Implement the game logic
 import createBlackJack from "#services/blackJack"
 import User from "#models/userModel"
 
 const games = new Map()
-//This will definitely not be like that I'm still cooking rn
 export const startGame = (req, res) => {
     const id = req.user.id
     const wallet = User.getUserBalance(id)

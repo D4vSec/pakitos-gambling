@@ -1,6 +1,7 @@
 import createRoulette from "#services/roulette"
 import User from "#models/userModel"
 import crypto from "crypto"
+import { get } from "http"
 
 const spinRoulette = (req, res) => {
     const { type, bet, amount } = req.body
@@ -45,11 +46,7 @@ const spinRoulette = (req, res) => {
 
         if (payout > 0) User.updateUserBalance(id, payout)
 
-        const color = roulette.isColorWinner("red", winningNumber)
-            ? "red"
-            : roulette.isColorWinner("black", winningNumber)
-              ? "black"
-              : "green"
+        const color = roulette.getColor(winningNumber)
 
         res.json({
             gameId: crypto.randomUUID(),
