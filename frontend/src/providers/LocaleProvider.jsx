@@ -29,38 +29,11 @@ const LocaleProvider = ({ children }) => {
         return text
     }
 
-    const findMessage = (targetKey, obj = localeData) => {
-        console.log("Buscando clave:", targetKey)
-        console.log("type", typeof targetKey)
-        // Convertir número a string
-        if (typeof targetKey === "number") targetKey = String(targetKey)
-
-        for (const key in obj) {
-            console.log("Revisando key:", key)
-
-            if (key === targetKey) {
-                console.log("¡Clave encontrada!", key, "→", obj[key])
-                return obj[key]
-            }
-
-            if (typeof obj[key] === "object" && obj[key] !== null) {
-                console.log("Descendiendo en objeto:", key)
-                const result = findMessage(targetKey, obj[key])
-                if (result !== undefined) {
-                    return result
-                }
-            }
-        }
-
-        console.log("Clave no encontrada en este nivel:", targetKey)
-        return `Value of ${targetKey} not found`
-    }
-
     useEffect(() => {
         loadLocale("en")
     }, [])
 
-    return <LocaleContext value={{ t, loadLocale, findMessage, loading }}>{children}</LocaleContext>
+    return <LocaleContext value={{ t, loadLocale, loading }}>{children}</LocaleContext>
 }
 
 export default LocaleProvider

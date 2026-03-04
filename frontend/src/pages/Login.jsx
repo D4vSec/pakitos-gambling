@@ -1,9 +1,9 @@
 import React from "react"
-import Title from "@/components/Title"
-import { useLocale } from "@/providers/LocaleProvider"
 import { useForm, FormProvider } from "react-hook-form"
-import { FormField } from "@/components/forms/FormField"
+import Title from "@/components/Title"
 import Button from "@/components/buttons/Button"
+import { FormField } from "@/components/forms/FormField"
+import { useLocale } from "@/providers/LocaleProvider"
 import { useSession } from "@/providers/SessionProvider"
 
 const Login = () => {

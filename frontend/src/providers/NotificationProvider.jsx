@@ -5,7 +5,7 @@ const NotificationContext = createContext()
 const NotificationProvider = ({ children }) => {
     const [notifications, setNotifications] = useState([])
 
-    const addNotification = (message, type = "info", duration = 4000, options = {}) => {
+    const addNotification = (message, type = "info", duration = 5000, options = {}) => {
         const id = crypto.randomUUID()
 
         const notification = {
@@ -15,6 +15,8 @@ const NotificationProvider = ({ children }) => {
             duration,
             ...options,
         }
+
+        console.log("n", notification?.message)
 
         setNotifications((prev) => [...prev, notification])
 

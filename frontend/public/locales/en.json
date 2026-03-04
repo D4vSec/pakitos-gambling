@@ -130,32 +130,34 @@
                 "title": "Blackjack",
                 "description": "Classic blackjack card game."
             }
+        }
+    },
+    "message": {
+        "info": {
+            "registered": "Your account is created, you need to go to the login page"
         },
-        "message": {
-            "info": {
-                "registered": "Your account is created, you need to go to the login page"
-            },
-            "success": {
-                "AUTH_USER_REGISTERED": "Account registered suscessfully",
-                "AUTH_USER_LOGGED": "Logged successfully"
-            },
-            "warning": {},
-            "error": {
-                "AUTH_EMAIL_ALREADY_REGISTERED": "The email already exists",
-                "AUTH_INVALID_USERNAME": "Invalid username",
-                "AUTH_INVALID_EMAIL": "Invalid email",
-                "AUTH_INVALID_PASSWORD_TOO_SHORT": "Password too short",
-                "AUTH_MISSING_FIELDS": "There's missing fields in the form",
-                "AUTH_INVALID_CREDENTIALS": "The email or the password is wrong",
-                "AUTH_INVALID_SESSION": "Invalid session",
-                "AUTH_INVALID_REFRESH_TOKEN": "Invalid refresh token",
-                "AUTH_NO_DATA_PROVIDED": "No data provided in the form",
-                "AUTH_NO_TOKEN_PROVIDED": "No auth token provided",
-                "AUTH_USER_REGISTERED": "Username already registered",
-                "SERVER_ERROR": "The server failed during the process",
-                "401": "Unauthorized",
-                "429": "Bro, chill, to many request..."
-            }
+        "success": {
+            "AUTH_USER_REGISTERED": "Account registered suscessfully",
+            "AUTH_USER_LOGGED": "Logged successfully"
+        },
+        "warning": {},
+        "error": {
+            "AUTH_EMAIL_ALREADY_REGISTERED": "The email already exists",
+            "AUTH_INVALID_USERNAME": "Invalid username",
+            "AUTH_INVALID_EMAIL": "Invalid email",
+            "AUTH_INVALID_PASSWORD_TOO_SHORT": "Password too short",
+            "AUTH_MISSING_FIELDS": "There's missing fields in the form",
+            "AUTH_INVALID_CREDENTIALS": "The email or the password is wrong",
+            "AUTH_INVALID_SESSION": "Invalid session",
+            "AUTH_INVALID_REFRESH_TOKEN": "Invalid refresh token",
+            "AUTH_NO_DATA_PROVIDED": "No data provided in the form",
+            "AUTH_NO_TOKEN_PROVIDED": "No auth token provided",
+            "AUTH_USER_REGISTERED": "Username already registered",
+            "SERVER_ERROR": "The server failed during the request",
+            "401": "Unauthorized",
+            "429": "Bro, chill, to many request...",
+            "500": "Server error during the request",
+            "409": "Some of the data introduced already exists"
         }
     }
 }
