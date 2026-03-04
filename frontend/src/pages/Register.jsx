@@ -2,16 +2,13 @@ import React from "react"
 import Title from "@/components/Title"
 import { useLocale } from "@/providers/LocaleProvider"
 import { useForm, FormProvider } from "react-hook-form"
+import { useSession } from "@/providers/SessionProvider"
 import { FormField } from "@/components/forms/FormField"
 import Button from "@/components/buttons/Button"
-import { useNotification } from "@/providers/NotificationProvider"
-import useAPI from "@/hooks/useAPI"
 
 const Register = () => {
     const { t } = useLocale()
-    const { addNotification } = useNotification()
-
-    const { post } = useAPI()
+    const { register } = useSession()
 
     const methods = useForm({
         defaultValues: {
@@ -77,38 +74,16 @@ const Register = () => {
         },
     ]
 
-    const register = async (data) => {
-        try {
-            const response = await post("/api/v1/auth/register", data)
-            console.log(response)
-
-            addNotification("User registered correctly", "success")
-        } catch (error) {
-            addNotification("Couldn't register the new user", "error")
-        }
-    }
-
     const onSubmit = (data) => {
         const { confirmPassword, ...info } = data
         console.log("Form submit", info)
-
         register(info)
         methods.reset()
     }
 
     return (
         <div className="bg-linear-to-b from-primary to-base-200 min-h-full flex flex-col justify-center items-center gap-4">
-            <Button
-                onClick={() => {
-                    addNotification("Form submit", "success")
-                    addNotification("Form submit", "info")
-                    addNotification("Form submit", "warning")
-                    addNotification("Form submit", "error")
-                }}
-            >
-                awatate
-            </Button>
-            <Title>Register</Title>
+            <Title>{t("general.form.page.register")}</Title>
             <div className="card w-full max-w-md bg-base-100 shadow-xl rounded-2xl">
                 <div className="card-body">
                     <FormProvider {...methods}>
