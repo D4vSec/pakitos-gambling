@@ -28,15 +28,15 @@ const CarrouselBanner = () => {
       setIsTransitioning(false);
     }, 500);
   };
-useEffect(() => {
-  const interval = setInterval(() => {
-    if (!isTransitioning) {
-      changeSlide("next");
-    }
-  }, 2000);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (!isTransitioning) {
+        changeSlide("next");
+      }
+    }, 2000);
 
-  return () => clearInterval(interval);
-}, [isTransitioning]);
+    return () => clearInterval(interval);
+  }, [isTransitioning]);
 
   return (
     <div className="relative w-full max-w-375 h-56 md:h-64 mx-auto overflow-hidden rounded-lg">

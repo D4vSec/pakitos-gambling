@@ -64,6 +64,10 @@
             }
         },
         "form": {
+            "page": {
+                "register" : "Registrarse",
+                "login" : "Iniciar Sesión"
+            },
             "username": {
                 "label": "Nombre de usuario",
                 "placeholder": "Nombre de usuario",
@@ -92,6 +96,39 @@
             "buttons": {
                 "login": "Iniciar Sesión",
                 "register": "Registrarse"
+            }
+        },
+        "home" : {
+            "playNow":"Juega ahora",
+            "slots": {
+                "title": "Tragamonedas",
+                "starwars": {
+                    "title": "Star Wars",
+                    "description": "Juego de tragamonedas temático de Star Wars."
+                },
+                "stardewValley": {
+                    "title": "Stardew Valley",
+                    "description": "Juego de tragamonedas temático de Stardew Valley."
+                },
+                "beer": {
+                    "title": "Beer-man",
+                    "description": "Juego de tragamonedas temático de la mejor bebida del mundo."
+                }
+            },
+            "roulette": {
+                "title": "Ruleta",
+                "classic": {
+                    "title": "Ruleta Clásica",
+                    "description": "Juego de ruleta clásica."
+                },
+                "american": {
+                    "title": "Ruleta Americana",
+                    "description": "Juego de ruleta americana."
+                }
+            },
+            "blackjack": {
+                "title": "Blackjack",
+                "description": "Juego de blackjack."
             }
         }
     }

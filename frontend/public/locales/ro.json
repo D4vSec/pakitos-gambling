@@ -1,0 +1,135 @@
+{
+    "admin": {},
+    "user": {},
+    "general": {
+        "navbar": {
+            "menu": "Meniu",
+            "home": "Acasă",
+            "allGames": "Toate jocurile",
+            "favourites": "Favorite",
+            "login": "Autentificare",
+            "register": "Înregistrare",
+            "userPill": {
+                "guest": "Invitat",
+                "settings": "Setări utilizator",
+                "coupon": "Introduceți cupónul",
+                "logout": "Deconectare"
+            }
+        },
+        "copyright": "Toate drepturile rezervate de The Mafia at the Back",
+        "landingPage": {
+            "heroContent": {
+                "title": "Bine ai venit la Pakito's Gambling",
+                "text": "Cea mai bună experiență de cazino online, cu sute de jocuri palpitante, bonusuri incredibile și șansa de a câștiga premii mari. Alătură-te astăzi comunității noastre de câștigători.",
+                "join": "Alătură-te",
+                "seeGames": "Vezi jocurile"
+            },
+            "cta": {
+                "title": "Ești gata să începi aventura ta?",
+                "text": "Alătură-te miilor de jucători care deja se bucură de cea mai bună experiență de cazino online. Obține bonusul tău de bun venit de 200% chiar astăzi.",
+                "join": "Alătură-te acum",
+                "exploreGames": "Explorează jocurile"
+            },
+            "imagesGrid": {
+                "title": "Joacă oriunde vrei",
+                "text": "Accesează toate jocurile tale preferate de pe orice dispozitiv. Design responsive pentru mobil, tabletă și desktop.",
+                "image1Title": "Sărbătorește câștigurile",
+                "image1Text": "Câștigă premii mari și bucură-te de fiecare moment",
+                "image2Title": "Atmosferă premium",
+                "image2Text": "Bucură-te de o atmosferă autentică de cazino cu grafică de înaltă calitate",
+                "image3Title": "Joacă oriunde vrei",
+                "image3Text": "Accesează toate jocurile tale preferate de pe orice dispozitiv. Design responsive pentru mobil, tabletă și desktop."
+            },
+            "stats": {
+                "games": "Jocuri",
+                "players": "Jucători",
+                "support": "Suport",
+                "prizes": "Premii"
+            },
+            "features": {
+                "title": "De ce să alegi Pakito's Gambling?",
+                "text": "Oferim o experiență premium de cazino cu cele mai bune funcționalități de pe piață și un angajament total față de satisfacția jucătorului.",
+                "item1_title": "Varietate de jocuri",
+                "item1_description": "Peste 100 de jocuri premium de cazino, inclusiv sloturi, ruletă, blackjack și altele.",
+                "item2_title": "Sigur și de încredere",
+                "item2_description": "Platformă sigură cu cele mai bune tehnologii de criptare și protecție.",
+                "item3_title": "Premii mari",
+                "item3_description": "Câștigă premii mari cu jackpoturile noastre progresive și turneele exclusive.",
+                "item4_title": "Experiență rapidă",
+                "item4_description": "Jocuri optimizate pentru o experiență fluidă pe orice dispozitiv.",
+                "item5_title": "Comunitate activă",
+                "item5_description": "Alătură-te miilor de jucători din comunitatea noastră vibrantă de cazino.",
+                "item6_title": "Bonusuri exclusive",
+                "item6_description": "Primește bonusuri de bun venit și promoții speciale în mod regulat."
+            }
+        },
+        "form": {
+            "page": {
+                "register" : "Înregistrare",
+                "login" : "Autentificare"
+            },
+            "username": {
+                "label": "Nume utilizator",
+                "placeholder": "Nume utilizator",
+                "required": "Numele de utilizator este obligatoriu",
+                "minLength": "Numele de utilizator trebuie să aibă cel puțin 3 caractere",
+                "maxLength": "Numele de utilizator poate avea maximum 25 de caractere"
+            },
+            "email": {
+                "label": "Email",
+                "placeholder": "Email",
+                "required": "Email-ul este obligatoriu",
+                "pattern": "Format de email invalid"
+            },
+            "password": {
+                "label": "Parolă",
+                "placeholder": "Parolă",
+                "required": "Parola este obligatorie",
+                "pattern": "Parola trebuie să aibă cel puțin 8 caractere, să includă 1 majusculă, 1 literă minusculă și 1 număr sau caracter special"
+            },
+            "confirmPassword": {
+                "label": "Confirmă parola",
+                "placeholder": "Confirmă parola",
+                "required": "Confirmarea parolei este obligatorie",
+                "match": "Confirmarea parolei nu se potrivește"
+            },
+            "buttons": {
+                "login": "Autentificare",
+                "register": "Înregistrare"
+            }
+        },
+        "home" : {
+            "playNow":"Joacă acum",
+            "slots": {
+                "title": "Sloturi",
+                "starwars": {
+                    "title": "Star Wars",
+                    "description": "Slot tematic Star Wars."
+                },
+                "stardewValley": {
+                    "title": "Stardew Valley",
+                    "description": "Slot tematic Stardew Valley."
+                },
+                "beer": {
+                    "title": "Beer-man",
+                    "description": "Slot tematic inspirat de cea mai bună băutură din lume."
+                }
+            },
+            "roulette": {
+                "title": "Ruletă",
+                "classic": {
+                    "title": "Ruletă clasică",
+                    "description": "Joc clasic de ruletă."
+                },
+                "american": {
+                    "title": "Ruletă americană",
+                    "description": "Joc de ruletă în stil american."
+                }
+            },
+            "blackjack": {
+                "title": "Blackjack",
+                "description": "Joc clasic de blackjack."
+            }
+        }
+    }
+}
