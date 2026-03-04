@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState } from "react"
 import { useNotification } from "@/providers/NotificationProvider"
 import useAPI from "@/hooks/useAPI"
 import { useNavigate } from "react-router-dom"
-
+import { useLocale } from "./LocaleProvider"
 const SessionContext = createContext()
 
 const SessionProvider = ({ children }) => {
@@ -11,6 +11,7 @@ const SessionProvider = ({ children }) => {
     const [loading, setLoading] = useState(true)
 
     const { addNotification } = useNotification()
+    const { localeData, findMessage } = useLocale()
     const { post } = useAPI()
 
     const navigate = useNavigate()
@@ -19,14 +20,16 @@ const SessionProvider = ({ children }) => {
         try {
             const response = await post("/api/v1/auth/register", data)
             console.log(response)
-            if (response.code === "AUTH_USER_REGISTERED") {
-                addNotification("User registered correctly", "success")
-                //navigate("/login")
-            } else {
 
+            if (response?.code !== "AUTH_USER_REGISTERED") {
+                throw new Error(findMessage(response?.code))
             }
+
+            addNotification(t(`message.success.${response?.code}`), "success")
+            addNotification(t("message.info.registered"), "success")
         } catch (error) {
-            addNotification("Couldn't register the new user", "error")
+            console.log(error)
+            addNotification(error.message || error, "error")
         }
     }
 
@@ -34,10 +37,24 @@ const SessionProvider = ({ children }) => {
         try {
             const response = await post("/api/v1/auth/login", data)
             console.log("ae", response)
-            const a = response.code === "AUTH_INVALID_CREDENTIALS" ? "error" : "success"
-            addNotification(response?.code, a)
+
+            // TODO: Cambiar cuando del david me ponga un code con el token
+            if (response.code) {
+                const msg =
+                    findMessage(response.code, localeData) || response.message || "Unknown error"
+                throw new Error(msg)
+            }
+
+            addNotification(findMessage("AUTH_USER_LOGGED", localeData), "success")
         } catch (error) {
-            addNotification(error?.message, "error")
+            console.log("e", error)
+            console.log("em", error.message)
+            addNotification(
+                findMessage(error.message, localeData?.message?.error) ||
+                    error.message ||
+                    "Error at the login",
+                "error",
+            )
         }
     }
 

@@ -54,7 +54,7 @@ const Login = () => {
 
     return (
         <div className="bg-linear-to-b from-primary to-base-200 min-h-full flex flex-col justify-center items-center gap-4">
-            <Title>{t("general.form.page.register")}</Title>
+            <Title>{t("general.form.page.login")}</Title>
             <div className="card w-full max-w-md bg-base-100 shadow-xl rounded-2xl">
                 <div className="card-body">
                     <FormProvider {...methods}>
