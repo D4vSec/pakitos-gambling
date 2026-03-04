@@ -11,9 +11,7 @@ const authMiddleware = async (req, res, next) => {
 	const refreshToken = req.headers["x-refresh-token"]
 
 	if (!authHeader?.startsWith("Bearer ")) {
-		return res
-			.status(401)
-			.json({ code: "AUTH_NO_TOKEN_PROVIDED", message: "No access token provided" })
+		return res.status(401).json({ code: "AUTH_NO_TOKEN_PROVIDED" })
 	}
 
 	const accessToken = authHeader.split(" ")[1]
@@ -22,7 +20,7 @@ const authMiddleware = async (req, res, next) => {
 		const decoded = jwt.verify(accessToken, secret)
 		const user = await User.findUserById(decoded.id)
 		if (!user) {
-			return res.status(401).json({ code: "AUTH_INVALID_TOKEN", message: "Invalid token" })
+			return res.status(401).json({ code: "AUTH_INVALID_TOKEN" })
 		}
 
 		req.user = { id: user.id, role: user.role }
@@ -30,9 +28,7 @@ const authMiddleware = async (req, res, next) => {
 	} catch (err) {
 		if (err.name === "TokenExpiredError") {
 			if (!refreshToken) {
-				return res
-					.status(401)
-					.json({ code: "AUTH_NO_TOKEN_PROVIDED" })
+				return res.status(401).json({ code: "AUTH_NO_TOKEN_PROVIDED" })
 			}
 
 			try {
@@ -44,7 +40,6 @@ const authMiddleware = async (req, res, next) => {
 				if (!validSession || new Date(validSession.expires_at) < new Date()) {
 					return res.status(401).json({
 						code: "AUTH_INVALID_SESSION",
-						message: "Invalid or expired session",
 					})
 				}
 
@@ -60,9 +55,7 @@ const authMiddleware = async (req, res, next) => {
 
 				return next()
 			} catch (refreshErr) {
-				return res
-					.status(401)
-					.json({ code: "AUTH_SESSION_EXPIRED" })
+				return res.status(401).json({ code: "AUTH_SESSION_EXPIRED" })
 			}
 		}
 

@@ -6,8 +6,7 @@ const getProfile = async (req, res) => {
 	try {
 		const user = await User.findUserById(req.user.id)
 
-		if (!user)
-			return res.status(404).json({ code: "USER_NOT_FOUND", message: "User not found" })
+		if (!user) return res.status(404).json({ code: "USER_NOT_FOUND" })
 
 		res.json({
 			id: user.id,
@@ -68,7 +67,7 @@ const updateSelf = async (req, res) => {
 
 		if (!updated) return res.status(404).json({ code: "USER_NOT_FOUND" })
 
-		res.status(200).json({ message: "success" })
+		res.status(200).json({ code: "SUCCESS" })
 	} catch (err) {
 		if (err instanceof z.ZodError) {
 			return res.status(400).json({ errors: err.errors })
@@ -119,12 +118,9 @@ const updateUserById = async (req, res) => {
 
 		const updated = await User.updateUser(id, data)
 
-		if (!updated)
-			return res
-				.status(404)
-				.json({ code: "USER_NOT_FOUND", message: "User not found or update failed" })
+		if (!updated) return res.status(404).json({ code: "USER_NOT_FOUND" })
 
-		res.status(200).json({ message: "success" })
+		res.status(200).json({ code: "SUCCESS" })
 	} catch (err) {
 		if (err instanceof z.ZodError) {
 			return res.status(400).json({ errors: err.errors })
@@ -139,10 +135,7 @@ const deleteUserById = async (req, res) => {
 		const { id } = req.params
 		const deleted = await User.deleteUser(id)
 
-		if (!deleted)
-			return res
-				.status(404)
-				.json({ code: "USER_NOT_FOUND", message: "User not found or already deleted" })
+		if (!deleted) return res.status(404).json({ code: "USER_NOT_FOUND" })
 
 		res.status(204).send()
 	} catch (err) {
@@ -156,8 +149,7 @@ const getSelfBalance = async (req, res) => {
 		const userId = req.user.id
 		const balance = await User.getUserBalance(userId)
 
-		if (balance === null)
-			return res.status(404).json({ code: "USER_NOT_FOUND", message: "User not found" })
+		if (balance === null) return res.status(404).json({ code: "USER_NOT_FOUND" })
 
 		res.json({ balance })
 	} catch (err) {
