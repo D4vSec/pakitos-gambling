@@ -13,10 +13,10 @@ import {
 const blackJackRoutes = express.Router()
 
 blackJackRoutes.post("/start", gameLimiter, authMiddleware, startGame)
-blackJackRoutes.post("/hit/:gameId", gameLimiter, authMiddleware, hit)
-blackJackRoutes.post("/stand/:gameId", gameLimiter, authMiddleware, stand)
-blackJackRoutes.post("/double/:gameId", gameLimiter, authMiddleware, double)
-blackJackRoutes.delete("/delete/:gameId", authMiddleware, deleteGame)
+blackJackRoutes.post("/:gameId/hit/", gameLimiter, authMiddleware, hit)
+blackJackRoutes.post("/:gameId/stand", gameLimiter, authMiddleware, stand)
+blackJackRoutes.post("/:gameId/double", gameLimiter, authMiddleware, double)
+blackJackRoutes.delete("/:gameId", authMiddleware, deleteGame)
 //Testing method, will be removed in the final version
 blackJackRoutes.get("/games", authMiddleware, getGames)
 
