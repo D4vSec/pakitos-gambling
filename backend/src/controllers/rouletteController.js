@@ -1,10 +1,39 @@
 import createRoulette from "#services/roulette"
 import User from "#models/userModel"
 import crypto from "crypto"
-import { get } from "http"
 
 const spinRoulette = (req, res) => {
-    const { type, bet, amount } = req.body
+    const { rouletteType, type, bet, amount } = req.body
+
+    //All the validations for the request body (I might want to move this to a middleware or something later)
+    if (!["Zero", "ZeroZero"].includes(rouletteType)) {
+        return res.status(400).json({ code: "INVALID_ROULETTE_TYPE" })
+    }
+
+    if (rouletteType === "Zero" && (bet < 0 || bet > 36)) {
+        return res.status(400).json({ code: "INVALID_BET" })
+    }
+
+    if (rouletteType === "ZeroZero" && (bet < 0 || bet > 37)) {
+        return res.status(400).json({ code: "INVALID_BET" })
+    }
+
+    if (type === "color" && !["red", "black"].includes(bet)) {
+        return res.status(400).json({ code: "INVALID_BET_TYPE" })
+    }
+
+    if (type === "odd/even" && !["odd", "even"].includes(bet)) {
+        return res.status(400).json({ code: "INVALID_BET_TYPE" })
+    }
+
+    if (type === "twelve" && !["1-12", "13-24", "25-36"].includes(bet)) {
+        return res.status(400).json({ code: "INVALID_BET_TYPE" })
+    }
+
+    if (type === "row" && !["row1", "row2", "row3"].includes(bet)) {
+        return res.status(400).json({ code: "INVALID_BET_TYPE" })
+    }
+
     const id = req.user.id
     const wallet = User.getUserBalance(id)
 
@@ -17,7 +46,7 @@ const spinRoulette = (req, res) => {
     try {
         User.updateUserBalance(id, -amount)
 
-        const winningNumber = roulette.spinRoulette()
+        const winningNumber = roulette.spinRoulette(rouletteType)
 
         let isWinner = false
         let multiplier = 0
@@ -51,6 +80,7 @@ const spinRoulette = (req, res) => {
         res.json({
             gameId: crypto.randomUUID(),
             game: "roulette",
+            rouletteType,
             status: "finished",
             createdAt: new Date().toISOString(),
             bet: { type, selection: bet, amount },

@@ -21,7 +21,10 @@ const createRoulette = () => {
         2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35,
     ]
 
-    const spinRoulette = () => randomInt(0, 37) //0-36 for numbers, 37 for 00
+    const spinRoulette = (rouletteType) => {
+        if (rouletteType === "Zero") return randomInt(0, 36)
+        if (rouletteType === "ZeroZero") return randomInt(0, 37) //0-36 for numbers, 37 for 00
+    }
     const isZero = (type) => type === 0
     const isZeroZero = (type) => type === 37
 
@@ -29,7 +32,7 @@ const createRoulette = () => {
     const isNumberBet = (type) => type === "number"
     const isColorBet = (type) => type === "color"
     const isOddBet = (type) => type === "odd/even"
-    const isTwelveBet = (type) => type === "Twelve"
+    const isTwelveBet = (type) => type === "twelve"
     const isRowBet = (type) => type === "row"
 
     //The following functions check if the bet is a winner based on the winning number
