@@ -77,7 +77,7 @@ const Register = () => {
         },
     ]
 
-    const registerUser = async (data) => {
+    const register = async (data) => {
         try {
             const response = await post("/api/v1/auth/register", data)
             console.log(response)
@@ -92,7 +92,7 @@ const Register = () => {
         const { confirmPassword, ...info } = data
         console.log("Form submit", info)
 
-        registerUser(info)
+        register(info)
         methods.reset()
     }
 
