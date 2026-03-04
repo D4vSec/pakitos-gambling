@@ -5,10 +5,14 @@ import { useForm, FormProvider } from "react-hook-form"
 import { FormField } from "@/components/forms/FormField"
 import Button from "@/components/buttons/Button"
 import { useNotification } from "@/providers/NotificationProvider"
+import useAPI from "@/hooks/useAPI"
 
 const Register = () => {
     const { t } = useLocale()
     const { addNotification } = useNotification()
+
+    const { post } = useAPI()
+
     const methods = useForm({
         defaultValues: {
             username: "",
@@ -73,14 +77,24 @@ const Register = () => {
         },
     ]
 
+    const registerUser = async (data) => {
+        try {
+            const response = await post("/api/v1/auth/register", data)
+            console.log(response)
+
+            addNotification("User registered correctly", "success")
+        } catch (error) {
+            addNotification("Couldn't register the new user", "error")
+        }
+    }
+
     const onSubmit = (data) => {
         const { confirmPassword, ...info } = data
         console.log("Form submit", info)
-        addNotification("Form submit", "success")
+
+        registerUser(info)
         methods.reset()
     }
-
-    console.log("e", methods.formState.errors)
 
     return (
         <div className="bg-linear-to-b from-primary to-base-200 min-h-full flex flex-col justify-center items-center gap-4">
