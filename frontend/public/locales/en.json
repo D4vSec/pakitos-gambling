@@ -134,11 +134,13 @@
     },
     "message": {
         "info": {
-            "registered": "Your account is created, you need to go to the login page"
+            "registered": "Your account is created, you need to go to the login page",
+            "userData": "User data received correctly"
         },
         "success": {
             "AUTH_USER_REGISTERED": "Account registered suscessfully",
-            "AUTH_USER_LOGGED": "Logged successfully"
+            "AUTH_USER_LOGGED": "Logged successfully",
+            "logout": "Logout successfully"
         },
         "warning": {},
         "error": {
