@@ -17,7 +17,7 @@ export const MACHINE_TYPES = {
 export const generatePaylines = (rows, cols) => {
 	const paylines = []
 
-	// ── Horizontal lines (main paylines) ──────────────────────────────────────
+	// ── Horizontal lines (main paylines) 
 	for (let r = 0; r < rows; r++) {
 		paylines.push({
 			id: `H_ROW${r}`,
@@ -25,21 +25,21 @@ export const generatePaylines = (rows, cols) => {
 		})
 	}
 
-	// ── Main diagonal (↘) — only for square grids ────────────────────────────
+	// ── Main diagonal (↘) — only for square grids 
 	if (rows === cols) {
 		paylines.push({
 			id: "D_MAIN",
 			positions: Array.from({ length: rows }, (_, i) => [i, i]),
 		})
 
-		// ── Anti-diagonal (↙) ────────────────────────────────────────────────
+		// ── Anti-diagonal (↙) 
 		paylines.push({
 			id: "D_ANTI",
 			positions: Array.from({ length: rows }, (_, i) => [i, cols - 1 - i]),
 		})
 	}
 
-	// ── V-shape and Λ-shape diagonals (only meaningful on wider grids) ───────
+	// ── V-shape and Λ-shape diagonals (only meaningful on wider grids) 
 	if (rows >= 3 && cols >= 5) {
 		const midRow = Math.floor(rows / 2)
 		const midCol = Math.floor(cols / 2)
