@@ -1,0 +1,75 @@
+{
+  "info": {
+    "_postman_id": "0758266b-187d-4b4c-8547-0119b41f5285",
+    "name": "Roullete",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "50574467",
+    "_collection_link": "https://go.postman.co/collection/50574467-0758266b-187d-4b4c-8547-0119b41f5285?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Spin",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"rouletteType\": \"ZeroZero\",\n    \"type\": \"twelve\",\n    \"bet\": \"1-12\",\n    \"amount\": 10\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/v1/roulette/spin",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "v1",
+            "roulette",
+            "spin"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{session}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ]
+}

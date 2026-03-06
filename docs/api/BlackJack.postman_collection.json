@@ -1,0 +1,210 @@
+{
+  "info": {
+    "_postman_id": "3b4b4263-8c63-48a0-abdb-1a4a8b50d89e",
+    "name": "BlackJack",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "50574467",
+    "_collection_link": "https://go.postman.co/collection/50574467-3b4b4263-8c63-48a0-abdb-1a4a8b50d89e?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "StarGame",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-refresh-token",
+            "value": "{{refresh}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"amount\": 10}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3000/v1/blackjack/start",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "v1",
+            "blackjack",
+            "start"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Hit",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/v1/blackjack/{{gameId}}/hit",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "v1",
+            "blackjack",
+            "{{gameId}}",
+            "hit"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Stand",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/v1/blackjack/ca571cfe-186d-4482-9d05-564b33c0202a/stand",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "v1",
+            "blackjack",
+            "ca571cfe-186d-4482-9d05-564b33c0202a",
+            "stand"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Double",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/v1/blackjack/double/",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "v1",
+            "blackjack",
+            "double",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "DestroyGame",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "x-refresh-token",
+            "value": "{{refresh}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"amount\": 10}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/v1/blackjack/d119f0b9-7245-430c-bc79-f3e7eb7e59a5",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "v1",
+            "blackjack",
+            "d119f0b9-7245-430c-bc79-f3e7eb7e59a5"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "SeeGames",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-refresh-token",
+            "value": "{{refresh}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3000/v1/blackjack/games",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "v1",
+            "blackjack",
+            "games"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{session}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "value": ""
+    }
+  ]
+}
