@@ -7,9 +7,9 @@ const CarrouselBanner = () => {
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   const images = [
-    "https://i.pinimg.com/1200x/ba/05/30/ba053027e388d7b5c84c2312684c75c3.jpg",
-    "https://i.pinimg.com/736x/1f/80/ff/1f80ff5e30f970c3f09c507f89e6425b.jpg",
-    "https://i.pinimg.com/1200x/d7/d9/23/d7d923f8d10821b6d482287241e7eebb.jpg",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTumNkmB-Q13m4UcQe-6uo_J0P8UCw1UBIWQ&s",
+    "https://static.posters.cz/image/hp/75998.jpg",
+    "https://www.teleadhesivo.com/es/img/asfs648-png/folder/products-detalle-png/pegatinas-coches-motos-bar-moes.png",
   ];
 
   const changeSlide = (direction) => {
@@ -28,48 +28,50 @@ const CarrouselBanner = () => {
       setIsTransitioning(false);
     }, 500);
   };
-useEffect(() => {
-  const interval = setInterval(() => {
-    if (!isTransitioning) {
-      changeSlide("next");
-    }
-  }, 2000);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (!isTransitioning) {
+        changeSlide("next");
+      }
+    }, 2000);
 
-  return () => clearInterval(interval);
-}, [isTransitioning]);
+    return () => clearInterval(interval);
+  }, [isTransitioning]);
 
   return (
-    <div className="relative w-full max-w-375 h-56 md:h-64 mx-auto overflow-hidden rounded-lg">
-      <img
-        src={images[current]}
-        className={`absolute w-full h-full object-cover transition-opacity duration-500 ${
-          isTransitioning ? "opacity-0" : "opacity-100"
-        }`}
-        alt=""
-      />
+    <>
+      <div className="relative w-full max-w-[1440px] mx-auto px-4 md:px-8 h-[224px] md:h-[360px] overflow-hidden rounded-lg">
+        <img
+          src={images[current]}
+          className={`absolute w-full h-full object-contain transition-opacity duration-500 ${
+            isTransitioning ? "opacity-0" : "opacity-100"
+          }`}
+          alt={`Slide ${current + 1}`}
+        />
 
-      <img
-        src={images[next]}
-        className={`absolute w-full h-full object-cover transition-opacity duration-500 ${
-          isTransitioning ? "opacity-100" : "opacity-0"
-        }`}
-        alt=""
-      />
+        <img
+          src={images[next]}
+          className={`absolute w-full h-full object-contain transition-opacity duration-500 ${
+            isTransitioning ? "opacity-100" : "opacity-0"
+          }`}
+          alt={`Slide ${next + 1}`}
+        />
 
-      <Button
-        onClick={() => changeSlide("prev")}
-        className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 text-white p-2 rounded-full"
-      >
-        &lt;
-      </Button>
+        <Button
+          onClick={() => changeSlide("prev")}
+          className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 text-white p-2 rounded-full"
+        >
+          &lt;
+        </Button>
 
-      <Button
-        onClick={() => changeSlide("next")}
-        className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 text-white p-2 rounded-full"
-      >
-        &gt;
-      </Button>
-    </div>
+        <Button
+          onClick={() => changeSlide("next")}
+          className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 text-white p-2 rounded-full"
+        >
+          &gt;
+        </Button>
+      </div>
+    </>
   );
 };
 

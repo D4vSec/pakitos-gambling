@@ -2,9 +2,10 @@ import createBlackJack from "#services/blackjack"
 import User from "#models/userModel"
 
 const games = new Map()
-export const startGame = (req, res) => {
+	
+export const startGame = async (req, res) => {
 	const id = req.user.id
-	const wallet = User.getUserBalance(id)
+	const wallet = await User.getUserBalance(id)
 	const { amount } = req.body
 	if (amount > wallet) {
 		return res.status(400).json({ code: "INSUFFICIENT_BALANCE" })
@@ -14,7 +15,7 @@ export const startGame = (req, res) => {
 	const gameId = crypto.randomUUID()
 
 	try {
-		User.updateUserBalance(id, -amount)
+		await User.updateUserBalance(id, -amount)
 
 		const deck = blackJack.shuffleDeck(blackJack.createDeck())
 		const playerHand = blackJack.getInitialHand(deck)
@@ -54,7 +55,7 @@ export const startGame = (req, res) => {
 
 			const payout = game.winner === "Player" ? amount * 1.5 + amount : 0
 
-			if (game.winner === "Player") User.updateUserBalance(id, payout)
+			if (game.winner === "Player") await User.updateUserBalance(id, payout)
 			games.set(gameId, game)
 		}
 
@@ -92,7 +93,7 @@ export const hit = (req, res) => {
 	}
 }
 
-export const stand = (req, res) => {
+export const stand = async (req, res) => {
 	const id = req.user.id
 	const blackJack = createBlackJack()
 	try {
@@ -115,7 +116,7 @@ export const stand = (req, res) => {
 
 		const payout = game.winner === "Player" ? game.amount + game.amount : 0
 
-		if (game.winner === "Player") User.updateUserBalance(id, payout)
+		if (game.winner === "Player") await User.updateUserBalance(id, payout)
 
 		games.set(gameId, game)
 		res.json(game)
@@ -124,7 +125,7 @@ export const stand = (req, res) => {
 	}
 }
 
-export const double = (req, res) => {
+export const double = async (req, res) => {
 	const id = req.user.id
 	const blackJack = createBlackJack()
 	try {
@@ -156,7 +157,7 @@ export const double = (req, res) => {
 
 			if (game.winner === "Player") {
 				const payout = game.amount * 2 + game.amount
-				User.updateUserBalance(id, payout)
+				await User.updateUserBalance(id, payout)
 			}
 		}
 		games.set(gameId, game)

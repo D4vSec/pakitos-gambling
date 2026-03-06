@@ -17,13 +17,7 @@ export const FormField = ({
 
     const error = errors?.[name]
 
-    const baseClass = `
-        w-full 
-        ${as === "input" ? "input input-lg" : ""}
-        ${as === "textarea" ? "textarea textarea-lg" : ""}
-        ${as === "select" ? "select select-lg" : ""}
-        ${error ? "input-error" : ""}
-    `
+    const baseClass = `w-full ${as === "input" ? "input input-lg" : ""} ${as === "textarea" ? "textarea textarea-md" : ""} ${as === "select" ? "select select-md" : ""} ${error ? "input-error" : ""}`
 
     return (
         <div className="w-full">
