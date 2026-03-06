@@ -3,6 +3,8 @@ import Button from "../buttons/Button";
 import Card from "../landingPage/Card";
 import BlackjackSVG from "../svg/BlackjackSVG";
 import { useLocale } from "@/providers/LocaleProvider";
+import Badge from "./Badges";
+import FlameSVG from "../svg/FlameSVG";
 
 const BlackjackCard = () => {
   const { t } = useLocale();
@@ -23,6 +25,12 @@ const BlackjackCard = () => {
               alt="Blackjack"
               className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
+
+            <div className="absolute top-2 left-2 flex flex-col gap-2 z-5">
+              <Badge variant="primary" svg={<FlameSVG className="w-4 h-4" />}>
+                HOT
+              </Badge>
+            </div>
 
             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
               <Button className="bg-primary text-primary-foreground px-4 py-2 rounded-md text-sm font-medium hover:opacity-90 transition">

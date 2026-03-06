@@ -1,9 +1,11 @@
 import React from "react"
 import UserSVG from "@/components/svg/UserSVG"
 import { useLocale } from "@/providers/LocaleProvider"
+import { useSession } from "@/providers/SessionProvider"
 
 const UserDropdown = ({ vertical = false }) => {
     const { t } = useLocale()
+    const { logout, user } = useSession()
 
     const userDropdownLinks = [
         { key: "settings", label: "general.navbar.userPill.settings" },
@@ -12,6 +14,7 @@ const UserDropdown = ({ vertical = false }) => {
             key: "logout",
             label: "general.navbar.userPill.logout",
             className: "text-error",
+            onClick: () => logout(),
         },
     ]
 
@@ -25,7 +28,7 @@ const UserDropdown = ({ vertical = false }) => {
                 }`}
             >
                 <UserSVG />
-                <p>{t("general.navbar.userPill.guest")}</p>
+                <p>{user?.username || t("general.navbar.userPill.guest")}</p>
             </div>
 
             <ul
@@ -34,9 +37,11 @@ const UserDropdown = ({ vertical = false }) => {
                     vertical ? "w-full z-1" : "w-52 z-10"
                 }`}
             >
-                {userDropdownLinks.map(({ key, label, className }) => (
+                {userDropdownLinks.map(({ key, label, className, onClick }) => (
                     <li key={key}>
-                        <a className={className || ""}>{t(label)}</a>
+                        <a className={className || ""} onClick={onClick}>
+                            {t(label)}
+                        </a>
                     </li>
                 ))}
             </ul>
