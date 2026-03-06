@@ -20,12 +20,11 @@
           }
         ],
         "url": {
-          "raw": "http://localhost:3000/v1/user/",
+          "raw": "http://{{host}}/v1/user/",
           "protocol": "http",
           "host": [
-            "localhost"
+            "{{host}}"
           ],
-          "port": "3000",
           "path": [
             "v1",
             "user",
@@ -48,12 +47,11 @@
           }
         ],
         "url": {
-          "raw": "http://localhost:3000/v1/user/c66d4b83-e5db-4512-a6cf-46da44429852",
+          "raw": "http://{{host}}/v1/user/c66d4b83-e5db-4512-a6cf-46da44429852",
           "protocol": "http",
           "host": [
-            "localhost"
+            "{{host}}"
           ],
-          "port": "3000",
           "path": [
             "v1",
             "user",
@@ -76,12 +74,11 @@
           }
         ],
         "url": {
-          "raw": "http://localhost:3000/v1/user/c66d4b83-e5db-4512-a6cf-46da44429852/transactions",
+          "raw": "http://{{host}}/v1/user/c66d4b83-e5db-4512-a6cf-46da44429852/transactions",
           "protocol": "http",
           "host": [
-            "localhost"
+            "{{host}}"
           ],
-          "port": "3000",
           "path": [
             "v1",
             "user",
@@ -105,12 +102,11 @@
           }
         ],
         "url": {
-          "raw": "http://localhost:3000/v1/user/c66d4b83-e5db-4512-a6cf-46da44429852",
+          "raw": "http://{{host}}/v1/user/c66d4b83-e5db-4512-a6cf-46da44429852",
           "protocol": "http",
           "host": [
-            "localhost"
+            "{{host}}"
           ],
-          "port": "3000",
           "path": [
             "v1",
             "user",
@@ -133,12 +129,11 @@
           }
         ],
         "url": {
-          "raw": "http://localhost:3000/v1/user/c66d4b83-e5db-4512-a6cf-46da44429852",
+          "raw": "http://{{host}}/v1/user/c66d4b83-e5db-4512-a6cf-46da44429852",
           "protocol": "http",
           "host": [
-            "localhost"
+            "{{host}}"
           ],
-          "port": "3000",
           "path": [
             "v1",
             "user",

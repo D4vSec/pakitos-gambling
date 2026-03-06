@@ -1,10 +1,10 @@
 {
   "info": {
-    "_postman_id": "3b4b4263-8c63-48a0-abdb-1a4a8b50d89e",
+    "_postman_id": "4f79c02c-03d0-4d9f-ad85-d74eaca59069",
     "name": "BlackJack",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "50574467",
-    "_collection_link": "https://go.postman.co/collection/50574467-3b4b4263-8c63-48a0-abdb-1a4a8b50d89e?source=collection_link"
+    "_exporter_id": "52767931",
+    "_collection_link": "https://go.postman.co/collection/52767931-4f79c02c-03d0-4d9f-ad85-d74eaca59069?source=collection_link"
   },
   "item": [
     {
@@ -28,12 +28,11 @@
           }
         },
         "url": {
-          "raw": "http://localhost:3000/v1/blackjack/start",
+          "raw": "http://{{host}}/v1/blackjack/start",
           "protocol": "http",
           "host": [
-            "localhost"
+            "{{host}}"
           ],
-          "port": "3000",
           "path": [
             "v1",
             "blackjack",
@@ -47,14 +46,19 @@
       "name": "Hit",
       "request": {
         "method": "POST",
-        "header": [],
+        "header": [
+          {
+            "key": "x-refresh-token",
+            "value": "{{refresh}}",
+            "type": "text"
+          }
+        ],
         "url": {
-          "raw": "http://localhost:3000/v1/blackjack/{{gameId}}/hit",
+          "raw": "http://{{host}}/v1/blackjack/{{gameId}}/hit",
           "protocol": "http",
           "host": [
-            "localhost"
+            "{{host}}"
           ],
-          "port": "3000",
           "path": [
             "v1",
             "blackjack",
@@ -69,18 +73,23 @@
       "name": "Stand",
       "request": {
         "method": "POST",
-        "header": [],
+        "header": [
+          {
+            "key": "x-refresh-token",
+            "value": "{{refresh}}",
+            "type": "text"
+          }
+        ],
         "url": {
-          "raw": "http://localhost:3000/v1/blackjack/ca571cfe-186d-4482-9d05-564b33c0202a/stand",
+          "raw": "http://{{host}}/v1/blackjack/{{gameId}}/stand",
           "protocol": "http",
           "host": [
-            "localhost"
+            "{{host}}"
           ],
-          "port": "3000",
           "path": [
             "v1",
             "blackjack",
-            "ca571cfe-186d-4482-9d05-564b33c0202a",
+            "{{gameId}}",
             "stand"
           ]
         }
@@ -91,17 +100,23 @@
       "name": "Double",
       "request": {
         "method": "POST",
-        "header": [],
+        "header": [
+          {
+            "key": "x-refresh-token",
+            "value": "{{refresh}}",
+            "type": "text"
+          }
+        ],
         "url": {
-          "raw": "http://localhost:3000/v1/blackjack/double/",
+          "raw": "http://{{host}}/v1/blackjack/{{gameId}}/double/",
           "protocol": "http",
           "host": [
-            "localhost"
+            "{{host}}"
           ],
-          "port": "3000",
           "path": [
             "v1",
             "blackjack",
+            "{{gameId}}",
             "double",
             ""
           ]
@@ -125,16 +140,15 @@
           "raw": "{\"amount\": 10}"
         },
         "url": {
-          "raw": "http://localhost:3000/v1/blackjack/d119f0b9-7245-430c-bc79-f3e7eb7e59a5",
+          "raw": "http://{{host}}/v1/blackjack/{{gameId}}",
           "protocol": "http",
           "host": [
-            "localhost"
+            "{{host}}"
           ],
-          "port": "3000",
           "path": [
             "v1",
             "blackjack",
-            "d119f0b9-7245-430c-bc79-f3e7eb7e59a5"
+            "{{gameId}}"
           ]
         }
       },

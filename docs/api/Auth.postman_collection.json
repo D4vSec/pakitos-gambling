@@ -26,12 +26,11 @@
           }
         },
         "url": {
-          "raw": "http://localhost:3000/v1/auth/register",
+          "raw": "http://{{host}}/v1/auth/register",
           "protocol": "http",
           "host": [
-            "localhost"
+            "{{host}}"
           ],
-          "port": "3000",
           "path": [
             "v1",
             "auth",
@@ -60,12 +59,11 @@
           }
         },
         "url": {
-          "raw": "http://localhost:3000/v1/auth/login",
+          "raw": "http://{{host}}/v1/auth/login",
           "protocol": "http",
           "host": [
-            "localhost"
+            "{{host}}"
           ],
-          "port": "3000",
           "path": [
             "v1",
             "auth",

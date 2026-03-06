@@ -28,12 +28,11 @@
           }
         },
         "url": {
-          "raw": "http://localhost:3000/v1/slots/create",
+          "raw": "http://{{host}}/v1/slots/create",
           "protocol": "http",
           "host": [
-            "localhost"
+            "{{host}}"
           ],
-          "port": "3000",
           "path": [
             "v1",
             "slots",
@@ -55,12 +54,11 @@
           }
         ],
         "url": {
-          "raw": "http://localhost:3000/v1/slots/{{gameId}}",
+          "raw": "http://{{host}}/v1/slots/{{gameId}}",
           "protocol": "http",
           "host": [
-            "localhost"
+            "{{host}}"
           ],
-          "port": "3000",
           "path": [
             "v1",
             "slots",
@@ -82,12 +80,11 @@
           }
         ],
         "url": {
-          "raw": "http://localhost:3000/v1/slots/{{gameId}}/spin",
+          "raw": "http://{{host}}/v1/slots/{{gameId}}/spin",
           "protocol": "http",
           "host": [
-            "localhost"
+            "{{host}}"
           ],
-          "port": "3000",
           "path": [
             "v1",
             "slots",
@@ -117,12 +114,11 @@
           }
         ],
         "url": {
-          "raw": "http://localhost:3000/v1/slots/{{gameId}}",
+          "raw": "http://{{host}}/v1/slots/{{gameId}}",
           "protocol": "http",
           "host": [
-            "localhost"
+            "{{host}}"
           ],
-          "port": "3000",
           "path": [
             "v1",
             "slots",

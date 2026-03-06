@@ -20,12 +20,11 @@
           }
         ],
         "url": {
-          "raw": "http://localhost:3000/v1/user/me",
+          "raw": "http://{{host}}/v1/user/me",
           "protocol": "http",
           "host": [
-            "localhost"
+            "{{host}}"
           ],
-          "port": "3000",
           "path": [
             "v1",
             "user",
@@ -48,12 +47,11 @@
           }
         ],
         "url": {
-          "raw": "http://localhost:3000/v1/user/me/balance",
+          "raw": "http://{{host}}/v1/user/me/balance",
           "protocol": "http",
           "host": [
-            "localhost"
+            "{{host}}"
           ],
-          "port": "3000",
           "path": [
             "v1",
             "user",
@@ -77,12 +75,11 @@
           }
         ],
         "url": {
-          "raw": "http://localhost:3000/v1/user/me/transactions?page=1&limit=20",
+          "raw": "http://{{host}}/v1/user/me/transactions?page=1&limit=20",
           "protocol": "http",
           "host": [
-            "localhost"
+            "{{host}}"
           ],
-          "port": "3000",
           "path": [
             "v1",
             "user",
@@ -125,12 +122,11 @@
           }
         },
         "url": {
-          "raw": "http://localhost:3000/v1/user/me/transactions",
+          "raw": "http://{{host}}/v1/user/me/transactions",
           "protocol": "http",
           "host": [
-            "localhost"
+            "{{host}}"
           ],
-          "port": "3000",
           "path": [
             "v1",
             "user",
@@ -163,12 +159,11 @@
           }
         },
         "url": {
-          "raw": "http://localhost:3000/v1/user/me",
+          "raw": "http://{{host}}/v1/user/me",
           "protocol": "http",
           "host": [
-            "localhost"
+            "{{host}}"
           ],
-          "port": "3000",
           "path": [
             "v1",
             "user",
@@ -200,12 +195,11 @@
           }
         },
         "url": {
-          "raw": "http://localhost:3000/v1/user/me",
+          "raw": "http://{{host}}/v1/user/me",
           "protocol": "http",
           "host": [
-            "localhost"
+            "{{host}}"
           ],
-          "port": "3000",
           "path": [
             "v1",
             "user",
