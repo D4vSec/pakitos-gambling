@@ -2,7 +2,7 @@ import createRoulette from "#services/roulette"
 import User from "#models/userModel"
 import crypto from "crypto"
 
-const spinRoulette = (req, res) => {
+const spinRoulette = async (req, res) => {
     const { rouletteType, type, bet, amount } = req.body
 
     //All the validations for the request body (I might want to move this to a middleware or something later)
@@ -35,7 +35,7 @@ const spinRoulette = (req, res) => {
     }
 
     const id = req.user.id
-    const wallet = User.getUserBalance(id)
+    const wallet = await User.getUserBalance(id)
 
     if (amount > wallet) {
         return res.status(400).json({ code: "INSUFFICIENT_BALANCE" })
@@ -44,7 +44,7 @@ const spinRoulette = (req, res) => {
     const roulette = createRoulette()
 
     try {
-        User.updateUserBalance(id, -amount)
+        await User.updateUserBalance(id, -amount)
 
         const winningNumber = roulette.spinRoulette(rouletteType)
 
@@ -73,7 +73,7 @@ const spinRoulette = (req, res) => {
 
         const payout = isWinner ? amount * multiplier : 0
 
-        if (payout > 0) User.updateUserBalance(id, payout)
+        if (payout > 0) await User.updateUserBalance(id, payout)
 
         const color = roulette.getColor(winningNumber)
 
