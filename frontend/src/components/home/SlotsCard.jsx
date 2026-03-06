@@ -19,7 +19,7 @@ const SlotsCard = () => {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {/*SLOT FOR CARLICO*/}
+        {/*SLOT FOR JUAN CARLOS*/}
         <Card className="group overflow-hidden bg-card/50 border border-border hover:bg-card/80 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 rounded-xl">
           <div className="relative h-52 w-full overflow-hidden">
             <img
@@ -52,7 +52,7 @@ const SlotsCard = () => {
             </p>
           </div>
         </Card>
-        {/*SLOT FOR ROSICA*/}
+        {/*SLOT FOR ROSA*/}
         <Card className="group overflow-hidden bg-card/50 border border-border hover:bg-card/80 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 rounded-xl">
           <div className="relative h-52 w-full overflow-hidden">
             <img
@@ -86,7 +86,7 @@ const SlotsCard = () => {
             </p>
           </div>
         </Card>
-        {/*SLOT FOR MIGUELIN*/}
+        {/*SLOT FOR MIGUEL*/}
         <Card className="group overflow-hidden bg-card/50 border border-border hover:bg-card/80 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 rounded-xl">
           <div className="relative h-52 w-full overflow-hidden">
             <img
