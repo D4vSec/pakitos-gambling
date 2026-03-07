@@ -30,7 +30,7 @@ const useAPI = () => {
                 }),
             })
 
-            if (!response.ok) throw new Error(response.status)
+            // if (!response.ok) throw new Error(response.status)
 
             return await response.json()
         } catch (error) {

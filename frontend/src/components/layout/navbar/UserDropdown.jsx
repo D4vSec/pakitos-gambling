@@ -1,20 +1,29 @@
 import React from "react"
+import { Link } from "react-router-dom"
 import UserSVG from "@/components/svg/UserSVG"
 import { useLocale } from "@/providers/LocaleProvider"
 import { useSession } from "@/providers/SessionProvider"
+import { useNotification } from "@/providers/NotificationProvider"
 
 const UserDropdown = ({ vertical = false }) => {
     const { t } = useLocale()
     const { logout, user } = useSession()
+    const { addNotification } = useNotification()
 
     const userDropdownLinks = [
-        { key: "settings", label: "general.navbar.userPill.settings" },
-        { key: "coupon", label: "general.navbar.userPill.coupon" },
+        { key: "settings", label: "general.navbar.userPill.settings", href: "" },
+        { key: "balance", label: "general.navbar.userPill.balance", href: "" },
+        { key: "coupon", label: "general.navbar.userPill.coupon", href: "" },
         {
             key: "logout",
             label: "general.navbar.userPill.logout",
             className: "text-error",
-            onClick: () => logout(),
+            onClick: () =>
+                addNotification(t("message.modal.logout.title"), "modal", {
+                    onAccept: () => logout(),
+                    acceptLabel: t("message.modal.logout.accept"),
+                    cancelLabel: t("message.modal.logout.cancel"),
+                }),
         },
     ]
 
@@ -37,11 +46,9 @@ const UserDropdown = ({ vertical = false }) => {
                     vertical ? "w-full z-1" : "w-52 z-10"
                 }`}
             >
-                {userDropdownLinks.map(({ key, label, className, onClick }) => (
-                    <li key={key}>
-                        <a className={className || ""} onClick={onClick}>
-                            {t(label)}
-                        </a>
+                {userDropdownLinks.map(({ key, label, className, href, onClick }) => (
+                    <li key={key} className={className} onClick={onClick}>
+                        <Link to={href}>{t(label)}</Link>
                     </li>
                 ))}
             </ul>
