@@ -11,7 +11,7 @@ const App = () => {
         <SessionProvider>
             <div
                 data-theme="mytheme"
-                className="bg-base-200 min-h-dvh grid grid-rows-[auto_1fr_auto]"
+                className="bg-base-300 min-h-dvh grid grid-rows-[auto_1fr_auto]"
             >
                 <Notifications />
                 <Navbar />

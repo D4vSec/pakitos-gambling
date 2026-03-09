@@ -5,6 +5,7 @@ import Home from "../pages/Home"
 import LandingPage from "../pages/LandingPage"
 import Login from "../pages/Login"
 import Register from "../pages/Register"
+import RouletteGame from "@/pages/games/RouletteGame"
 
 const Router = () => {
     return (
@@ -13,6 +14,7 @@ const Router = () => {
             <Route path="/home" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/roulette" element={<RouletteGame />} />
             <Route path="*" element={<Error />} />
         </Routes>
     )

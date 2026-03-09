@@ -24,7 +24,7 @@ const NavbarLinks = ({ className = "" }) => {
             key: "favourites",
             label: "general.navbar.favourites",
             Icon: StarSVG,
-            link: "/",
+            link: "/roulette",
         },
     ]
 
