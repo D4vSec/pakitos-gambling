@@ -5,25 +5,29 @@ const NotificationContext = createContext()
 const NotificationProvider = ({ children }) => {
     const [notifications, setNotifications] = useState([])
 
-    const addNotification = (message, type = "info", duration = 5000, options = {}) => {
+    const addNotification = (message, type = "info", options = {}) => {
         const id = crypto.randomUUID()
+
+        const duration = 3000
 
         const notification = {
             id,
             message,
             type,
-            duration,
-            ...options,
+            options: {
+                ...options,
+                duration,
+            },
         }
 
-        console.log("n", notification?.message)
+        console.log("n", notification)
 
         setNotifications((prev) => [...prev, notification])
 
         if (type !== "modal" && type !== "input") {
             setTimeout(() => {
                 removeNotification(id)
-            }, duration)
+            }, notification?.options?.duration)
         }
     }
 

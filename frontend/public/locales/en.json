@@ -12,6 +12,7 @@
             "userPill": {
                 "guest": "Guest",
                 "settings": "User Settings",
+                "balance": "Add Balance",
                 "coupon": "Enter Coupon",
                 "logout": "Logout"
             }
@@ -144,7 +145,7 @@
         },
         "warning": {},
         "error": {
-            "AUTH_EMAIL_ALREADY_REGISTERED": "The email already exists",
+            "AUTH_EMAIL_ALREADY_REGISTERED": "An account with this email already exists",
             "AUTH_INVALID_USERNAME": "Invalid username",
             "AUTH_INVALID_EMAIL": "Invalid email",
             "AUTH_INVALID_PASSWORD_TOO_SHORT": "Password too short",
@@ -160,6 +161,18 @@
             "429": "Bro, chill, to many request...",
             "500": "Server error during the request",
             "409": "Some of the data introduced already exists"
+        },
+        "modal": {
+            "logout": {
+                "title": "Are you sure you want to exit?",
+                "accept": "Exit Pakito's",
+                "cancel": "Keep playing"
+            },
+            "default": {
+                "title": "Modal title",
+                "accept": "Accept",
+                "cancel": "Cancel"
+            }
         }
     }
 }

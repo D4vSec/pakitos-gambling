@@ -3,43 +3,67 @@ import { useNotification } from "@/providers/NotificationProvider"
 import useAPI from "@/hooks/useAPI"
 import { useNavigate } from "react-router-dom"
 import { useLocale } from "./LocaleProvider"
+
 const SessionContext = createContext()
 
 const SessionProvider = ({ children }) => {
     const defaultUser = {}
-    const defaultAccessToken = ""
 
     const [user, setUser] = useState(defaultUser)
-    const [accessToken, setAccessToken] = useState(defaultAccessToken)
-    // Refresh token in localStorage
     const [isLogged, setIsLogged] = useState(false)
     const [loading, setLoading] = useState(true)
 
     const { addNotification } = useNotification()
     const { t } = useLocale()
-
-    const { get, post, put, patch, destroy } = useAPI()
-
+    const { get, post } = useAPI()
     const navigate = useNavigate()
 
-    const setRefreshToken = (refreshToken) => {
-        localStorage.setItem("refreshToken", refreshToken)
-        return refreshToken
+    const getTokens = () => {
+        const tokens = localStorage.getItem("tokens")
+        return tokens ? JSON.parse(tokens) : {}
+    }
+
+    const getAccessToken = () => {
+        const tokens = getTokens()
+        return tokens.accessToken || null
+    }
+
+    const setAccessToken = (accessToken) => {
+        const tokens = getTokens()
+
+        localStorage.setItem(
+            "tokens",
+            JSON.stringify({
+                ...tokens,
+                accessToken,
+            }),
+        )
     }
 
     const getRefreshToken = () => {
-        const refreshToken = localStorage.getItem("refreshToken")
-        return refreshToken || null
+        const tokens = getTokens()
+        return tokens.refreshToken || null
     }
 
-    const removeRefreshToken = () => {
-        localStorage.removeItem("refreshToken")
+    const setRefreshToken = (refreshToken) => {
+        const tokens = getTokens()
+
+        localStorage.setItem(
+            "tokens",
+            JSON.stringify({
+                ...tokens,
+                refreshToken,
+            }),
+        )
+    }
+
+    const removeTokens = () => {
+        localStorage.removeItem("tokens")
     }
 
     const register = async (data) => {
         try {
             const response = await post("/api/v1/auth/register", data)
-            console.log(response)
 
             if (response?.code !== "AUTH_USER_REGISTERED") {
                 throw new Error(response?.code)
@@ -47,16 +71,16 @@ const SessionProvider = ({ children }) => {
 
             addNotification(t(`message.success.${response?.code}`), "success")
             addNotification(t("message.info.registered"), "info", 7000)
+
             navigate("/login")
         } catch (error) {
-            addNotification(error?.message, "error")
+            addNotification(t(`message.error.${error?.message}`), "error")
         }
     }
 
     const login = async (data) => {
         try {
             const response = await post("/api/v1/auth/login", data)
-            console.log("res", response)
 
             if (response.code) {
                 throw new Error(response?.code)
@@ -66,23 +90,21 @@ const SessionProvider = ({ children }) => {
 
             setAccessToken(accessToken)
             setRefreshToken(refreshToken)
+
+            addNotification(t("message.success.AUTH_USER_LOGGED"), "success")
+
+            const userData = await getUserData()
+            setUser(userData)
             setIsLogged(true)
-
-            addNotification(t(`message.success.AUTH_USER_LOGGED`), "success")
-
-            const user = await getUserData()
-            console.log("user", user)
-            setUser(user)
 
             navigate("/home")
         } catch (error) {
-            addNotification(error?.message, "error")
+            addNotification(t(`message.error.${error?.message}`), "error")
         }
     }
 
     const logout = () => {
-        removeRefreshToken()
-        setAccessToken(defaultAccessToken)
+        removeTokens()
         setUser(defaultUser)
         setIsLogged(false)
         addNotification(t("message.success.logout"), "success")
@@ -90,35 +112,40 @@ const SessionProvider = ({ children }) => {
     }
 
     const getUserData = async () => {
-        // TODO: Se pierde el accToken al F5, hay veces que me indica
-        // unauthorized
         try {
-            console.log("acc", accessToken)
+            const accessToken = getAccessToken()
+
+            if (!accessToken) return null
+
             const response = await get("/api/v1/user/me", {
-                headers: { Authorization: `Bearer ${accessToken}` },
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
             })
-            console.log("rr", response)
+
             if (response.code) {
                 throw new Error(response?.code)
             }
 
             setUser(response)
             setIsLogged(true)
+
+            return response
         } catch (error) {
-            addNotification(error?.message, "error")
+            addNotification(t(`message.error.${error?.message}`), "error")
         } finally {
             setLoading(false)
         }
     }
 
     useEffect(() => {
-        const storedRefreshToken = getRefreshToken()
+        const token = getAccessToken()
 
-        if (storedRefreshToken) {
-            setRefreshToken(storedRefreshToken)
+        if (token) {
+            getUserData()
+        } else {
+            setLoading(false)
         }
-
-        setLoading(false)
     }, [])
 
     const value = {
@@ -126,10 +153,12 @@ const SessionProvider = ({ children }) => {
         login,
         logout,
         user,
-        accessToken,
         isLogged,
         loading,
+        getAccessToken,
+        getRefreshToken,
     }
+
     return <SessionContext value={value}>{children}</SessionContext>
 }
 
@@ -137,8 +166,10 @@ export default SessionProvider
 
 export const useSession = () => {
     const context = useContext(SessionContext)
+
     if (!context) {
         throw new Error("Provider outside scope")
     }
+
     return context
 }
