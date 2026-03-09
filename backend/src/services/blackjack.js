@@ -69,9 +69,11 @@ const createBlackJack = () => {
 		return playerHand
 	}
 
-	const split = (hand, splitHand) => {
-		if (hand[0].rank === hand[1].rank) splitHand = true
-		return [[hand[0]], [hand[1]]]
+	const split = (hand) => {
+		if (hand[0].rank === hand[1].rank) {
+			return [[hand[0]], [hand[1]]]
+		}
+		return null
 	}
 
 	//Dealer logic
