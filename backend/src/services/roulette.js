@@ -34,6 +34,7 @@ const createRoulette = () => {
     const isOddBet = (type) => type === "odd/even"
     const isTwelveBet = (type) => type === "twelve"
     const isRowBet = (type) => type === "row"
+    const isHalfBet = (type) => type === "half"
 
     //The following functions check if the bet is a winner based on the winning number
     const isNumberWinner = (bet, winningNumber) => bet === winningNumber
@@ -63,6 +64,12 @@ const createRoulette = () => {
         if (bet === "row1") return rowNumbers[0].includes(winningNumber)
         if (bet === "row2") return rowNumbers[1].includes(winningNumber)
         if (bet === "row3") return rowNumbers[2].includes(winningNumber)
+        return false
+    }
+
+    const isHalfWinner = (bet, winningNumber) => {
+        if (bet === "1-18") return winningNumber >= 1 && winningNumber <= 18
+        if (bet === "19-36") return winningNumber >= 19 && winningNumber <= 36
         return false
     }
 

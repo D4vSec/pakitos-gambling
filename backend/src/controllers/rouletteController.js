@@ -3,77 +3,106 @@ import User from "#models/userModel"
 import crypto from "crypto"
 
 const spinRoulette = async (req, res) => {
-    const { rouletteType, type, bet, amount } = req.body
+    const { rouletteType, bets } = req.body
 
     //All the validations for the request body (I might want to move this to a middleware or something later)
     if (!["Zero", "ZeroZero"].includes(rouletteType)) {
         return res.status(400).json({ code: "INVALID_ROULETTE_TYPE" })
     }
 
-    if (rouletteType === "Zero" && (bet < 0 || bet > 36)) {
+    if (rouletteType === "Zero" && (bets.bet < 0 || bets.bet > 36)) {
         return res.status(400).json({ code: "INVALID_BET" })
     }
 
-    if (rouletteType === "ZeroZero" && (bet < 0 || bet > 37)) {
+    if (rouletteType === "ZeroZero" && (bets.bet < 0 || bets.bet > 37)) {
         return res.status(400).json({ code: "INVALID_BET" })
     }
 
-    if (type === "color" && !["red", "black"].includes(bet)) {
+    if (bets.type === "color" && !["red", "black"].includes(bets.bet)) {
         return res.status(400).json({ code: "INVALID_BET_TYPE" })
     }
 
-    if (type === "odd/even" && !["odd", "even"].includes(bet)) {
+    if (bets.type === "odd/even" && !["odd", "even"].includes(bets.bet)) {
         return res.status(400).json({ code: "INVALID_BET_TYPE" })
     }
 
-    if (type === "twelve" && !["1-12", "13-24", "25-36"].includes(bet)) {
+    if (
+        bets.type === "twelve" &&
+        !["1-12", "13-24", "25-36"].includes(bets.bet)
+    ) {
         return res.status(400).json({ code: "INVALID_BET_TYPE" })
     }
 
-    if (type === "row" && !["row1", "row2", "row3"].includes(bet)) {
+    if (bets.type === "row" && !["row1", "row2", "row3"].includes(bets.bet)) {
+        return res.status(400).json({ code: "INVALID_BET_TYPE" })
+    }
+
+    if (bets.type === "half" && !["1-18", "19-36"].includes(bets.bet)) {
         return res.status(400).json({ code: "INVALID_BET_TYPE" })
     }
 
     const id = req.user.id
     const wallet = await User.getUserBalance(id)
 
-    if (amount > wallet) {
+    const totalAmount = bets.reduce((acc, bet) => acc + bet.amount, 0)
+
+    if (totalAmount > wallet) {
         return res.status(400).json({ code: "INSUFFICIENT_BALANCE" })
     }
 
     const roulette = createRoulette()
 
     try {
-        await User.updateUserBalance(id, -amount)
+        await User.updateUserBalance(id, -totalAmount)
 
         const winningNumber = roulette.spinRoulette(rouletteType)
+        //We check each bet against the winning number and also calculate the payout for each one
+        const results = bets.map((bet) => {
+            let isWinner = false
+            let multiplier = 0
+            const { type, bet, amount } = bet
+            if (roulette.isNumberBet(type)) {
+                isWinner = roulette.isNumberWinner(bet, winningNumber)
+                multiplier = 36
+            }
+            if (roulette.isColorBet(type)) {
+                isWinner = roulette.isColorWinner(bet, winningNumber)
+                multiplier = 2
+            }
+            if (roulette.isOddBet(type)) {
+                isWinner = roulette.isOddWinner(bet, winningNumber)
+                multiplier = 2
+            }
+            if (roulette.isTwelveBet(type)) {
+                isWinner = roulette.isTwelveWinner(bet, winningNumber)
+                multiplier = 3
+            }
+            if (roulette.isRowBet(type)) {
+                isWinner = roulette.isRowWinner(bet, winningNumber)
+                multiplier = 3
+            }
+            if (roulette.isHalfBet(type)) {
+                isWinner = roulette.isHalfWinner(bet, winningNumber)
+                multiplier = 2
+            }
 
-        let isWinner = false
-        let multiplier = 0
-        if (roulette.isNumberBet(type)) {
-            isWinner = roulette.isNumberWinner(bet, winningNumber)
-            multiplier = 36
-        }
-        if (roulette.isColorBet(type)) {
-            isWinner = roulette.isColorWinner(bet, winningNumber)
-            multiplier = 2
-        }
-        if (roulette.isOddBet(type)) {
-            isWinner = roulette.isOddWinner(bet, winningNumber)
-            multiplier = 2
-        }
-        if (roulette.isTwelveBet(type)) {
-            isWinner = roulette.isTwelveWinner(bet, winningNumber)
-            multiplier = 3
-        }
-        if (roulette.isRowBet(type)) {
-            isWinner = roulette.isRowWinner(bet, winningNumber)
-            multiplier = 3
-        }
+            return {
+                ...betObj,
+                type,
+                bet,
+                amount,
+                isWinner,
+                payout: isWinner ? amount * multiplier : 0,
+                multiplier,
+            }
+        })
 
-        const payout = isWinner ? amount * multiplier : 0
+        const totalPayout = results.reduce(
+            (acc, result) => acc + result.payout,
+            0,
+        )
 
-        if (payout > 0) await User.updateUserBalance(id, payout)
+        if (totalPayout > 0) await User.updateUserBalance(id, totalPayout)
 
         const color = roulette.getColor(winningNumber)
 
@@ -83,17 +112,12 @@ const spinRoulette = async (req, res) => {
             rouletteType,
             status: "finished",
             createdAt: new Date().toISOString(),
-            bet: { type, selection: bet, amount },
+            bets: results,
             result: {
                 winningNumber: winningNumber === 37 ? "00" : winningNumber,
                 color,
                 isZero: roulette.isZero,
                 isZeroZero: roulette.isZeroZero,
-            },
-            outcome: {
-                isWinner,
-                multiplier,
-                payout,
             },
         })
     } catch (error) {
