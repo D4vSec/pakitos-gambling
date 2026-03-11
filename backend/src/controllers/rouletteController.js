@@ -57,39 +57,39 @@ const spinRoulette = async (req, res) => {
 
         const winningNumber = roulette.spinRoulette(rouletteType)
         //We check each bet against the winning number and also calculate the payout for each one
-        const results = bets.map((bet) => {
+        const results = await bets.map((bet) => {
             let isWinner = false
             let multiplier = 0
-            const { type, bet, amount } = bet
+            const { type, bet: singleBet, amount } = bet
             if (roulette.isNumberBet(type)) {
-                isWinner = roulette.isNumberWinner(bet, winningNumber)
+                isWinner = roulette.isNumberWinner(singleBet, winningNumber)
                 multiplier = 36
             }
             if (roulette.isColorBet(type)) {
-                isWinner = roulette.isColorWinner(bet, winningNumber)
+                isWinner = roulette.isColorWinner(singleBet, winningNumber)
                 multiplier = 2
             }
             if (roulette.isOddBet(type)) {
-                isWinner = roulette.isOddWinner(bet, winningNumber)
+                isWinner = roulette.isOddWinner(singleBet, winningNumber)
                 multiplier = 2
             }
             if (roulette.isTwelveBet(type)) {
-                isWinner = roulette.isTwelveWinner(bet, winningNumber)
+                isWinner = roulette.isTwelveWinner(singleBet, winningNumber)
                 multiplier = 3
             }
             if (roulette.isRowBet(type)) {
-                isWinner = roulette.isRowWinner(bet, winningNumber)
+                isWinner = roulette.isRowWinner(singleBet, winningNumber)
                 multiplier = 3
             }
             if (roulette.isHalfBet(type)) {
-                isWinner = roulette.isHalfWinner(bet, winningNumber)
+                isWinner = roulette.isHalfWinner(singleBet, winningNumber)
                 multiplier = 2
             }
 
             return {
-                ...betObj,
+                ...bet,
                 type,
-                bet,
+                singleBet,
                 amount,
                 isWinner,
                 payout: isWinner ? amount * multiplier : 0,
@@ -121,6 +121,7 @@ const spinRoulette = async (req, res) => {
             },
         })
     } catch (error) {
+        console.error("Error spinning roulette:", error)
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
 }

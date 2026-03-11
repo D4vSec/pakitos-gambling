@@ -93,6 +93,7 @@ const createRoulette = () => {
         isOddBet,
         isTwelveBet,
         isRowBet,
+        isHalfBet,
         getColor,
     }
 }
