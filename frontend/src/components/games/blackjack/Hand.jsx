@@ -17,32 +17,28 @@ const Hand = () => {
 
     createDeck()
 
-    deck = deck.slice(0, 2)
-    const offsetX = 40
-    const offsetY = 30
-    const cardWidth = 80
-    const cardHeight = 112
+    deck = deck.slice(0, 5)
+
+    const getCardValue = (rank) => {
+        if (rank === "A") return 1
+        if (["J", "Q", "K"].includes(rank)) return 10
+        return Number(rank)
+    }
+
+    const handValue = deck.reduce((acc, card) => acc + getCardValue(card.rank), 0)
 
     return (
-        <div
-            className="relative"
-            style={{
-                width: cardWidth + (deck.length - 1) * offsetX,
-                height: cardHeight + (deck.length - 1) * offsetY,
-            }}
-        >
-            {deck.map((card, i) => (
-                <div
-                    key={i}
-                    className="absolute"
-                    style={{
-                        top: i * offsetY,
-                        left: i * offsetX,
-                    }}
-                >
-                    <Card card={card} faceDown={false} />
-                </div>
-            ))}
+        <div className="z-10 flex flex-col gap-3 justify-center items-center">
+            <div className="flex items-start">
+                {deck.map((card, i) => (
+                    <div key={i} className={i !== 0 ? "-ml-10" : ""}>
+                        <div style={{ marginTop: `${i * 1}rem` }}>
+                            <Card card={card} faceDown={false} />
+                        </div>
+                    </div>
+                ))}
+            </div>
+            <p className="font-bold text-xl">{handValue}</p>
         </div>
     )
 }

@@ -17,7 +17,7 @@ const Deck = () => {
     createDeck()
 
     return (
-        <div className="relative w-20 h-28">
+        <div className="relative w-20 h-28 mt-4">
             {deck.map((card, i) => (
                 <div
                     key={i}
