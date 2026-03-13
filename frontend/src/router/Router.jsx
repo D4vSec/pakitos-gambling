@@ -6,6 +6,7 @@ import LandingPage from "../pages/LandingPage"
 import Login from "../pages/Login"
 import Register from "../pages/Register"
 import RouletteGame from "@/pages/games/RouletteGame"
+import BlackjackGame from "@/pages/games/BlackjackGame"
 
 const Router = () => {
     return (
@@ -15,6 +16,7 @@ const Router = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/roulette" element={<RouletteGame />} />
+            <Route path="/blackjack" element={<BlackjackGame />} />
             <Route path="*" element={<Error />} />
         </Routes>
     )

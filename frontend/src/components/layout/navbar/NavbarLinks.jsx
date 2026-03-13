@@ -18,13 +18,13 @@ const NavbarLinks = ({ className = "" }) => {
             key: "allGames",
             label: "general.navbar.allGames",
             Icon: CardsSVG,
-            link: "/",
+            link: "/roulette",
         },
         {
             key: "favourites",
             label: "general.navbar.favourites",
             Icon: StarSVG,
-            link: "/roulette",
+            link: "/blackjack",
         },
     ]
 
