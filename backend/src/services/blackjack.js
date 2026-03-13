@@ -87,10 +87,10 @@ const createBlackJack = () => {
 	}
 	//The function determinate the winner based on the hand values of the player and the dealer
 	const determinateWinner = (playerHandValue, dealerHandValue) => {
-		if (playerHandValue > 21) return "Dealer"
-		if (dealerHandValue > 21) return "Player"
-		if (playerHandValue > dealerHandValue) return "Player"
-		if (playerHandValue < dealerHandValue) return "Dealer"
+		if (playerHandValue > 21) return "dealer"
+		if (dealerHandValue > 21) return "player"
+		if (playerHandValue > dealerHandValue) return "player"
+		if (playerHandValue < dealerHandValue) return "dealer"
 		return "Tie"
 	}
 
