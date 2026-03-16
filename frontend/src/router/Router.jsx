@@ -5,6 +5,7 @@ import Home from "../pages/Home"
 import LandingPage from "../pages/LandingPage"
 import Login from "../pages/Login"
 import Register from "../pages/Register"
+import Profile from "@/pages/Profile"
 import RouletteGame from "@/pages/games/RouletteGame"
 import BlackjackGame from "@/pages/games/BlackjackGame"
 
@@ -15,6 +16,7 @@ const Router = () => {
             <Route path="/home" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/settings" element={<Profile />} />
             <Route path="/roulette" element={<RouletteGame />} />
             <Route path="/blackjack" element={<BlackjackGame />} />
             <Route path="*" element={<Error />} />
