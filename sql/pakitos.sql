@@ -1,14 +1,23 @@
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
-DROP TABLE IF EXISTS sessions;
-DROP TABLE IF EXISTS transactions;
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS bets;
-DROP TABLE IF EXISTS bets_options;
-DROP TABLE IF EXISTS user_bets;
+DROP TABLE IF EXISTS audit_logs CASCADE;
+DROP TABLE IF EXISTS user_bets CASCADE;
+DROP TABLE IF EXISTS bets_options CASCADE;
+DROP TABLE IF EXISTS bets CASCADE;
+DROP TABLE IF EXISTS transactions CASCADE;
+DROP TABLE IF EXISTS sessions CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
 
 CREATE TYPE user_role AS ENUM ('user', 'admin');
 CREATE TYPE transaction_type AS ENUM ('deposit', 'withdrawal');
+CREATE TYPE audit_action AS ENUM (
+    'USER_REGISTER', 
+    'BET_PLACED', 
+    'BET_RESULT', 
+    'BALANCE_UPDATED', 
+    'ADMIN_ACTION',
+    'GAME_RESULT' 
+);
 
 CREATE TABLE users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -64,4 +73,15 @@ CREATE TABLE user_bets (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (bet_option_id) REFERENCES bets_options(id) ON DELETE CASCADE
+);
+
+CREATE TABLE audit_logs (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID,
+    action audit_action NOT NULL,
+    details JSONB,
+    ip_address INET,
+    user_agent TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
 );
