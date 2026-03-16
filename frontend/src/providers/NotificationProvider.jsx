@@ -41,7 +41,7 @@ const NotificationProvider = ({ children }) => {
         removeNotification,
     }
 
-    return <NotificationContext value={value}>{children}</NotificationContext>
+    return <NotificationContext.Provider value={value}>{children}</NotificationContext.Provider>
 }
 
 export const useNotification = () => {
