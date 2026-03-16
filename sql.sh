@@ -9,4 +9,4 @@ source .env
 set +a
 
 docker exec -i -e PGPASSWORD="${DB_PASSWORD}" postgres_db_dev \
-  psql -h "${DB_HOST}" -U "${DB_USER}" -d "${DB_NAME}" < ./sql/user.sql
+  psql -h "${DB_HOST}" -U "${DB_USER}" -d "${DB_NAME}" < ./sql/pakitos.sql
