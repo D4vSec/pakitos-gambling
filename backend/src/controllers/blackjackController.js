@@ -47,7 +47,7 @@ export const startGame = async (req, res) => {
                     blackjack: false,
                     doubled: false,
                     resolved: false,
-                    bet: amount, //TODO: Change the amount to the player hands (it will be easier trust)
+                    bet: amount,
                 },
             ],
             dealer: {
@@ -192,7 +192,7 @@ export const stand = async (req, res) => {
                     const payout = //I have to check if the first hand is doubled
                         game.winners[0] === "player" && game.player[0].doubled
                             ? game.player[0].bet * 2 + game.player[0].bet
-                            : game.winners[0] === "player"
+                            : game.winners[0] === "player" //If the first hand is not doubled I check if the player wins to pay the normal payout
                               ? game.player[0].bet + game.player[0].bet
                               : 0
 
@@ -249,7 +249,6 @@ export const stand = async (req, res) => {
     }
 }
 
-//TODO: Implement the double split logic
 export const double = async (req, res) => {
     const id = req.user.id
     const blackJack = createBlackJack()
@@ -270,6 +269,13 @@ export const double = async (req, res) => {
 
         //If the game is not split we do the usual thing
         if (game.split === false) {
+            game.player[0].hand = blackJack.hit(game.deck, game.player[0].hand)
+            game.player[0].value = blackJack.calculateHandValue(
+                game.player[0].hand,
+            )
+            game.player[0].bust = game.player[0].value > 21
+            game.player[0].doubled = true
+
             const dealerFinalHand = blackJack.dealerPlay(
                 game.deck,
                 game.dealer.hand,
@@ -291,7 +297,7 @@ export const double = async (req, res) => {
             if (game.winners.includes("player")) {
                 const payout =
                     game.winners[0] === "player"
-                        ? game.player[0].bet + game.player[0].bet
+                        ? game.player[0].bet * 2 + game.player[0].bet
                         : 0
                 game.payout = payout
                 await User.updateUserBalance(id, payout)
@@ -310,7 +316,45 @@ export const double = async (req, res) => {
                 )
                 game.player[1].bust = game.player[1].value > 21
                 game.player[1].resolved = true
-                //TODO: Implement all the logic for the second double
+                
+                const dealerFinalHand = blackJack.dealerPlay(
+                    game.deck,
+                    game.dealer.hand,
+                    game.player[0].hand,
+                )
+                game.dealer.hand = dealerFinalHand
+                game.dealer.value =
+                    blackJack.calculateHandValue(dealerFinalHand)
+                game.dealer.bust = game.dealer.value > 21
+                game.dealer.blackJack = game.dealer.value === 21
+
+                const winner = blackJack.determinateWinner(
+                    game.player[0].value,
+                    game.dealer.value,
+                )
+
+                game.winners.push(winner)
+                game.status = "finished"
+
+                if (game.winners.includes("player")) {
+                    const payout = //I have to check if the first hand is doubled
+                        game.winners[0] === "player" && game.player[0].doubled
+                            ? game.player[0].bet * 2 + game.player[0].bet
+                            : game.winners[0] === "player" //If the first hand is not doubled I check if the player wins to pay the normal payout
+                              ? game.player[0].bet + game.player[0].bet
+                              : 0
+
+                    payout +=
+                        game.winners[1] === "player"
+                            ? game.player[1].bet + game.player[1].bet
+                            : 0
+
+                    game.payout = payout
+
+                    await User.updateUserBalance(id, payout)
+                }
+
+                games.set(gameId, game)
             } else {
                 // If the player decides to double with the first hand we have to check a few things too
                 game.player[0].hand = blackJack.hit(
