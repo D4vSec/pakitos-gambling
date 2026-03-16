@@ -150,7 +150,8 @@
         "success": {
             "AUTH_USER_REGISTERED": "Account registered suscessfully",
             "AUTH_USER_LOGGED": "Logged successfully",
-            "logout": "Logout successfully"
+            "logout": "Logout successfully",
+            "USER_UPDATED" : "Profile updated"
         },
         "warning": {},
         "error": {
@@ -169,7 +170,8 @@
             "401": "Unauthorized",
             "429": "Bro, chill, to many request...",
             "500": "Server error during the request",
-            "409": "Some of the data introduced already exists"
+            "409": "Some of the data introduced already exists",
+            "Update_User" : "Error updating profile"
         },
         "modal": {
             "logout": {

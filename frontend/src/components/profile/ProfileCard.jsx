@@ -69,7 +69,7 @@ const ProfileCard = () => {
 
       reset({ ...data, password: "", confirmPassword: "" });
     } catch (err) {
-      addNotification(t ? t("message.error.update_profile") : "Error updating profile", "error");
+      addNotification(t ? t("message.error.Update_User") : "Error updating profile", "error");
     }
   };
 
