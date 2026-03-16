@@ -11,7 +11,7 @@ const UserDropdown = ({ vertical = false }) => {
     const { addNotification } = useNotification()
 
     const userDropdownLinks = [
-        { key: "settings", label: "general.navbar.userPill.settings", href: "" },
+        { key: "settings", label: "general.navbar.userPill.settings", href: "/settings" },
         { key: "balance", label: "general.navbar.userPill.balance", href: "" },
         { key: "coupon", label: "general.navbar.userPill.coupon", href: "" },
         {
