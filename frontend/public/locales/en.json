@@ -96,7 +96,8 @@
             },
             "buttons": {
                 "login": "Login",
-                "register": "Register"
+                "register": "Register",
+                "update" : "Update Profile"
             }
         },
         "home": {
@@ -130,6 +131,14 @@
             "blackjack": {
                 "title": "Blackjack",
                 "description": "Classic blackjack card game."
+            }
+        },
+        "profile": {
+            "title": "Account Settings",
+            "description": "Manage your account settings and preferences",
+            "profileCard" : {
+                "title" : "Profile Information",
+                "description" : "Update your personal information"
             }
         }
     },
@@ -174,5 +183,6 @@
                 "cancel": "Cancel"
             }
         }
+        
     }
 }

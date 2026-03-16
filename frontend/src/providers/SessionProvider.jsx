@@ -157,9 +157,11 @@ const SessionProvider = ({ children }) => {
         loading,
         getAccessToken,
         getRefreshToken,
+        getUserData,
+        setUser,
     }
 
-    return <SessionContext value={value}>{children}</SessionContext>
+    return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>
 }
 
 export default SessionProvider

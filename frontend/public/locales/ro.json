@@ -95,7 +95,8 @@
             },
             "buttons": {
                 "login": "Autentificare",
-                "register": "Înregistrare"
+                "register": "Înregistrare",
+                "update": "Actualizează profilul"
             }
         },
         "home" : {
@@ -129,6 +130,14 @@
             "blackjack": {
                 "title": "Blackjack",
                 "description": "Joc clasic de blackjack."
+            }
+        },
+        "profile": {
+            "title": "Setările contului",
+            "description": "Gestionează setările contului și preferințele",
+            "profileCard": {
+                "title": "Informații profil",
+                "description": "Actualizează informațiile personale"
             }
         }
     }

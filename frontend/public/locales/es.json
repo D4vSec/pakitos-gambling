@@ -95,7 +95,8 @@
             },
             "buttons": {
                 "login": "Iniciar Sesión",
-                "register": "Registrarse"
+                "register": "Registrarse",
+                "update": "Actualizar perfil"
             }
         },
         "home" : {
@@ -129,6 +130,14 @@
             "blackjack": {
                 "title": "Blackjack",
                 "description": "Juego de blackjack."
+            }
+        },
+        "profile": {
+            "title": "Configuración de la cuenta",
+            "description": "Gestiona la configuración de tu cuenta y tus preferencias",
+            "profileCard": {
+                "title": "Información de perfil",
+                "description": "Actualiza tu información personal"
             }
         }
     }
