@@ -3,10 +3,10 @@ import { randomFloat, randomFloatInRange, randomInt } from "#utils/rng"
 // Cross-Road game chicken from stake
 const createCapyRoad = () => {
     const createGame = () => {
-        const road = 0
-        const crash = 0
-        const multiplier = 1
-        const isCrashed = false
+        let road = 0
+        let crashProbability = 0
+        let payoutMultiplier = 1
+        let isCrashed = false
     }
     //This function will increment the multiplier of the next road
     const incrementMultiplier = (multiplier) => {
@@ -18,6 +18,10 @@ const createCapyRoad = () => {
         return road + 1
     }
     
+    const incrementCrashProbability = (crashProbability) => {
+        const increment = randomIntInclusive(0, 10) / 100
+        return crashProbability + increment
+    }
 
     return {}
 }

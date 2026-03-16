@@ -96,7 +96,7 @@ export const startGame = async (req, res) => {
         //I hide the second card of the dealer hand and the deck from the response
         game.dealer.hand[1] = "Hidden"
 
-        res.json(game.filter((key) => key !== "deck"))
+        res.json(Object.fromEntries(Object.entries(game).filter(([key]) => key !== "deck")))
     } catch (error) {
         console.error("Error starting game:", error)
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
@@ -144,7 +144,7 @@ export const hit = (req, res) => {
 
             games.set(gameId, game)
         }
-        res.json(game.filter((key) => key !== "deck"))
+        res.json(Object.fromEntries(Object.entries(game).filter(([key]) => key !== "deck")))
     } catch (error) {
         console.error("Error hitting:", error)
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
@@ -245,7 +245,7 @@ export const stand = async (req, res) => {
             games.set(gameId, game)
         }
 
-        res.json(game.filter((key) => key !== "deck"))
+        res.json(Object.fromEntries(Object.entries(game).filter(([key]) => key !== "deck")))
     } catch (error) {
         console.error("Error standing:", error)
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
@@ -379,7 +379,7 @@ export const double = async (req, res) => {
             games.set(gameId, game)
         }
 
-        res.json(game.filter((key) => key !== "deck"))
+        res.json(Object.fromEntries(Object.entries(game).filter(([key]) => key !== "deck")))
     } catch (error) {
         console.error("Error doubling:", error)
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
@@ -428,7 +428,7 @@ export const split = async (req, res) => {
             game.player.push(newHand)
 
             games.set(gameId, game)
-            res.json(game.filter((key) => key !== "deck"))
+            res.json(Object.fromEntries(Object.entries(game).filter(([key]) => key !== "deck")))
         } else {
             return res.status(400).json({ code: "CANNOT_SPLIT" })
         }
