@@ -8,6 +8,8 @@ import authRoutes from "#routes/auth"
 import rouletteRoutes from "#routes/roulette"
 import slotsRoutes from "#routes/slots"
 import blackJackRoutes from "#routes/blackjack"
+import betsRoutes from "#routes/bets"
+
 import corsConfig from "#config/cors"
 
 const API_VERSION = "v1"
@@ -25,6 +27,7 @@ app.use(`/${API_VERSION}/auth`, authRoutes)
 app.use(`/${API_VERSION}/roulette`, rouletteRoutes)
 app.use(`/${API_VERSION}/slots`, slotsRoutes)
 app.use(`/${API_VERSION}/blackjack`, blackJackRoutes)
+app.use(`/${API_VERSION}/bets`, betsRoutes)
 
 app.use((req, res) => {
 	res.status(404).json({
