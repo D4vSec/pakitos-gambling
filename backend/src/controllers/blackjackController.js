@@ -98,6 +98,7 @@ export const startGame = async (req, res) => {
 
         res.json(game.filter((key) => key !== "deck"))
     } catch (error) {
+        console.error("Error starting game:", error)
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
 }
@@ -145,6 +146,7 @@ export const hit = (req, res) => {
         }
         res.json(game.filter((key) => key !== "deck"))
     } catch (error) {
+        console.error("Error hitting:", error)
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
 }
@@ -245,6 +247,7 @@ export const stand = async (req, res) => {
 
         res.json(game.filter((key) => key !== "deck"))
     } catch (error) {
+        console.error("Error standing:", error)
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
 }
@@ -378,6 +381,7 @@ export const double = async (req, res) => {
 
         res.json(game.filter((key) => key !== "deck"))
     } catch (error) {
+        console.error("Error doubling:", error)
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
 }
@@ -429,6 +433,7 @@ export const split = async (req, res) => {
             return res.status(400).json({ code: "CANNOT_SPLIT" })
         }
     } catch (error) {
+        console.error("Error splitting:", error)
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
 }
@@ -442,6 +447,7 @@ export const deleteGame = (req, res) => {
         games.delete(gameId)
         res.json({ message: "Game deleted successfully" })
     } catch (error) {
+        console.error("Error deleting game:", error)
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
 }
@@ -451,6 +457,7 @@ export const getGames = (req, res) => {
         const gamesArray = Array.from(games.values())
         res.json(gamesArray)
     } catch (error) {
+        console.error("Error getting games:", error)
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
 }

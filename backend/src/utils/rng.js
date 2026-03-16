@@ -22,6 +22,10 @@ const randomFloat = () => {
     return uint / 0xffffffff
 }
 
+const randomFloatInRange = (min, max) => {
+    return randomFloat() * (max - min) + min
+}
+
 const randomId = (length = 32) => {
     return crypto.randomBytes(length).toString("hex")
 }
@@ -37,4 +41,4 @@ const shuffle = (array) => {
     return arr
 }
 
-export { randomInt, randomIntInclusive, randomFloat, randomId, shuffle }
+export { randomInt, randomIntInclusive, randomFloat, randomFloatInRange, randomId, shuffle }
