@@ -63,7 +63,7 @@ const SessionProvider = ({ children }) => {
 
     const register = async (data) => {
         try {
-            const response = await post("/api/v1/auth/register", data)
+            const response = await post("/api/v1/auth/register", { body: data })
 
             if (response?.code !== "AUTH_USER_REGISTERED") {
                 throw new Error(response?.code)
@@ -80,7 +80,7 @@ const SessionProvider = ({ children }) => {
 
     const login = async (data) => {
         try {
-            const response = await post("/api/v1/auth/login", data)
+            const response = await post("/api/v1/auth/login", { body: data })
 
             if (response.code) {
                 throw new Error(response?.code)
