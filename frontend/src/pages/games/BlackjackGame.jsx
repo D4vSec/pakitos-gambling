@@ -1,9 +1,16 @@
 import BlackjackBoard from "@/components/games/blackjack/BlackjackBoard"
+import BlackjackControls from "@/components/games/blackjack/controller/BlackjackControls"
 import GameDescription from "@/components/games/GameDescription"
 import GameTemplate from "@/components/games/GameTemplate"
 import React from "react"
 
+import { useEffect, useState } from "react"
+
 const BlackjackGame = () => {
+    const [game, setGame] = useState({})
+
+    useEffect(() => {}, [])
+
     return (
         <GameTemplate
             game={<BlackjackBoard />}
@@ -17,6 +24,7 @@ const BlackjackGame = () => {
                     possimus a magni id modi?
                 </GameDescription>
             }
+            controls={<BlackjackControls />}
         />
     )
 }
