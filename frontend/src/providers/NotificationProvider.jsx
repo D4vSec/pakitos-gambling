@@ -8,7 +8,7 @@ const NotificationProvider = ({ children }) => {
     const addNotification = (message, type = "info", options = {}) => {
         const id = crypto.randomUUID()
 
-        const duration = 3000
+        const duration = 5000
 
         const notification = {
             id,
