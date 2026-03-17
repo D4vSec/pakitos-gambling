@@ -97,7 +97,8 @@
             "buttons": {
                 "login": "Login",
                 "register": "Register",
-                "update" : "Update Profile"
+                "update" : "Update Profile",
+                "cancel" : "Cancel"
             }
         },
         "home": {

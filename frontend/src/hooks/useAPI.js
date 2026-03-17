@@ -43,8 +43,8 @@ const useAPI = () => {
 
     const get = async (url, options) => await request(url, { method: "GET", ...options })
     const post = async (url, options) => await request(url, { method: "POST", ...options })
-    const put = async (url, body) => await request(url, { method: "PUT", body: body })
-    const patch = async (url, body) => await request(url, { method: "PATCH", body: body })
+    const put = async (url, options = {}) => await request(url, { method: "PUT", ...options })
+    const patch = async (url, options = {}) => await request(url, { method: "PATCH", ...options })
     const destroy = async (url) => await request(url, { method: "DELETE" })
 
     return { get, post, put, patch, destroy, loading, error }

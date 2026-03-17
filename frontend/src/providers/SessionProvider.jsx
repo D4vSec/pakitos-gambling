@@ -15,7 +15,7 @@ const SessionProvider = ({ children }) => {
 
     const { addNotification } = useNotification()
     const { t } = useLocale()
-    const { get, post } = useAPI()
+    const { get, post, put } = useAPI()
     const navigate = useNavigate()
 
     const getTokens = () => {
@@ -148,10 +148,38 @@ const SessionProvider = ({ children }) => {
         }
     }, [])
 
+    const updateProfile = async (data) => {
+        try {
+            const accessToken = getAccessToken()
+
+            const response = await put("/api/v1/user/me", {
+                body: data,
+                headers: {
+                    Authorization: accessToken ? `Bearer ${accessToken}` : undefined,
+                },
+            })
+
+            if (response?.code && response.code !== "SUCCESS") {
+                throw new Error(response.code)
+            }
+
+            addNotification(t ? t("message.success.USER_UPDATED") : "Profile updated", "success")
+
+            const userData = await getUserData()
+            setUser(userData)
+
+            return userData
+        } catch (error) {
+            addNotification(t ? t(`message.error.${error?.message}`) : "Error updating profile", "error")
+            throw error
+        }
+    }
+
     const value = {
         register,
         login,
         logout,
+        updateProfile,
         user,
         isLogged,
         loading,
