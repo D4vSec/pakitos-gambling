@@ -19,10 +19,10 @@ const BlackjackProvider = ({ children }) => {
     const { addNotification } = useNotification()
     const { post } = useAPI()
 
-    const startGame = async () => {
+    const startGame = async (amount = 0) => {
         setThinking(true)
         const url = `http://${HOST}/v1/blackjack/start`
-
+        console.log("am", amount)
         try {
             const res = await post(url, {
                 headers: {
@@ -30,7 +30,7 @@ const BlackjackProvider = ({ children }) => {
                     Authorization: `Bearer ${getAccessToken()}`,
                 },
                 body: {
-                    amount: 1,
+                    amount: amount,
                 },
             })
 
@@ -60,9 +60,6 @@ const BlackjackProvider = ({ children }) => {
                 headers: {
                     "x-refresh-token": getRefreshToken(),
                     Authorization: `Bearer ${getAccessToken()}`,
-                },
-                body: {
-                    amount: 1,
                 },
             })
 
@@ -114,9 +111,7 @@ const BlackjackProvider = ({ children }) => {
     const split = async () => await play("split")
 
     useEffect(() => {
-        if (!getGameId()) {
-            startGame()
-        } else {
+        if (getGameId()) {
             continueGame()
         }
     }, [])

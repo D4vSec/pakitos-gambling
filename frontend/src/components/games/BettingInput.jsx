@@ -1,9 +1,8 @@
 import React, { useState } from "react"
 import Button from "../buttons/Button"
 
-const BettingInput = () => {
-    const [betAmount, setBetAmount] = useState("")
-    const [lastBetAmount, setLastBetAmount] = useState("")
+const BettingInput = ({ betAmount, setBetAmount }) => {
+    const [lastBetAmount, setLastBetAmount] = useState(0)
 
     const handleChange = (e) => {
         const value = e.target.value
@@ -23,14 +22,13 @@ const BettingInput = () => {
     }
 
     return (
-        <div className="flex flex-col md:flex-row items-baseline  gap-1">
+        <div className="flex flex-col md:flex-row items-baseline gap-1">
             <fieldset className="fieldset w-full">
                 <legend className="fieldset-legend">Bet Amount</legend>
                 <input
                     type="number"
                     placeholder="Insert bet amount"
                     name="betAmount"
-                    pattern="[0-9]"
                     value={betAmount}
                     onChange={handleChange}
                     className="input w-full"
