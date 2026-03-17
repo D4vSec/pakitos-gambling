@@ -9,7 +9,7 @@ import {
 } from "#controllers/capyRoadController"
 
 const capyRoadRoutes = express.Router()
-
+//TODO: Test the routes
 capyRoadRoutes.post("/start", gameLimiter, authMiddleware, startGame)
 capyRoadRoutes.post("/:gameId/jump", gameLimiter, authMiddleware, jumpRoad)
 capyRoadRoutes.delete("/:gameId", authMiddleware, deleteGame)

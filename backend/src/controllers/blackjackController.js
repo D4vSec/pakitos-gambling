@@ -88,7 +88,7 @@ export const startGame = async (req, res) => {
 
         //I hide the second card of the dealer hand and the deck from the response
         game.dealer.hand[1] = { rank: "hidden", suit: "hidden" }
-        game.dealer.value = blackJack.calculateHandValue([game.dealer.hand[0]])
+        game.dealer[0].value = blackJack.calculateHandValue([game.dealer[0].hand[0]])
         res.status(200).json(Object.fromEntries(Object.entries(game).filter(([key]) => key !== "deck")))
     } catch (error) {
         console.error("Error starting game:", error)
@@ -133,7 +133,7 @@ export const hit = (req, res) => {
 
             games.set(gameId, game)
         }
-        game.dealer.value = blackJack.calculateHandValue([game.dealer.hand[0]])
+        game.dealer[0].value = blackJack.calculateHandValue([game.dealer[0].hand[0]])
         res.status(200).json(Object.fromEntries(Object.entries(game).filter(([key]) => key !== "deck")))
     } catch (error) {
         console.error("Error hitting:", error)
@@ -382,6 +382,21 @@ export const deleteGame = (req, res) => {
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
 }
+
+const getGame = (req, res) => {
+    try {
+        const { gameId } = req.params
+        if (!games.has(gameId)) {
+            return res.status(404).json({ code: "GAME_NOT_FOUND" })
+        }
+        const game = games.get(gameId)
+        res.status(200).json(Object.fromEntries(Object.entries(game).filter(([key]) => key !== "deck")))
+    } catch (error) {
+        console.error("Error getting game:", error)
+        res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
+    }
+}
+
 //DEV:This method is just for testing purposes, it will not be here in the final version
 export const getGames = (req, res) => {
     try {

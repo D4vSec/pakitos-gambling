@@ -14,7 +14,7 @@ const isGameValid = (gameId, game) => {
 
     return true
 }
-
+//TODO: Test the game
 const startGame = async (req, res) => {
     const id = req.user.id
     const wallet = req.user.wallet
