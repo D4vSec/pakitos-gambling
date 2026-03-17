@@ -383,7 +383,7 @@ export const deleteGame = (req, res) => {
     }
 }
 
-const getGame = (req, res) => {
+export const getGame = (req, res) => {
     try {
         const { gameId } = req.params
         if (!games.has(gameId)) {
