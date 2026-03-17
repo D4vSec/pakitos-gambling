@@ -13,11 +13,13 @@ const removeGameId = () => localStorage.removeItem(GAME_ID_KEY)
 
 const BlackjackProvider = ({ children }) => {
     const [game, setGame] = useState({})
+    const [thinking, setThinking] = useState(false)
     const { getRefreshToken, getAccessToken } = useSession()
     const { addNotification } = useNotification()
     const { post } = useAPI()
 
     const startGame = async () => {
+        setThinking(true)
         const url = "http://localhost:3000/v1/blackjack/start"
 
         try {
@@ -43,6 +45,8 @@ const BlackjackProvider = ({ children }) => {
             setGame(res)
         } catch (error) {
             addNotification(error.message, "error")
+        } finally {
+            setThinking(false)
         }
     }
 

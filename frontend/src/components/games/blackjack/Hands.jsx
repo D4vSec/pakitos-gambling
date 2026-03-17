@@ -1,11 +1,15 @@
 import React from "react"
 import Hand from "./Hand"
 
-const Hands = () => {
+const Hands = ({ hands }) => {
+    console.log("hands", hands)
+
+    if (!Array.isArray(hands) || hands.length === 0) return ""
+
     return (
         <div className="flex gap-8">
-            {Array.from({ length: 2 }).map((hand) => (
-                <Hand />
+            {hands.map((hand, i) => (
+                <Hand key={i} hand={hand} />
             ))}
         </div>
     )

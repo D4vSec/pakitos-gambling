@@ -2,17 +2,23 @@ import React from "react"
 import Hand from "./Hand"
 import Hands from "./Hands"
 import Deck from "./Deck"
+import { useEffect } from "react"
+import { useBlackjack } from "@/providers/BlackjackProvider"
 import "./BlackjackBoard.css"
 
 const BlackjackBoard = () => {
+    const { game } = useBlackjack()
+
+    const { dealer, player } = game
+
     return (
         <div className="w-full h-full grid grid-cols-[1fr_3fr_1fr] grid-rows-4 gap-4 bg-accent">
             <div className="dealer flex justify-center items-center">
-                <Hand />
+                <Hands hands={[dealer]} />
             </div>
 
             <div className="player flex justify-center items-center">
-                <Hands />
+                <Hands hands={player} />
             </div>
 
             <div className="deck flex justify-center items-start">

@@ -1,13 +1,20 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import Hearts from "./svg/Hearts"
 import Diamonds from "./svg/Diamonds"
 import Clubs from "./svg/Clubs"
 import Spades from "./svg/Spades"
 import CherrySVG from "@/components/svg/CherrySVG"
 
-const Card = ({ card, faceDown }) => {
+const Card = ({ card }) => {
     const { rank, suit } = card
-    const [display, setDisplay] = useState(faceDown)
+
+    const isHidden = rank === "hidden" || suit === "hidden"
+
+    const [display, setDisplay] = useState(isHidden)
+
+    useEffect(() => {
+        setDisplay(isHidden)
+    }, [isHidden])
 
     const red = "text-red-500"
     const black = "text-black"
@@ -27,7 +34,7 @@ const Card = ({ card, faceDown }) => {
     }
 
     return (
-        <div className="w-20 h-28 perspective-[1000px]" onClick={() => setDisplay(!display)}>
+        <div className="w-20 h-28 perspective-[1000px]">
             <div
                 className={`relative w-full h-full transition-transform duration-500 transform-3d ${
                     display ? "transform-[rotateY(180deg)]" : ""
@@ -42,7 +49,7 @@ const Card = ({ card, faceDown }) => {
                 </div>
 
                 {/* BACK */}
-                <div className="absolute w-full h-full bg-blue-600  border-white border-6 rounded-lg flex items-center justify-center text-white transform-[rotateY(180deg)] backface-hidden shadow-md">
+                <div className="absolute w-full h-full bg-blue-600 border-white border-6 rounded-lg flex items-center justify-center text-white transform-[rotateY(180deg)] backface-hidden shadow-md">
                     <CherrySVG />
                 </div>
             </div>

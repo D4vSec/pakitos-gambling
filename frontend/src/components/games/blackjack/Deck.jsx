@@ -1,7 +1,7 @@
 import Card from "./Card"
 
 const Deck = () => {
-    const suits = ["Hearts"]
+    const suits = ["hidden"]
     const cards = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
     let deck = []
 
@@ -26,7 +26,7 @@ const Deck = () => {
                         bottom: i * 1,
                     }}
                 >
-                    <Card card={card} faceDown={true} />
+                    <Card card={card} />
                 </div>
             ))}
         </div>
