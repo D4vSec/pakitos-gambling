@@ -50,12 +50,14 @@ export const startGame = async (req, res) => {
                     bet: amount,
                 },
             ],
-            dealer: {
-                hand: dealerHand,
-                value: blackJack.calculateHandValue(dealerHand),
-                bust: blackJack.calculateHandValue(dealerHand) > 21,
-                blackJack: false,
-            },
+            dealer: [
+                {
+                    hand: dealerHand,
+                    value: blackJack.calculateHandValue(dealerHand),
+                    bust: blackJack.calculateHandValue(dealerHand) > 21,
+                    blackJack: false,
+                },
+            ],
             deck: deck,
             winners: [],
             payout: 0,
@@ -80,14 +82,14 @@ export const startGame = async (req, res) => {
             game.payout = payout
 
             if (game.winners.includes("player")) await User.updateUserBalance(id, payout)
-                
+
             games.set(gameId, game)
         }
 
         //I hide the second card of the dealer hand and the deck from the response
         game.dealer.hand[1] = { rank: "hidden", suit: "hidden" }
-
-        res.json(Object.fromEntries(Object.entries(game).filter(([key]) => key !== "deck")))
+        game.dealer.value = blackJack.calculateHandValue([game.dealer.hand[0]])
+        res.status(200).json(Object.fromEntries(Object.entries(game).filter(([key]) => key !== "deck")))
     } catch (error) {
         console.error("Error starting game:", error)
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
@@ -131,7 +133,8 @@ export const hit = (req, res) => {
 
             games.set(gameId, game)
         }
-        res.json(Object.fromEntries(Object.entries(game).filter(([key]) => key !== "deck")))
+        game.dealer.value = blackJack.calculateHandValue([game.dealer.hand[0]])
+        res.status(200).json(Object.fromEntries(Object.entries(game).filter(([key]) => key !== "deck")))
     } catch (error) {
         console.error("Error hitting:", error)
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
@@ -208,7 +211,7 @@ export const stand = async (req, res) => {
             games.set(gameId, game)
         }
 
-        res.json(Object.fromEntries(Object.entries(game).filter(([key]) => key !== "deck")))
+        res.status(200).json(Object.fromEntries(Object.entries(game).filter(([key]) => key !== "deck")))
     } catch (error) {
         console.error("Error standing:", error)
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
@@ -309,7 +312,7 @@ export const double = async (req, res) => {
             games.set(gameId, game)
         }
 
-        res.json(Object.fromEntries(Object.entries(game).filter(([key]) => key !== "deck")))
+        res.status(200).json(Object.fromEntries(Object.entries(game).filter(([key]) => key !== "deck")))
     } catch (error) {
         console.error("Error doubling:", error)
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
@@ -355,7 +358,8 @@ export const split = async (req, res) => {
             game.player.push(newHand)
 
             games.set(gameId, game)
-            res.json(Object.fromEntries(Object.entries(game).filter(([key]) => key !== "deck")))
+            game.dealer.value = blackJack.calculateHandValue([game.dealer.hand[0]])
+            res.status(200).json(Object.fromEntries(Object.entries(game).filter(([key]) => key !== "deck")))
         } else {
             return res.status(400).json({ code: "CANNOT_SPLIT" })
         }
@@ -372,17 +376,17 @@ export const deleteGame = (req, res) => {
             return res.status(404).json({ code: "GAME_NOT_FOUND" })
         }
         games.delete(gameId)
-        res.json({ message: "Game deleted successfully" })
+        res.status(200).json({ code: "GAME_DELETED_SUCCESSFULLY" })
     } catch (error) {
         console.error("Error deleting game:", error)
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
 }
-//This method is just for testing purposes, it will not be here in the final version
+//DEV:This method is just for testing purposes, it will not be here in the final version
 export const getGames = (req, res) => {
     try {
         const gamesArray = Array.from(games.values())
-        res.json(gamesArray)
+        res.status(200).json(gamesArray)
     } catch (error) {
         console.error("Error getting games:", error)
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })

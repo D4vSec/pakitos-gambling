@@ -8,7 +8,7 @@ import {
 	double,
 	deleteGame,
 	getGames,
-} from "#@/controllers/blackjackController"
+} from "#controllers/blackjackController"
 
 const blackJackRoutes = express.Router()
 
@@ -17,7 +17,7 @@ blackJackRoutes.post("/:gameId/hit/", gameLimiter, authMiddleware, hit)
 blackJackRoutes.post("/:gameId/stand", gameLimiter, authMiddleware, stand)
 blackJackRoutes.post("/:gameId/double", gameLimiter, authMiddleware, double)
 blackJackRoutes.delete("/:gameId", authMiddleware, deleteGame)
-//Testing method, will be removed in the final version
+//DEV: Testing method, will be removed in the final version
 blackJackRoutes.get("/games", authMiddleware, getGames)
 
 export default blackJackRoutes

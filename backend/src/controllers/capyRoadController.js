@@ -1,11 +1,21 @@
 import createCapyRoad from "#services/capyroad"
 import User from "#models/User"
 import { randomId } from "#utils/rng"
-import { ca } from "zod/v4/locales"
 
 const games = new Map()
 
-const startGame = async (res, req) => {
+const isGameValid = (gameId, game) => {
+    if (!games.has(gameId)) {
+        return false
+    }
+    if (game.status === "finished") {
+        return false
+    }
+
+    return true
+}
+
+const startGame = async (req, res) => {
     const id = req.user.id
     const wallet = req.user.wallet
     const { amount } = req.body
@@ -40,27 +50,21 @@ const startGame = async (res, req) => {
             payout: amount * payoutMultiplier,
         }
 
-        games.set(gameID, game)
+        games.set(game.gameID, game)
+
+        return res.status(200).json(game)
     } catch (error) {
         console.error("Error starting CapyRoad game:", error)
         return res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
-
-    games.set(gameID, game)
-
-    return res.status(200).json({ message: "Juego iniciado", gameId: game.gameID })
 }
 
-export const jumpRoad = async (req, res) => {
+const jumpRoad = async (req, res) => {
     const { gameId } = req.params
     const game = games.get(gameId)
 
-    if (!game) {
-        return res.status(404).json({ code: "GAME_NOT_FOUND" })
-    }
-
-    if (game.status !== "ongoing") {
-        return res.status(400).json({ code: "GAME_NOT_ONGOING" })
+    if (!isGameValid(gameId, game)) {
+        return res.status(400).json({ code: "GAME_NOT_VALID" })
     }
 
     const capyRoad = createCapyRoad()
@@ -90,4 +94,37 @@ export const jumpRoad = async (req, res) => {
         console.error("Error processing jump in CapyRoad game:", error)
         return res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
+}
+
+const destroyGame = (req, res) => {
+    try {
+        const { gameId } = req.params
+        if (!games.has(gameId)) {
+            return res.status(404).json({ code: "GAME_NOT_FOUND" })
+        }
+
+        games.delete(gameId)
+        return res.status(200).json({ code: "GAME_DELETED_SUCCESSFULLY" })
+    } catch (error) {
+        console.error("Error destroying CapyRoad game:", error)
+        return res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
+    }
+}
+
+//DEV:This method is just for testing purposes, it will not be here in the final version
+const getGames = (req, res) => {
+    try {
+        const allGames = Array.from(games.values())
+        return res.status(200).json(allGames)
+    } catch (error) {
+        console.error("Error fetching CapyRoad games:", error)
+        return res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
+    }
+}
+
+export default {
+    startGame,
+    jumpRoad,
+    destroyGame,
+    getGames,
 }
