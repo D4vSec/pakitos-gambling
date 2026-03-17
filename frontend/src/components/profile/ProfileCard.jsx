@@ -11,7 +11,7 @@ import { useNotification } from "@/providers/NotificationProvider";
 import { useLocale } from "@/providers/LocaleProvider";
 
 const ProfileCard = () => {
-  const { user, getAccessToken, getUserData, setUser } = useSession();
+  const { user, setUser } = useSession();
   const { addNotification } = useNotification();
   const { t } = useLocale();
 
@@ -57,7 +57,7 @@ const ProfileCard = () => {
 
     try {
       const fresh = await updateProfile(body);
-
+      console.log("Prueba", body);
       if (fresh && setUser) setUser(fresh);
 
       reset({ ...data, password: "", confirmPassword: "" });
@@ -207,7 +207,8 @@ const ProfileCard = () => {
                     <button
                       type="button"
                       className="btn btn-ghost flex-1"
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.preventDefault()
                         reset({
                           username: user?.username || "",
                           email: user?.email || "",

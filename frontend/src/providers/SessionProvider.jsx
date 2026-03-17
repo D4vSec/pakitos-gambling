@@ -166,12 +166,15 @@ const SessionProvider = ({ children }) => {
           body.password = pwd;
         }
       }
-
+      
+      console.log(body);
+      
       const response = await put("/api/v1/user/me", {
-        body,
         headers: {
-          Authorization: accessToken ? `Bearer ${accessToken}` : undefined,
+          "x-refresh-token": getRefreshToken(),
+          Authorization: `Bearer ${getAccessToken()}`,
         },
+        body: body,
       });
 
       if (response?.code && response.code !== "SUCCESS") {
