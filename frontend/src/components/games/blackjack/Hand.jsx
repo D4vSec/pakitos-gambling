@@ -4,7 +4,9 @@ import Card from "./Card"
 const Hand = ({ hand }) => {
     const cards = hand?.hand || []
 
-    const hasCards = cards.length > 0
+    const visibleCards = cards.filter((card) => card.rank !== "hidden")
+
+    const hasCards = visibleCards.length > 0
 
     const getCardValue = (rank) => {
         if (rank === "A") return 1
@@ -12,25 +14,20 @@ const Hand = ({ hand }) => {
         return Number(rank)
     }
 
-    // 👉 calcular valores
     const lowValue = hasCards
-        ? cards.reduce((acc, card) => acc + getCardValue(card.rank), 0)
+        ? visibleCards.reduce((acc, card) => acc + getCardValue(card.rank), 0)
         : 0
 
-    const hasAce = cards.some((card) => card.rank === "A")
-
+    const hasAce = visibleCards.some((card) => card.rank === "A")
     const highValue = hasAce ? lowValue + 10 : lowValue
 
-    // 👉 decidir qué mostrar
     let displayValue = lowValue
 
     if (hasAce && highValue <= 21) {
         displayValue = `${lowValue}/${highValue}`
     }
-
     return (
         <div className="z-10 flex flex-col gap-3 justify-center items-center">
-            
             {hasCards && (
                 <div className="flex items-start">
                     {cards.map((card, i) => (

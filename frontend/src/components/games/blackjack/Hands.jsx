@@ -2,9 +2,8 @@ import React from "react"
 import Hand from "./Hand"
 
 const Hands = ({ hands }) => {
-    console.log("hands", hands)
 
-    if (!Array.isArray(hands) || hands.length === 0) return ""
+    if (!Array.isArray(hands) || hands.length === 0) return null
 
     return (
         <div className="flex gap-8">

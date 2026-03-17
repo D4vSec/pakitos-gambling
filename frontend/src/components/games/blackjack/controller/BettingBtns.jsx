@@ -5,19 +5,19 @@ const BettingBtns = ({ actions }) => {
     const buttons = [
         {
             label: "Hit",
-            onClick: () => console.log("hit"),
+            onClick: actions?.hit,
         },
         {
             label: "Stand",
-            onClick: () => console.log("stand"),
+            onClick: actions?.stand,
         },
         {
             label: "Split",
-            onClick: () => console.log("split"),
+            onClick: actions?.split,
         },
         {
             label: "Double",
-            onClick: () => console.log("double"),
+            onClick: actions?.double,
         },
     ]
     return (
