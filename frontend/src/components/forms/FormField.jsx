@@ -34,6 +34,7 @@ export const FormField = ({
                             title={error?.message}
                             {...register(name, rules)}
                             {...rest}
+                            {...(type === "number" ? { step: "0.01" } : {})}
                         />
                     )}
 
