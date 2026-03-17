@@ -6,6 +6,7 @@ import { useSession } from "./SessionProvider"
 const BlackjackContext = createContext()
 
 const GAME_ID_KEY = "blackjackGameId"
+const HOST = "localhost:3000"
 
 const getGameId = () => localStorage.getItem(GAME_ID_KEY)
 const setGameId = (id) => localStorage.setItem(GAME_ID_KEY, id)
@@ -20,7 +21,7 @@ const BlackjackProvider = ({ children }) => {
 
     const startGame = async () => {
         setThinking(true)
-        const url = "http://localhost:3000/v1/blackjack/start"
+        const url = `http://${HOST}/v1/blackjack/start`
 
         try {
             const res = await post(url, {
@@ -41,7 +42,7 @@ const BlackjackProvider = ({ children }) => {
                 setGameId(res.gameId)
             }
 
-            console.log(res)
+            console.log("start", res)
             setGame(res)
         } catch (error) {
             addNotification(error.message, "error")
@@ -50,18 +51,85 @@ const BlackjackProvider = ({ children }) => {
         }
     }
 
+    const continueGame = async () => {
+        setThinking(true)
+        const url = `http://${HOST}/v1/blackjack/${getGameId}`
+
+        try {
+            const res = await post(url, {
+                headers: {
+                    "x-refresh-token": getRefreshToken(),
+                    Authorization: `Bearer ${getAccessToken()}`,
+                },
+                body: {
+                    amount: 1,
+                },
+            })
+
+            if (res.code) {
+                throw new Error(res.code)
+            }
+
+            if (res.gameId) {
+                setGameId(res.gameId)
+            }
+
+            console.log("start", res)
+            setGame(res)
+        } catch (error) {
+            addNotification(error.message, "error")
+        } finally {
+            setThinking(false)
+        }
+    }
+
+    const play = async (action) => {
+        setThinking(true)
+        const url = `http://${HOST}/v1/blackjack/${getGameId()}/${action}`
+
+        try {
+            const res = await post(url, {
+                headers: {
+                    "x-refresh-token": getRefreshToken(),
+                    Authorization: `Bearer ${getAccessToken()}`,
+                },
+            })
+
+            if (res.code) {
+                throw new Error(res.code)
+            }
+
+            console.log("hit", res)
+            setGame(res)
+        } catch (error) {
+            addNotification(error.message, "error")
+        } finally {
+            setThinking(false)
+        }
+    }
+
+    const hit = async () => await play("hit")
+    const stand = async () => await play("stand")
+    const double = async () => await play("double")
+    const split = async () => await play("split")
+
     useEffect(() => {
         if (!getGameId()) {
             startGame()
-        }
-
-        return () => {
-            removeGameId()
+        } else {
+            continueGame()
         }
     }, [])
 
     const value = {
         game,
+        startGame,
+        continueGame,
+        hit,
+        stand,
+        double,
+        split,
+        thinking,
     }
 
     return <BlackjackContext value={value}>{children}</BlackjackContext>

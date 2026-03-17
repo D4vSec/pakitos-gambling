@@ -14,7 +14,7 @@ const BlackjackBoard = () => {
     return (
         <div className="w-full h-full grid grid-cols-[1fr_3fr_1fr] grid-rows-4 gap-4 bg-accent">
             <div className="dealer flex justify-center items-center">
-                <Hands hands={[dealer]} />
+                <Hands hands={dealer} />
             </div>
 
             <div className="player flex justify-center items-center">

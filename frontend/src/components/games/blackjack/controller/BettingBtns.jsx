@@ -1,7 +1,7 @@
 import Button from "@/components/buttons/Button"
 import React from "react"
 
-const BettingBtns = () => {
+const BettingBtns = ({ actions }) => {
     const buttons = [
         {
             label: "Hit",
