@@ -5,6 +5,7 @@ import Button from "@/components/buttons/Button"
 import { FormField } from "@/components/forms/FormField"
 import { useLocale } from "@/providers/LocaleProvider"
 import { useSession } from "@/providers/SessionProvider"
+import GradientBg from "@/components/layout/GradientBg"
 
 const Login = () => {
     const { t } = useLocale()
@@ -53,7 +54,7 @@ const Login = () => {
     }
 
     return (
-        <div className="bg-linear-to-b from-primary to-base-200 min-h-full flex flex-col justify-center items-center gap-4">
+        <GradientBg>
             <Title>{t("general.form.page.login")}</Title>
             <div className="card w-full max-w-md bg-base-100 shadow-xl rounded-2xl">
                 <div className="card-body">
@@ -82,7 +83,7 @@ const Login = () => {
                     </FormProvider>
                 </div>
             </div>
-        </div>
+        </GradientBg>
     )
 }
 

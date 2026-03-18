@@ -91,7 +91,7 @@ const BlackjackProvider = ({ children }) => {
     // TODO: Efectivamente el split no va (id is not defined 328:50)
     // TODO: El calculo del dealer creo que en el momento que tiene más que el player se para
     const finishGame = async () => {
-        setThinking(true)
+        setThinking(true)   
         const url = `http://${HOST}/v1/blackjack/${getGameId()}`
 
         try {

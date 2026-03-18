@@ -5,6 +5,7 @@ import { useForm, FormProvider } from "react-hook-form"
 import { useSession } from "@/providers/SessionProvider"
 import { FormField } from "@/components/forms/FormField"
 import Button from "@/components/buttons/Button"
+import GradientBg from "@/components/layout/GradientBg"
 
 const Register = () => {
     const { t } = useLocale()
@@ -82,7 +83,7 @@ const Register = () => {
     }
 
     return (
-        <div className="bg-linear-to-b from-primary to-base-200 min-h-full flex flex-col justify-center items-center gap-4">
+        <GradientBg>
             <Title>{t("general.form.page.register")}</Title>
             <div className="card w-full max-w-md bg-base-100 shadow-xl rounded-2xl">
                 <div className="card-body">
@@ -111,7 +112,7 @@ const Register = () => {
                     </FormProvider>
                 </div>
             </div>
-        </div>
+        </GradientBg>
     )
 }
 
