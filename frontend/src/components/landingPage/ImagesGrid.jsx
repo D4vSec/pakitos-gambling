@@ -65,15 +65,16 @@ const ImagesGrid = () => {
               alt="Juega en Móvil"
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-transparent" />
-            <div className="absolute inset-0 flex items-center">
-              <div className="p-8 md:p-12 max-w-2xl">
-                <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                  {t("general.landingPage.imagesGrid.image3Title")}
-                </h3>
-                <p className="text-lg text-white/90 mb-6">
-                  {t("general.landingPage.imagesGrid.image3Text")}
-                </p>
+            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-transparent">
+              <div className="absolute inset-0 flex items-center md:block">
+                <div className="p-8 md:p-12 max-w-2xl md:absolute md:bottom-0">
+                  <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                    {t("general.landingPage.imagesGrid.image3Title")}
+                  </h3>
+                  <p className="text-lg text-white/90 mb-6">
+                    {t("general.landingPage.imagesGrid.image3Text")}
+                  </p>
+                </div>
               </div>
             </div>
           </div>

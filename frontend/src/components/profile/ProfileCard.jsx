@@ -56,6 +56,7 @@ const ProfileCard = () => {
     if (pwd) body.password = pwd;
 
     try {
+      console.log("form", data);
       //El updateProfile lo cambio la mierda del copilot si ves que tal miralo. 
       const fresh = await updateProfile(body);
 
@@ -67,7 +68,6 @@ const ProfileCard = () => {
             : "Password changed successfully, please log in again",
           "info",
         );
-        logout();
       } else if (fresh && setUser) {
         // Actualizar user si solo cambió username/email
         setUser(fresh);

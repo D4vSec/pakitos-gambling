@@ -7,9 +7,11 @@ import Badge from "./Badges";
 import CrownSVG from "../svg/CrownSVG";
 import DolarSVG from "../svg/DolarSVG";
 import SparkleSVG from "../svg/SparkleSVG";
+import { useNavigate } from "react-router-dom";
 
 const RouletteCard = () => {
   const { t } = useLocale();
+  const navigate = useNavigate();
   return (
     <section className=" max-w-6xl mx-auto px-4 md:px-8 lg:px-16 mt-12">
       <div className="mb-6 border-b-2 pb-3 text-primary">
@@ -37,7 +39,10 @@ const RouletteCard = () => {
             </div>
 
             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-              <Button className="bg-primary text-primary-foreground px-4 py-2 rounded-md text-sm font-medium hover:opacity-90 transition">
+              <Button
+                className="bg-primary text-primary-foreground px-4 py-2 rounded-md text-sm font-medium hover:opacity-90 transition"
+                onClick={() => navigate("/roulette")}
+              >
                 {t("general.home.playNow")}
               </Button>
             </div>
@@ -67,7 +72,10 @@ const RouletteCard = () => {
             </div>
 
             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-              <Button className="bg-primary text-primary-foreground px-4 py-2 rounded-md text-sm font-medium hover:opacity-90 transition">
+              <Button
+                className="bg-primary text-primary-foreground px-4 py-2 rounded-md text-sm font-medium hover:opacity-90 transition"
+                onClick={() => navigate("/roulette")}
+              >
                 {t("general.home.playNow")}
               </Button>
             </div>
