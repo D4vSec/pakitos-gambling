@@ -138,6 +138,89 @@ const SessionProvider = ({ children }) => {
         }
     }
 
+    const updateProfile = async (data) => {
+        try {
+            const accessToken = getAccessToken()
+
+            // Sanitize payload: remove confirmPassword, trim password, and only send password when non-empty
+            const body = { ...(data || {}) }
+            if (body.confirmPassword !== undefined) {
+                delete body.confirmPassword
+            }
+
+            if (body.password !== undefined) {
+                const pwd = String(body.password).trim()
+                if (pwd === "") {
+                    delete body.password
+                } else {
+                    body.password = pwd
+                }
+            }
+
+            console.log(body)
+
+            const response = await put("/api/v1/user/me", {
+                headers: {
+                    "x-refresh-token": getRefreshToken(),
+                    Authorization: `Bearer ${accessToken}`,
+                },
+                body: body,
+            })
+
+            if (!response || response.code !== "SUCCESS") {
+                const message =
+                    response?.message ||
+                    (response?.errors
+                        ? response.errors.map((e) => e.message || JSON.stringify(e)).join(" \n")
+                        : response?.code || "UNKNOWN_ERROR")
+                throw new Error(message)
+            }
+
+            addNotification(t ? t("message.success.USER_UPDATED") : "Profile updated", "success")
+
+            const userData = await getUserData()
+            setUser(userData)
+
+            return userData
+        } catch (error) {
+            addNotification(
+                t ? t(`message.error.${error?.message}`) : "Error updating profile",
+                "error",
+            )
+        }
+    }
+
+    // TODO: No se si separar el balance del user y controlarlo independientemente
+    const addBalance = async (amount) => {
+        try {
+            const response = await post("/api/v1/user/me/transactions", {
+                headers: {
+                    "x-refresh-token": getRefreshToken(),
+                    Authorization: `Bearer ${getAccessToken()}`,
+                },
+                body: {
+                    type: "deposit",
+                    amount: amount,
+                },
+            })
+
+            if (response.code) {
+                throw new Error(response?.code)
+            }
+
+            setUser((prev) => ({
+                ...prev,
+                balance: ((parseFloat(prev.balance) || 0) + parseFloat(amount)).toFixed(2),
+            }))
+
+            console.log("balance", response)
+
+            addNotification(t(`message.success.BALANCE_ADDED_SUCCESSFULLY`), "success")
+        } catch (error) {
+            addNotification(t(`message.error.${error?.message}`), "error")
+        }
+    }
+
     useEffect(() => {
         const token = getAccessToken()
 
@@ -148,38 +231,12 @@ const SessionProvider = ({ children }) => {
         }
     }, [])
 
-    const updateProfile = async (data) => {
-        try {
-            const accessToken = getAccessToken()
-
-            const response = await put("/api/v1/user/me", {
-                body: data,
-                headers: {
-                    Authorization: accessToken ? `Bearer ${accessToken}` : undefined,
-                },
-            })
-
-            if (response?.code && response.code !== "SUCCESS") {
-                throw new Error(response.code)
-            }
-
-            addNotification(t ? t("message.success.USER_UPDATED") : "Profile updated", "success")
-
-            const userData = await getUserData()
-            setUser(userData)
-
-            return userData
-        } catch (error) {
-            addNotification(t ? t(`message.error.${error?.message}`) : "Error updating profile", "error")
-            throw error
-        }
-    }
-
     const value = {
         register,
         login,
         logout,
         updateProfile,
+        addBalance,
         user,
         isLogged,
         loading,

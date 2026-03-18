@@ -158,7 +158,7 @@ export const stand = async (req, res) => {
             return res.status(400).json({ code: "GAME_NOT_VALID" })
         }
         //If there is a split, we have two branches of logic, one for the first hand and one for the second hand
-        if (split === true) {
+        if (game?.split === true) {
             //If the player is already resolved the first hand, and decides to stand with the second hand,
             //the dealer plays his hand and we determinate the winner of both hands
             if (game.player[0].resolved === true && split === true) {
@@ -206,7 +206,7 @@ export const stand = async (req, res) => {
             game.dealer[0].blackJack = game.dealer[0].value === 21
 
             const winner = blackJack.determinateWinner(game.player[0].value, game.dealer[0].value)
-            game.winner.push(winner)
+            game.winners.push(winner)
             game.status = "finished"
 
             if (game.winners.includes("player")) {

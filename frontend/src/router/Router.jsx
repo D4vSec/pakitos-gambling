@@ -1,13 +1,14 @@
 import React from "react"
 import { Routes, Route } from "react-router-dom"
+import AddBalance from "@/pages/AddBalance"
+import BlackjackGame from "@/pages/games/BlackjackGame"
 import Error from "../pages/Error"
 import Home from "../pages/Home"
 import LandingPage from "../pages/LandingPage"
 import Login from "../pages/Login"
-import Register from "../pages/Register"
 import Profile from "@/pages/Profile"
+import Register from "../pages/Register"
 import RouletteGame from "@/pages/games/RouletteGame"
-import BlackjackGame from "@/pages/games/BlackjackGame"
 
 const Router = () => {
     return (
@@ -19,6 +20,7 @@ const Router = () => {
             <Route path="/settings" element={<Profile />} />
             <Route path="/roulette" element={<RouletteGame />} />
             <Route path="/blackjack" element={<BlackjackGame />} />
+            <Route path="/addBalance" element={<AddBalance />} />
             <Route path="*" element={<Error />} />
         </Routes>
     )
