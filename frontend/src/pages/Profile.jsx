@@ -8,7 +8,7 @@ import Button from "@/components/buttons/Button"
 import GradientBg from "@/components/layout/GradientBg"
 import UserSVG from "@/components/svg/UserSVG"
 import ShieldSVG from "@/components/svg/ShieldSVG"
-import AlertTriangle from "@/components/svg/AlertTriangle"
+import AlertTriangleSVG from "@/components/svg/AlertTriangleSVG"
 
 const Profile = () => {
     const { user, updateProfile } = useSession()
@@ -177,7 +177,7 @@ const Profile = () => {
                 <div className="card bg-base-100 shadow-xl border border-error">
                     <div className="card-body">
                         <h2 className="card-title text-error text-xl">
-                            <AlertTriangle />
+                            <AlertTriangleSVG />
                             Danger Zone
                         </h2>
 

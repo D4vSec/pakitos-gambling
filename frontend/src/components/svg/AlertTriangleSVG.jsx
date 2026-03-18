@@ -1,6 +1,6 @@
 import React from "react"
 
-const AlertTriangle = () => {
+const AlertTriangleSVG = () => {
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -22,4 +22,4 @@ const AlertTriangle = () => {
     )
 }
 
-export default AlertTriangle
+export default AlertTriangleSVG

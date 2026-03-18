@@ -1,7 +1,7 @@
 import React from "react"
 import InfoSVG from "../svg/InfoSVG"
 import CheckSVG from "../svg/CheckSVG"
-import AlertTriangle from "../svg/AlertTriangle"
+import AlertTriangleSVG from "../svg/AlertTriangleSVG"
 import CircleXSVG from "../svg/CircleXSVG"
 
 const Notification = ({ notification }) => {
@@ -15,7 +15,7 @@ const Notification = ({ notification }) => {
     const svg = {
         info: <InfoSVG />,
         success: <CheckSVG />,
-        warning: <AlertTriangle />,
+        warning: <AlertTriangleSVG />,
         error: <CircleXSVG />,
     }
 
