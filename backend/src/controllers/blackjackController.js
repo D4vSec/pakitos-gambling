@@ -19,6 +19,11 @@ export const startGame = async (req, res) => {
     const id = req.user.id
     const wallet = await User.getUserBalance(id)
     const { amount } = req.body
+
+    if (amount <= 0 || isNaN(amount)) {
+        return res.status(400).json({ code: "INVALID_BET_AMOUNT" })
+    }
+
     if (amount > wallet) {
         return res.status(400).json({ code: "INSUFFICIENT_BALANCE" })
     }
@@ -125,7 +130,9 @@ export const hit = (req, res) => {
             if (game.player[0].bust && split === true) {
                 game.player[0].resolved = true
                 game.winners.push("dealer")
-            } else {
+            }
+            
+            if (game.player[0].bust && split === false) {
                 game.player[0].resolved = true
                 game.winners.push("dealer")
                 game.status = "finished"
