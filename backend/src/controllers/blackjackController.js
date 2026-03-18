@@ -73,7 +73,7 @@ export const startGame = async (req, res) => {
         //If the player hits a blackJack
         if (blackJack.calculateHandValue(playerHand) === 21) {
             game.status = "finished"
-            const dealerFinalHand = blackJack.dealerPlay(game.dealer[0], game.dealer[0].hand, game.player.hand)
+            const dealerFinalHand = blackJack.dealerPlay(game.dealer[0], game.dealer[0].hand, game.player[0].hand)
             game.dealer[0].hand = dealerFinalHand
             game.dealer[0].value = blackJack.calculateHandValue(dealerFinalHand)
             game.dealer[0].bust = game.dealer[0].value > 21
@@ -91,17 +91,22 @@ export const startGame = async (req, res) => {
             games.set(gameId, game)
         }
 
-        //I hide the second card of the dealer hand and the deck from the response
-        game.dealer[0].hand[1] = { rank: "hidden", suit: "hidden" }
-        game.dealer[0].value = blackJack.calculateHandValue([game.dealer[0].hand[0]])
-        res.status(200).json(Object.fromEntries(Object.entries(game).filter(([key]) => key !== "deck")))
+        // Create a copy for the response to avoid modifying the stored game state
+        const responseGame = JSON.parse(JSON.stringify(game))
+
+        //I hide the second card of the dealer hand and the deck from the response only if the game is ongoing
+        if (responseGame.status !== "finished") {
+            responseGame.dealer[0].hand[1] = { rank: "hidden", suit: "hidden" }
+            responseGame.dealer[0].value = blackJack.calculateHandValue([responseGame.dealer[0].hand[0]])
+        }
+        res.status(200).json(Object.fromEntries(Object.entries(responseGame).filter(([key]) => key !== "deck")))
     } catch (error) {
         console.error("Error starting game:", error)
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
 }
 
-export const hit = (req, res) => {
+export const hit = async (req, res) => {
     const blackJack = createBlackJack()
     try {
         const { gameId } = req.params
@@ -109,39 +114,105 @@ export const hit = (req, res) => {
         if (!isGameValid(gameId, game)) {
             return res.status(400).json({ code: "GAME_NOT_VALID" })
         }
-
-        if (game.player[0].resolved === true && split === true) {
-            game.player[1].hand = blackJack.hit(game.deck, game.player[1].hand)
-            game.player[1].value = blackJack.calculateHandValue(game.player[1].hand)
-            game.player[1].bust = game.player[1].value > 21
-
-            if (game.player[1].bust) {
+        //TODO: HIT WITH SPLIT IS NOT WORKING
+        if (game.split === true) {
+            if (game.player[0].resolved === true) {
+                game.player[1].hand = blackJack.hit(game.deck, game.player[1].hand)
+                game.player[1].value = blackJack.calculateHandValue(game.player[1].hand)
+                game.player[1].bust = game.player[1].value > 21
+                game.player[1].blackJack = game.player[1].value === 21
                 game.player[1].resolved = true
-                game.status = "finished"
-                game.winners.push("dealer")
-            }
 
-            games.set(gameId, game)
-        } else {
+                if (game.player[1].bust) {
+                    game.player[1].resolved = true
+                    game.status = "finished"
+                    game.winners.push("dealer")
+                }
+
+                if (game.player[1].blackJack) {
+                    game.player[1].resolved = true
+                    game.status = "finished"
+                    const dealerFinalHand = blackJack.dealerPlay(game.deck, game.dealer[0].hand, game.player[1].hand)
+                    game.dealer[0].hand = dealerFinalHand
+                    game.dealer[0].value = blackJack.calculateHandValue(dealerFinalHand)
+                    game.dealer[0].bust = game.dealer[0].value > 21
+                    game.dealer[0].blackJack = game.dealer[0].value === 21
+
+                    const winner = blackJack.determinateWinner(game.player[1].value, game.dealer[0].value)
+                    game.winners.push(winner)
+
+                    if (game.winners.includes("player")) {
+                        await User.updateUserBalance(id, payout)
+                    }
+                }
+
+                games.set(gameId, game)
+            } else {
+                game.player[0].hand = blackJack.hit(game.deck, game.player[0].hand)
+                game.player[0].value = blackJack.calculateHandValue(game.player[0].hand)
+                game.player[0].bust = game.player[0].value > 21
+                game.player[0].blackJack = game.player[0].value === 21
+                game.player[0].resolved = true
+
+                if (game.player[0].bust) {
+                    game.player[0].resolved = true
+                    game.winners.push("dealer")
+                }
+
+                if (game.player[0].blackJack) {
+                    game.player[0].resolved = true
+                }
+
+                games.set(gameId, game)
+            }
+        }
+
+        if (game.split === false) {
             game.player[0].hand = blackJack.hit(game.deck, game.player[0].hand)
             game.player[0].value = blackJack.calculateHandValue(game.player[0].hand)
             game.player[0].bust = game.player[0].value > 21
+            game.player[0].blackJack = game.player[0].value === 21
+            game.player[0].resolved = true
 
-            if (game.player[0].bust && split === true) {
-                game.player[0].resolved = true
-                game.winners.push("dealer")
-            }
-            
-            if (game.player[0].bust && split === false) {
-                game.player[0].resolved = true
-                game.winners.push("dealer")
+            if (game.player[0].bust) {
                 game.status = "finished"
+                game.winners.push("dealer")
             }
 
-            games.set(gameId, game)
+            if (game.player[0].blackJack) {
+                game.status = "finished"
+                const dealerFinalHand = blackJack.dealerPlay(game.deck, game.dealer[0].hand, game.player[0].hand)
+                game.dealer[0].hand = dealerFinalHand
+                game.dealer[0].value = blackJack.calculateHandValue(dealerFinalHand)
+                game.dealer[0].bust = game.dealer[0].value > 21
+                game.dealer[0].blackJack = game.dealer[0].value === 21
+
+                const winner = blackJack.determinateWinner(game.player[0].value, game.dealer[0].value)
+                game.winners.push(winner)
+
+                if (game.winners.includes("player")) {
+                    const payout = game.winners[0] === "player" ? game.player[0].bet + game.player[0].bet : 0
+                    game.payout = payout
+                    await User.updateUserBalance(id, payout)
+                }
+
+                games.set(gameId, game)
+            }
         }
-        game.dealer[0].value = blackJack.calculateHandValue([game.dealer[0].hand[0]])
-        res.status(200).json(Object.fromEntries(Object.entries(game).filter(([key]) => key !== "deck")))
+
+        // Create a copy for the response
+        const responseGame = JSON.parse(JSON.stringify(game))
+
+        // Hide dealer card if game is ongoing
+        if (responseGame.status === "ongoing") {
+            responseGame.dealer[0].hand[1] = { rank: "hidden", suit: "hidden" }
+            responseGame.dealer[0].value = blackJack.calculateHandValue([responseGame.dealer[0].hand[0]])
+        } else {
+            // If finished, show real value (already present in game object, but ensure display is correct)
+            // No specific action needed as responseGame has full hand
+        }
+
+        res.status(200).json(Object.fromEntries(Object.entries(responseGame).filter(([key]) => key !== "deck")))
     } catch (error) {
         console.error("Error hitting:", error)
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
@@ -158,19 +229,19 @@ export const stand = async (req, res) => {
             return res.status(400).json({ code: "GAME_NOT_VALID" })
         }
         //If there is a split, we have two branches of logic, one for the first hand and one for the second hand
-        if (game?.split === true) {
+        if (game.split === true) {
             //If the player is already resolved the first hand, and decides to stand with the second hand,
             //the dealer plays his hand and we determinate the winner of both hands
-            if (game.player[0].resolved === true && split === true) {
-                const dealerFinalHand = blackJack.dealerPlay(game.deck, game.dealer[0].hand, game.player.hand)
+            if (game.player[0].resolved === true) {
+                const dealerFinalHand = blackJack.dealerPlay(game.deck, game.dealer[0], game.player[0].hand)
                 game.dealer[0].hand = dealerFinalHand
                 game.dealer[0].value = blackJack.calculateHandValue(dealerFinalHand)
                 game.dealer[0].bust = game.dealer[0].value > 21
                 game.dealer[0].blackJack = game.dealer[0].value === 21
 
-                const winner = blackJack.determinateWinner(game.player.value, game.dealer[0].value)
+                const winner = blackJack.determinateWinner(game.player[0].value, game.dealer[0].value)
 
-                const winner2 = blackJack.determinateWinner(game.player.value2, game.dealer[0].value)
+                const winner2 = blackJack.determinateWinner(game.player[1].value, game.dealer[0].value)
 
                 game.winners.push(winner)
                 game.winners.push(winner2)
@@ -195,10 +266,13 @@ export const stand = async (req, res) => {
                 //If the player decides to stand with the first hand, we just mark it as resolved
                 //and wait for the player to play with the second hand
                 game.player[0].resolved = true
-                game.set(gameId, game)
+                games.set(gameId, game)
             }
         } else {
             //If there is no split, the dealer plays his hand and we determinate the winner
+
+            game.player[0].resolved = true
+
             const dealerFinalHand = blackJack.dealerPlay(game.deck, game.dealer[0].hand, game.player[0].hand)
             game.dealer[0].hand = dealerFinalHand
             game.dealer[0].value = blackJack.calculateHandValue(dealerFinalHand)
@@ -218,7 +292,8 @@ export const stand = async (req, res) => {
             games.set(gameId, game)
         }
 
-        res.status(200).json(Object.fromEntries(Object.entries(game).filter(([key]) => key !== "deck")))
+        const responseGame = JSON.parse(JSON.stringify(game))
+        res.status(200).json(Object.fromEntries(Object.entries(responseGame).filter(([key]) => key !== "deck")))
     } catch (error) {
         console.error("Error standing:", error)
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
@@ -242,30 +317,37 @@ export const double = async (req, res) => {
         }
 
         await User.updateUserBalance(id, -game.player[0].bet)
-
+        game.player[0].bet *= 2
         //If the game is not split we do the usual thing
         if (game.split === false) {
             game.player[0].hand = blackJack.hit(game.deck, game.player[0].hand)
             game.player[0].value = blackJack.calculateHandValue(game.player[0].hand)
             game.player[0].bust = game.player[0].value > 21
             game.player[0].doubled = true
+            game.player[0].resolved = true
 
-            const dealerFinalHand = blackJack.dealerPlay(game.deck, game.dealer[0].hand, game.player[0].hand)
-            game.dealer[0].hand = dealerFinalHand
-            game.dealer[0].value = blackJack.calculateHandValue(dealerFinalHand)
-            game.dealer[0].bust = game.dealer[0].value > 21
-            game.dealer[0].blackJack = game.dealer[0].value === 21
+            if (!game.player[0].bust) {
+                const dealerFinalHand = blackJack.dealerPlay(game.deck, game.dealer[0].hand, game.player[0].hand)
+                game.dealer[0].hand = dealerFinalHand
+                game.dealer[0].value = blackJack.calculateHandValue(dealerFinalHand)
+                game.dealer[0].bust = game.dealer[0].value > 21
+                game.dealer[0].blackJack = game.dealer[0].value === 21
 
-            const winner = blackJack.determinateWinner(game.player[0].value, game.dealer[0].value)
+                const winner = blackJack.determinateWinner(game.player[0].value, game.dealer[0].value)
 
-            game.winners.push(winner)
-            game.status = "finished"
+                game.winners.push(winner)
+                game.status = "finished"
 
-            if (game.winners.includes("player")) {
-                const payout = game.winners[0] === "player" ? game.player[0].bet * 2 + game.player[0].bet : 0
-                game.payout = payout
-                await User.updateUserBalance(id, payout)
+                if (game.winners.includes("player")) {
+                    const payout = game.winners[0] === "player" ? game.player[0].bet * 2 + game.player[0].bet : 0
+                    game.payout = payout
+                    await User.updateUserBalance(id, payout)
+                }
+            } else {
+                game.status = "finished"
+                game.winners.push("dealer")
             }
+            games.set(gameId, game)
         }
         //If the game is split we have to check a few things
         if (game.split === true) {
@@ -318,8 +400,8 @@ export const double = async (req, res) => {
 
             games.set(gameId, game)
         }
-
-        res.status(200).json(Object.fromEntries(Object.entries(game).filter(([key]) => key !== "deck")))
+        const responseGame = JSON.parse(JSON.stringify(game))
+        res.status(200).json(Object.fromEntries(Object.entries(responseGame).filter(([key]) => key !== "deck")))
     } catch (error) {
         console.error("Error doubling:", error)
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
@@ -329,6 +411,7 @@ export const double = async (req, res) => {
 export const split = async (req, res) => {
     const blackJack = createBlackJack()
     try {
+        const id = req.user.id
         const { gameId } = req.params
         const game = games.get(gameId)
 
@@ -340,13 +423,15 @@ export const split = async (req, res) => {
         if (!isGameValid(gameId, game)) {
             return res.status(400).json({ code: "GAME_NOT_VALID" })
         }
-        if (game.player.hand.length === 2 && game.player.hand[0].value === game.player.hand[1].value) {
+        //DEV: I am skipping the check for the split condition for now, but in a real game the player can only split if the first two cards have the same rank
+        if (/*game.player.hand.length === 2 && game.player.hand[0].value === game.player.hand[1].value*/ true) {
             game.split = true
-            const [splitHand1, splitHand2] = blackJack.split(game.player.hand)
+            const [splitHand1, splitHand2] = blackJack.split(game.player[0].hand)
             game.player[0].hand = splitHand1
-            game.player[0].value = blackJack.calculateHandValue(splitHand1)
+            game.player[0].hand = [...splitHand1, game.deck[0]]
+            game.player[0].value = blackJack.calculateHandValue(game.player[0].hand)
             game.player[0].bust = game.player[0].value > 21
-            game.player[0].hand = [...hand, game.deck[0]]
+            game.player[0].blackJack = game.player[0].value === 21
             game.deck.shift()
 
             const hitHand2 = [...splitHand2, game.deck[0]]
@@ -364,9 +449,50 @@ export const split = async (req, res) => {
 
             game.player.push(newHand)
 
+            if (game.player[0].blackJack) {
+                // If the first hand is a blackjack, we can immediately resolve the hand
+                game.player[0].resolved = true
+            }
+
+            if (game.player[0].blackJack && game.player[1].blackJack) {
+                // If both hands are blackjack, we can immediately resolve the hand
+                game.player[1].resolved = true
+                game.status = "finished"
+
+                const dealerFinalHand = blackJack.dealerPlaySplit(game.deck, game.dealer[0].hand, game.player[0].hand, game.player[1].hand)
+                game.dealer[0].hand = dealerFinalHand
+                game.dealer[0].value = blackJack.calculateHandValue(dealerFinalHand)
+                game.dealer[0].bust = game.dealer[0].value > 21
+                game.dealer[0].blackJack = game.dealer[0].value === 21
+
+                const winner = blackJack.determinateWinner(game.player[0].value, game.dealer[0].value)
+
+                const winner2 = blackJack.determinateWinner(game.player[1].value, game.dealer[0].value)
+
+                game.winners.push(winner)
+                game.winners.push(winner2)
+
+                if (game.winners.includes("player")) {
+                    const payout = game.winners[0] === "player" ? game.player[0].bet + game.player[0].bet : 0
+
+                    payout += game.winners[1] === "player" ? game.player[1].bet + game.player[1].bet : 0
+
+                    game.payout = payout
+
+                    await User.updateUserBalance(id, payout)
+                }
+            }
+
             games.set(gameId, game)
-            game.dealer[0].value = blackJack.calculateHandValue([game.dealer[0].hand[0]])
-            res.status(200).json(Object.fromEntries(Object.entries(game).filter(([key]) => key !== "deck")))
+
+            const responseGame = JSON.parse(JSON.stringify(game))
+
+            //I hide the second card of the dealer hand and the deck from the response only if the game is ongoing
+            if (responseGame.status !== "finished") {
+                responseGame.dealer[0].hand[1] = { rank: "hidden", suit: "hidden" }
+                responseGame.dealer[0].value = blackJack.calculateHandValue([responseGame.dealer[0].hand[0]])
+            }
+            res.status(200).json(Object.fromEntries(Object.entries(responseGame).filter(([key]) => key !== "deck")))
         } else {
             return res.status(400).json({ code: "CANNOT_SPLIT" })
         }
