@@ -68,6 +68,7 @@ const ProfileCard = () => {
             : "Password changed successfully, please log in again",
           "info",
         );
+        logout();
       } else if (fresh && setUser) {
         // Actualizar user si solo cambió username/email
         setUser(fresh);
