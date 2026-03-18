@@ -5,7 +5,7 @@ import RouletteCard from "@/components/home/RouletteCard.jsx";
 import BlackjackCard from "@/components/home/BlackjackCard.jsx";
 const Home = () => {
   return (
-    <div className="min-h-full px-4 py-4 md:px-6 md:py-6 lg:px-8 lg:py-8">
+    <div className="min-h-full px-4 py-4 md:px-6 md:py-6 lg:px-10 lg:py-10">
       <CarrouselBanner />
 
       {/*SLOTS*/}
