@@ -2,6 +2,7 @@ import GameTemplate from "@/components/games/GameTemplate"
 import GameDescription from "@/components/games/GameDescription"
 import Roulette0 from "@/components/games/roulette/Roulette0"
 import React from "react"
+import RouletteController from "@/components/games/roulette/controller/RouletteController"
 
 const RouletteGame = () => {
     return (
@@ -17,6 +18,7 @@ const RouletteGame = () => {
                     possimus a magni id modi?
                 </GameDescription>
             }
+            controls={<RouletteController />}
         />
     )
 }

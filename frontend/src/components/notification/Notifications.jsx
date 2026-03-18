@@ -16,6 +16,7 @@ const Notifications = () => {
                         return (
                             <NotificationModal key={notification.id} notification={notification} />
                         )
+
                     default:
                         return <Notification key={notification.id} notification={notification} />
                 }

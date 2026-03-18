@@ -127,6 +127,7 @@ const SessionProvider = ({ children }) => {
                 throw new Error(response?.code)
             }
 
+            console.log("user", response)
             setUser(response)
             setIsLogged(true)
 

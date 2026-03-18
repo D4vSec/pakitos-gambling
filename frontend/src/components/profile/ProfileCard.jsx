@@ -8,9 +8,6 @@ import { useSession } from "@/providers/SessionProvider";
 import { useNotification } from "@/providers/NotificationProvider";
 import { useLocale } from "@/providers/LocaleProvider";
 
-//Lo dicho Nain si ves cosas raras o q no deberian de estar asi marcalo y lo cambio, o si quieres cambiarlo tu adelante,
-//puta ia de mierda quiero beber y arrancarme el pelo, veras la tonteria de mierda q esta mal y por inutil de mierda q soy esta mal, me voy a comer :) 
-
 const ProfileCard = () => {
   const { user, setUser, updateProfile, logout } = useSession();
   const { addNotification } = useNotification();
@@ -51,16 +48,13 @@ const ProfileCard = () => {
       email: data.email,
     };
 
-    // Limpiar la contraseña de espacios y saltos de línea (en el login no lo cambiado pero creo que puede suponer un problema si ves q tal quitalo)
-    const pwd = data.password?.trim().replace(/[\r\n]+/g, ""); 
+   const pwd = data.password?.trim().replace(/[\r\n]+/g, ""); 
     if (pwd) body.password = pwd;
 
     try {
-      //El updateProfile lo cambio la mierda del copilot si ves que tal miralo. 
       const fresh = await updateProfile(body);
 
       if (pwd) {
-        // Si se cambió la contraseña, forzar logout
         addNotification(
           t
             ? t("message.info.passwordChanged")
@@ -69,7 +63,6 @@ const ProfileCard = () => {
         );
         logout();
       } else if (fresh && setUser) {
-        // Actualizar user si solo cambió username/email
         setUser(fresh);
       }
 
