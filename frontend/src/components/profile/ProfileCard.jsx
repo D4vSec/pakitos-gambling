@@ -2,16 +2,17 @@ import React, { useEffect, useState } from "react";
 import Card from "../landingPage/Card";
 import Button from "../buttons/Button";
 import UserSVG from "../svg/UserSVG";
-import EmailSVG from "../svg/EmailSVG";
-import LockSVG from "../svg/LockSVG";
 import { useForm, FormProvider } from "react-hook-form";
 import { FormField } from "@/components/forms/FormField";
 import { useSession } from "@/providers/SessionProvider";
 import { useNotification } from "@/providers/NotificationProvider";
 import { useLocale } from "@/providers/LocaleProvider";
 
+//Lo dicho Nain si ves cosas raras o q no deberian de estar asi marcalo y lo cambio, o si quieres cambiarlo tu adelante,
+//puta ia de mierda quiero beber y arrancarme el pelo, veras la tonteria de mierda q esta mal y por inutil de mierda q soy esta mal, me voy a comer :) 
+
 const ProfileCard = () => {
-  const { user, setUser } = useSession();
+  const { user, setUser, updateProfile, logout } = useSession();
   const { addNotification } = useNotification();
   const { t } = useLocale();
 
@@ -25,7 +26,6 @@ const ProfileCard = () => {
   });
 
   const [isEditing, setIsEditing] = useState(false);
-
   const { reset, handleSubmit, watch } = methods;
 
   useEffect(() => {
@@ -37,8 +37,6 @@ const ProfileCard = () => {
     });
   }, [user]);
 
-  const { updateProfile } = useSession();
-
   const onSubmit = async (data) => {
     if (data.password && data.password !== data.confirmPassword) {
       addNotification(
@@ -48,17 +46,32 @@ const ProfileCard = () => {
       return;
     }
 
-    const body = { username: data.username, email: data.email };
-    const pwd = data.password?.trim();
+    const body = {
+      username: data.username,
+      email: data.email,
+    };
+
+    // Limpiar la contraseña de espacios y saltos de línea (en el login no lo cambiado pero creo que puede suponer un problema si ves q tal quitalo)
+    const pwd = data.password?.trim().replace(/[\r\n]+/g, ""); 
     if (pwd) body.password = pwd;
 
-    console.log("Submitting profile update, body:", body);
-    console.log("SessionProvider.updateProfile data:", data);
-
     try {
+      //El updateProfile lo cambio la mierda del copilot si ves que tal miralo. 
       const fresh = await updateProfile(body);
-      console.log("Prueba", body);
-      if (fresh && setUser) setUser(fresh);
+
+      if (pwd) {
+        // Si se cambió la contraseña, forzar logout
+        addNotification(
+          t
+            ? t("message.info.passwordChanged")
+            : "Password changed successfully, please log in again",
+          "info",
+        );
+        logout();
+      } else if (fresh && setUser) {
+        // Actualizar user si solo cambió username/email
+        setUser(fresh);
+      }
 
       reset({ ...data, password: "", confirmPassword: "" });
       setIsEditing(false);
@@ -208,7 +221,7 @@ const ProfileCard = () => {
                       type="button"
                       className="btn btn-ghost flex-1"
                       onClick={(e) => {
-                        e.preventDefault()
+                        e.preventDefault();
                         reset({
                           username: user?.username || "",
                           email: user?.email || "",

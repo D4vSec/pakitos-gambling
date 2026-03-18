@@ -162,13 +162,18 @@ const SessionProvider = ({ children }) => {
             const response = await put("/api/v1/user/me", {
                 headers: {
                     "x-refresh-token": getRefreshToken(),
-                    Authorization: `Bearer ${getAccessToken()}`,
+                    Authorization: `Bearer ${accessToken}`,
                 },
                 body: body,
             })
 
-            if (response?.code && response.code !== "SUCCESS") {
-                throw new Error(response.code)
+            if (!response || response.code !== "SUCCESS") {
+                const message =
+                    response?.message ||
+                    (response?.errors
+                        ? response.errors.map((e) => e.message || JSON.stringify(e)).join(" \n")
+                        : response?.code || "UNKNOWN_ERROR")
+                throw new Error(message)
             }
 
             addNotification(t ? t("message.success.USER_UPDATED") : "Profile updated", "success")
