@@ -8,7 +8,8 @@ import LandingPage from "../pages/LandingPage"
 import Login from "../pages/Login"
 import Profile from "@/pages/Profile"
 import Register from "../pages/Register"
-import RouletteGame from "@/pages/games/RouletteGame"
+import Roulette0Game from "@/pages/games/Roulette0Game"
+import Roulette00Game from "@/pages/games/Roulette00Game"
 import SlotsGame from "@/pages/games/SlotsGame"
 
 const Router = () => {
@@ -19,7 +20,8 @@ const Router = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/settings" element={<Profile />} />
-            <Route path="/roulette" element={<RouletteGame />} />
+            <Route path="/roulette0" element={<Roulette0Game />} />
+            <Route path="/roulette00" element={<Roulette00Game />} />
             <Route path="/blackjack" element={<BlackjackGame />} />
             <Route path="/slots" element={<SlotsGame />} />
             <Route path="/addBalance" element={<AddBalance />} />

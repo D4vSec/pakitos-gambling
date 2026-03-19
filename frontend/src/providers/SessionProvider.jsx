@@ -192,6 +192,7 @@ const SessionProvider = ({ children }) => {
     }
 
     // TODO: No se si separar el balance del user y controlarlo independientemente
+    // TODo: Actualizar dinámicamente cuando se apuesta
     const addBalance = async (amount) => {
         try {
             const response = await post("/api/v1/user/me/transactions", {
@@ -209,14 +210,32 @@ const SessionProvider = ({ children }) => {
                 throw new Error(response?.code)
             }
 
-            setUser((prev) => ({
-                ...prev,
-                balance: ((parseFloat(prev.balance) || 0) + parseFloat(amount)).toFixed(2),
-            }))
+            updateBalance("deposit", amount)
 
             console.log("balance", response)
 
             addNotification(t(`message.success.BALANCE_ADDED_SUCCESSFULLY`), "success")
+        } catch (error) {
+            addNotification(t(`message.error.${error?.message}`), "error")
+        }
+    }
+
+    const updateBalance = async (type, amount) => {
+        try {
+            setUser((prev) => {
+                const currentBalance = parseFloat(prev.balance) || 0
+                const parsedAmount = parseFloat(amount) || 0
+
+                const newBalance =
+                    type === "deposit"
+                        ? currentBalance + parsedAmount
+                        : currentBalance - parsedAmount
+
+                return {
+                    ...prev,
+                    balance: newBalance.toFixed(2),
+                }
+            })
         } catch (error) {
             addNotification(t(`message.error.${error?.message}`), "error")
         }
@@ -238,6 +257,7 @@ const SessionProvider = ({ children }) => {
         logout,
         updateProfile,
         addBalance,
+        updateBalance,
         user,
         isLogged,
         loading,

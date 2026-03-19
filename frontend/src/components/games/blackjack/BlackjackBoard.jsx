@@ -2,39 +2,19 @@ import React, { useEffect } from "react"
 import Hands from "./Hands"
 import Deck from "./Deck"
 import { useBlackjack } from "@/providers/BlackjackProvider"
-import { useNotification } from "@/providers/NotificationProvider"
+
 import "./BlackjackBoard.css"
 
 const BlackjackBoard = () => {
-    const { addNotification } = useNotification()
     const { game, finishGame } = useBlackjack()
     const { dealer, player } = game
 
     useEffect(() => {
         if (game?.status === "finished") {
-            const winner = game.winners[0]
-
-            let type
-            let message
-
-            if (winner === "dealer") {
-                type = "error"
-                message = "You loss ;-;"
-            } else if (winner === "player") {
-                type = "success"
-                message = "You win!!!"
-            } else if (winner === "Tie") {
-                type = "info"
-                message = "Tie -_-"
-            }
-
-            addNotification(message, type)
-
-            setTimeout(() => {
-                finishGame()
-            }, 2000)
+            finishGame(game)
         }
     }, [game])
+    
     return (
         <div className="w-full h-full grid grid-cols-[1fr_3fr_1fr] grid-rows-4 gap-4 bg-accent">
             <div className="dealer flex justify-center items-center">

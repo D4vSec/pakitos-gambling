@@ -3,12 +3,14 @@ import BettingInput from "../../BettingInput"
 import PlayBtn from "../../PlayBtn"
 import BettingBtns from "./BettingBtns"
 import { useBlackjack } from "@/providers/BlackjackProvider"
+import { useSession } from "@/providers/SessionProvider"
 
 const BlackjackControls = () => {
     const { startGame, hit, stand, double, split } = useBlackjack()
+    const { updateBalance } = useSession()
 
     const [betAmount, setBetAmount] = useState(0)
-    
+
     const actions = {
         hit,
         stand,
@@ -17,6 +19,7 @@ const BlackjackControls = () => {
     }
 
     const handleStartGame = () => {
+        updateBalance("withdrawal", Number(betAmount))
         startGame(Number(betAmount))
     }
 

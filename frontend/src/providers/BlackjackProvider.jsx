@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react"
 import { useNotification } from "@/providers/NotificationProvider"
 import useAPI from "@/hooks/useAPI"
 import { useSession } from "./SessionProvider"
+import { useLocale } from "./LocaleProvider"
 
 const BlackjackContext = createContext()
 
@@ -15,8 +16,9 @@ const removeGameId = () => localStorage.removeItem(GAME_ID_KEY)
 const BlackjackProvider = ({ children }) => {
     const [game, setGame] = useState({})
     const [thinking, setThinking] = useState(false)
-    const { getRefreshToken, getAccessToken } = useSession()
+    const { getRefreshToken, getAccessToken, updateBalance } = useSession()
     const { addNotification } = useNotification()
+    const { t } = useLocale()
     const { post, destroy } = useAPI()
 
     const startGame = async (amount = 0) => {
@@ -45,7 +47,7 @@ const BlackjackProvider = ({ children }) => {
             console.log("start", res)
             setGame(res)
         } catch (error) {
-            addNotification(error.message, "error")
+            addNotification(t(`message.error.${error.message}`), "error")
         } finally {
             setThinking(false)
         }
@@ -74,24 +76,30 @@ const BlackjackProvider = ({ children }) => {
             console.log("continue", res)
             setGame(res)
         } catch (error) {
-            addNotification(error.message, "error")
+            addNotification(t(`message.error.${error.message}`), "error")
         } finally {
             setThinking(false)
         }
     }
 
-    // TODO: Si la carta que se muestra y el jugador tienen el mismo valor se cuenta como empate
-    // TODO: Tras hacer hit, stand o double ns que pasa que se auto termina la partida aunque resolved siga en false
-    // TODO: Cuando se termina el juego el value de dealer es null y la segunda carta sigue en hidden
-    // TODO: Si spliteas con numeros distintos devuelve internal server error, no cannot_split
-    // TODO: El juego detecta antes de tiempo que has perdido y no se actualizan las cartas
-    // TODO: Se puede apostar dinero en negativo, lo que hace que se te añada a la cuenta
-    // TODO: Si apuestas 0 devuelve internal_server_error
-    // TODO: El getGame no furula  (hand is not iterable /services/blackjack.js:30:20))
-    // TODO: Efectivamente el split no va (id is not defined 328:50)
-    // TODO: El calculo del dealer creo que en el momento que tiene más que el player se para
-    const finishGame = async () => {
-        setThinking(true)   
+    const finishGame = async (game) => {
+        const winner = game.winners[0]
+        let type
+        let message
+        if (winner === "dealer") {
+            type = "error"
+            message = "You loss ;-;"
+        } else if (winner === "player") {
+            type = "success"
+            message = "You win!!!"
+        } else if (winner === "Tie") {
+            type = "info"
+            message = "Tie -_-"
+        }
+        addNotification(message, type)
+        updateBalance("deposit", game?.payout)
+
+        setThinking(true)
         const url = `http://${HOST}/v1/blackjack/${getGameId()}`
 
         try {
@@ -107,9 +115,11 @@ const BlackjackProvider = ({ children }) => {
             }
 
             console.log("end", res)
-            setGame({})
+            setTimeout(() => {
+                setGame({})
+            }, 2000)
             removeGameId()
-            addNotification(res.code, "success")
+            addNotification(t(`message.success.${res.code}`), "success")
         } catch (error) {
             addNotification(error.message, "error")
         } finally {
@@ -136,7 +146,7 @@ const BlackjackProvider = ({ children }) => {
             console.log("currentState", res)
             setGame(res)
         } catch (error) {
-            addNotification(error.message, "error")
+            addNotification(t(`message.error.${error.message}`), "error")
         } finally {
             setThinking(false)
         }

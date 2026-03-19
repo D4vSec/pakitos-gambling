@@ -1,0 +1,329 @@
+@media screen and (min-width: 48rem) {
+    .roulette0-single {
+        grid-area: 1 / 1 / 7 / 3;
+    }
+    .roulette0 {
+        grid-area: 1 / 1 / 4 / 3;
+    }
+    .roulette00 {
+        grid-area: 4 / 1 / 7 / 3;
+    }
+    .roulette1 {
+        grid-area: 5 / 3 / 7 / 5;
+    }
+    .roulette2 {
+        grid-area: 3 / 3 / 5 / 5;
+    }
+    .roulette3 {
+        grid-area: 1 / 3 / 3 / 5;
+    }
+    .roulette4 {
+        grid-area: 5 / 5 / 7 / 7;
+    }
+    .roulette5 {
+        grid-area: 3 / 5 / 5 / 7;
+    }
+    .roulette6 {
+        grid-area: 1 / 5 / 3 / 7;
+    }
+    .roulette7 {
+        grid-area: 5 / 7 / 7 / 9;
+    }
+    .roulette8 {
+        grid-area: 3 / 7 / 5 / 9;
+    }
+    .roulette9 {
+        grid-area: 1 / 7 / 3 / 9;
+    }
+    .roulette10 {
+        grid-area: 5 / 9 / 7 / 11;
+    }
+    .roulette11 {
+        grid-area: 3 / 9 / 5 / 11;
+    }
+    .roulette12 {
+        grid-area: 1 / 9 / 3 / 11;
+    }
+    .roulette13 {
+        grid-area: 5 / 11 / 7 / 13;
+    }
+    .roulette14 {
+        grid-area: 3 / 11 / 5 / 13;
+    }
+    .roulette15 {
+        grid-area: 1 / 11 / 3 / 13;
+    }
+    .roulette16 {
+        grid-area: 5 / 13 / 7 / 15;
+    }
+    .roulette17 {
+        grid-area: 3 / 13 / 5 / 15;
+    }
+    .roulette18 {
+        grid-area: 1 / 13 / 3 / 15;
+    }
+    .roulette19 {
+        grid-area: 5 / 15 / 7 / 17;
+    }
+    .roulette20 {
+        grid-area: 3 / 15 / 5 / 17;
+    }
+    .roulette21 {
+        grid-area: 1 / 15 / 3 / 17;
+    }
+    .roulette22 {
+        grid-area: 5 / 17 / 7 / 19;
+    }
+    .roulette23 {
+        grid-area: 3 / 17 / 5 / 19;
+    }
+    .roulette24 {
+        grid-area: 1 / 17 / 3 / 19;
+    }
+    .roulette25 {
+        grid-area: 5 / 19 / 7 / 21;
+    }
+    .roulette26 {
+        grid-area: 3 / 19 / 5 / 21;
+    }
+    .roulette27 {
+        grid-area: 1 / 19 / 3 / 21;
+    }
+    .roulette28 {
+        grid-area: 5 / 21 / 7 / 23;
+    }
+    .roulette29 {
+        grid-area: 3 / 21 / 5 / 23;
+    }
+    .roulette30 {
+        grid-area: 1 / 21 / 3 / 23;
+    }
+    .roulette31 {
+        grid-area: 5 / 23 / 7 / 25;
+    }
+    .roulette32 {
+        grid-area: 3 / 23 / 5 / 25;
+    }
+    .roulette33 {
+        grid-area: 1 / 23 / 3 / 25;
+    }
+    .roulette34 {
+        grid-area: 5 / 25 / 7 / 27;
+    }
+    .roulette35 {
+        grid-area: 3 / 25 / 5 / 27;
+    }
+    .roulette36 {
+        grid-area: 1 / 25 / 3 / 27;
+    }
+    .rouletterow1 {
+        grid-area: 5 / 27 / 7 / 29;
+    }
+    .rouletterow2 {
+        grid-area: 3 / 27 / 5 / 29;
+    }
+    .rouletterow3 {
+        grid-area: 1 / 27 / 3 / 29;
+    }
+    .roulette1-12 {
+        grid-area: 7 / 3 / 9 / 11;
+    }
+    .roulette13-24 {
+        grid-area: 7 / 11 / 9 / 19;
+    }
+    .roulette25-36 {
+        grid-area: 7 / 19 / 9 / 27;
+    }
+    .roulette1-18 {
+        grid-area: 9 / 3 / 11 / 7;
+    }
+    .rouletteodd {
+        grid-area: 9 / 7 / 11 / 11;
+    }
+    .roulettered {
+        grid-area: 9 / 11 / 11 / 15;
+    }
+    .rouletteblack {
+        grid-area: 9 / 15 / 11 / 19;
+    }
+    .rouletteeven {
+        grid-area: 9 / 19 / 11 / 23;
+    }
+    .roulette19-36 {
+        grid-area: 9 / 23 / 11 / 27;
+    }
+}
+
+@media screen and (max-width: 48rem) {
+    .roulette0-single {
+        grid-area: 1 / 5 / 3 / 11;
+    }
+    .roulette0 {
+        grid-area: 1 / 5 / 3 / 8;
+    }
+    .roulette00 {
+        grid-area: 1 / 8 / 3 / 11;
+    }
+
+    .roulette1 {
+        grid-area: 3 / 5 / 5 / 7;
+    }
+    .roulette2 {
+        grid-area: 3 / 7 / 5 / 9;
+    }
+    .roulette3 {
+        grid-area: 3 / 9 / 5 / 11;
+    }
+
+    .roulette4 {
+        grid-area: 5 / 5 / 7 / 7;
+    }
+    .roulette5 {
+        grid-area: 5 / 7 / 7 / 9;
+    }
+    .roulette6 {
+        grid-area: 5 / 9 / 7 / 11;
+    }
+
+    .roulette7 {
+        grid-area: 7 / 5 / 9 / 7;
+    }
+    .roulette8 {
+        grid-area: 7 / 7 / 9 / 9;
+    }
+    .roulette9 {
+        grid-area: 7 / 9 / 9 / 11;
+    }
+
+    .roulette10 {
+        grid-area: 9 / 5 / 11 / 7;
+    }
+    .roulette11 {
+        grid-area: 9 / 7 / 11 / 9;
+    }
+    .roulette12 {
+        grid-area: 9 / 9 / 11 / 11;
+    }
+
+    .roulette13 {
+        grid-area: 11 / 5 / 13 / 7;
+    }
+    .roulette14 {
+        grid-area: 11 / 7 / 13 / 9;
+    }
+    .roulette15 {
+        grid-area: 11 / 9 / 13 / 11;
+    }
+
+    .roulette16 {
+        grid-area: 13 / 5 / 15 / 7;
+    }
+    .roulette17 {
+        grid-area: 13 / 7 / 15 / 9;
+    }
+    .roulette18 {
+        grid-area: 13 / 9 / 15 / 11;
+    }
+
+    .roulette19 {
+        grid-area: 15 / 5 / 17 / 7;
+    }
+    .roulette20 {
+        grid-area: 15 / 7 / 17 / 9;
+    }
+    .roulette21 {
+        grid-area: 15 / 9 / 17 / 11;
+    }
+
+    .roulette22 {
+        grid-area: 17 / 5 / 20 / 7;
+    }
+    .roulette23 {
+        grid-area: 17 / 7 / 19 / 9;
+    }
+    .roulette24 {
+        grid-area: 17 / 9 / 19 / 11;
+    }
+
+    .roulette25 {
+        grid-area: 19 / 5 / 21 / 7;
+    }
+    .roulette26 {
+        grid-area: 19 / 7 / 21 / 9;
+    }
+    .roulette27 {
+        grid-area: 19 / 9 / 21 / 11;
+    }
+
+    .roulette28 {
+        grid-area: 21 / 5 / 23 / 7;
+    }
+    .roulette29 {
+        grid-area: 21 / 7 / 23 / 9;
+    }
+    .roulette30 {
+        grid-area: 21 / 9 / 23 / 11;
+    }
+
+    .roulette31 {
+        grid-area: 23 / 5 / 25 / 7;
+    }
+    .roulette32 {
+        grid-area: 23 / 7 / 25 / 9;
+    }
+    .roulette33 {
+        grid-area: 23 / 9 / 25 / 11;
+    }
+
+    .roulette34 {
+        grid-area: 25 / 5 / 27 / 7;
+    }
+    .roulette35 {
+        grid-area: 25 / 7 / 27 / 9;
+    }
+    .roulette36 {
+        grid-area: 25 / 9 / 27 / 11;
+    }
+
+    /* Column bets */
+    .rouletterow1 {
+        grid-area: 27 / 5 / 29 / 7;
+    }
+    .rouletterow2 {
+        grid-area: 27 / 7 / 29 / 9;
+    }
+    .rouletterow3 {
+        grid-area: 27 / 9 / 29 / 11;
+    }
+
+    /* Dozens */
+    .roulette1-12 {
+        grid-area: 3 / 3 / 11 / 5;
+    }
+    .roulette13-24 {
+        grid-area: 11 / 3 / 19 / 5;
+    }
+    .roulette25-36 {
+        grid-area: 19 / 3 / 27 / 5;
+    }
+
+    /* External bets */
+    .roulette1-18 {
+        grid-area: 3 / 1 / 7 / 3;
+    }
+    .rouletteodd {
+        grid-area: 7 / 1 / 11 / 3;
+    }
+    .roulettered {
+        grid-area: 11 / 1 / 15 / 3;
+    }
+    .rouletteblack {
+        grid-area: 15 / 1 / 19 / 3;
+    }
+    .rouletteeven {
+        grid-area: 19 / 1 / 23 / 3;
+    }
+    .roulette19-36 {
+        grid-area: 23 / 1 / 27 / 3;
+    }
+}

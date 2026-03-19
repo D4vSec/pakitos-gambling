@@ -165,6 +165,7 @@
         },
         "warning": {},
         "error": {
+            "INVALID_BET_AMOUNT": "Invalid bet amount setted",
             "AUTH_EMAIL_ALREADY_REGISTERED": "An account with this email already exists",
             "AUTH_INVALID_USERNAME": "Invalid username",
             "AUTH_INVALID_EMAIL": "Invalid email",

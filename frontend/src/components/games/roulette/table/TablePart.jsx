@@ -1,0 +1,39 @@
+import React from "react"
+import rouletteValues from "./rouletteValues"
+
+const TablePart = ({ text, rouletteType, children }) => {
+    const item = rouletteValues.find((i) => i.text === text)
+
+    if (!item) return null
+
+    let bgColor = "bg-zinc-800"
+    let textColor = "text-white"
+    if (item.color === "red") bgColor = "bg-red-500"
+    else if (item.color === "black") {
+        bgColor = "bg-black"
+    } else if (item.color === "green") {
+        bgColor = "bg-green-600"
+    }
+
+    let gridClass = `roulette${item.bet}`
+
+    if (rouletteType === "Zero" && item.text === "0") {
+        gridClass = "roulette0-single"
+    }
+
+    return (
+        <button
+            className={`${gridClass} ${bgColor} ${textColor} font-bold flex justify-center items-center border border-gray-700 rounded relative`}
+            data-info={JSON.stringify(item)}
+        >
+            {item.text}
+
+            {/* Chips */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                {children}
+            </div>
+        </button>
+    )
+}
+
+export default TablePart
