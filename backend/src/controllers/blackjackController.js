@@ -136,21 +136,26 @@ export const hit = async (req, res) => {
                 if (game.player[1].blackjack) {
                     game.player[1].resolved = true
                     game.status = "finished"
+                }
+                if (game.status === "finished") {
                     const dealerFinalHand = blackJack.dealerPlay(game.deck, game.dealer[0].hand, game.player[1].hand)
                     game.dealer[0].hand = dealerFinalHand
                     game.dealer[0].value = blackJack.calculateHandValue(dealerFinalHand)
                     game.dealer[0].bust = game.dealer[0].value > 21
                     game.dealer[0].blackjack = game.dealer[0].value === 21
 
-                    const winner = blackJack.determinateWinner(game.player[1].value, game.dealer[0].value)
-
-                    const winner2 = blackJack.determinateWinner(game.player[0].value, game.dealer[0].value)
-
-                    game.winners.push(winner)
-                    game.winners.push(winner2)
+                    if (!game.player[0].bust) {
+                        const winner = blackJack.determinateWinner(game.player[0].value, game.dealer[0].value)
+                        game.winners.push(winner)
+                    }
+                    
+                    if (!game.player[1].bust) {
+                        const winner2 = blackJack.determinateWinner(game.player[1].value, game.dealer[0].value)
+                        game.winners.push(winner2)
+                    }
 
                     if (game.winners.includes("player")) {
-                        const payout = //I have to check if the first hand is doubled
+                        let payout = //I have to check if the first hand is doubled
                             game.winners[0] === "player" && game.player[0].doubled
                                 ? game.player[0].bet * 2 + game.player[0].bet
                                 : game.winners[0] === "player" //If the first hand is not doubled I check if the player wins to pay the normal payout
@@ -169,7 +174,6 @@ export const hit = async (req, res) => {
                 game.player[0].value = blackJack.calculateHandValue(game.player[0].hand)
                 game.player[0].bust = game.player[0].value > 21
                 game.player[0].blackjack = game.player[0].value === 21
-                game.player[0].resolved = true
 
                 if (game.player[0].bust) {
                     game.player[0].resolved = true
@@ -248,7 +252,7 @@ export const stand = async (req, res) => {
             //If the player is already resolved the first hand, and decides to stand with the second hand,
             //the dealer plays his hand and we determinate the winner of both hands
             if (game.player[0].resolved === true) {
-                const dealerFinalHand = blackJack.dealerPlay(game.deck, game.dealer[0], game.player[0].hand)
+                const dealerFinalHand = blackJack.dealerPlay(game.deck, game.dealer[0].hand, game.player[0].hand)
                 game.dealer[0].hand = dealerFinalHand
                 game.dealer[0].value = blackJack.calculateHandValue(dealerFinalHand)
                 game.dealer[0].bust = game.dealer[0].value > 21
@@ -263,7 +267,7 @@ export const stand = async (req, res) => {
                 game.status = "finished"
 
                 if (game.winners.includes("player")) {
-                    const payout = //I have to check if the first hand is doubled
+                    let payout = //I have to check if the first hand is doubled
                         game.winners[0] === "player" && game.player[0].doubled
                             ? game.player[0].bet * 2 + game.player[0].bet
                             : game.winners[0] === "player" //If the first hand is not doubled I check if the player wins to pay the normal payout
@@ -495,7 +499,7 @@ export const split = async (req, res) => {
                 game.winners.push(winner2)
 
                 if (game.winners.includes("player")) {
-                    const payout = game.winners[0] === "player" ? game.player[0].bet + game.player[0].bet : 0
+                    let payout = game.winners[0] === "player" ? game.player[0].bet + game.player[0].bet : 0
 
                     payout += game.winners[1] === "player" ? game.player[1].bet + game.player[1].bet : 0
 
