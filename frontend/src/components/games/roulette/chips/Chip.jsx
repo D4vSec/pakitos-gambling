@@ -1,8 +1,8 @@
 import React from "react"
-import chipValues from "./chipValues"
+import { CHIPS } from "../rouletteConsts"
 
 const Chip = ({ value }) => {
-    const chip = chipValues.find((c) => c.value === value) || chipValues[0]
+    const chip = CHIPS.find((c) => c.value === value) || chips[0]
     const { color, edgeColor, shadowColor, idSuffix } = chip
 
     const edgeId = `edgeGradient-${idSuffix}`

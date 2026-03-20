@@ -2,26 +2,24 @@ import React from "react"
 import Chip from "./Chip"
 
 const PlacedChips = ({ chips }) => {
-    const offsetY = 4
-    const offsetX = 12
+    const offsetY = 5
+    const offsetX = 15
     const maxPerColumn = 10
 
-    // Dividir fichas en columnas
     const columns = []
     for (let i = 0; i < chips.length; i += maxPerColumn) {
         columns.push(chips.slice(i, i + maxPerColumn))
     }
 
-    // Calcular desplazamiento para centrar todas las columnas
     const totalColumnsWidth = (columns.length - 1) * offsetX
-    const startOffset = -totalColumnsWidth / 2 // mover la primera columna a la izquierda
+    const startOffset = -totalColumnsWidth / 2
 
     return (
         <div className="relative w-full h-full flex items-end justify-center pointer-events-none">
             {columns.map((column, colIndex) => (
                 <div
                     key={colIndex}
-                    className="absolute bottom-0 flex flex-col items-center"
+                    className="absolute bottom-1/10 flex flex-col items-center"
                     style={{
                         left: `calc(50% + ${startOffset + colIndex * offsetX}px)`,
                         transform: "translateX(-50%)",

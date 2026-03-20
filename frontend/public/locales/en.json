@@ -173,6 +173,7 @@
             "AUTH_MISSING_FIELDS": "There's missing fields in the form",
             "AUTH_INVALID_CREDENTIALS": "The email or the password is wrong",
             "AUTH_INVALID_SESSION": "Invalid session",
+            "AUTH_INVALID_TOKEN": "Invalid session token",
             "AUTH_INVALID_REFRESH_TOKEN": "Invalid refresh token",
             "AUTH_NO_DATA_PROVIDED": "No data provided in the form",
             "AUTH_NO_TOKEN_PROVIDED": "No auth token provided",

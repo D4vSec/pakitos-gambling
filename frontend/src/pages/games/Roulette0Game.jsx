@@ -1,8 +1,8 @@
+import React from "react"
 import GameTemplate from "@/components/games/GameTemplate"
 import GameDescription from "@/components/games/GameDescription"
 import Roulette from "@/components/games/roulette/Roulette"
-import React from "react"
-import RouletteController from "@/components/games/roulette/controller/RouletteController"
+import RouletteControls from "@/components/games/roulette/controls/RouletteControls"
 import RouletteProvider from "@/providers/RouletteProvider"
 
 const Roulette0Game = () => {
@@ -20,7 +20,7 @@ const Roulette0Game = () => {
                         corporis! Provident possimus a magni id modi?
                     </GameDescription>
                 }
-                controls={<RouletteController />}
+                controls={<RouletteControls />}
             />
         </RouletteProvider>
     )

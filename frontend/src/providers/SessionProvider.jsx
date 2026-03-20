@@ -192,7 +192,6 @@ const SessionProvider = ({ children }) => {
     }
 
     // TODO: No se si separar el balance del user y controlarlo independientemente
-    // TODo: Actualizar dinámicamente cuando se apuesta
     const addBalance = async (amount) => {
         try {
             const response = await post("/api/v1/user/me/transactions", {
@@ -247,7 +246,7 @@ const SessionProvider = ({ children }) => {
         if (token) {
             getUserData()
         } else {
-            setLoading(false)
+            addNotification(t("message.error.AUTH_TOKEN_INVALID"))
         }
     }, [])
 

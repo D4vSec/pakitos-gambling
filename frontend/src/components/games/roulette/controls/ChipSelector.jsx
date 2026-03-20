@@ -1,13 +1,13 @@
 import React from "react"
 import Chip from "../chips/Chip"
-import chipValues from "../chips/chipValues"
+import { CHIPS } from "../rouletteConsts"
 
 const ChipSelector = ({ selectedChip, setSelectedChip }) => {
     return (
         <div>
             <p className="fieldset-legend text-md">Chip value: {selectedChip}</p>
             <div className="flex flex-wrap gap-2 justify-center">
-                {chipValues.map((chip) => (
+                {CHIPS.map((chip) => (
                     <div
                         key={chip.idSuffix}
                         onClick={() => setSelectedChip(chip.value)}

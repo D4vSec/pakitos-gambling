@@ -1,8 +1,8 @@
 import React from "react"
-import rouletteValues from "./rouletteValues"
+import { useRoulette } from "@/providers/RouletteProvider"
 
-const TablePart = ({ text, rouletteType, children }) => {
-    const item = rouletteValues.find((i) => i.text === text)
+const BoardPiece = ({ item, children }) => {
+    const { type } = useRoulette()
 
     if (!item) return null
 
@@ -17,7 +17,7 @@ const TablePart = ({ text, rouletteType, children }) => {
 
     let gridClass = `roulette${item.bet}`
 
-    if (rouletteType === "Zero" && item.text === "0") {
+    if (type === "Zero" && item.text === "0") {
         gridClass = "roulette0-single"
     }
 
@@ -36,4 +36,4 @@ const TablePart = ({ text, rouletteType, children }) => {
     )
 }
 
-export default TablePart
+export default BoardPiece

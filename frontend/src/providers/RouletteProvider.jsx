@@ -3,7 +3,8 @@ import useAPI from "@/hooks/useAPI"
 import { useNotification } from "@/providers/NotificationProvider"
 import { useSession } from "./SessionProvider"
 import { useLocation } from "react-router-dom"
-import rouletteValues from "@/components/games/roulette/table/rouletteValues"
+import { useLocale } from "./LocaleProvider"
+import { CHIPS, ROULETTE_VALUES } from "@/components/games/roulette/rouletteConsts"
 
 const RouletteContext = createContext()
 
@@ -26,12 +27,12 @@ const RouletteProvider = ({ children }) => {
     const [betAmount, setBetAmount] = useState(0)
     const [selectedChip, setSelectedChip] = useState(0)
     const [winningNums, setWinningNums] = useState([])
-    const [lastBet, setLastBet] = useState([])
-    const [lastBetAmount, setLastBetAmount] = useState(0)
+    const [lastBet, setLastBet] = useState({})
 
-    const { getRefreshToken, getAccessToken, updateBalance } = useSession()
+    const { getRefreshToken, getAccessToken, updateBalance, user: balance } = useSession()
     const { addNotification } = useNotification()
     const { post } = useAPI()
+    const { t } = useLocale()
 
     const updateBets = (bet) => {
         if (!selectedChip || selectedChip <= 0) {
@@ -81,10 +82,14 @@ const RouletteProvider = ({ children }) => {
 
     const updateChip = (chip) => setSelectedChip(chip)
 
-    const repeatBet = () => {
-        if (!lastBet) return
+    const repeatBets = () => {
+        if (!Object.keys(lastBet).length) {
+            addNotification("Play 1 time to repeat the bet", "warning")
+            return
+        }
         setGame(lastBet)
-        setBetAmount(getTotalBet(lastBet))
+        const lastAmount = getTotalBet(lastBet)
+        setBetAmount(lastAmount)
     }
 
     const clearBets = () => {
@@ -95,6 +100,27 @@ const RouletteProvider = ({ children }) => {
         setBetAmount(0)
     }
 
+    const doubleBets = () => {
+        setGame((prev) => {
+            const totalCurrent = betAmount
+            const totalAfterDouble = totalCurrent * 2
+
+            if (balance < totalAfterDouble) {
+                addNotification("You don't have the currency to double", "warning")
+                return prev
+            }
+
+            return {
+                ...prev,
+                bets: prev.bets.map((bet) => ({
+                    ...bet,
+                    amount: bet.amount * 2,
+                })),
+            }
+        })
+        setBetAmount((prev) => prev * 2)
+    }
+
     const getChipsForCell = (cell) => {
         const bet = game.bets.find((b) => b.type === cell.type && b.bet === cell.bet)
 
@@ -103,16 +129,18 @@ const RouletteProvider = ({ children }) => {
         const chips = []
         let remaining = bet.amount
 
-        while (remaining > 0) {
-            chips.push({ value: selectedChip })
-            remaining -= selectedChip
+        const sortedChips = [...CHIPS].sort((a, b) => b.value - a.value)
+
+        for (const chip of sortedChips) {
+            while (remaining >= chip.value) {
+                chips.push(chip)
+                remaining -= chip.value
+            }
         }
 
         return chips
     }
 
-    // TODO: Revisar que el amount no sea 0
-    // TODO: El apostar al half no va (roulette.isHalfWinner is not a function rouletteController:85:37)
     const spin = async () => {
         const url = `http://${HOST}/v1/roulette/spin`
 
@@ -132,7 +160,7 @@ const RouletteProvider = ({ children }) => {
             console.log("rouletteStatus", res)
 
             addNotification(
-                `Winning number: ${res?.result?.winningNumber} | ${res?.result?.color}`,
+                `Winning number: ${res?.result?.winningNumber === 37 ? "00" : res?.result?.winningNumber} | ${res?.result?.color}`,
                 "info",
             )
 
@@ -181,7 +209,7 @@ const RouletteProvider = ({ children }) => {
     }
 
     const getRouletteValues = () => {
-        return rouletteValues.filter((item) => {
+        return ROULETTE_VALUES.filter((item) => {
             if (type === "Zero") {
                 return item.text !== "00"
             }
@@ -193,8 +221,9 @@ const RouletteProvider = ({ children }) => {
         game,
         clearBets,
         updateBets,
+        doubleBets,
         lastBet,
-        repeatBet,
+        repeatBets,
         selectedChip,
         updateChip,
         betAmount,

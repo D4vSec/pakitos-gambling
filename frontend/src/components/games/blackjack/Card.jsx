@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react"
-import Hearts from "./svg/Hearts"
-import Diamonds from "./svg/Diamonds"
-import Clubs from "./svg/Clubs"
-import Spades from "./svg/Spades"
+import Hearts from "./suits/Hearts"
+import Diamonds from "./suits/Diamonds"
+import Clubs from "./suits/Clubs"
+import Spades from "./suits/Spades"
 import CherrySVG from "@/components/svg/CherrySVG"
 
+// TODO: Animación más suave de las cartas
 const Card = ({ card }) => {
     const { rank, suit } = card
 

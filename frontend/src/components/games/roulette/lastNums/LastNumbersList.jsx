@@ -6,17 +6,22 @@ const LastNumbersList = () => {
     const { winningNums, getRouletteValues } = useRoulette()
 
     const last4Objects = winningNums
-        .slice(0, 5)
-        .map((num) => getRouletteValues().find((i) => i.text === String(num)))
+        .slice(0, 4)
+        .map((num) => getRouletteValues().find((i) => i.bet === num))
         .filter(Boolean)
 
-    if (!last4Objects.length) return null
-
     return (
-        <div className="flex flex-col justify-center items-center gap-2">
-            {last4Objects.map((item, index) => (
-                <LastNumber key={index} number={item.text} />
-            ))}
+        <div className="flex flex-col gap-4 justify-center items-center">
+            <h2 className="font-bold text-2xl">Last numbers</h2>
+            {last4Objects.length ? (
+                <div className="flex flex-row  justify-center items-center gap-2">
+                    {last4Objects.map((item, index) => (
+                        <LastNumber key={index} number={item.text} />
+                    ))}
+                </div>
+            ) : (
+                <LastNumber number={true} />
+            )}
         </div>
     )
 }

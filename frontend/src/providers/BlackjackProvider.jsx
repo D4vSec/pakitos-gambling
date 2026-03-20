@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react"
-import { useNotification } from "@/providers/NotificationProvider"
 import useAPI from "@/hooks/useAPI"
+import { useNotification } from "@/providers/NotificationProvider"
 import { useSession } from "./SessionProvider"
 import { useLocale } from "./LocaleProvider"
 
@@ -15,16 +15,26 @@ const removeGameId = () => localStorage.removeItem(GAME_ID_KEY)
 
 const BlackjackProvider = ({ children }) => {
     const [game, setGame] = useState({})
-    const [thinking, setThinking] = useState(false)
+    const [betAmount, setBetAmount] = useState(0)
+    const [lastBetAmount, setLastBetAmount] = useState(0)
+
     const { getRefreshToken, getAccessToken, updateBalance } = useSession()
     const { addNotification } = useNotification()
     const { t } = useLocale()
     const { post, destroy } = useAPI()
 
-    const startGame = async (amount = 0) => {
-        setThinking(true)
+    const updateBetAmount = (amount) => setBetAmount(amount)
+    const clearBet = () => setBetAmount(0)
+    const repeatBet = () => setBetAmount(lastBetAmount)
+    const doubleBet = () => setBetAmount((prev) => prev * 2)
+
+    const startGame = async () => {
+        updateBalance("withdrawal", betAmount)
+        setLastBetAmount(betAmount)
+
         const url = `http://${HOST}/v1/blackjack/start`
-        console.log("am", amount)
+        console.log("am", betAmount)
+
         try {
             const res = await post(url, {
                 headers: {
@@ -32,7 +42,7 @@ const BlackjackProvider = ({ children }) => {
                     Authorization: `Bearer ${getAccessToken()}`,
                 },
                 body: {
-                    amount: amount,
+                    amount: betAmount,
                 },
             })
 
@@ -48,13 +58,10 @@ const BlackjackProvider = ({ children }) => {
             setGame(res)
         } catch (error) {
             addNotification(t(`message.error.${error.message}`), "error")
-        } finally {
-            setThinking(false)
         }
     }
 
     const continueGame = async () => {
-        setThinking(true)
         const url = `http://${HOST}/v1/blackjack/${getGameId()}`
 
         try {
@@ -77,8 +84,6 @@ const BlackjackProvider = ({ children }) => {
             setGame(res)
         } catch (error) {
             addNotification(t(`message.error.${error.message}`), "error")
-        } finally {
-            setThinking(false)
         }
     }
 
@@ -96,10 +101,10 @@ const BlackjackProvider = ({ children }) => {
             type = "info"
             message = "Tie -_-"
         }
+
         addNotification(message, type)
         updateBalance("deposit", game?.payout)
 
-        setThinking(true)
         const url = `http://${HOST}/v1/blackjack/${getGameId()}`
 
         try {
@@ -115,6 +120,8 @@ const BlackjackProvider = ({ children }) => {
             }
 
             console.log("end", res)
+
+            // Para que las caras no desaparezcan instantáneamente
             setTimeout(() => {
                 setGame({})
             }, 2000)
@@ -122,13 +129,10 @@ const BlackjackProvider = ({ children }) => {
             addNotification(t(`message.success.${res.code}`), "success")
         } catch (error) {
             addNotification(error.message, "error")
-        } finally {
-            setThinking(false)
         }
     }
 
     const play = async (action) => {
-        setThinking(true)
         const url = `http://${HOST}/v1/blackjack/${getGameId()}/${action}`
 
         try {
@@ -147,8 +151,6 @@ const BlackjackProvider = ({ children }) => {
             setGame(res)
         } catch (error) {
             addNotification(t(`message.error.${error.message}`), "error")
-        } finally {
-            setThinking(false)
         }
     }
 
@@ -168,11 +170,15 @@ const BlackjackProvider = ({ children }) => {
         startGame,
         continueGame,
         finishGame,
+        betAmount,
+        updateBetAmount,
+        clearBet,
+        repeatBet,
+        doubleBet,
         hit,
         stand,
         double,
         split,
-        thinking,
     }
 
     return <BlackjackContext value={value}>{children}</BlackjackContext>

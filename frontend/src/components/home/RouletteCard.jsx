@@ -41,7 +41,7 @@ const RouletteCard = () => {
             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
               <Button
                 className="bg-primary text-primary-foreground px-4 py-2 rounded-md text-sm font-medium hover:opacity-90 transition"
-                onClick={() => navigate("/roulette")}
+                onClick={() => navigate("/roulette00")}
               >
                 {t("general.home.playNow")}
               </Button>
@@ -74,7 +74,7 @@ const RouletteCard = () => {
             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
               <Button
                 className="bg-primary text-primary-foreground px-4 py-2 rounded-md text-sm font-medium hover:opacity-90 transition"
-                onClick={() => navigate("/roulette")}
+                onClick={() => navigate("/roulette0")}
               >
                 {t("general.home.playNow")}
               </Button>

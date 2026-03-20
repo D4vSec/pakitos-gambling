@@ -23,7 +23,10 @@ const Button = ({ children, variant = "primary", className = "", size = "md", on
     const safeSize = sizeMap[size] || sizeMap.md
 
     return (
-        <button className={`btn ${safeVariant} ${safeSize} ${className}`} onClick={onClick}>
+        <button
+            className={`btn ${safeVariant} ${safeSize} flex justify-center items-center ${className}`}
+            onClick={onClick}
+        >
             {svg}
             {children}
         </button>

@@ -1,8 +1,7 @@
 import React, { useEffect } from "react"
-import Hands from "./Hands"
-import Deck from "./Deck"
+import Hands from "../Hands"
+import Deck from "../Deck"
 import { useBlackjack } from "@/providers/BlackjackProvider"
-
 import "./BlackjackBoard.css"
 
 const BlackjackBoard = () => {
@@ -14,7 +13,7 @@ const BlackjackBoard = () => {
             finishGame(game)
         }
     }, [game])
-    
+
     return (
         <div className="w-full h-full grid grid-cols-[1fr_3fr_1fr] grid-rows-4 gap-4 bg-accent">
             <div className="dealer flex justify-center items-center">

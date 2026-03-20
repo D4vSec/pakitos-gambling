@@ -5,7 +5,8 @@
     .roulette0 {
         grid-area: 1 / 1 / 4 / 3;
     }
-    .roulette00 {
+    .roulette37 {
+        /* 00 */
         grid-area: 4 / 1 / 7 / 3;
     }
     .roulette1 {
@@ -161,7 +162,8 @@
     .roulette0 {
         grid-area: 1 / 5 / 3 / 8;
     }
-    .roulette00 {
+    .roulette37 {
+        /* 00 */
         grid-area: 1 / 8 / 3 / 11;
     }
 
