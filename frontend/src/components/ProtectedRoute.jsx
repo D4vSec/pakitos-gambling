@@ -12,7 +12,7 @@ const ProtectedRoute = ({ children, requireAdmin }) => {
     const { isLogged, loading, user } = useSession()
     const navigate = useNavigate()
     const requireLogged = true
-    console.log("load", loading)
+    
     return loading ? (
         <Loading />
     ) : requireLogged && !isLogged ? (

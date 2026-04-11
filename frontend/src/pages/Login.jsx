@@ -48,7 +48,6 @@ const Login = () => {
     ]
 
     const onSubmit = (data) => {
-        console.log("Form submit", data)
         login(data)
         methods.reset()
     }

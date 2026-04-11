@@ -161,8 +161,6 @@ const SessionProvider = ({ children }) => {
                 }
             }
 
-            console.log(body)
-
             const response = await put("/api/v1/user/me", {
                 headers: {
                     "x-refresh-token": getRefreshToken(),
@@ -249,6 +247,7 @@ const SessionProvider = ({ children }) => {
         }
     }
 
+    // TODO: Revisar que no se envíe la petición si no hay access y que no salga dupe
     useEffect(() => {
         const token = getAccessToken()
         console.log("t", token)

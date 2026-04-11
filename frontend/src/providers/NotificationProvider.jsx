@@ -20,8 +20,6 @@ const NotificationProvider = ({ children }) => {
             },
         }
 
-        console.log("n", notification)
-
         setNotifications((prev) => [...prev, notification])
 
         if (type !== "modal" && type !== "input") {

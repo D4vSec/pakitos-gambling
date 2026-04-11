@@ -77,7 +77,6 @@ const Register = () => {
 
     const onSubmit = (data) => {
         const { confirmPassword, ...info } = data
-        console.log("Form submit", info)
         register(info)
         methods.reset()
     }
