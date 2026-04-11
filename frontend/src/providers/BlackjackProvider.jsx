@@ -93,16 +93,16 @@ const BlackjackProvider = ({ children }) => {
         let message
         if (winner === "dealer") {
             type = "error"
-            message = "You loss ;-;"
+            message = "lose"
         } else if (winner === "player") {
             type = "success"
-            message = "You win!!!"
+            message = "win"
         } else if (winner === "Tie") {
             type = "info"
-            message = "Tie -_-"
+            message = "tie"
         }
 
-        addNotification(message, type)
+        addNotification(t(`games.result.${message}`), type)
         updateBalance("deposit", game?.payout)
 
         const url = `http://${HOST}/v1/blackjack/${getGameId()}`
@@ -128,7 +128,7 @@ const BlackjackProvider = ({ children }) => {
             removeGameId()
             addNotification(t(`message.success.${res.code}`), "success")
         } catch (error) {
-            addNotification(error.message, "error")
+            addNotification(t(`message.error.${error.message}`), "error")
         }
     }
 

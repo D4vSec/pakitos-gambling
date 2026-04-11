@@ -4,14 +4,16 @@ import GameDescription from "@/components/games/GameDescription"
 import Roulette from "@/components/games/roulette/Roulette"
 import RouletteControls from "@/components/games/roulette/controls/RouletteControls"
 import RouletteProvider from "@/providers/RouletteProvider"
+import { useLocale } from "@/providers/LocaleProvider"
 
 const Roulette0Game = () => {
+    const { t } = useLocale()
     return (
         <RouletteProvider>
             <GameTemplate
                 game={<Roulette />}
                 description={
-                    <GameDescription title="European Roulette">
+                    <GameDescription title={t("games.roulette.Zero")}>
                         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum earum
                         quos, suscipit sed nobis excepturi distinctio quidem quas ullam blanditiis
                         dolores sit quo corporis! Provident possimus a magni id modi? Lorem ipsum

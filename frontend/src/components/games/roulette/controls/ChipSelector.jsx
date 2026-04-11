@@ -1,11 +1,16 @@
 import React from "react"
 import Chip from "../chips/Chip"
 import { CHIPS } from "../rouletteConsts"
+import { useLocale } from "@/providers/LocaleProvider"
 
 const ChipSelector = ({ selectedChip, setSelectedChip }) => {
+    const { t } = useLocale()
+
     return (
         <div>
-            <p className="fieldset-legend text-md">Chip value: {selectedChip}</p>
+            <p className="fieldset-legend text-md">
+                {t("games.roulette.controls.chipValue")}: {selectedChip}
+            </p>
             <div className="flex flex-wrap gap-2 justify-center">
                 {CHIPS.map((chip) => (
                     <div

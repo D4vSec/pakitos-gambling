@@ -2,32 +2,39 @@ import Button from "@/components/buttons/Button"
 import React from "react"
 import { useBlackjack } from "@/providers/BlackjackProvider"
 
+import { useLocale } from "@/providers/LocaleProvider"
+
 const BlackjackActions = () => {
     const { hit, stand, double, split } = useBlackjack()
-
+    const { t } = useLocale()
     const buttons = [
         {
-            label: "Hit",
+            label: "games.blackjack.actions.hit",
             onClick: hit,
         },
         {
-            label: "Stand",
+            label: "games.blackjack.actions.stand",
             onClick: stand,
         },
         {
-            label: "Split",
+            label: "games.blackjack.actions.split",
             onClick: split,
         },
         {
-            label: "Double",
+            label: "games.blackjack.actions.double",
             onClick: double,
         },
     ]
     return (
         <div className="w-full grid grid-cols-2 grid-row-2 gap-2">
             {buttons.map((btn, i) => (
-                <Button key={i} variant="neutral" className="flex-1 min-w-fit" onClick={btn.onClick}>
-                    {btn.label}
+                <Button
+                    key={i}
+                    variant="neutral"
+                    className="flex-1 min-w-fit"
+                    onClick={btn.onClick}
+                >
+                    {t(btn.label)}
                 </Button>
             ))}
         </div>

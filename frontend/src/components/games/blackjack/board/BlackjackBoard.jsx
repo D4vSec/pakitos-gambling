@@ -2,11 +2,13 @@ import React, { useEffect } from "react"
 import Hands from "../Hands"
 import Deck from "../Deck"
 import { useBlackjack } from "@/providers/BlackjackProvider"
+import { useLocale } from "@/providers/LocaleProvider"
 import "./BlackjackBoard.css"
 
 const BlackjackBoard = () => {
     const { game, finishGame } = useBlackjack()
     const { dealer, player } = game
+    const { t } = useLocale()
 
     useEffect(() => {
         if (game?.status === "finished") {
@@ -29,7 +31,9 @@ const BlackjackBoard = () => {
             </div>
             <div className="opacity-80 bg-blackjack flex justify-center items-center">
                 <div className="bg-primary px-10 py-2 rounded-md shadow-md transform -skew-x-12">
-                    <p className="font-bold text-xl text-white skew-x-12">Blackjack pays 3 to 2</p>
+                    <p className="font-bold text-xl text-white skew-x-12">
+                        {t("games.blackjack.bkPays")}
+                    </p>
                 </div>
             </div>
         </div>

@@ -1,144 +1,265 @@
 {
     "admin": {},
-    "user": {},
+    "games": {
+        "actions": {
+            "bet": "Apostar",
+            "clearBet": "Borrar apuesta",
+            "doubleBet": "Doblar apuesta",
+            "repeatBet": "Repetir apuesta"
+        },
+        "blackjack": {
+            "actions": {
+                "double": "Doblar",
+                "hit": "Pedir carta",
+                "split": "Separar",
+                "stand": "Plantarse"
+            },
+            "bkPays": "El blackjack paga 3 a 2",
+            "title": "Blackjack"
+        },
+        "result": {
+            "lose": "Has perdido :/",
+            "tie": "Empate",
+            "win": "¡Has ganado!"
+        },
+        "roulette": {
+            "Zero": "Ruleta europea",
+            "ZeroZero": "Ruleta americana",
+            "board": {
+                "black": "negro",
+                "even": "par",
+                "green": "verde",
+                "odd": "impar",
+                "red": "rojo"
+            },
+            "controls": {
+                "betAmount": "Cantidad de apuesta",
+                "betAmountPlaceholder": "Introduce una cantidad",
+                "chipValue": "Valor de la ficha"
+            },
+            "lastNumbers": "Últimos números"
+        }
+    },
     "general": {
-        "navbar": {
-            "menu": "Menú",
-            "home": "Inicio",
-            "allGames": "Todos los Juegos",
-            "favourites": "Favoritos",
-            "login": "Iniciar Sesión",
-            "register": "Registrarse",
-            "userPill": {
-                "guest": "Invitado",
-                "settings": "Configuración de Usuario",
-                "coupon": "Ingresar Cupón",
-                "logout": "Cerrar Sesión"
-            }
+        "addBalance": {
+            "button": "Añadir saldo",
+            "label": "Cantidad",
+            "min": "La cantidad debe ser mayor que 1",
+            "placeholder": "Cantidad",
+            "required": "Este campo es obligatorio",
+            "title": "Añadir saldo a la cuenta"
         },
         "copyright": "Todos los derechos reservados por The Mafia at the Back",
-        "landingPage": {
-            "heroContent": {
-                "title": "Bienvenido a Pakito's Gambling",
-                "text": "La mejor experiencia de casino online con cientos de juegos emocionantes, increíbles bonos y la oportunidad de ganar grandes premios. Únete hoy a nuestra comunidad de ganadores.",
-                "join": "Unirse",
-                "seeGames": "Ver Juegos"
+        "form": {
+            "buttons": {
+                "cancel": "Cancelar",
+                "login": "Iniciar sesión",
+                "register": "Registrarse",
+                "update": "Actualizar perfil",
+                "changePassword": "Cambiar contraseña"
             },
+            "confirmPassword": {
+                "label": "Confirmar contraseña",
+                "match": "Las contraseñas no coinciden",
+                "placeholder": "Confirmar contraseña",
+                "required": "Confirmar contraseña es obligatoria"
+            },
+            "email": {
+                "label": "Correo electrónico",
+                "pattern": "Formato de correo no válido",
+                "placeholder": "Correo electrónico",
+                "required": "El correo electrónico es obligatorio"
+            },
+            "page": {
+                "login": "Iniciar sesión",
+                "register": "Registro"
+            },
+            "password": {
+                "label": "Contraseña",
+                "pattern": "La contraseña debe tener al menos 8 caracteres, incluir mayúscula, minúscula y número o carácter especial",
+                "placeholder": "Contraseña",
+                "required": "La contraseña es obligatoria",
+                "current": "Contraseña actual",
+                "new": "Nueva contraseña",
+                "confirm": "Repetir nueva contraseña",
+                "minLength": "Mínimo 8 caracteres"
+            },
+            "username": {
+                "label": "Nombre de usuario",
+                "maxLength": "El nombre de usuario debe tener como máximo 25 caracteres",
+                "minLength": "El nombre de usuario debe tener al menos 3 caracteres",
+                "placeholder": "Nombre de usuario",
+                "required": "El nombre de usuario es obligatorio"
+            }
+        },
+        "home": {
+            "blackjack": {
+                "description": "Juego clásico de blackjack.",
+                "title": "Blackjack"
+            },
+            "playNow": "Jugar ahora",
+            "roulette": {
+                "american": {
+                    "description": "Ruleta americana.",
+                    "title": "Ruleta americana"
+                },
+                "classic": {
+                    "description": "Ruleta clásica.",
+                    "title": "Ruleta clásica"
+                },
+                "title": "Ruleta"
+            },
+            "slots": {
+                "beer": {
+                    "description": "Tragaperras inspirada en la mejor bebida del mundo.",
+                    "title": "Beer-Man"
+                },
+                "starwars": {
+                    "description": "Tragaperras temática de Star Wars.",
+                    "title": "Star Wars"
+                },
+                "stardewValley": {
+                    "description": "Tragaperras temática de Stardew Valley.",
+                    "title": "Stardew Valley"
+                },
+                "title": "Tragaperras"
+            }
+        },
+        "landingPage": {
             "cta": {
-                "title": "¿Listo para Comenzar tu Aventura?",
-                "text": "Únete a miles de jugadores que ya disfrutan de la mejor experiencia de casino online. Obtén tu bono de bienvenida del 200% hoy mismo.",
-                "join": "Unirse Ahora",
-                "exploreGames": "Explorar Juegos"
+                "exploreGames": "Explorar juegos",
+                "join": "Únete ahora",
+                "text": "Únete a miles de jugadores que disfrutan de la mejor experiencia de casino online.",
+                "title": "¿Listo para empezar tu aventura?"
+            },
+            "features": {
+                "item1_description": "Más de 100 juegos premium incluyendo slots, ruleta, blackjack y más.",
+                "item1_title": "Variedad de juegos",
+                "item2_description": "Plataforma segura con tecnologías de cifrado y protección.",
+                "item2_title": "Seguro y fiable",
+                "item3_description": "Gana grandes premios con jackpots y torneos exclusivos.",
+                "item3_title": "Grandes premios",
+                "item4_description": "Juegos optimizados para cualquier dispositivo.",
+                "item4_title": "Experiencia rápida",
+                "item5_description": "Únete a nuestra comunidad de jugadores.",
+                "item5_title": "Comunidad activa",
+                "item6_description": "Bonos y promociones regularmente.",
+                "item6_title": "Bonos exclusivos",
+                "text": "Ofrecemos una experiencia de casino premium con compromiso total con el jugador.",
+                "title": "¿Por qué elegir Pakito's Gambling?"
+            },
+            "heroContent": {
+                "join": "Unirse",
+                "seeGames": "Ver juegos",
+                "text": "La mejor experiencia de casino online con cientos de juegos y grandes premios.",
+                "title": "Bienvenido a Pakito's Gambling"
             },
             "imagesGrid": {
-                "title": "Juega Donde Quieras",
-                "text": "Accede a todos tus juegos favoritos desde cualquier dispositivo. Diseño responsive para móvil, tablet y escritorio.",
-                "image1Title": "Celebra tus Ganancias",
                 "image1Text": "Gana grandes premios y disfruta cada momento",
-                "image2Title": "Ambiente Premium",
-                "image2Text": "Disfruta de un ambiente de casino auténtico con gráficos de alta calidad",
-                "image3Title": "Juega Donde Quieras",
-                "image3Text": "Accede a todos tus juegos favoritos desde cualquier dispositivo. Diseño responsive para móvil, tablet y escritorio."
+                "image1Title": "Celebra tus victorias",
+                "image2Text": "Disfruta de un casino premium con gráficos de alta calidad",
+                "image2Title": "Ambiente premium",
+                "image3Text": "Accede desde cualquier dispositivo.",
+                "image3Title": "Juega donde quieras",
+                "text": "Accede desde cualquier dispositivo.",
+                "title": "Juega donde quieras"
             },
             "stats": {
                 "games": "Juegos",
                 "players": "Jugadores",
-                "support": "Soporte",
-                "prizes": "Premios"
-            },
-            "features": {
-                "title": "¿Por Qué Elegir Pakito's Gambling?",
-                "text": "Ofrecemos una experiencia de casino premium con las mejores características del mercado y un compromiso total con la satisfacción del jugador.",
-                "item1_title": "Variedad de Juegos",
-                "item1_description": "Más de 100 juegos de casino premium, incluyendo tragamonedas, ruleta, blackjack y más.",
-                "item2_title": "Seguro y Confiable",
-                "item2_description": "Plataforma segura con las mejores tecnologías de cifrado y protección.",
-                "item3_title": "Grandes Premios",
-                "item3_description": "Gana grandes premios con nuestros jackpots progresivos y torneos exclusivos.",
-                "item4_title": "Experiencia Rápida",
-                "item4_description": "Juegos optimizados para una experiencia fluida en cualquier dispositivo.",
-                "item5_title": "Comunidad Activa",
-                "item5_description": "Únete a miles de jugadores en nuestra vibrante comunidad de casino.",
-                "item6_title": "Bonos Exclusivos",
-                "item6_description": "Recibe bonos de bienvenida y promociones especiales regularmente."
+                "prizes": "Premios",
+                "support": "Soporte"
             }
         },
-        "form": {
-            "page": {
-                "register" : "Registrarse",
-                "login" : "Iniciar Sesión"
-            },
-            "username": {
-                "label": "Nombre de usuario",
-                "placeholder": "Nombre de usuario",
-                "required": "El nombre de usuario es obligatorio",
-                "minLength": "El nombre de usuario debe tener al menos 3 caracteres",
-                "maxLength": "El nombre de usuario debe tener como máximo 25 caracteres"
-            },
-            "email": {
-                "label": "Correo electrónico",
-                "placeholder": "Correo electrónico",
-                "required": "El correo electrónico es obligatorio",
-                "pattern": "Formato de correo electrónico inválido"
-            },
-            "password": {
-                "label": "Contraseña",
-                "placeholder": "Contraseña",
-                "required": "La contraseña es obligatoria",
-                "pattern": "La contraseña debe tener al menos 8 caracteres, incluir 1 mayúscula, 1 minúscula y 1 número o carácter especial"
-            },
-            "confirmPassword": {
-                "label": "Confirmar contraseña",
-                "placeholder": "Confirmar contraseña",
-                "required": "Confirmar la contraseña es obligatorio",
-                "match": "La confirmación de la contraseña no coincide"
-            },
-            "buttons": {
-                "login": "Iniciar Sesión",
-                "register": "Registrarse",
-                "update": "Actualizar perfil"
-            }
-        },
-        "home" : {
-            "playNow":"Juega ahora",
-            "slots": {
-                "title": "Tragamonedas",
-                "starwars": {
-                    "title": "Star Wars",
-                    "description": "Juego de tragamonedas temático de Star Wars."
-                },
-                "stardewValley": {
-                    "title": "Stardew Valley",
-                    "description": "Juego de tragamonedas temático de Stardew Valley."
-                },
-                "beer": {
-                    "title": "Beer-man",
-                    "description": "Juego de tragamonedas temático de la mejor bebida del mundo."
-                }
-            },
-            "roulette": {
-                "title": "Ruleta",
-                "classic": {
-                    "title": "Ruleta Clásica",
-                    "description": "Juego de ruleta clásica."
-                },
-                "american": {
-                    "title": "Ruleta Americana",
-                    "description": "Juego de ruleta americana."
-                }
-            },
-            "blackjack": {
-                "title": "Blackjack",
-                "description": "Juego de blackjack."
+        "navbar": {
+            "allGames": "Todos los juegos",
+            "favourites": "Favoritos",
+            "home": "Inicio",
+            "login": "Iniciar sesión",
+            "menu": "Menú",
+            "register": "Registrarse",
+            "userPill": {
+                "balance": "Añadir saldo",
+                "coupon": "Introducir cupón",
+                "guest": "Invitado",
+                "logout": "Cerrar sesión",
+                "settings": "Configuración de usuario"
             }
         },
         "profile": {
-            "title": "Configuración de la cuenta",
-            "description": "Gestiona la configuración de tu cuenta y tus preferencias",
+            "title": "Perfil",
             "profileCard": {
-                "title": "Información de perfil",
+                "title": "Información del perfil",
                 "description": "Actualiza tu información personal"
+            },
+            "changePhoto": "Cambiar foto",
+            "security": {
+                "title": "Seguridad",
+                "description": "Gestiona la seguridad de tu cuenta"
+            },
+            "danger": {
+                "title": "Zona de peligro",
+                "description": "Esta acción es irreversible. Se eliminarán todos tus datos.",
+                "deleteAccount": "Eliminar cuenta"
             }
         }
-    }
+    },
+    "message": {
+        "error": {
+            "401": "No autorizado",
+            "409": "Algunos de los datos introducidos ya existen",
+            "429": "Tranquilo, demasiadas peticiones...",
+            "500": "Error del servidor durante la petición",
+            "AUTH_EMAIL_ALREADY_REGISTERED": "Ya existe una cuenta con este correo",
+            "AUTH_INVALID_CREDENTIALS": "El correo o la contraseña son incorrectos",
+            "AUTH_INVALID_EMAIL": "Correo electrónico no válido",
+            "AUTH_INVALID_PASSWORD_TOO_SHORT": "Contraseña demasiado corta",
+            "AUTH_INVALID_REFRESH_TOKEN": "Token de refresco no válido",
+            "AUTH_INVALID_SESSION": "Sesión no válida",
+            "AUTH_INVALID_TOKEN": "Token de sesión no válido",
+            "AUTH_MISSING_FIELDS": "Faltan campos en el formulario",
+            "AUTH_NO_DATA_PROVIDED": "No se han proporcionado datos en el formulario",
+            "AUTH_NO_TOKEN_PROVIDED": "No se ha proporcionado token de autenticación",
+            "AUTH_USER_REGISTERED": "El nombre de usuario ya está registrado",
+            "INVALID_BET_AMOUNT": "Cantidad de apuesta no válida",
+            "SERVER_ERROR": "El servidor falló durante la petición",
+            "Update_User": "Error al actualizar el perfil",
+            "bet0": "La apuesta no puede ser 0",
+            "noAdmin": "No tienes acceso a esto",
+            "noLogin": "Necesitas iniciar sesión para acceder a esto"
+        },
+        "info": {
+            "loading": "Cargando...",
+            "registered": "Tu cuenta ha sido creada, debes ir a la página de inicio de sesión",
+            "userData": "Datos de usuario recibidos correctamente",
+            "winningNumber": "Número ganador"
+        },
+        "modal": {
+            "default": {
+                "accept": "Aceptar",
+                "cancel": "Cancelar",
+                "title": "Título del modal"
+            },
+            "logout": {
+                "accept": "Salir de Pakito's",
+                "cancel": "Seguir jugando",
+                "title": "¿Seguro que quieres salir?"
+            }
+        },
+        "success": {
+            "AUTH_USER_LOGGED": "Sesión iniciada con éxito",
+            "AUTH_USER_REGISTERED": "Cuenta registrada con éxito",
+            "BALANCE_ADDED_SUCCESSFULLY": "Saldo actualizado correctamente",
+            "LANGUAGE_CHANGED": "Idioma cambiado correctamente",
+            "USER_UPDATED": "Perfil actualizado",
+            "logout": "Cierre de sesión exitoso"
+        },
+        "warning": {
+            "cantDouble": "No tienes saldo suficiente para doblar",
+            "playFirstToRepeat": "Juega 1 vez para repetir la apuesta",
+            "selectChipFirst": "Selecciona una ficha primero para colocarla",
+            "spinning": "Girando..."
+        }
+    },
+    "user": {}
 }

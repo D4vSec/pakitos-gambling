@@ -3,6 +3,7 @@ import { useForm, FormProvider } from "react-hook-form"
 import { FormField } from "@/components/forms/FormField"
 import { useSession } from "@/providers/SessionProvider"
 import { useNotification } from "@/providers/NotificationProvider"
+import { useLocale } from "@/providers/LocaleProvider"
 import Title from "@/components/Title"
 import Button from "@/components/buttons/Button"
 import GradientBg from "@/components/layout/GradientBg"
@@ -13,6 +14,7 @@ import AlertTriangleSVG from "@/components/svg/AlertTriangleSVG"
 const Profile = () => {
     const { user, updateProfile } = useSession()
     const { addNotification } = useNotification()
+    const { t } = useLocale()
 
     const profileMethods = useForm({
         defaultValues: {
@@ -47,7 +49,6 @@ const Profile = () => {
 
     const handlePasswordSubmit = (data) => {
         console.log("Cambiar contraseña:", data)
-        // updateProfile(data)
         passwordMethods.reset()
     }
 
@@ -57,20 +58,24 @@ const Profile = () => {
 
     return (
         <GradientBg>
-            <Title>Profile</Title>
+            <Title>{t("general.profile.title")}</Title>
+
             <div className="w-full max-w-5xl flex flex-col gap-6">
                 {/* 🔵 PERFIL */}
                 <div className="card bg-base-100 shadow-xl">
                     <div className="card-body">
                         <h2 className="card-title text-xl">
                             <UserSVG />
-                            Profile Information
+                            {t("general.profile.profileCard.title")}
                         </h2>
-                        <p className="text-base-content mb-6">Update your personal information</p>
 
-                        <div className="flex flex-col lg:flex-row  gap-6">
+                        <p className="text-base-content mb-6">
+                            {t("general.profile.profileCard.description")}
+                        </p>
+
+                        <div className="flex flex-col lg:flex-row gap-6">
                             {/* Avatar */}
-                            <div className="flex flex-col items-center  gap-4 ">
+                            <div className="flex flex-col items-center gap-4">
                                 <div className="avatar">
                                     <div className="w-30 rounded-full ring ring-primary ring-offset-2">
                                         <img
@@ -88,7 +93,7 @@ const Profile = () => {
                                     className="btn-sm"
                                     onClick={() => console.log("editando foto...")}
                                 >
-                                    Cambiar foto
+                                    {t("general.profile.changePhoto")}
                                 </Button>
                             </div>
 
@@ -102,19 +107,23 @@ const Profile = () => {
                                         <FormField
                                             name="username"
                                             type="text"
-                                            label="Username"
-                                            rules={{ required: "Required" }}
+                                            label={t("general.form.username.label")}
+                                            rules={{
+                                                required: t("general.form.username.required"),
+                                            }}
                                         />
 
                                         <FormField
                                             name="email"
                                             type="email"
-                                            label="Email"
-                                            rules={{ required: "Required" }}
+                                            label={t("general.form.email.label")}
+                                            rules={{
+                                                required: t("general.form.email.required"),
+                                            }}
                                         />
 
                                         <Button variant="primary" className="mt-2">
-                                            Guardar cambios
+                                            {t("general.form.buttons.update")}
                                         </Button>
                                     </form>
                                 </FormProvider>
@@ -128,9 +137,12 @@ const Profile = () => {
                     <div className="card-body">
                         <h2 className="card-title text-xl">
                             <ShieldSVG />
-                            Security Settings
+                            {t("general.profile.security.title")}
                         </h2>
-                        <p className="text-base-content mb-6">Manage account security</p>
+
+                        <p className="text-base-content mb-6">
+                            {t("general.profile.security.description")}
+                        </p>
 
                         <FormProvider {...passwordMethods}>
                             <form
@@ -140,33 +152,36 @@ const Profile = () => {
                                 <FormField
                                     name="currentPassword"
                                     type="password"
-                                    label="Contraseña actual"
-                                    rules={{ required: "Required" }}
+                                    label={t("general.form.password.current")}
+                                    rules={{ required: t("general.form.password.required") }}
                                 />
 
                                 <FormField
                                     name="newPassword"
                                     type="password"
-                                    label="Nueva contraseña"
+                                    label={t("general.form.password.new")}
                                     rules={{
-                                        required: "Required",
-                                        minLength: { value: 8, message: "Min 8 caracteres" },
+                                        required: t("general.form.password.required"),
+                                        minLength: {
+                                            value: 8,
+                                            message: t("general.form.password.minLength"),
+                                        },
                                     }}
                                 />
 
                                 <FormField
                                     name="confirmPassword"
                                     type="password"
-                                    label="Repetir nueva contraseña"
+                                    label={t("general.form.password.confirm")}
                                     rules={{
                                         validate: (value) =>
                                             value === newPasswordValue ||
-                                            "Las contraseñas no coinciden",
+                                            t("general.form.confirmPassword.match"),
                                     }}
                                 />
 
                                 <Button variant="secondary" className="mt-2">
-                                    Cambiar contraseña
+                                    {t("general.form.buttons.changePassword")}
                                 </Button>
                             </form>
                         </FormProvider>
@@ -178,15 +193,15 @@ const Profile = () => {
                     <div className="card-body">
                         <h2 className="card-title text-error text-xl">
                             <AlertTriangleSVG />
-                            Danger Zone
+                            {t("general.profile.danger.title")}
                         </h2>
 
                         <p className="text-sm opacity-70">
-                            Esta acción es irreversible. Se eliminarán todos tus datos.
+                            {t("general.profile.danger.description")}
                         </p>
 
                         <Button variant="error" className="mt-4" onClick={handleDeleteAccount}>
-                            Eliminar cuenta
+                            {t("general.profile.danger.deleteAccount")}
                         </Button>
                     </div>
                 </div>

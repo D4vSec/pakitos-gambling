@@ -1,8 +1,10 @@
 import React from "react"
 import { useRoulette } from "@/providers/RouletteProvider"
+import { useLocale } from "@/providers/LocaleProvider"
 
 const BoardPiece = ({ item, children }) => {
     const { type } = useRoulette()
+    const { t } = useLocale()
 
     if (!item) return null
 
@@ -26,7 +28,9 @@ const BoardPiece = ({ item, children }) => {
             className={`${gridClass} ${bgColor} ${textColor} font-bold flex justify-center items-center border border-gray-700 rounded relative`}
             data-info={JSON.stringify(item)}
         >
-            {item.text}
+            {["red", "black", "odd", "even"].includes(item.text)
+                ? t(`games.roulette.board.${item.text}`)
+                : item.text}
 
             {/* Chips */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">

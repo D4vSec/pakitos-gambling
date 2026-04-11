@@ -36,7 +36,7 @@ const RouletteProvider = ({ children }) => {
 
     const updateBets = (bet) => {
         if (!selectedChip || selectedChip <= 0) {
-            addNotification("Select a chip first to place it", "warning")
+            addNotification(t("message.warning.selectChipFirst"), "warning")
             return
         }
 
@@ -84,7 +84,7 @@ const RouletteProvider = ({ children }) => {
 
     const repeatBets = () => {
         if (!Object.keys(lastBet).length) {
-            addNotification("Play 1 time to repeat the bet", "warning")
+            addNotification(t("message.warning.playFirstToRepeat"), "warning")
             return
         }
         setGame(lastBet)
@@ -106,7 +106,7 @@ const RouletteProvider = ({ children }) => {
             const totalAfterDouble = totalCurrent * 2
 
             if (balance < totalAfterDouble) {
-                addNotification("You don't have the currency to double", "warning")
+                addNotification(t("message.warning.cantDouble"), "warning")
                 return prev
             }
 
@@ -160,13 +160,13 @@ const RouletteProvider = ({ children }) => {
             console.log("rouletteStatus", res)
 
             addNotification(
-                `Winning number: ${res?.result?.winningNumber === 37 ? "00" : res?.result?.winningNumber} | ${res?.result?.color}`,
+                `${t("message.info.winningNumber")}: ${res?.result?.winningNumber === 37 ? "00" : res?.result?.winningNumber} | ${t(`games.roulette.board.${res?.result?.color}`)}`,
                 "info",
             )
 
             const outcome = getGameOutcome(res)
             addNotification(
-                outcome,
+                t(`games.result.${outcome}`),
                 outcome === "win" ? "success" : outcome === "lose" ? "error" : "info",
             )
 
@@ -179,7 +179,7 @@ const RouletteProvider = ({ children }) => {
 
             clearBets()
         } catch (error) {
-            addNotification(error.message, "error")
+            addNotification(t(`message.error.${error.message}`), "error")
         }
     }
 

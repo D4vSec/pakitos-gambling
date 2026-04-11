@@ -37,8 +37,8 @@ const ProfileCard = () => {
   const onSubmit = async (data) => {
     if (data.password && data.password !== data.confirmPassword) {
       addNotification(
-        t ? t("general.form.password.match") : "Passwords must match",
-        "error",
+        t("general.form.confirmPassword.match"),
+        "error"
       );
       return;
     }
@@ -48,7 +48,7 @@ const ProfileCard = () => {
       email: data.email,
     };
 
-   const pwd = data.password?.trim().replace(/[\r\n]+/g, ""); 
+    const pwd = data.password?.trim().replace(/[\r\n]+/g, "");
     if (pwd) body.password = pwd;
 
     try {
@@ -56,10 +56,8 @@ const ProfileCard = () => {
 
       if (pwd) {
         addNotification(
-          t
-            ? t("message.info.passwordChanged")
-            : "Password changed successfully, please log in again",
-          "info",
+          t("message.info.passwordChanged"),
+          "info"
         );
         logout();
       } else if (fresh && setUser) {
@@ -77,12 +75,11 @@ const ProfileCard = () => {
     <Card className="py-6 px-6 border-0">
       <h2 className="flex items-center gap-2 text-2xl">
         <UserSVG />
-        {t ? t("general.profile.profileCard.title") : "Profile Settings"}
+        {t("general.profile.profileCard.title")}
       </h2>
+
       <p className="text-1lg">
-        {t
-          ? t("general.profile.profileCard.description")
-          : "Manage your account settings and preferences"}
+        {t("general.profile.profileCard.description")}
       </p>
 
       <div className="mt-1">
@@ -90,33 +87,27 @@ const ProfileCard = () => {
           <div className="card-body">
             {!isEditing ? (
               <div className="flex flex-col gap-4">
-                <div className="flex justify-between items-center">
-                  <div>
-                    <div className="text-sm text-muted-foreground">
-                      {t ? t("general.form.username.label") : "Username"}
-                    </div>
-                    <div className="text-lg font-medium">
-                      {user?.username || "-"}
-                    </div>
+                <div>
+                  <div className="text-sm text-muted-foreground">
+                    {t("general.form.username.label")}
+                  </div>
+                  <div className="text-lg font-medium">
+                    {user?.username || "-"}
                   </div>
                 </div>
 
-                <div className="flex justify-between items-center">
-                  <div>
-                    <div className="text-sm text-muted-foreground">
-                      {t ? t("general.form.email.label") : "Email"}
-                    </div>
-                    <div className="text-lg font-medium">
-                      {user?.email || "-"}
-                    </div>
+                <div>
+                  <div className="text-sm text-muted-foreground">
+                    {t("general.form.email.label")}
+                  </div>
+                  <div className="text-lg font-medium">
+                    {user?.email || "-"}
                   </div>
                 </div>
 
-                <div className="form-control mt-2">
-                  <Button onClick={() => setIsEditing(true)} className="w-full">
-                    {t ? t("general.form.buttons.update") : "Edit"}
-                  </Button>
-                </div>
+                <Button onClick={() => setIsEditing(true)} className="w-full">
+                  {t("general.form.buttons.update")}
+                </Button>
               </div>
             ) : (
               <FormProvider {...methods}>
@@ -127,37 +118,23 @@ const ProfileCard = () => {
                   <FormField
                     name="username"
                     type="text"
-                    label={t ? t("general.form.username.label") : "Username"}
-                    placeholder={
-                      t
-                        ? t("general.form.username.placeholder")
-                        : "Your username"
-                    }
+                    label={t("general.form.username.label")}
+                    placeholder={t("general.form.username.placeholder")}
                     rules={{
-                      required: t
-                        ? t("general.form.username.required")
-                        : "Required",
+                      required: t("general.form.username.required"),
                     }}
                   />
 
                   <FormField
                     name="email"
                     type="email"
-                    label={t ? t("general.form.email.label") : "Email"}
-                    placeholder={
-                      t
-                        ? t("general.form.email.placeholder")
-                        : "you@example.com"
-                    }
+                    label={t("general.form.email.label")}
+                    placeholder={t("general.form.email.placeholder")}
                     rules={{
-                      required: t
-                        ? t("general.form.email.required")
-                        : "Required",
+                      required: t("general.form.email.required"),
                       pattern: {
                         value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                        message: t
-                          ? t("general.form.email.pattern")
-                          : "Invalid email",
+                        message: t("general.form.email.pattern"),
                       },
                     }}
                   />
@@ -165,19 +142,13 @@ const ProfileCard = () => {
                   <FormField
                     name="password"
                     type="password"
-                    label={t ? t("general.form.password.label") : "Password"}
-                    placeholder={
-                      t
-                        ? t("general.form.password.placeholder")
-                        : "New password"
-                    }
+                    label={t("general.form.password.label")}
+                    placeholder={t("general.form.password.placeholder")}
                     rules={{
                       pattern: {
                         value:
                           /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9!@#$%^&*])[A-Za-z0-9!@#$%^&*]{8,}$/,
-                        message: t
-                          ? t("general.form.password.pattern")
-                          : "Invalid password",
+                        message: t("general.form.password.pattern"),
                       },
                     }}
                   />
@@ -185,36 +156,26 @@ const ProfileCard = () => {
                   <FormField
                     name="confirmPassword"
                     type="password"
-                    label={
-                      t
-                        ? t("general.form.confirmPassword.label")
-                        : "Confirm Password"
-                    }
-                    placeholder={
-                      t
-                        ? t("general.form.confirmPassword.placeholder")
-                        : "Confirm new password"
-                    }
+                    label={t("general.form.confirmPassword.label")}
+                    placeholder={t("general.form.confirmPassword.placeholder")}
                     rules={{
                       validate: (val) =>
                         watch("password")
                           ? val === watch("password") ||
-                            (t
-                              ? t("general.form.confirmPassword.match")
-                              : "Passwords must match")
+                            t("general.form.confirmPassword.match")
                           : true,
                     }}
                   />
 
                   <div className="flex gap-2">
                     <Button className="flex-1">
-                      {t ? t("general.form.buttons.update") : "Update Profile"}
+                      {t("general.form.buttons.update")}
                     </Button>
+
                     <button
                       type="button"
                       className="btn btn-ghost flex-1"
-                      onClick={(e) => {
-                        e.preventDefault();
+                      onClick={() => {
                         reset({
                           username: user?.username || "",
                           email: user?.email || "",
@@ -224,7 +185,7 @@ const ProfileCard = () => {
                         setIsEditing(false);
                       }}
                     >
-                      {t ? t("general.form.buttons.cancel") : "Cancel"}
+                      {t("general.form.buttons.cancel")}
                     </button>
                   </div>
                 </form>

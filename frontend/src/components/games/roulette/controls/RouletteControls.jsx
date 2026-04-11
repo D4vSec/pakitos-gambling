@@ -4,7 +4,7 @@ import ChipSelector from "./ChipSelector"
 import { useRoulette } from "@/providers/RouletteProvider"
 import { useNotification } from "@/providers/NotificationProvider"
 import BettingBtns from "../../BettingBtns"
-
+import { useLocale } from "@/providers/LocaleProvider"
 const RouletteControls = () => {
     const {
         betAmount,
@@ -16,17 +16,20 @@ const RouletteControls = () => {
         doubleBets,
         game,
         spin,
+        type,
     } = useRoulette()
 
     const { addNotification } = useNotification()
 
+    const { t } = useLocale()
+
     const handleStartGame = () => {
         if (betAmount <= 0) {
-            addNotification("The bet can't be 0", "error")
+            addNotification(t("message.error.bet0"), "error")
             return
         }
         console.log("g", game)
-        addNotification("Spinning...", "warning", { duration: 2000 })
+        addNotification(t("message.warning.spinning"), "warning", { duration: 2000 })
 
         setTimeout(() => {
             spin()
@@ -36,7 +39,7 @@ const RouletteControls = () => {
     // TODO: Hacer algo con los botones de 1x, 2x posiblemente me los ventile
     return (
         <div className="flex flex-col gap-6 w-full h-full p-4">
-            <h2 className="font-bold text-xl text-center">Roulette</h2>
+            <h2 className="font-bold text-xl text-center">{t(`games.roulette.${type}`)}</h2>
 
             <BettingInput bet={{ betAmount, updateBetAmount }} readOnly />
 
