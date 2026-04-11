@@ -34,7 +34,6 @@ const RouletteControls = () => {
     }
 
     // TODO: Hacer algo con los botones de 1x, 2x posiblemente me los ventile
-    // TODO  Bloquea el cambiar el amount de la ruleta
     return (
         <div className="flex flex-col gap-6 w-full h-full p-4">
             <h2 className="font-bold text-xl text-center">Roulette</h2>

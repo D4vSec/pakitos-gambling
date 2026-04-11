@@ -6,12 +6,24 @@ const LocaleProvider = ({ children }) => {
     const [localeData, setLocaleData] = useState({})
     const [loading, setLoading] = useState(true)
 
-    const loadLocale = async (lang) => {
+    const [lang, setLang] = useState(() => {
+        return localStorage.getItem("lang") || "en"
+    })
+
+    const loadLocale = async (newLang) => {
         try {
-            const response = await fetch(`./locales/${lang}.json`)
+            const response = await fetch(`./locales/${newLang}.json`)
             const data = await response.json()
+
             setLocaleData(data)
             setLoading(false)
+
+            if (localStorage.getItem("lang") !== newLang) {
+                localStorage.setItem("lang", newLang)
+            }
+
+            setLang(newLang)
+
             return true
         } catch (err) {
             console.error("Error loading locale", err)
@@ -20,20 +32,28 @@ const LocaleProvider = ({ children }) => {
     }
 
     const t = (key, vars = {}) => {
-        let text = key.split(".").reduce((obj, i) => (obj ? obj[i] : null), localeData)
+        let text = key
+            .split(".")
+            .reduce((obj, i) => (obj !== undefined && obj !== null ? obj[i] : null), localeData)
+
         if (!text || typeof text !== "string") return key
 
         Object.keys(vars).forEach((v) => {
             text = text.replace(new RegExp(`{{${v}}}`, "g"), vars[v])
         })
+
         return text
     }
 
     useEffect(() => {
-        loadLocale("en")
+        loadLocale(lang)
     }, [])
 
-    return <LocaleContext value={{ t, loadLocale, loading }}>{children}</LocaleContext>
+    return (
+        <LocaleContext.Provider value={{ t, loadLocale, loading, lang }}>
+            {children}
+        </LocaleContext.Provider>
+    )
 }
 
 export default LocaleProvider

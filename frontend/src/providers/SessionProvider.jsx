@@ -75,6 +75,8 @@ const SessionProvider = ({ children }) => {
             navigate("/login")
         } catch (error) {
             addNotification(t(`message.error.${error?.message}`), "error")
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -100,6 +102,8 @@ const SessionProvider = ({ children }) => {
             navigate("/home")
         } catch (error) {
             addNotification(t(`message.error.${error?.message}`), "error")
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -115,7 +119,7 @@ const SessionProvider = ({ children }) => {
         try {
             const accessToken = getAccessToken()
 
-            if (!accessToken) return null
+            //if (!accessToken) return null
 
             const response = await get("/api/v1/user/me", {
                 headers: {
@@ -130,7 +134,6 @@ const SessionProvider = ({ children }) => {
             console.log("user", response)
             setUser(response)
             setIsLogged(true)
-
             return response
         } catch (error) {
             addNotification(t(`message.error.${error?.message}`), "error")
@@ -188,6 +191,8 @@ const SessionProvider = ({ children }) => {
                 t ? t(`message.error.${error?.message}`) : "Error updating profile",
                 "error",
             )
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -216,6 +221,8 @@ const SessionProvider = ({ children }) => {
             addNotification(t(`message.success.BALANCE_ADDED_SUCCESSFULLY`), "success")
         } catch (error) {
             addNotification(t(`message.error.${error?.message}`), "error")
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -237,17 +244,22 @@ const SessionProvider = ({ children }) => {
             })
         } catch (error) {
             addNotification(t(`message.error.${error?.message}`), "error")
+        } finally {
+            setLoading(false)
         }
     }
 
     useEffect(() => {
         const token = getAccessToken()
-
-        if (token) {
-            getUserData()
+        console.log("t", token)
+        getUserData()
+        /*if (token) {
         } else {
-            addNotification(t("message.error.AUTH_TOKEN_INVALID"))
-        }
+            addNotification("message.error.AUTH_TOKEN_INVALID", "error")
+            setLoading(false)
+            console.log("u", user)
+            console.log("logged", isLogged)
+        } */
     }, [])
 
     const value = {

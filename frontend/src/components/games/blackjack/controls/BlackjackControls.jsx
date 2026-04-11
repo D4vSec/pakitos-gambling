@@ -11,6 +11,8 @@ const BlackjackControls = () => {
         startGame()
     }
 
+    // TODO: Bloquear los botones si no hay un juego iniciado
+    // TODO: Mostrar las cartas de poco en poco
     return (
         <div className="flex flex-col gap-4 w-full h-full p-4">
             <h2 className="font-bold text-xl text-center m-0 p-0">Blackjack</h2>

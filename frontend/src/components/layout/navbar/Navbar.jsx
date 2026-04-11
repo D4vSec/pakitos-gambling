@@ -7,6 +7,7 @@ import NavbarLinks from "./NavbarLinks"
 import NavbarBtns from "./NavbarBtns"
 import { useLocale } from "@/providers/LocaleProvider"
 import { useNavigate } from "react-router-dom"
+import LangDropdown from "./LangDropdown"
 
 const Navbar = () => {
     const { t } = useLocale()

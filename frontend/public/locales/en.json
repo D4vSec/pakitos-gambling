@@ -154,14 +154,16 @@
     "message": {
         "info": {
             "registered": "Your account is created, you need to go to the login page",
-            "userData": "User data received correctly"
+            "userData": "User data received correctly",
+            "loading": "Loading..."
         },
         "success": {
             "AUTH_USER_REGISTERED": "Account registered successfully",
             "AUTH_USER_LOGGED": "Logged successfully",
             "logout": "Logout successfully",
             "USER_UPDATED": "Profile updated",
-            "BALANCE_ADDED_SUCCESSFULLY": "Balance updated successfully"
+            "BALANCE_ADDED_SUCCESSFULLY": "Balance updated successfully",
+            "LANGUAGE_CHANGED": "Language changed successfully"
         },
         "warning": {},
         "error": {
@@ -183,7 +185,9 @@
             "429": "Bro, chill, to many request...",
             "500": "Server error during the request",
             "409": "Some of the data introduced already exists",
-            "Update_User": "Error updating profile"
+            "Update_User": "Error updating profile",
+            "noLogin": "You need to be logged to access this",
+            "noAdmin": "You don't have access to this"
         },
         "modal": {
             "logout": {

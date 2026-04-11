@@ -28,7 +28,7 @@ const UserDropdown = ({ vertical = false }) => {
     ]
 
     return (
-        <div className={`dropdown ${vertical ? "dropdown-open w-full" : "dropdown-end"}`}>
+        <div className={`dropdown ${vertical ? "w-full" : "dropdown-end"}`}>
             <div
                 tabIndex={0}
                 role="button"
@@ -39,19 +39,26 @@ const UserDropdown = ({ vertical = false }) => {
                 <UserSVG />
                 <p>{user?.username || t("general.navbar.userPill.guest")}</p>
             </div>
-
-            <ul
-                tabIndex={0}
-                className={`dropdown-content menu bg-base-100 rounded-box mt-2 p-2 shadow ${
-                    vertical ? "w-full z-1" : "w-52 z-10"
-                }`}
-            >
-                {userDropdownLinks.map(({ key, label, className, href, onClick }) => (
-                    <li key={key} className={className} onClick={onClick}>
-                        <Link to={href}>{t(label)}</Link>
-                    </li>
-                ))}
-            </ul>
+            {vertical ? (
+                <ul className="menu bg-base-100 rounded-box w-full mt-2 p-2">
+                    {userDropdownLinks.map(({ key, label, className, href, onClick }) => (
+                        <li key={key} className={className} onClick={onClick}>
+                            <Link to={href}>{t(label)}</Link>
+                        </li>
+                    ))}
+                </ul>
+            ) : (
+                <ul
+                    tabIndex={0}
+                    className="dropdown-content menu bg-base-100 rounded-box mt-2 p-2 shadow w-52 z-10"
+                >
+                    {userDropdownLinks.map(({ key, label, className, href, onClick }) => (
+                        <li key={key} className={className} onClick={onClick}>
+                            <Link to={href}>{t(label)}</Link>
+                        </li>
+                    ))}
+                </ul>
+            )}
         </div>
     )
 }

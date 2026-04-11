@@ -16,7 +16,7 @@ const RouletteBoard = () => {
 
     return (
         <div
-            className="grid grid-cols-[repeat(10,1fr)] grid-rows-[repeat(28,1fr)] md:grid-cols-[repeat(28,1fr)] md:grid-rows-[repeat(10,1fr)] gap-1 w-full h-full text-black z-10 "
+            className="grid grid-cols-[repeat(10,1fr)] grid-rows-[repeat(28,1fr)] md:grid-cols-[repeat(28,1fr)] md:grid-rows-[repeat(10,1fr)] gap-1 w-full h-full text-black "
             onClick={(e) => handleClick(e)}
         >
             {values.map((cell) => (

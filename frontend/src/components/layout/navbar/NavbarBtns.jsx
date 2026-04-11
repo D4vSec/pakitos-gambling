@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom"
 import { useSession } from "@/providers/SessionProvider"
 import UserDropdown from "./UserDropdown"
 import UserBalance from "./UserBalance"
+import LangDropdown from "./LangDropdown"
 
 const NavbarBtns = ({ className = "", vertical = false }) => {
     const { t } = useLocale()
@@ -49,6 +50,7 @@ const NavbarBtns = ({ className = "", vertical = false }) => {
             </div>
 
             <UserDropdown vertical={vertical} />
+            <LangDropdown vertical={vertical} />
         </div>
     )
 }

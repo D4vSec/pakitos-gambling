@@ -11,20 +11,70 @@ import Register from "../pages/Register"
 import Roulette0Game from "@/pages/games/Roulette0Game"
 import Roulette00Game from "@/pages/games/Roulette00Game"
 import SlotsGame from "@/pages/games/SlotsGame"
+import ProtectedRoute from "@/components/ProtectedRoute"
 
 const Router = () => {
     return (
         <Routes>
             <Route path="/" element={<LandingPage />} />
-            <Route path="/home" element={<Home />} />
+            <Route
+                path="/home"
+                element={
+                    <ProtectedRoute>
+                        <Home />
+                    </ProtectedRoute>
+                }
+            />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/settings" element={<Profile />} />
-            <Route path="/roulette0" element={<Roulette0Game />} />
-            <Route path="/roulette00" element={<Roulette00Game />} />
-            <Route path="/blackjack" element={<BlackjackGame />} />
-            <Route path="/slots" element={<SlotsGame />} />
-            <Route path="/addBalance" element={<AddBalance />} />
+            <Route
+                path="/settings"
+                element={
+                    <ProtectedRoute>
+                        <Profile />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/roulette0"
+                element={
+                    <ProtectedRoute>
+                        <Roulette0Game />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/roulette00"
+                element={
+                    <ProtectedRoute>
+                        <Roulette00Game />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/blackjack"
+                element={
+                    <ProtectedRoute>
+                        <BlackjackGame />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/slots"
+                element={
+                    <ProtectedRoute>
+                        <SlotsGame />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/addBalance"
+                element={
+                    <ProtectedRoute>
+                        <AddBalance />
+                    </ProtectedRoute>
+                }
+            />
             <Route path="*" element={<Error />} />
         </Routes>
     )
