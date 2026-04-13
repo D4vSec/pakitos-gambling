@@ -119,7 +119,9 @@ const SessionProvider = ({ children }) => {
         try {
             const accessToken = getAccessToken()
 
-            //if (!accessToken) return null
+            if (!accessToken) {
+                throw new Error("AUTH_NO_TOKEN_PROVIDED")
+            }
 
             const response = await get("/api/v1/user/me", {
                 headers: {

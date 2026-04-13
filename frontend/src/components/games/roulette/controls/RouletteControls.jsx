@@ -36,7 +36,6 @@ const RouletteControls = () => {
         }, 2000)
     }
 
-    // TODO: Hacer algo con los botones de 1x, 2x posiblemente me los ventile
     return (
         <div className="flex flex-col gap-6 w-full h-full p-4">
             <h2 className="font-bold text-xl text-center">{t(`games.roulette.${type}`)}</h2>

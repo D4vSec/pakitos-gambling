@@ -222,6 +222,7 @@
             "AUTH_NO_TOKEN_PROVIDED": "No auth token provided",
             "AUTH_USER_REGISTERED": "Username already registered",
             "INVALID_BET_AMOUNT": "Invalid bet amount setted",
+            "GAME_NOT_VALID": "Invalid game",
             "SERVER_ERROR": "The server failed during the request",
             "Update_User": "Error updating profile",
             "bet0": "The bet can't be 0",
