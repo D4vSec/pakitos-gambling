@@ -3,6 +3,7 @@ import useAPI from "@/hooks/useAPI"
 import { useNotification } from "@/providers/NotificationProvider"
 import { useSession } from "./SessionProvider"
 import { useLocale } from "./LocaleProvider"
+import { info } from "autoprefixer"
 
 const BlackjackContext = createContext()
 
@@ -130,6 +131,7 @@ const BlackjackProvider = ({ children }) => {
       }, 3000)
       removeGameId()
       addNotification(t(`message.success.${res.code}`), "success")
+      addNotification("cucuuuuuuuuuuu", "info", { scope: "games" })
     } catch (error) {
       addNotification(t(`message.error.${error.message}`), "error")
     }

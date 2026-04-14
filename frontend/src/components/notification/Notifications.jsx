@@ -4,25 +4,30 @@ import Notification from "./Notification.jsx"
 import NotificationModal from "./NotificationModal.jsx"
 
 const Notifications = () => {
-    const { notifications } = useNotification()
+  const { notifications } = useNotification()
 
-    if (!notifications || notifications.length === 0) return null
+  if (!notifications || notifications.length === 0) return null
 
-    return (
-        <div className="fixed top-5 left-5 flex flex-col gap-2 z-50">
-            {notifications.map((notification) => {
-                switch (notification?.type) {
-                    case "modal":
-                        return (
-                            <NotificationModal key={notification.id} notification={notification} />
-                        )
+  return (
+    <div className="fixed top-5 left-5 flex flex-col gap-2 z-50">
+      {notifications.global.map((notification) => {
+        switch (notification?.type) {
+          case "modal":
+            return (
+              <NotificationModal
+                key={notification.id}
+                notification={notification}
+              />
+            )
 
-                    default:
-                        return <Notification key={notification.id} notification={notification} />
-                }
-            })}
-        </div>
-    )
+          default:
+            return (
+              <Notification key={notification.id} notification={notification} />
+            )
+        }
+      })}
+    </div>
+  )
 }
 
 export default Notifications
