@@ -8,8 +8,6 @@ const Hand = ({ hand }) => {
   const prevLengthRef = useRef(0)
   const isRevealingRef = useRef(false)
 
-  const revealedCardsRef = useRef(new Set())
-
   useEffect(() => {
     const prev = prevLengthRef.current
     const current = cards.length
@@ -20,7 +18,6 @@ const Hand = ({ hand }) => {
     if (isReset) {
       setRevealedCount(0)
       isRevealingRef.current = false
-      revealedCardsRef.current = new Set()
     }
 
     if (hasNew && !isRevealingRef.current) {
@@ -75,26 +72,19 @@ const Hand = ({ hand }) => {
     <div className="z-10 flex flex-col gap-3 justify-center items-center">
       {hasCards && (
         <div className="flex items-start">
-          {cards.slice(0, revealedCount).map((card, i) => {
-            const id = `${card.rank}-${card.suit}-${i}`
-
-            const isNew = !revealedCardsRef.current.has(id)
-            revealedCardsRef.current.add(id)
-
-            return (
-              <div key={id} className={i !== 0 ? "-ml-10" : ""}>
-                <div style={{ marginTop: `${i * 1}rem` }}>
-                  <Card
-                    card={card}
-                    animate={isNew}
-                    forceHidden={
-                      card.rank === "hidden" || card.suit === "hidden"
-                    }
-                  />
-                </div>
+          {cards.slice(0, revealedCount).map((card, i) => (
+            <div
+              key={`${card.rank}-${card.suit}-${i}`}
+              className={i !== 0 ? "-ml-10" : ""}>
+              <div style={{ marginTop: `${i * 1}rem` }}>
+                <Card
+                  card={card}
+                  reveal={true}
+                  forceHidden={card.rank === "hidden" || card.suit === "hidden"}
+                />
               </div>
-            )
-          })}
+            </div>
+          ))}
         </div>
       )}
 

@@ -1,9 +1,12 @@
-import React from "react";
-import Button from "@/components/buttons/Button";
-import { useLocale } from "@/providers/LocaleProvider";
+import React from "react"
+import Button from "@/components/buttons/Button"
+import { useLocale } from "@/providers/LocaleProvider"
+import { useNavigate } from "react-router-dom"
 
 const HeroContent = () => {
-  const { t } = useLocale();
+  const { t } = useLocale()
+  const navigate = useNavigate()
+
   return (
     <div className="relative py-20 md:py-32 px-6 md:px-12">
       <div className="max-w-3xl">
@@ -14,16 +17,24 @@ const HeroContent = () => {
           {t("general.landingPage.heroContent.text")}
         </p>
         <div className="flex flex-col sm:flex-row gap-4">
-          <Button variant="primary" size="lg" className={"sm:btn-xl"}>
+          <Button
+            variant="primary"
+            size="lg"
+            className={"sm:btn-xl"}
+            onClick={() => navigate("/register")}>
             {t("general.landingPage.heroContent.join")}
           </Button>
-          <Button variant="accent" size="lg" className={"sm:btn-xl"}>
+          <Button
+            variant="accent"
+            size="lg"
+            className={"sm:btn-xl"}
+            onClick={() => navigate("/home")}>
             {t("general.landingPage.heroContent.seeGames")}
           </Button>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default HeroContent;
+export default HeroContent

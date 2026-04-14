@@ -5,37 +5,35 @@ import Clubs from "./suits/Clubs"
 import Spades from "./suits/Spades"
 import CherrySVG from "@/components/svg/CherrySVG"
 
-const Card = ({ card, forceHidden = false, animate = true }) => {
+const Card = ({ card, reveal = false, forceHidden = false }) => {
   const { rank, suit } = card
 
   const isFaceDown = forceHidden || rank === "hidden" || suit === "hidden"
 
   const [mounted, setMounted] = useState(false)
-  const [flipped, setFlipped] = useState(!isFaceDown)
+  const [flipped, setFlipped] = useState(false)
 
   useEffect(() => {
     setMounted(false)
+    setFlipped(false)
 
-    const t1 = setTimeout(() => {
+    if (isFaceDown) return
+
+    const mountTimer = setTimeout(() => {
       setMounted(true)
     }, 30)
 
-    const t2 = setTimeout(
-      () => {
-        if (!isFaceDown && animate) {
-          setFlipped(true)
-        } else {
-          setFlipped(!isFaceDown)
-        }
-      },
-      animate ? 800 : 0,
-    )
+    const flipTimer = setTimeout(() => {
+      if (reveal) {
+        setFlipped(true)
+      }
+    }, 700)
 
     return () => {
-      clearTimeout(t1)
-      clearTimeout(t2)
+      clearTimeout(mountTimer)
+      clearTimeout(flipTimer)
     }
-  }, [rank, suit, isFaceDown, animate])
+  }, [rank, suit, reveal, isFaceDown])
 
   const color = {
     Hearts: "text-red-500",
@@ -51,25 +49,31 @@ const Card = ({ card, forceHidden = false, animate = true }) => {
     Spades: <Spades />,
   }
 
+  if (isFaceDown) {
+    return (
+      <div className="w-20 h-28 perspective-[1000px]">
+        <div className="w-full h-full bg-blue-600 border-6 border-white rounded-lg flex items-center justify-center text-white shadow-md">
+          <CherrySVG />
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div
       className={`w-20 h-28 perspective-[1000px] transition-all duration-300 ${
-        mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
+        mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
       }`}>
       <div
         className={`relative w-full h-full transition-transform duration-700 ease-out transform-3d ${
           flipped ? "" : "transform-[rotateY(180deg)]"
         }`}>
-        {/* FRONT */}
         <div
-          className={`absolute w-full h-full bg-white ${
-            isFaceDown ? "" : color[suit]
-          } font-bold text-xl rounded-lg p-2 flex flex-col gap-1 backface-hidden border border-gray-200 shadow-md`}>
-          {!isFaceDown && <p className="ml-1">{rank}</p>}
-          {!isFaceDown && symbol[suit]}
+          className={`absolute w-full h-full bg-white ${color[suit]} font-bold text-xl rounded-lg p-2 flex flex-col gap-1 backface-hidden border border-gray-200 shadow-md`}>
+          <p className="ml-1">{rank}</p>
+          {symbol[suit]}
         </div>
 
-        {/* BACK */}
         <div className="absolute w-full h-full bg-blue-600 border-white border-6 rounded-lg flex items-center justify-center text-white transform-[rotateY(180deg)] backface-hidden shadow-md">
           <CherrySVG />
         </div>
