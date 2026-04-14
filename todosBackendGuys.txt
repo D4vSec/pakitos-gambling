@@ -1,0 +1,6 @@
+// TODO: Chiquito bug, cuando continuas un juego (la ruta de get/:gameId) la segunda carta
+// del dealer se devuelve sin suit ni value "hidden"
+
+// TODO: El dealer si detecta que ya ha ganado no sigue sacando cartas, p.ej:
+// si tengo 11, hago stand y el dealer tiene un 3 y la carta que estaba hidden es una J (13)
+// El dealer no sigue sacando cartas, el dealer tiene que sacar si o si hasta llegar a 17 o mas
