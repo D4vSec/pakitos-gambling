@@ -10,7 +10,8 @@ const NotificationProvider = ({ children }) => {
 
   const addNotification = (message, type = "info", options = {}) => {
     const id = crypto.randomUUID()
-    const duration = 5000
+    const duration = options.duration || 5000
+    const scope = options.scope || "global"
 
     const notification = {
       id,
@@ -19,17 +20,16 @@ const NotificationProvider = ({ children }) => {
       options: {
         ...options,
         duration,
-        scope: options.scope || "global",
+        scope,
       },
     }
-
-    const scope = notification.options.scope
 
     setNotifications((prev) => ({
       ...prev,
       [scope]: [...prev[scope], notification],
     }))
 
+    // ⏱ solo auto-remove lógico (NO animación)
     if (type !== "modal" && type !== "input") {
       setTimeout(() => {
         removeNotification(id, scope)
@@ -37,11 +37,22 @@ const NotificationProvider = ({ children }) => {
     }
   }
 
-  const removeNotification = (id, scope = "global") => {
+  const removeNotification = (id, scope = "games") => {
+    // 1. marcar como saliendo
     setNotifications((prev) => ({
       ...prev,
-      [scope]: prev[scope].filter((n) => n.id !== id),
+      [scope]: prev[scope].map((n) =>
+        n.id === id ? { ...n, leaving: true } : n,
+      ),
     }))
+
+    // 2. esperar animación y eliminar
+    setTimeout(() => {
+      setNotifications((prev) => ({
+        ...prev,
+        [scope]: prev[scope].filter((n) => n.id !== id),
+      }))
+    }, 500) // 👈 debe coincidir con duración animación
   }
 
   const value = {
@@ -59,11 +70,8 @@ const NotificationProvider = ({ children }) => {
 
 export const useNotification = () => {
   const context = useContext(NotificationContext)
-  if (!context) {
-    throw new Error("Provider outside scope")
-  }
+  if (!context) throw new Error("Provider outside scope")
   return context
 }
 
 export default NotificationProvider
-export { NotificationContext }

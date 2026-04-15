@@ -1,266 +1,270 @@
 {
-    "admin": {},
-    "games": {
-        "actions": {
-            "bet": "Bet",
-            "clearBet": "Clear bet",
-            "doubleBet": "Double bet",
-            "repeatBet": "Repeat bet"
-        },
-        "blackjack": {
-            "actions": {
-                "double": "Double",
-                "hit": "Hit",
-                "split": "Split",
-                "stand": "Stand"
-            },
-            "bkPays": "Blackjack pays 3 to 2",
-            "title": "Blackjack"
-        },
-        "result": {
-            "lose": "You lose :/",
-            "tie": "Tie",
-            "win": "You win!!!"
-        },
-        "roulette": {
-            "Zero": "European Roulette",
-            "ZeroZero": "American Roulette",
-            "board": {
-                "black": "black",
-                "even": "even",
-                "green": "green",
-                "odd": "odd",
-                "red": "red"
-            },
-            "controls": {
-                "betAmount": "Bet amount",
-                "betAmountPlaceholder": "Insert bet amount",
-                "chipValue": "Chip value"
-            },
-            "lastNumbers": "Last numbers"
-        }
+  "admin": {},
+  "buttons": {
+    "returnHome": "Return to home",
+    "goLogin": "Go to login"
+  },
+  "games": {
+    "actions": {
+      "bet": "Bet",
+      "clearBet": "Clear bet",
+      "doubleBet": "Double bet",
+      "repeatBet": "Repeat bet"
     },
-    "general": {
-        "addBalance": {
-            "button": "Add balance",
-            "label": "Amount",
-            "min": "The amount must be greater than 1",
-            "placeholder": "Amount",
-            "required": "This field is required",
-            "title": "Add balance to account"
-        },
-        "copyright": "All rights reserved by The Mafia at the Back",
-        "form": {
-            "buttons": {
-                "cancel": "Cancel",
-                "login": "Login",
-                "register": "Register",
-                "update": "Update profile",
-                "changePassword": "Change password"
-            },
-            "confirmPassword": {
-                "label": "Confirm password",
-                "match": "Passwords do not match",
-                "placeholder": "Confirm password",
-                "required": "Confirm password is required"
-            },
-            "email": {
-                "label": "Email",
-                "pattern": "Invalid email format",
-                "placeholder": "Email",
-                "required": "Email is required"
-            },
-            "page": {
-                "login": "Login",
-                "register": "Sign up"
-            },
-            "password": {
-                "label": "Password",
-                "pattern": "Password must be at least 8 characters, include uppercase, lowercase and number or special character",
-                "placeholder": "Password",
-                "required": "Password is required",
-                "current": "Current password",
-                "new": "New password",
-                "confirm": "Repeat new password",
-                "minLength": "Minimum 8 characters"
-            },
-            "username": {
-                "label": "Username",
-                "maxLength": "Username must be at most 25 characters",
-                "minLength": "Username must be at least 3 characters",
-                "placeholder": "Username",
-                "required": "Username is required"
-            }
-        },
-        "home": {
-            "blackjack": {
-                "description": "Classic blackjack game.",
-                "title": "Blackjack"
-            },
-            "playNow": "Play now",
-            "roulette": {
-                "american": {
-                    "description": "American roulette game.",
-                    "title": "American Roulette"
-                },
-                "classic": {
-                    "description": "Classic roulette game.",
-                    "title": "Classic Roulette"
-                },
-                "title": "Roulette"
-            },
-            "slots": {
-                "beer": {
-                    "description": "Slot game inspired by the best drink in the world.",
-                    "title": "Beer-Man"
-                },
-                "starwars": {
-                    "description": "Star Wars themed slot game.",
-                    "title": "Star Wars"
-                },
-                "stardewValley": {
-                    "description": "Stardew Valley themed slot game.",
-                    "title": "Stardew Valley"
-                },
-                "title": "Slots"
-            }
-        },
-        "landingPage": {
-            "cta": {
-                "exploreGames": "Explore games",
-                "join": "Join now",
-                "text": "Join thousands of players enjoying the best online casino experience. Get your 200% welcome bonus today.",
-                "title": "Ready to start your adventure?"
-            },
-            "features": {
-                "item1_description": "Over 100 premium casino games including slots, roulette, blackjack and more.",
-                "item1_title": "Game variety",
-                "item2_description": "Secure platform with top encryption and protection technologies.",
-                "item2_title": "Safe and reliable",
-                "item3_description": "Win big prizes with progressive jackpots and exclusive tournaments.",
-                "item3_title": "Big prizes",
-                "item4_description": "Optimized games for smooth experience on any device.",
-                "item4_title": "Fast experience",
-                "item5_description": "Join thousands of players in our casino community.",
-                "item5_title": "Active community",
-                "item6_description": "Receive welcome bonuses and special promotions regularly.",
-                "item6_title": "Exclusive bonuses",
-                "text": "We offer a premium casino experience with top features and full commitment to player satisfaction.",
-                "title": "Why choose Pakito's Gambling?"
-            },
-            "heroContent": {
-                "join": "Join",
-                "seeGames": "View games",
-                "text": "The best online casino experience with hundreds of games, bonuses and big prizes.",
-                "title": "Welcome to Pakito's Gambling"
-            },
-            "imagesGrid": {
-                "image1Text": "Win big prizes and enjoy every moment",
-                "image1Title": "Celebrate your wins",
-                "image2Text": "Enjoy a premium casino atmosphere with high quality graphics",
-                "image2Title": "Premium atmosphere",
-                "image3Text": "Access your games from any device. Responsive design.",
-                "image3Title": "Play anywhere",
-                "text": "Access your games from any device.",
-                "title": "Play anywhere"
-            },
-            "stats": {
-                "games": "Games",
-                "players": "Players",
-                "prizes": "Prizes",
-                "support": "Support"
-            }
-        },
-        "navbar": {
-            "allGames": "All games",
-            "favourites": "Favourites",
-            "home": "Home",
-            "login": "Sign in",
-            "menu": "Menu",
-            "register": "Sign up",
-            "userPill": {
-                "balance": "Add balance",
-                "coupon": "Enter coupon",
-                "guest": "Guest",
-                "logout": "Logout",
-                "settings": "User settings"
-            }
-        },
-        "profile": {
-            "title": "Profile",
-            "profileCard": {
-                "title": "Profile information",
-                "description": "Update your personal information"
-            },
-            "changePhoto": "Change photo",
-            "security": {
-                "title": "Security",
-                "description": "Manage your account security"
-            },
-            "danger": {
-                "title": "Danger zone",
-                "description": "This action is irreversible. All your data will be deleted.",
-                "deleteAccount": "Delete account"
-            }
-        }
+    "blackjack": {
+      "actions": {
+        "double": "Double",
+        "hit": "Hit",
+        "split": "Split",
+        "stand": "Stand"
+      },
+      "bkPays": "Blackjack pays 3 to 2",
+      "title": "Blackjack"
     },
-    "message": {
-        "error": {
-            "401": "Unauthorized",
-            "409": "Some of the data introduced already exists",
-            "429": "Bro, chill, to many request...",
-            "500": "Server error during the request",
-            "AUTH_EMAIL_ALREADY_REGISTERED": "An account with this email already exists",
-            "AUTH_INVALID_CREDENTIALS": "The email or the password is wrong",
-            "AUTH_INVALID_EMAIL": "Invalid email",
-            "AUTH_INVALID_PASSWORD_TOO_SHORT": "Password too short",
-            "AUTH_INVALID_REFRESH_TOKEN": "Invalid refresh token",
-            "AUTH_INVALID_SESSION": "Invalid session",
-            "AUTH_INVALID_TOKEN": "Invalid session token",
-            "AUTH_MISSING_FIELDS": "There's missing fields in the form",
-            "AUTH_NO_DATA_PROVIDED": "No data provided in the form",
-            "AUTH_NO_TOKEN_PROVIDED": "No auth token provided",
-            "AUTH_USER_REGISTERED": "Username already registered",
-            "INVALID_BET_AMOUNT": "Invalid bet amount setted",
-            "GAME_NOT_VALID": "Invalid game",
-            "SERVER_ERROR": "The server failed during the request",
-            "Update_User": "Error updating profile",
-            "bet0": "The bet can't be 0",
-            "noAdmin": "You don't have access to this",
-            "noLogin": "You need to be logged to access this"
-        },
-        "info": {
-            "loading": "Loading...",
-            "registered": "Your account is created, you need to go to the login page",
-            "userData": "User data received correctly",
-            "winningNumber": "Winning number"
-        },
-        "modal": {
-            "default": {
-                "accept": "Accept",
-                "cancel": "Cancel",
-                "title": "Modal title"
-            },
-            "logout": {
-                "accept": "Exit Pakito's",
-                "cancel": "Keep playing",
-                "title": "Are you sure you want to exit?"
-            }
-        },
-        "success": {
-            "AUTH_USER_LOGGED": "Logged successfully",
-            "AUTH_USER_REGISTERED": "Account registered successfully",
-            "BALANCE_ADDED_SUCCESSFULLY": "Balance updated successfully",
-            "LANGUAGE_CHANGED": "Language changed successfully",
-            "USER_UPDATED": "Profile updated",
-            "logout": "Logout successfully"
-        },
-        "warning": {
-            "cantDouble": "You don't have the currency to double",
-            "playFirstToRepeat": "Play 1 time to repeat the bet",
-            "selectChipFirst": "Select a chip first to place it",
-            "spinning": "Spinning..."
-        }
+    "result": {
+      "lose": "You lose :/",
+      "tie": "Tie",
+      "win": "You win!!!"
     },
-    "user": {}
+    "roulette": {
+      "Zero": "European Roulette",
+      "ZeroZero": "American Roulette",
+      "board": {
+        "black": "black",
+        "even": "even",
+        "green": "green",
+        "odd": "odd",
+        "red": "red"
+      },
+      "controls": {
+        "betAmount": "Bet amount",
+        "betAmountPlaceholder": "Insert bet amount",
+        "chipValue": "Chip value"
+      },
+      "lastNumbers": "Last numbers"
+    }
+  },
+  "general": {
+    "addBalance": {
+      "button": "Add balance",
+      "label": "Amount",
+      "min": "The amount must be greater than 1",
+      "placeholder": "Amount",
+      "required": "This field is required",
+      "title": "Add balance to account"
+    },
+    "copyright": "All rights reserved by The Mafia at the Back",
+    "form": {
+      "buttons": {
+        "cancel": "Cancel",
+        "login": "Login",
+        "register": "Register",
+        "update": "Update profile",
+        "changePassword": "Change password"
+      },
+      "confirmPassword": {
+        "label": "Confirm password",
+        "match": "Passwords do not match",
+        "placeholder": "Confirm password",
+        "required": "Confirm password is required"
+      },
+      "email": {
+        "label": "Email",
+        "pattern": "Invalid email format",
+        "placeholder": "Email",
+        "required": "Email is required"
+      },
+      "page": {
+        "login": "Login",
+        "register": "Sign up"
+      },
+      "password": {
+        "label": "Password",
+        "pattern": "Password must be at least 8 characters, include uppercase, lowercase and number or special character",
+        "placeholder": "Password",
+        "required": "Password is required",
+        "current": "Current password",
+        "new": "New password",
+        "confirm": "Repeat new password",
+        "minLength": "Minimum 8 characters"
+      },
+      "username": {
+        "label": "Username",
+        "maxLength": "Username must be at most 25 characters",
+        "minLength": "Username must be at least 3 characters",
+        "placeholder": "Username",
+        "required": "Username is required"
+      }
+    },
+    "home": {
+      "blackjack": {
+        "description": "Classic blackjack game.",
+        "title": "Blackjack"
+      },
+      "playNow": "Play now",
+      "roulette": {
+        "american": {
+          "description": "American roulette game.",
+          "title": "American Roulette"
+        },
+        "classic": {
+          "description": "Classic roulette game.",
+          "title": "Classic Roulette"
+        },
+        "title": "Roulette"
+      },
+      "slots": {
+        "beer": {
+          "description": "Slot game inspired by the best drink in the world.",
+          "title": "Beer-Man"
+        },
+        "starwars": {
+          "description": "Star Wars themed slot game.",
+          "title": "Star Wars"
+        },
+        "stardewValley": {
+          "description": "Stardew Valley themed slot game.",
+          "title": "Stardew Valley"
+        },
+        "title": "Slots"
+      }
+    },
+    "landingPage": {
+      "cta": {
+        "exploreGames": "Explore games",
+        "join": "Join now",
+        "text": "Join thousands of players enjoying the best online casino experience. Get your 200% welcome bonus today.",
+        "title": "Ready to start your adventure?"
+      },
+      "features": {
+        "item1_description": "Over 100 premium casino games including slots, roulette, blackjack and more.",
+        "item1_title": "Game variety",
+        "item2_description": "Secure platform with top encryption and protection technologies.",
+        "item2_title": "Safe and reliable",
+        "item3_description": "Win big prizes with progressive jackpots and exclusive tournaments.",
+        "item3_title": "Big prizes",
+        "item4_description": "Optimized games for smooth experience on any device.",
+        "item4_title": "Fast experience",
+        "item5_description": "Join thousands of players in our casino community.",
+        "item5_title": "Active community",
+        "item6_description": "Receive welcome bonuses and special promotions regularly.",
+        "item6_title": "Exclusive bonuses",
+        "text": "We offer a premium casino experience with top features and full commitment to player satisfaction.",
+        "title": "Why choose Pakito's Gambling?"
+      },
+      "heroContent": {
+        "join": "Join",
+        "seeGames": "View games",
+        "text": "The best online casino experience with hundreds of games, bonuses and big prizes.",
+        "title": "Welcome to Pakito's Gambling"
+      },
+      "imagesGrid": {
+        "image1Text": "Win big prizes and enjoy every moment",
+        "image1Title": "Celebrate your wins",
+        "image2Text": "Enjoy a premium casino atmosphere with high quality graphics",
+        "image2Title": "Premium atmosphere",
+        "image3Text": "Access your games from any device. Responsive design.",
+        "image3Title": "Play anywhere",
+        "text": "Access your games from any device.",
+        "title": "Play anywhere"
+      },
+      "stats": {
+        "games": "Games",
+        "players": "Players",
+        "prizes": "Prizes",
+        "support": "Support"
+      }
+    },
+    "navbar": {
+      "allGames": "All games",
+      "favourites": "Favourites",
+      "home": "Home",
+      "login": "Sign in",
+      "menu": "Menu",
+      "register": "Sign up",
+      "userPill": {
+        "balance": "Add balance",
+        "coupon": "Enter coupon",
+        "guest": "Guest",
+        "logout": "Logout",
+        "settings": "User settings"
+      }
+    },
+    "profile": {
+      "title": "Profile",
+      "profileCard": {
+        "title": "Profile information",
+        "description": "Update your personal information"
+      },
+      "changePhoto": "Change photo",
+      "security": {
+        "title": "Security",
+        "description": "Manage your account security"
+      },
+      "danger": {
+        "title": "Danger zone",
+        "description": "This action is irreversible. All your data will be deleted.",
+        "deleteAccount": "Delete account"
+      }
+    }
+  },
+  "message": {
+    "error": {
+      "401": "Unauthorized",
+      "409": "Some of the data introduced already exists",
+      "429": "Bro, chill, to many request...",
+      "500": "Server error during the request",
+      "AUTH_EMAIL_ALREADY_REGISTERED": "An account with this email already exists",
+      "AUTH_INVALID_CREDENTIALS": "The email or the password is wrong",
+      "AUTH_INVALID_EMAIL": "Invalid email",
+      "AUTH_INVALID_PASSWORD_TOO_SHORT": "Password too short",
+      "AUTH_INVALID_REFRESH_TOKEN": "Invalid refresh token",
+      "AUTH_INVALID_SESSION": "Invalid session",
+      "AUTH_INVALID_TOKEN": "Invalid session token",
+      "AUTH_MISSING_FIELDS": "There's missing fields in the form",
+      "AUTH_NO_DATA_PROVIDED": "No data provided in the form",
+      "AUTH_NO_TOKEN_PROVIDED": "No auth token provided",
+      "AUTH_USER_REGISTERED": "Username already registered",
+      "INVALID_BET_AMOUNT": "Invalid bet amount setted",
+      "GAME_NOT_VALID": "Invalid game",
+      "SERVER_ERROR": "The server failed during the request",
+      "Update_User": "Error updating profile",
+      "bet0": "The bet can't be 0",
+      "noAdmin": "You don't have access to this",
+      "noLogin": "You need to be logged to access this"
+    },
+    "info": {
+      "loading": "Loading...",
+      "registered": "Your account is created, you need to go to the login page",
+      "userData": "User data received correctly",
+      "winningNumber": "Winning number"
+    },
+    "modal": {
+      "default": {
+        "accept": "Accept",
+        "cancel": "Cancel",
+        "title": "Modal title"
+      },
+      "logout": {
+        "accept": "Exit Pakito's",
+        "cancel": "Keep playing",
+        "title": "Are you sure you want to exit?"
+      }
+    },
+    "success": {
+      "AUTH_USER_LOGGED": "Logged successfully",
+      "AUTH_USER_REGISTERED": "Account registered successfully",
+      "BALANCE_ADDED_SUCCESSFULLY": "Balance updated successfully",
+      "LANGUAGE_CHANGED": "Language changed successfully",
+      "USER_UPDATED": "Profile updated",
+      "logout": "Logout successfully"
+    },
+    "warning": {
+      "cantDouble": "You don't have the currency to double",
+      "playFirstToRepeat": "Play 1 time to repeat the bet",
+      "selectChipFirst": "Select a chip first to place it",
+      "spinning": "Spinning..."
+    }
+  },
+  "user": {}
 }

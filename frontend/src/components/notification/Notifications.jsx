@@ -6,11 +6,13 @@ import NotificationModal from "./NotificationModal.jsx"
 const Notifications = () => {
   const { notifications } = useNotification()
 
-  if (!notifications || notifications.length === 0) return null
+  const global = notifications?.global || []
+
+  if (global.length === 0) return null
 
   return (
-    <div className="fixed top-5 left-5 flex flex-col gap-2 z-50">
-      {notifications.global.map((notification) => {
+    <div className="fixed top-5 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-50">
+      {global.map((notification) => {
         switch (notification?.type) {
           case "modal":
             return (

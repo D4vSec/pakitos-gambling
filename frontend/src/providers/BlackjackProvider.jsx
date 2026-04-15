@@ -3,8 +3,8 @@ import useAPI from "@/hooks/useAPI"
 import { useNotification } from "@/providers/NotificationProvider"
 import { useSession } from "./SessionProvider"
 import { useLocale } from "./LocaleProvider"
-import { info } from "autoprefixer"
 
+// TODO: No poder apostar negativo
 const BlackjackContext = createContext()
 
 const GAME_ID_KEY = "blackjackGameId"
@@ -131,7 +131,12 @@ const BlackjackProvider = ({ children }) => {
       }, 3000)
       removeGameId()
       addNotification(t(`message.success.${res.code}`), "success")
-      addNotification("cucuuuuuuuuuuu", "info", { scope: "games" })
+      /*
+      addNotification("cucuuuuuuuuuuu", "info", {
+        scope: "games",
+        duration: 2000,
+      })
+      */
     } catch (error) {
       addNotification(t(`message.error.${error.message}`), "error")
     }
