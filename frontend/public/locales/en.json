@@ -225,6 +225,7 @@
       "AUTH_NO_DATA_PROVIDED": "No data provided in the form",
       "AUTH_NO_TOKEN_PROVIDED": "No auth token provided",
       "AUTH_USER_REGISTERED": "Username already registered",
+      "INSUFFICIENT_BALANCE": "You don't have enough balance to place this bet",
       "INVALID_BET_AMOUNT": "Invalid bet amount setted",
       "GAME_NOT_VALID": "Invalid game",
       "SERVER_ERROR": "The server failed during the request",

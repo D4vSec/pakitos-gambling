@@ -17,6 +17,7 @@ import {
 
 const RouletteContext = createContext()
 
+// TODO: No poner mas fichas si no te da el saldo
 const HOST = "localhost:3000"
 
 const RouletteProvider = ({ children }) => {
@@ -38,12 +39,8 @@ const RouletteProvider = ({ children }) => {
   const [winningNums, setWinningNums] = useState([])
   const [lastBet, setLastBet] = useState({})
 
-  const {
-    getRefreshToken,
-    getAccessToken,
-    updateBalance,
-    user: balance,
-  } = useSession()
+  const { getRefreshToken, getAccessToken, updateBalance, user } = useSession()
+  const { balance } = user
   const { addNotification } = useNotification()
   const { post } = useAPI()
   const { t } = useLocale()
@@ -51,6 +48,11 @@ const RouletteProvider = ({ children }) => {
   const updateBets = (bet) => {
     if (!selectedChip || selectedChip <= 0) {
       addNotification(t("message.warning.selectChipFirst"), "warning")
+      return
+    }
+
+    if (balance < selectedChip) {
+      addNotification(t("message.warning.insufficientBalance"), "error")
       return
     }
 
@@ -191,6 +193,9 @@ const RouletteProvider = ({ children }) => {
       )
 
       const payout = getTotalPayout(res)
+      console.log("ae", payout)
+
+      // TODO: REVISA ESO APUESTAS Y TE DEVUELVE LO APOSTADO
       updateBalance("deposit", payout)
 
       setLastBet(game)
@@ -223,7 +228,9 @@ const RouletteProvider = ({ children }) => {
 
   const getGameOutcome = (gameResult) => {
     const totalPayout = getTotalPayout(gameResult)
+    console.log("payout", totalPayout)
     const totalBet = getTotalBet(gameResult)
+    console.log("bet", totalBet)
 
     if (totalPayout > totalBet) return "win"
     if (totalPayout < totalBet) return "lose"

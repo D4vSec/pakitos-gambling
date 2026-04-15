@@ -4,7 +4,6 @@ import { useNotification } from "@/providers/NotificationProvider"
 import { useSession } from "./SessionProvider"
 import { useLocale } from "./LocaleProvider"
 
-// TODO: No poder apostar negativo
 const BlackjackContext = createContext()
 
 const GAME_ID_KEY = "blackjackGameId"
@@ -18,23 +17,38 @@ const BlackjackProvider = ({ children }) => {
   const [game, setGame] = useState({})
   const [betAmount, setBetAmount] = useState("")
   const [lastBetAmount, setLastBetAmount] = useState("")
+  const [baseBet, setBaseBet] = useState("")
 
-  const { getRefreshToken, getAccessToken, updateBalance } = useSession()
+  const { user, getRefreshToken, getAccessToken, updateBalance } = useSession()
+  const { balance } = user
   const { addNotification } = useNotification()
   const { t } = useLocale()
   const { get, post, destroy } = useAPI()
 
   const updateBetAmount = (amount) => setBetAmount(amount)
-  const clearBet = () => setBetAmount(0)
+  const clearBet = () => setBetAmount("")
   const repeatBet = () => setBetAmount(lastBetAmount)
   const doubleBet = () => setBetAmount((prev) => prev * 2)
 
+  const theresAmount = () => {
+    if (betAmount > Number(balance)) {
+      addNotification(t("message.error.INSUFFICIENT_BALANCE"), "error")
+      return false
+    }
+    return true
+  }
+
+  const formatMoney = (value) => {
+    return Math.round(Number(value) * 100) / 100
+  }
+
   const startGame = async () => {
+    if (!theresAmount()) return
     updateBalance("withdrawal", betAmount)
     setLastBetAmount(betAmount)
+    setBaseBet(betAmount)
 
     const url = `http://${HOST}/v1/blackjack/start`
-    console.log("am", betAmount)
 
     try {
       const res = await post(url, {
@@ -43,19 +57,14 @@ const BlackjackProvider = ({ children }) => {
           Authorization: `Bearer ${getAccessToken()}`,
         },
         body: {
-          amount: betAmount,
+          amount: formatMoney(betAmount),
         },
       })
 
-      if (res.code) {
-        throw new Error(res.code)
-      }
+      if (res.code) throw new Error(res.code)
 
-      if (res.gameId) {
-        setGameId(res.gameId)
-      }
+      if (res.gameId) setGameId(res.gameId)
 
-      console.log("start", res)
       setGame(res)
     } catch (error) {
       addNotification(t(`message.error.${error.message}`), "error")
@@ -73,19 +82,21 @@ const BlackjackProvider = ({ children }) => {
         },
       })
 
-      if (res.code) {
-        throw new Error(res.code)
-      }
+      if (res.code) throw new Error(res.code)
 
-      if (res.gameId) {
-        setGameId(res.gameId)
-      }
+      if (res.gameId) setGameId(res.gameId)
 
-      console.log("continue", res)
       setGame(res)
-      setBetAmount(
-        res?.player?.map((hand) => hand.bet).reduce((acc, bet) => acc + bet, 0),
-      )
+
+      const totalBet = res?.player
+        ?.map((hand) => hand.bet)
+        .reduce((acc, bet) => acc + bet, 0)
+
+      setBetAmount(formatMoney(totalBet))
+
+      if (res?.player?.length > 0) {
+        setBaseBet(res.player[0].bet)
+      }
     } catch (error) {
       addNotification(t(`message.error.${error.message}`), "error")
     }
@@ -93,15 +104,17 @@ const BlackjackProvider = ({ children }) => {
 
   const finishGame = async (game) => {
     const winner = game.winners[0]
+
     let type
     let message
+
     if (winner === "dealer") {
       type = "error"
       message = "lose"
     } else if (winner === "player") {
       type = "success"
       message = "win"
-    } else if (winner === "Tie") {
+    } else {
       type = "info"
       message = "tie"
     }
@@ -123,20 +136,15 @@ const BlackjackProvider = ({ children }) => {
         throw new Error(res.code)
       }
 
-      console.log("end", res)
-
-      // Para que las cartas no desaparezcan instantáneamente
       setTimeout(() => {
         setGame({})
       }, 3000)
+
       removeGameId()
+
+      setBaseBet(0)
+
       addNotification(t(`message.success.${res.code}`), "success")
-      /*
-      addNotification("cucuuuuuuuuuuu", "info", {
-        scope: "games",
-        duration: 2000,
-      })
-      */
     } catch (error) {
       addNotification(t(`message.error.${error.message}`), "error")
     }
@@ -153,11 +161,8 @@ const BlackjackProvider = ({ children }) => {
         },
       })
 
-      if (res.code) {
-        throw new Error(res.code)
-      }
+      if (res.code) throw new Error(res.code)
 
-      console.log("currentState", res)
       setGame(res)
     } catch (error) {
       addNotification(t(`message.error.${error.message}`), "error")
@@ -166,17 +171,19 @@ const BlackjackProvider = ({ children }) => {
 
   const hit = async () => await play("hit")
   const stand = async () => await play("stand")
+
   const double = async () => {
+    if (!theresAmount()) return
     await play("double")
-    setBetAmount((prev) => prev * 2)
-    setLastBetAmount((prev) => prev * 2)
-    updateBalance("withdrawal", betAmount)
+    setBetAmount((prev) => formatMoney(prev * 2))
+    updateBalance("withdrawal", formatMoney(baseBet))
   }
+
   const split = async () => {
+    if (!theresAmount()) return
     await play("split")
-    setBetAmount((prev) => prev * 2)
-    setLastBetAmount((prev) => prev * 2)
-    updateBalance("withdrawal", betAmount)
+    setBetAmount((prev) => formatMoney(prev + baseBet))
+    updateBalance("withdrawal", formatMoney(baseBet))
   }
 
   useEffect(() => {

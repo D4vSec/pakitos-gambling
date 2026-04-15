@@ -17,7 +17,16 @@ const BettingInput = ({ bet, readOnly }) => {
           value={betAmount ?? ""}
           readOnly={readOnly || false}
           min={0}
-          onChange={(e) => updateBetAmount(Number(e.target.value))}
+          step={0.01}
+          onChange={(e) => {
+            const value = e.target.value
+            if (value === "") {
+              updateBetAmount("")
+              return
+            }
+            const parsed = Number(value)
+            updateBetAmount(Number(parsed.toFixed(2)))
+          }}
           className="input w-full"
         />
       </div>
