@@ -4,3 +4,6 @@
 // TODO: El dealer si detecta que ya ha ganado no sigue sacando cartas, p.ej:
 // si tengo 11, hago stand y el dealer tiene un 3 y la carta que estaba hidden es una J (13)
 // El dealer no sigue sacando cartas, el dealer tiene que sacar si o si hasta llegar a 17 o mas
+
+// TODO: Se puede dividir mas de 2 manos pero a la hora de calcular el fin del juego en el
+// te plantas con 2 las siguientes manos se la pela
