@@ -17,7 +17,6 @@ import {
 
 const RouletteContext = createContext()
 
-// TODO: No poner mas fichas si no te da el saldo
 const HOST = "localhost:3000"
 
 const RouletteProvider = ({ children }) => {
@@ -52,7 +51,7 @@ const RouletteProvider = ({ children }) => {
     }
 
     if (balance < selectedChip) {
-      addNotification(t("message.warning.insufficientBalance"), "error")
+      addNotification(t("message.error.INSUFFICIENT_BALANCE"), "error")
       return
     }
 
@@ -103,9 +102,14 @@ const RouletteProvider = ({ children }) => {
       addNotification(t("message.warning.playFirstToRepeat"), "warning")
       return
     }
+
+    clearBets()
+    console.log("bb", lastBet.bets)
+    console.log("l", lastBet)
     setGame(lastBet)
     const lastAmount = getTotalBet(lastBet)
     setBetAmount(lastAmount)
+    updateBalance("withdrawal", lastAmount)
   }
 
   const clearBets = () => {
@@ -121,15 +125,21 @@ const RouletteProvider = ({ children }) => {
   }
 
   const doubleBets = () => {
+    const totalCurrent = betAmount
+    const totalAfterDouble = totalCurrent * 2
+
+    if (totalCurrent === 0) {
+      addNotification(t("message.error.INVALID_BET_AMOUNT"), "warning")
+      return
+    }
+
+    if (balance < totalAfterDouble) {
+      addNotification(t("message.warning.cantDouble"), "warning")
+      return
+    }
+    updateBalance("withdrawal", totalCurrent)
+
     setGame((prev) => {
-      const totalCurrent = betAmount
-      const totalAfterDouble = totalCurrent * 2
-
-      if (balance < totalAfterDouble) {
-        addNotification(t("message.warning.cantDouble"), "warning")
-        return prev
-      }
-
       return {
         ...prev,
         bets: prev.bets.map((bet) => ({
@@ -193,9 +203,7 @@ const RouletteProvider = ({ children }) => {
       )
 
       const payout = getTotalPayout(res)
-      console.log("ae", payout)
 
-      // TODO: REVISA ESO APUESTAS Y TE DEVUELVE LO APOSTADO
       updateBalance("deposit", payout)
 
       setLastBet(game)
@@ -204,7 +212,11 @@ const RouletteProvider = ({ children }) => {
         [res?.result?.winningNumber, ...prev].slice(0, 10),
       )
 
-      clearBets()
+      setGame((prev) => ({
+        ...prev,
+        bets: [],
+      }))
+      setBetAmount(0)
     } catch (error) {
       addNotification(t(`message.error.${error.message}`), "error")
     }
