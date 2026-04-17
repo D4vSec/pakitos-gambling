@@ -103,6 +103,11 @@ const RouletteProvider = ({ children }) => {
       return
     }
 
+    if (balance < lastBet.bets.reduce((total, bet) => total + bet.amount, 0)) {
+      addNotification(t("message.error.INSUFFICIENT_BALANCE"), "error")
+      return
+    }
+
     clearBets()
     console.log("bb", lastBet.bets)
     console.log("l", lastBet)
