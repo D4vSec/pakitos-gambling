@@ -1,22 +1,22 @@
 import React from "react"
 import { useRoulette } from "@/providers/RouletteProvider"
-import { BETTING_GROUPS, PIECE_COLORS } from "../rouletteConsts"
+import { PIECE_COLORS } from "../rouletteConsts"
 
-const NumberBet = ({ item, children, hover }) => {
+const NumberBet = React.memo(({ item, children, highlightedSet }) => {
   const { type } = useRoulette()
 
   if (!item) return null
 
   let bgClass = PIECE_COLORS.default.base
   let highlightClass = PIECE_COLORS.default.hover
-  const hoverClass = PIECE_COLORS[item.color]?.hoverClass
+  const hoverClass = PIECE_COLORS[item.color]?.hoverClass || ""
 
   if (item.color && PIECE_COLORS[item.color]) {
     bgClass = PIECE_COLORS[item.color].base
     highlightClass = PIECE_COLORS[item.color].hover
   }
 
-  const isHighlighted = BETTING_GROUPS[hover]?.includes(item.bet)
+  const isHighlighted = highlightedSet.has(item.bet)
   const bgColor = isHighlighted ? highlightClass : bgClass
 
   let gridClass = `roulette${item.bet}`
@@ -36,6 +36,6 @@ const NumberBet = ({ item, children, hover }) => {
       </div>
     </button>
   )
-}
+})
 
 export default NumberBet
