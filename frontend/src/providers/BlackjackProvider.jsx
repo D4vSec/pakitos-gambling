@@ -13,11 +13,15 @@ const getGameId = () => localStorage.getItem(GAME_ID_KEY)
 const setGameId = (id) => localStorage.setItem(GAME_ID_KEY, id)
 const removeGameId = () => localStorage.removeItem(GAME_ID_KEY)
 
+// TODo: Revisar lso payouts con el split o no se q coño pasa
 const BlackjackProvider = ({ children }) => {
   const [game, setGame] = useState({})
   const [betAmount, setBetAmount] = useState("")
   const [lastBetAmount, setLastBetAmount] = useState("")
   const [baseBet, setBaseBet] = useState("")
+
+  // TODO: Añadir esto para que na vaya con timeouts
+  const [allShown, setAllShown] = useState(false)
 
   const { user, getRefreshToken, getAccessToken, updateBalance } = useSession()
   const { balance } = user
@@ -25,6 +29,7 @@ const BlackjackProvider = ({ children }) => {
   const { t } = useLocale()
   const { get, post, destroy } = useAPI()
 
+  const updateAllShown = (value) => setAllShown(value)
   const updateBetAmount = (amount) => setBetAmount(amount)
   const clearBet = () => setBetAmount("")
   const repeatBet = () => setBetAmount(lastBetAmount)
@@ -40,6 +45,24 @@ const BlackjackProvider = ({ children }) => {
 
   const formatMoney = (value) => {
     return Math.round(Number(value) * 100) / 100
+  }
+
+  const getGlobalWinner = (winners = []) => {
+    const counts = winners.reduce((acc, w) => {
+      acc[w] = (acc[w] || 0) + 1
+      return acc
+    }, {})
+
+    const entries = Object.entries(counts)
+
+    if (entries.length === 0) return null
+
+    const max = Math.max(...entries.map(([, v]) => v))
+    const top = entries.filter(([, v]) => v === max)
+
+    if (top.length > 1) return "tie"
+
+    return top[0][0]
   }
 
   const startGame = async () => {
@@ -103,23 +126,19 @@ const BlackjackProvider = ({ children }) => {
   }
 
   const finishGame = async (game) => {
-    const winner = game.winners[0]
+    console.log(game)
+    const winner = getGlobalWinner(game?.winners)
+    let type =
+      winner === "dealer" ? "error" : winner === "player" ? "success" : "info"
+    let message =
+      winner === "dealer" ? "lose" : winner === "player" ? "win" : "tie"
 
-    let type
-    let message
+    addNotification(t(`games.result.${message}`), type, {
+      scope: "games",
+      duration: 4000,
+      payout: game?.payout,
+    })
 
-    if (winner === "dealer") {
-      type = "error"
-      message = "lose"
-    } else if (winner === "player") {
-      type = "success"
-      message = "win"
-    } else {
-      type = "info"
-      message = "tie"
-    }
-
-    addNotification(t(`games.result.${message}`), type)
     updateBalance("deposit", game?.payout)
 
     const url = `http://${HOST}/v1/blackjack/${getGameId()}`
@@ -138,7 +157,7 @@ const BlackjackProvider = ({ children }) => {
 
       setTimeout(() => {
         setGame({})
-      }, 3000)
+      }, 4000)
 
       removeGameId()
 
@@ -206,6 +225,8 @@ const BlackjackProvider = ({ children }) => {
     stand,
     double,
     split,
+    allShown,
+    updateAllShown,
   }
 
   return <BlackjackContext value={value}>{children}</BlackjackContext>

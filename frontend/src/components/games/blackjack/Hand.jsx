@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react"
 import Card from "./Card"
 
-const Hand = ({ hand }) => {
+const Hand = ({ hand, isActive }) => {
   const cards = hand?.hand || []
 
   const [revealedCount, setRevealedCount] = useState(0)
@@ -90,6 +90,7 @@ const Hand = ({ hand }) => {
                     forceHidden={
                       card.rank === "hidden" || card.suit === "hidden"
                     }
+                    isActive={isActive}
                   />
                 </div>
               </div>

@@ -5,13 +5,33 @@ import Clubs from "./suits/Clubs"
 import Spades from "./suits/Spades"
 import CherrySVG from "@/components/svg/CherrySVG"
 
-const Card = ({ card, forceHidden = false, animate = true }) => {
+// TODO: Meter glow cuando pierdes / ganas
+const Card = ({
+  card,
+  forceHidden = false,
+  animate = true,
+  isActive = false,
+}) => {
   const { rank, suit } = card
 
   const isFaceDown = forceHidden || rank === "hidden" || suit === "hidden"
 
   const [mounted, setMounted] = useState(false)
   const [flipped, setFlipped] = useState(!isFaceDown)
+
+  const color = {
+    Hearts: "text-red-500",
+    Diamonds: "text-red-500",
+    Clubs: "text-black",
+    Spades: "text-black",
+  }
+
+  const symbol = {
+    Hearts: <Hearts />,
+    Diamonds: <Diamonds />,
+    Clubs: <Clubs />,
+    Spades: <Spades />,
+  }
 
   useEffect(() => {
     setMounted(false)
@@ -37,20 +57,6 @@ const Card = ({ card, forceHidden = false, animate = true }) => {
     }
   }, [rank, suit, isFaceDown, animate])
 
-  const color = {
-    Hearts: "text-red-500",
-    Diamonds: "text-red-500",
-    Clubs: "text-black",
-    Spades: "text-black",
-  }
-
-  const symbol = {
-    Hearts: <Hearts />,
-    Diamonds: <Diamonds />,
-    Clubs: <Clubs />,
-    Spades: <Spades />,
-  }
-
   return (
     <div
       className={`w-20 h-28 perspective-[1000px] transition-all duration-300 ${
@@ -64,7 +70,8 @@ const Card = ({ card, forceHidden = false, animate = true }) => {
         <div
           className={`absolute w-full h-full bg-white ${
             isFaceDown ? "" : color[suit]
-          } font-bold text-xl rounded-lg p-2 flex flex-col gap-1 backface-hidden border border-gray-200 shadow-md`}>
+          } font-bold text-xl rounded-lg p-2 flex flex-col gap-1 backface-hidden border border-gray-200 shadow-md}
+          ${isActive ? "ring-4 ring-green-400" : ""}`}>
           {!isFaceDown && <p className="ml-1">{rank}</p>}
           {!isFaceDown && symbol[suit]}
         </div>
