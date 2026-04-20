@@ -32,7 +32,7 @@ const ExternalBet = React.memo(
 
     return (
       <button
-        className={`${gridClass} ${bgColor} ${hoverClass} text-white font-bold flex justify-center items-center border border-gray-700 rounded relative transition-colors duration-200 ease-in-out`}
+        className={`${gridClass} ${bgColor} ${hoverClass} text-white font-bold aspect-square md:aspect-auto w-full h-full flex justify-center items-center border border-gray-700 rounded relative transition-colors duration-200 ease-in-out`}
         data-info={JSON.stringify(item)}
         onMouseEnter={handleEnter}
         onMouseLeave={handleLeave}>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react"
 import Card from "./Card"
 
+// TODO : que las manos no hagan puf al eliminarse
 const Hand = ({ hand, isActive }) => {
   const cards = hand?.hand || []
 

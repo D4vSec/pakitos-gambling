@@ -6,6 +6,7 @@ import ExternalBet from "./ExternalBet"
 import { BETTING_GROUPS } from "../rouletteConsts"
 import "./RouletteBoard.css"
 
+// TODO: Mejorar el rendimiento de esto sin cargarme las chips
 const RouletteBoard = () => {
   const [hoveredCell, setHoveredCell] = useState(null)
 
@@ -13,7 +14,6 @@ const RouletteBoard = () => {
 
   const values = getRouletteValues()
 
-  // 🔥 O(1) lookup en vez de includes
   const highlightedSet = useMemo(() => {
     return new Set(BETTING_GROUPS[hoveredCell] || [])
   }, [hoveredCell])
@@ -46,7 +46,32 @@ const RouletteBoard = () => {
 
   return (
     <div
-      className="grid grid-cols-[repeat(10,1fr)] grid-rows-[repeat(28,1fr)] md:grid-cols-[repeat(28,1fr)] md:grid-rows-[repeat(10,1fr)] gap-1 w-full h-full text-black"
+      className="
+    grid
+    grid-cols-10 grid-rows-28
+    md:grid-cols-28 md:grid-rows-10
+    gap-1
+    /* MOBILE (base) */
+    h-[calc(100%-1rem)]
+    w-[calc(100%-0.5rem)]
+    /* SM */
+    sm:h-[calc(100%-1.5rem)]
+    sm:w-[calc(100%-1rem)]
+    /* MD */
+    md:h-[calc(100%-2rem)]
+    md:w-[calc(100%-1.5rem)]
+    /* LG */
+    lg:h-[calc(100%-4rem)]
+    lg:w-[calc(100%-1rem)]
+    /* XL */
+    xl:h-[calc(100%-2rem)]
+    xl:w-[calc(100%-3rem)]
+    /* 2XL */
+    2xl:h-[calc(100%-2rem)]
+    2xl:w-[calc(100%-6rem)]
+    aspect-[10/28] md:aspect-[28/10]
+    text-white
+  "
       onClick={handleClick}>
       {numbers.map((cell) => (
         <NumberBet key={cell.text} item={cell} highlightedSet={highlightedSet}>

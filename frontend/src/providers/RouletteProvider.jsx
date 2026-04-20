@@ -1,7 +1,7 @@
 import React, {
   createContext,
   useContext,
-  useEffect,
+  useCallback,
   useState,
   useMemo,
 } from "react"
@@ -156,27 +156,37 @@ const RouletteProvider = ({ children }) => {
     setBetAmount((prev) => prev * 2)
   }
 
-  const getChipsForCell = (cell) => {
-    const bet = game.bets.find(
-      (b) => b.type === cell.type && b.bet === cell.bet,
-    )
-
-    if (!bet) return []
-
-    const chips = []
-    let remaining = bet.amount
+  const chipsCache = useMemo(() => {
+    const cache = new Map()
 
     const sortedChips = [...CHIPS].sort((a, b) => b.value - a.value)
 
-    for (const chip of sortedChips) {
-      while (remaining >= chip.value) {
-        chips.push(chip)
-        remaining -= chip.value
+    for (const bet of game.bets) {
+      let remaining = bet.amount
+      const chips = []
+
+      for (const chip of sortedChips) {
+        while (remaining >= chip.value) {
+          chips.push(chip)
+          remaining -= chip.value
+        }
       }
+
+      // clave única por celda
+      const key = `${bet.type}-${bet.bet}`
+      cache.set(key, chips)
     }
 
-    return chips
-  }
+    return cache
+  }, [game.bets])
+
+  const getChipsForCell = useCallback(
+    (cell) => {
+      const key = `${cell.type}-${cell.bet}`
+      return chipsCache.get(key) || []
+    },
+    [chipsCache],
+  )
 
   const spin = async () => {
     const url = `http://${HOST}/v1/roulette/spin`
@@ -196,26 +206,35 @@ const RouletteProvider = ({ children }) => {
 
       console.log("rouletteStatus", res)
 
-      addNotification(
-        `${t("message.info.winningNumber")}: ${res?.result?.winningNumber === 37 ? "00" : res?.result?.winningNumber} | ${t(`games.roulette.board.${res?.result?.color}`)}`,
-        "info",
-      )
-
       const outcome = getGameOutcome(res)
-      addNotification(
-        t(`games.result.${outcome}`),
-        outcome === "win" ? "success" : outcome === "lose" ? "error" : "info",
-      )
 
       const payout = getTotalPayout(res)
 
       updateBalance("deposit", payout)
 
+      const winningNumber =
+        res?.result?.winningNumber === 37 ? "00" : res?.result?.winningNumber
+
+      addNotification(
+        `${t("message.info.winningNumber")}: ${res?.result?.winningNumber === 37 ? "00" : res?.result?.winningNumber} | ${t(`games.roulette.board.${res?.result?.color}`)}`,
+        outcome === "win" ? "success" : outcome === "lose" ? "error" : "info",
+        {
+          scope: "games",
+          duration: 4000,
+          game: "roulette",
+          outcome: outcome,
+          number: winningNumber,
+          payout: payout,
+        },
+      )
+
       setLastBet(game)
 
-      setWinningNums((prev) =>
-        [res?.result?.winningNumber, ...prev].slice(0, 10),
-      )
+      setTimeout(() => {
+        setWinningNums((prev) =>
+          [res?.result?.winningNumber, ...prev].slice(0, 10),
+        )
+      }, [300])
 
       setGame((prev) => ({
         ...prev,
