@@ -69,7 +69,7 @@ const RouletteBoard = () => {
     /* 2XL */
     2xl:h-[calc(100%-2rem)]
     2xl:w-[calc(100%-6rem)]
-    aspect-[10/28] md:aspect-[28/10]
+    aspect-10/28 md:aspect-28/10
     text-white
   "
       onClick={handleClick}>

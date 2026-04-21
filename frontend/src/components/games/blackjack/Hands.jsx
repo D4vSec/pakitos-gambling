@@ -1,21 +1,54 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import Hand from "./Hand"
 
 const Hands = ({ player, hands, gameState }) => {
-  if (!Array.isArray(hands) || hands.length === 0) return null
+  const [fade, setFade] = useState(false)
+  const [visible, setVisible] = useState(true)
 
-  const hasSplit = hands.length > 1
+  const safeHands = Array.isArray(hands) ? hands : []
+
+  const hasSplit = safeHands.length > 1
 
   const activeIndex =
     gameState === "finished"
       ? null
       : hasSplit
-        ? hands.findIndex((hand) => !hand.resolved)
+        ? safeHands.findIndex((hand) => !hand.resolved)
         : null
 
+  useEffect(() => {
+    if (gameState === "finished") {
+      setFade(false)
+      setVisible(true)
+
+      const t = setTimeout(() => {
+        setFade(true)
+      }, 2700)
+
+      const t2 = setTimeout(() => {
+        setVisible(false)
+      }, 3000)
+
+      return () => {
+        clearTimeout(t)
+        clearTimeout(t2)
+      }
+    } else {
+      setFade(false)
+      setVisible(true)
+    }
+  }, [gameState])
+
+  if (!safeHands.length || !visible) return null
+
   return (
-    <div className="flex gap-8">
-      {hands.map((hand, i) => (
+    <div
+      className={`
+        flex gap-8
+        transition-opacity duration-700 ease-out
+        ${fade ? "opacity-0" : "opacity-100"}
+      `}>
+      {safeHands.map((hand, i) => (
         <Hand
           key={i}
           hand={hand}

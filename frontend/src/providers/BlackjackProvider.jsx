@@ -135,7 +135,7 @@ const BlackjackProvider = ({ children }) => {
 
     addNotification(t(`games.result.${message}`), type, {
       scope: "games",
-      duration: 4000,
+      duration: 3000,
       payout: game?.payout,
     })
 

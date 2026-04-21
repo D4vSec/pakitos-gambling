@@ -59,7 +59,7 @@ const Card = ({
 
   return (
     <div
-      className={`w-20 h-28 perspective-[1000px] transition-all duration-300 ${
+      className={`w-17 h-23 md:w-20 md:h-28 perspective-[1000px] transition-all duration-300 ${
         mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
       }`}>
       <div
