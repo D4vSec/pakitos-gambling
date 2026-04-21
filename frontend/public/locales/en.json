@@ -26,6 +26,22 @@
       "tie": "Tie",
       "win": "You win!!!"
     },
+    "slots": {
+      "title": "Slots",
+      "3x3": "3x3 Machine",
+      "3x5": "3x5 Machine",
+      "5x5": "5x5 Machine",
+      "description": "Classic slot machine. Match symbols across the paylines to win. The rarer the symbol, the higher the payout!",
+      "controls": {
+        "betAmount": "Bet amount",
+        "betAmountPlaceholder": "Enter bet amount",
+        "startSession": "Start game",
+        "spin": "Spin",
+        "endSession": "End session",
+        "spins": "Spins",
+        "totalPayout": "Total payout"
+      }
+    },
     "roulette": {
       "Zero": "European Roulette",
       "ZeroZero": "American Roulette",
@@ -226,6 +242,8 @@
       "AUTH_NO_TOKEN_PROVIDED": "No auth token provided",
       "AUTH_USER_REGISTERED": "Username already registered",
       "INSUFFICIENT_BALANCE": "You don't have enough balance to place this bet",
+      "INSUFFICIENT_FUNDS": "Insufficient funds to continue playing",
+      "GAME_NOT_FOUND": "Game session not found",
       "INVALID_BET_AMOUNT": "Invalid bet amount setted",
       "GAME_NOT_VALID": "Invalid game",
       "SERVER_ERROR": "The server failed during the request",

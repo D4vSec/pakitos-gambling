@@ -1,18 +1,49 @@
-import React, { createContext, useCallback, useContext, useState } from "react";
-import useAPI from "@/hooks/useAPI";
-import { useSession } from "@/providers/SessionProvider";
-import { useNotification } from "@/providers/NotificationProvider";
+import React, { createContext, useCallback, useContext, useEffect, useState } from "react"
+import useAPI from "@/hooks/useAPI"
+import { useSession } from "@/providers/SessionProvider"
+import { useNotification } from "@/providers/NotificationProvider"
+import { useLocale } from "@/providers/LocaleProvider"
 
 const SlotsContext = createContext()
+
+const GAME_ID_KEY = "slotsGameId"
+const PAYLINES_KEY = "slotsPaylines"
+
+const getStoredGameId = () => localStorage.getItem(GAME_ID_KEY)
+const setStoredGameId = (id) => localStorage.setItem(GAME_ID_KEY, id)
+const removeStoredGameId = () => localStorage.removeItem(GAME_ID_KEY)
+
+const getStoredPaylines = () => {
+  try {
+    const raw = localStorage.getItem(PAYLINES_KEY)
+    return raw ? JSON.parse(raw) : null
+  } catch {
+    return null
+  }
+}
+const setStoredPaylines = (paylines) =>
+  localStorage.setItem(PAYLINES_KEY, JSON.stringify(paylines))
+const removeStoredPaylines = () => localStorage.removeItem(PAYLINES_KEY)
+
+const getDimensionsFromType = (machineType) => {
+  const map = {
+    "3x3": { rows: 3, cols: 3 },
+    "3x5": { rows: 3, cols: 5 },
+    "5x5": { rows: 5, cols: 5 },
+  }
+  return map[machineType] ?? { rows: 3, cols: 5 }
+}
 
 const SlotsProvider = ({ children }) => {
   const { post, get, destroy, loading: apiLoading } = useAPI()
   const { getAccessToken, getRefreshToken, setUser } = useSession()
   const { addNotification } = useNotification()
+  const { t } = useLocale()
 
   const [session, setSession] = useState(null)
   const [spins, setSpins] = useState([])
   const [loading, setLoading] = useState(false)
+  const [isSpinning, setIsSpinning] = useState(false)
   const [error, setError] = useState(null)
 
   const authHeaders = useCallback(() => {
@@ -47,16 +78,17 @@ const SlotsProvider = ({ children }) => {
       }
       setSession(newSession)
       setSpins([])
+      setStoredGameId(res.gameId)
+      setStoredPaylines(res.paylines)
 
-      // update balance in session provider if present
-      if (res.balance && setUser) {
-        setUser((prev) => ({ ...prev, balance: String(res.balance) }))
+      if (res.balance != null) {
+        setUser((prev) => ({ ...prev, balance: Number(res.balance).toFixed(2) }))
       }
 
       return res
     } catch (err) {
       setError(err.message)
-      addNotification(`Slots error: ${err.message}`, "error")
+      addNotification(t(`message.error.${err.message}`) || err.message, "error")
       throw err
     } finally {
       setLoading(false)
@@ -65,6 +97,7 @@ const SlotsProvider = ({ children }) => {
 
   const spin = async (gameId) => {
     setLoading(true)
+    setIsSpinning(true)
     setError(null)
     try {
       const res = await post(`/api/v1/slots/${gameId}/spin`, {
@@ -75,7 +108,6 @@ const SlotsProvider = ({ children }) => {
         throw new Error(res?.code || "UNKNOWN_ERROR")
       }
 
-      // append spin result
       const spinResult = {
         spinNumber: res.spinNumber,
         grid: res.grid,
@@ -87,20 +119,18 @@ const SlotsProvider = ({ children }) => {
 
       setSpins((s) => [...s, spinResult])
 
-      // update session summary minimal fields
-      setSession((prev) => (prev ? { ...prev, bet: res.bet } : prev))
-
-      if (res.balance && setUser) {
-        setUser((prev) => ({ ...prev, balance: String(res.balance) }))
+      if (res.balance != null) {
+        setUser((prev) => ({ ...prev, balance: Number(res.balance).toFixed(2) }))
       }
 
       return res
     } catch (err) {
       setError(err.message)
-      addNotification(`Slots error: ${err.message}`, "error")
+      addNotification(t(`message.error.${err.message}`) || err.message, "error")
       throw err
     } finally {
       setLoading(false)
+      setIsSpinning(false)
     }
   }
 
@@ -111,10 +141,16 @@ const SlotsProvider = ({ children }) => {
       const res = await get(`/api/v1/slots/${gameId}`, { headers: authHeaders() })
       if (!res || res.code) throw new Error(res?.code || "UNKNOWN_ERROR")
 
+      const { rows, cols } = getDimensionsFromType(res.machineType)
+      const paylines = getStoredPaylines()
+
       setSession({
         gameId: res.gameId,
         machineType: res.machineType,
         bet: res.bet,
+        rows,
+        cols,
+        paylines,
         totalSpins: res.totalSpins,
         totalPayout: res.totalPayout,
         createdAt: res.createdAt,
@@ -124,7 +160,7 @@ const SlotsProvider = ({ children }) => {
       return res
     } catch (err) {
       setError(err.message)
-      addNotification(`Slots error: ${err.message}`, "error")
+      addNotification(t(`message.error.${err.message}`) || err.message, "error")
       throw err
     } finally {
       setLoading(false)
@@ -138,19 +174,30 @@ const SlotsProvider = ({ children }) => {
       const res = await destroy(`/api/v1/slots/${gameId}`, { headers: authHeaders() })
       if (!res || res.code) throw new Error(res?.code || "UNKNOWN_ERROR")
 
-      // clear local session state
       setSession(null)
       setSpins([])
+      removeStoredGameId()
+      removeStoredPaylines()
 
       return res
     } catch (err) {
       setError(err.message)
-      addNotification(`Slots error: ${err.message}`, "error")
+      addNotification(t(`message.error.${err.message}`) || err.message, "error")
       throw err
     } finally {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    const storedId = getStoredGameId()
+    if (storedId) {
+      getSession(storedId).catch(() => {
+        removeStoredGameId()
+        removeStoredPaylines()
+      })
+    }
+  }, [])
 
   const value = {
     createSession,
@@ -159,6 +206,7 @@ const SlotsProvider = ({ children }) => {
     endSession,
     session,
     spins,
+    isSpinning,
     loading: loading || apiLoading,
     error,
   }

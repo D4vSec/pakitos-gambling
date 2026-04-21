@@ -99,6 +99,35 @@
                 "update": "Actualizează profilul"
             }
         },
+        "games": {
+            "slots": {
+                "title": "Sloturi",
+                "3x3": "Mașină 3x3",
+                "3x5": "Mașină 3x5",
+                "5x5": "Mașină 5x5",
+                "description": "Slot clasic. Aliniază simbolurile pe liniile de câștig pentru a câștiga. Cu cât simbolul este mai rar, cu atât câștigul este mai mare!",
+                "controls": {
+                    "betAmount": "Suma pariată",
+                    "betAmountPlaceholder": "Introduceți suma",
+                    "startSession": "Începe jocul",
+                    "spin": "Rotește",
+                    "endSession": "Încheie sesiunea",
+                    "spins": "Rotiri",
+                    "totalPayout": "Câștig total"
+                }
+            },
+            "result": {
+                "win": "Ai câștigat!",
+                "lose": "Fără noroc...",
+                "tie": "Egal"
+            },
+            "actions": {
+                "bet": "Pariază",
+                "clearBet": "Șterge pariul",
+                "doubleBet": "Dublează pariul",
+                "repeatBet": "Repetă pariul"
+            }
+        },
         "home" : {
             "playNow":"Joacă acum",
             "slots": {

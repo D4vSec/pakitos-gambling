@@ -22,6 +22,22 @@
             "tie": "Empate",
             "win": "¡Has ganado!"
         },
+        "slots": {
+            "title": "Tragaperras",
+            "3x3": "Máquina 3x3",
+            "3x5": "Máquina 3x5",
+            "5x5": "Máquina 5x5",
+            "description": "Tragaperras clásica. Alinea símbolos en las líneas de pago para ganar. ¡Cuanto más raro el símbolo, mayor el premio!",
+            "controls": {
+                "betAmount": "Cantidad de apuesta",
+                "betAmountPlaceholder": "Introduce una cantidad",
+                "startSession": "Iniciar partida",
+                "spin": "Girar",
+                "endSession": "Terminar sesión",
+                "spins": "Tiradas",
+                "totalPayout": "Premio total"
+            }
+        },
         "roulette": {
             "Zero": "Ruleta europea",
             "ZeroZero": "Ruleta americana",
@@ -222,6 +238,8 @@
             "AUTH_NO_TOKEN_PROVIDED": "No se ha proporcionado token de autenticación",
             "AUTH_USER_REGISTERED": "El nombre de usuario ya está registrado",
             "INVALID_BET_AMOUNT": "Cantidad de apuesta no válida",
+            "INSUFFICIENT_FUNDS": "Fondos insuficientes para continuar jugando",
+            "GAME_NOT_FOUND": "Sesión de juego no encontrada",
             "SERVER_ERROR": "El servidor falló durante la petición",
             "Update_User": "Error al actualizar el perfil",
             "bet0": "La apuesta no puede ser 0",
