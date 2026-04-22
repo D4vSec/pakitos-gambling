@@ -1,12 +1,11 @@
-import User from "#models/userModel"
-import * as z from "zod"
-import { hashPassword } from "#utils/password"
+import User from '#models/userModel'
+import * as z from 'zod'
 
 const getProfile = async (req, res) => {
 	try {
 		const user = await User.findUserById(req.user.id)
 
-		if (!user) return res.status(404).json({ code: "USER_NOT_FOUND" })
+		if (!user) return res.status(404).json({ code: 'USER_NOT_FOUND' })
 
 		res.json({
 			id: user.id,
@@ -17,7 +16,7 @@ const getProfile = async (req, res) => {
 		})
 	} catch (err) {
 		console.error(err)
-		res.status(500).json({ code: "SERVER_ERROR" })
+		res.status(500).json({ code: 'SERVER_ERROR' })
 	}
 }
 
@@ -27,7 +26,7 @@ const getAllUsers = async (req, res) => {
 		res.json(users || [])
 	} catch (err) {
 		console.error(err)
-		res.status(500).json({ code: "SERVER_ERROR" })
+		res.status(500).json({ code: 'SERVER_ERROR' })
 	}
 }
 
@@ -36,12 +35,12 @@ const deleteSelf = async (req, res) => {
 		const userId = req.user.id
 		const deleted = await User.deleteUser(userId)
 
-		if (!deleted) return res.status(404).json({ code: "USER_NOT_FOUND" })
+		if (!deleted) return res.status(404).json({ code: 'USER_NOT_FOUND' })
 
 		res.status(204).send()
 	} catch (err) {
 		console.error(err)
-		res.status(500).json({ code: "SERVER_ERROR" })
+		res.status(500).json({ code: 'SERVER_ERROR' })
 	}
 }
 
@@ -58,22 +57,17 @@ const updateSelf = async (req, res) => {
 			.strict()
 
 		const data = schema.parse(req.body)
-
-		if (data.password) {
-			data.password = await hashPassword(data.password)
-		}
-
 		const updated = await User.updateUser(userId, data)
 
-		if (!updated) return res.status(404).json({ code: "USER_NOT_FOUND" })
+		if (!updated) return res.status(404).json({ code: 'USER_NOT_FOUND' })
 
-		res.status(200).json({ code: "SUCCESS" })
+		res.status(200).json({ code: 'SUCCESS' })
 	} catch (err) {
 		if (err instanceof z.ZodError) {
 			return res.status(400).json({ errors: err.errors })
 		}
 		console.error(err)
-		res.status(500).json({ code: "SERVER_ERROR" })
+		res.status(500).json({ code: 'SERVER_ERROR' })
 	}
 }
 
@@ -82,7 +76,7 @@ const getUserById = async (req, res) => {
 		const { id } = req.params
 		const user = await User.findUserById(id)
 
-		if (!user) return res.status(404).json({ code: "USER_NOT_FOUND" })
+		if (!user) return res.status(404).json({ code: 'USER_NOT_FOUND' })
 
 		res.json({
 			id: user.id,
@@ -93,7 +87,7 @@ const getUserById = async (req, res) => {
 		})
 	} catch (err) {
 		console.error(err)
-		res.status(500).json({ code: "SERVER_ERROR" })
+		res.status(500).json({ code: 'SERVER_ERROR' })
 	}
 }
 
@@ -106,27 +100,25 @@ const updateUserById = async (req, res) => {
 				username: z.string().min(3).max(50).optional(),
 				email: z.string().email().optional(),
 				password: z.string().min(8).optional(),
-				role: z.enum(["user", "admin"]).optional(),
+				role: z.enum(['user', 'admin']).optional(),
 			})
 			.strict()
 
 		const data = schema.parse(req.body)
 
-		if (data.password) {
-			data.password = await hashPassword(data.password)
-		}
+		// Password hashing is handled by the model (`User.updateUser`).
 
 		const updated = await User.updateUser(id, data)
 
-		if (!updated) return res.status(404).json({ code: "USER_NOT_FOUND" })
+		if (!updated) return res.status(404).json({ code: 'USER_NOT_FOUND' })
 
-		res.status(200).json({ code: "SUCCESS" })
+		res.status(200).json({ code: 'SUCCESS' })
 	} catch (err) {
 		if (err instanceof z.ZodError) {
 			return res.status(400).json({ errors: err.errors })
 		}
 		console.error(err)
-		res.status(500).json({ code: "SERVER_ERROR" })
+		res.status(500).json({ code: 'SERVER_ERROR' })
 	}
 }
 
@@ -135,12 +127,12 @@ const deleteUserById = async (req, res) => {
 		const { id } = req.params
 		const deleted = await User.deleteUser(id)
 
-		if (!deleted) return res.status(404).json({ code: "USER_NOT_FOUND" })
+		if (!deleted) return res.status(404).json({ code: 'USER_NOT_FOUND' })
 
 		res.status(204).send()
 	} catch (err) {
 		console.error(err)
-		res.status(500).json({ code: "SERVER_ERROR" })
+		res.status(500).json({ code: 'SERVER_ERROR' })
 	}
 }
 
@@ -149,12 +141,12 @@ const getSelfBalance = async (req, res) => {
 		const userId = req.user.id
 		const balance = await User.getUserBalance(userId)
 
-		if (balance === null) return res.status(404).json({ code: "USER_NOT_FOUND" })
+		if (balance === null) return res.status(404).json({ code: 'USER_NOT_FOUND' })
 
 		res.json({ balance })
 	} catch (err) {
 		console.error(err)
-		res.status(500).json({ code: "SERVER_ERROR" })
+		res.status(500).json({ code: 'SERVER_ERROR' })
 	}
 }
 
@@ -174,7 +166,7 @@ const getTransactions = async (req, res) => {
 	} catch (err) {
 		if (err instanceof z.ZodError) return res.status(400).json({ errors: err.errors })
 		console.error(err)
-		res.status(500).json({ code: "SERVER_ERROR" })
+		res.status(500).json({ code: 'SERVER_ERROR' })
 	}
 }
 
@@ -182,21 +174,21 @@ const createTransaction = async (req, res) => {
 	try {
 		const schema = z
 			.object({
-				type: z.enum(["deposit", "withdrawal"]),
+				type: z.enum(['deposit', 'withdrawal']),
 				amount: z.number().positive(),
 			})
 			.strict()
 
 		if (!req.body || Object.keys(req.body).length === 0) {
 			return res.status(400).json({
-				code: "INVALID_TRANSACTION_DATA",
+				code: 'INVALID_TRANSACTION_DATA',
 			})
 		}
 
 		const parseResult = schema.safeParse(req.body)
 		if (!parseResult.success) {
 			return res.status(400).json({
-				code: "INVALID_TRANSACTION_DATA",
+				code: 'INVALID_TRANSACTION_DATA',
 			})
 		}
 
@@ -204,29 +196,29 @@ const createTransaction = async (req, res) => {
 
 		if (!type || !amount)
 			return res.status(400).json({
-				code: "INVALID_TRANSACTION_DATA",
+				code: 'INVALID_TRANSACTION_DATA',
 			})
 
 		const userId = req.user.id
 
 		const user = await User.findUserById(userId)
-		if (!user) return res.status(404).json({ code: "USER_NOT_FOUND" })
+		if (!user) return res.status(404).json({ code: 'USER_NOT_FOUND' })
 
-		const signedAmount = type === "deposit" ? amount : -amount
+		const signedAmount = type === 'deposit' ? amount : -amount
 		const newBalance = await User.updateUserBalance(userId, signedAmount)
 
 		if (newBalance === null) {
-			if (type === "withdrawal") {
-				return res.status(400).json({ code: "INSUFFICIENT_FUNDS" })
+			if (type === 'withdrawal') {
+				return res.status(400).json({ code: 'INSUFFICIENT_FUNDS' })
 			}
-			return res.status(500).json({ code: "ERROR_UPDATING_BALANCE" })
+			return res.status(500).json({ code: 'ERROR_UPDATING_BALANCE' })
 		}
 
 		res.status(200).json({ balance: newBalance })
 	} catch (err) {
 		if (err instanceof z.ZodError) return res.status(400).json({ errors: err.errors })
 		console.error(err)
-		res.status(500).json({ code: "SERVER_ERROR" })
+		res.status(500).json({ code: 'SERVER_ERROR' })
 	}
 }
 
@@ -243,27 +235,15 @@ const getTransactionsByUserId = async (req, res) => {
 		const { page = 1, limit = 20 } = schema.parse(req.query)
 
 		const user = await User.findUserById(id)
-		if (!user) return res.status(404).json({ code: "USER_NOT_FOUND" })
+		if (!user) return res.status(404).json({ code: 'USER_NOT_FOUND' })
 
 		const txs = await User.findTransactionsByUser(id, page, limit)
 		res.json({ page, limit, transactions: txs })
 	} catch (err) {
 		if (err instanceof z.ZodError) return res.status(400).json({ errors: err.errors })
 		console.error(err)
-		res.status(500).json({ code: "SERVER_ERROR" })
+		res.status(500).json({ code: 'SERVER_ERROR' })
 	}
 }
 
-export {
-	getProfile,
-	getAllUsers,
-	deleteSelf,
-	updateSelf,
-	getUserById,
-	updateUserById,
-	deleteUserById,
-	getSelfBalance,
-	getTransactions,
-	createTransaction,
-	getTransactionsByUserId,
-}
+export { getProfile, getAllUsers, deleteSelf, updateSelf, getUserById, updateUserById, deleteUserById, getSelfBalance, getTransactions, createTransaction, getTransactionsByUserId }
