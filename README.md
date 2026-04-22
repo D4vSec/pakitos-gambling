@@ -1,5 +1,5 @@
 # Pakitos Gambling
-Project of a simulated online casino developed as a Final Project (TFG) for the Higher Degree in Web Application Development (DAW).
+Simulated online casino project developed as a Final Degree Project (TFG) for the Higher Degree in Web Application Development (DAW).
 
 ## Team Members
 - [David González](https://github.com/D4vSec)
