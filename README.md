@@ -19,16 +19,20 @@ Project of a simulated online casino developed as a Final Project (TFG) for the 
 To facilitate development and deployment, the project is fully dockerized. 
 > **Note for Windows users:** It is required to use **WSL2** (Windows Subsystem for Linux) to run the project correctly.
 
+### Permissions
+```bash
+chmod +x start.sh
+```
+
 ### Development Mode
-**Linux**
 ```bash
 bash start.sh dev
 ```
 
 ### Production Mode
-**Linux**
 ```bash
 bash start.sh
 ```
+
 ### Resource Management (WSL2)
 On Windows, the command `powershell -Command "Start-Process wsl -ArgumentList '--shutdown' -Verb RunAs"` stops the containers and terminate the Docker process to prevent it from over-consuming RAM within the WSL2 utility VM.
