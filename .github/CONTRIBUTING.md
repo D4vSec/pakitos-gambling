@@ -1,126 +1,105 @@
-# Guía de Contribución
+# Contributing Guide
 
-Para mantener un repositorio limpio y profesional, sigue las siguientes convenciones y pasos.
+To keep the repository clean and professional, follow the conventions and steps below.
 
-## Convenciones de Código
+## Code Conventions
 
-Se recomienda seguir [Conventional Commits](https://www.conventionalcommits.org/) para mantener un historial de commits claro y estructurado.
+We recommend following [Conventional Commits](https://www.conventionalcommits.org/) to maintain a clear and structured commit history.
 
-| Tipo          | Descripción                                                         |
-| ------------- | ------------------------------------------------------------------- |
-| **feat:**     | Nueva funcionalidad                                                 |
-| **fix:**      | Corrección de errores                                               |
-| **docs:**     | Cambios en documentación                                            |
-| **style:**    | Formato, estilo, puntos y comas, sin afectar lógica                 |
-| **refactor:** | Refactorización de código sin añadir funcionalidad ni corregir bugs |
-| **test:**     | Añadir o modificar pruebas                                          |
-| **chore:**    | Cambios en tareas de build, configuración, scripts                  |
-| **perf:**     | Mejoras de rendimiento                                              |
-| **build:**    | Cambios que afectan el sistema de build o dependencias              |
+| Type          | Description                                                      |
+| ------------- | ---------------------------------------------------------------- |
+| **feat:**     | New functionality                                                |
+| **fix:**      | Bug fixes                                                        |
+| **docs:**     | Documentation changes                                            |
+| **style:**    | Formatting, style, punctuation, without affecting logic          |
+| **refactor:** | Code refactoring without adding features or fixing bugs          |
+| **test:**     | Adding or modifying tests                                        |
+| **chore:**    | Changes to build tasks, configuration, or scripts                |
+| **perf:**     | Performance improvements                                         |
+| **build:**    | Changes that affect the build system or dependencies             |
+| **security:** | Vulnerability patches                                            |
 
-**Ejemplo de commit:**
+**Commit examples:**
 
 ```
-feat: añadir sistema de bonos para usuarios
-fix: corregir cálculo de saldo en blackjack
-docs: actualizar README con guía de despliegue
-style: formatear código según reglas de ESLint
-refactor: optimizar función de validación de apuestas
-test: añadir pruebas unitarias para módulo de pago
-chore: actualizar dependencias en package.json
-chore: renombrar variables de entorno en .env
-chore: eliminar archivos obsoletos del proyecto
-chore: ajustar configuración de docker-compose.yml
+feat: add a bonus system for users
+fix: correct blackjack balance calculation
+docs: update README with deployment guide
+style: format code according to ESLint rules
+refactor: optimize bet validation function
+test: add unit tests for the payment module
+chore: update dependencies in package.json
+chore: rename environment variables in .env
+chore: remove obsolete project files
+chore: adjust docker-compose.yml configuration
 ```
 
 ### Breaking Changes
 
-Los **BREAKING CHANGES** se indican con un **!** después del tipo o con BREAKING CHANGE: en el cuerpo del commit.
+**BREAKING CHANGES** are indicated with a **!** after the type or with `BREAKING CHANGE:` in the commit body.
 
-**Ejemplos:**
-
-```
-feat!: eliminar soporte para API v1
-refactor!: cambiar estructura de la base de datos
-```
+**Examples:**
 
 ```
-feat: migrar a nueva arquitectura de microservicios
-
-BREAKING CHANGE: La API ahora requiere autenticación JWT en todos los endpoints
+feat!: remove support for API v1
+refactor!: change the database structure
 ```
 
-## Versionado Semántico (SemVer)
+```
+feat: migrate to a new microservices architecture
 
-Seguimos Semantic Versioning `MAJOR.MINOR.PATCH` (e.g., 1.2.3):
+BREAKING CHANGE: The API now requires JWT authentication on all endpoints
+```
+
+## Semantic Versioning (SemVer)
+
+We follow Semantic Versioning `MAJOR.MINOR.PATCH` (e.g., 1.2.3):
 
 ```
 v1.2.3
- │ │ └─── PATCH: fixes backwards-compatible
- │ └───── MINOR: nuevas features backwards-compatible
+ │ │ └─── PATCH: backward-compatible fixes
+ │ └───── MINOR: backward-compatible new features
  └─────── MAJOR: breaking changes
 ```
 
-### Cómo se versiona:
+### How versioning works
 
-| Tipo de Cambio         | Incremento | Ejemplo       | Descripción                                    |
-| ---------------------- | ---------- | ------------- | ---------------------------------------------- |
-| Breaking Change        | MAJOR      | 1.2.3 → 2.0.0 | Cambios incompatibles con versiones anteriores |
-| Nueva Feature (feat)   | MINOR      | 1.2.3 → 1.3.0 | Funcionalidades nuevas compatibles             |
-| Bug Fix (fix)          | PATCH      | 1.2.3 → 1.2.4 | Corrección de errores                          |
-| Otros (docs, chore...) | PATCH      | 1.2.3 → 1.2.4 | Mejoras internas                               |
+| Change Type            | Increment | Example       | Description                               |
+| ---------------------- | --------- | ------------- | ----------------------------------------- |
+| Breaking Change        | MAJOR     | 1.2.3 -> 2.0.0 | Changes incompatible with previous versions |
+| New Feature (feat)     | MINOR     | 1.2.3 -> 1.3.0 | New backward-compatible functionality     |
+| Bug Fix (fix)          | PATCH     | 1.2.3 -> 1.2.4 | Bug fixes                                 |
+| Others (docs, chore...) | PATCH    | 1.2.3 -> 1.2.4 | Internal improvements                     |
 
-### Flujo de Versiones y Releases
+### Version and Release Flow
 
-#### Etapas de Release:
+#### Release Stages
 
-| Etapa / Rama      | Versión / Estado | Descripción                          |
-| ----------------- | ---------------- | ------------------------------------ |
-| feature/          | N/A              | Desarrollo de nuevas funcionalidades |
-| develop           | N/A              | Integración de features en testing   |
-| Release Candidate | v1.1.0-rc.1      | Pruebas antes de versión estable     |
-| Stable            | v1.0.0 / v1.1.0  | Versión estable del proyecto         |
+| Stage / Branch    | Version / Status | Description                        |
+| ----------------- | ---------------- | ---------------------------------- |
+| feature/          | N/A              | Development of new features        |
+| develop           | N/A              | Feature integration in testing     |
+| Release Candidate | v1.1.0-rc.1      | Testing before a stable release    |
+| Stable            | v1.0.0 / v1.1.0  | Stable project release             |
 
-#### Tipos de Pre-releases:
+#### Pre-release Types
 
-| Tipo de Pre-release | Versión        | Descripción                                    |
-| ------------------- | -------------- | ---------------------------------------------- |
-| Release Candidate   | v1.2.0-rc.1    | Release Candidate 1 (pruebas antes de estable) |
-| Release Candidate   | v1.2.0-rc.2    | Release Candidate 2                            |
-| Beta                | v1.2.0-beta.1  | Beta 1 (pruebas tempranas)                     |
-| Alpha               | v1.2.0-alpha.1 | Alpha 1 (desarrollo interno)                   |
+| Pre-release Type  | Version        | Description                                  |
+| ----------------- | -------------- | -------------------------------------------- |
+| Release Candidate | v1.2.0-rc.1    | Release Candidate 1 (testing before stable)  |
+| Release Candidate | v1.2.0-rc.2    | Release Candidate 2                          |
+| Beta              | v1.2.0-beta.1  | Beta 1 (early testing)                       |
+| Alpha             | v1.2.0-alpha.1 | Alpha 1 (internal development)               |
 
-#### Ejemplo de Evolución de Versiones:
+#### Version Evolution Example
 
-| Versión       | Tipo / Estado                   | Descripción                              |
-| ------------- | ------------------------------- | ---------------------------------------- |
-| v1.0.0        | Estable                         | Versión estable inicial                  |
-| v1.0.1        | Patch / Fix crítico             | Corrección de errores críticos           |
-| v1.1.0-rc.1   | Pre-release / Release Candidate | Nueva feature en testing                 |
-| v1.1.0        | Minor / Feature estable         | Nueva feature estable                    |
-| v1.1.1        | Patch / Fix menor               | Corrección de errores menores            |
-| v1.2.0-beta.1 | Pre-release / Beta              | Más features en beta                     |
-| v2.0.0-rc.1   | Pre-release / Breaking change   | Breaking changes en testing              |
-| v2.0.0        | Major / Breaking change         | Nueva major version con breaking changes |
-
-## Configuración del Entorno
-
-**1. Clonar el repositorio:**
-
-```bash
-git clone https://github.com/D4vSec/pakitos-gambling.git
-cd pakitos-gambling
-```
-
-**2. Copiar archivo de entorno:**
-
-```bash
-cp .env.example .env
-```
-
-**3. Levantar contenedores:**
-
-```bash
-chmod +x ./build-and-run.sh
-./build-and-run.sh
-```
+| Version       | Type / Status                  | Description                           |
+| ------------- | ------------------------------ | ------------------------------------- |
+| v1.0.0        | Stable                         | Initial stable release                |
+| v1.0.1        | Patch / Critical fix           | Critical bug fix                      |
+| v1.1.0-rc.1   | Pre-release / Release Candidate | New feature in testing               |
+| v1.1.0        | Minor / Stable feature         | New stable feature                    |
+| v1.1.1        | Patch / Minor fix              | Minor bug fix                         |
+| v1.2.0-beta.1 | Pre-release / Beta             | More features in beta                 |
+| v2.0.0-rc.1   | Pre-release / Breaking change  | Breaking changes in testing           |
+| v2.0.0        | Major / Breaking change        | New major version with breaking changes |
