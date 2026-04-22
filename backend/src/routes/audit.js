@@ -4,6 +4,6 @@ import getAuditLogs from "#controllers/auditController"
 
 const auditRoutes = express.Router()
 
-auditRoutes.post("/", adminMiddleware, getAuditLogs)
+auditRoutes.get("/", adminMiddleware, getAuditLogs)
 
 export default auditRoutes
