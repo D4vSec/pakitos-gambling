@@ -1,6 +1,6 @@
 # Pakitos Gambling
 
-Pakitos Gambling is a **simulated online casino** developed as a final project for the **Higher Vocational Training program in Web Application Development (FP DAW)**.
+Pakitos Gambling is a **simulated online casino** developed as a final project for the **Higher Degree in Web Application Development (DAW) in Web Application Development (FP DAW)**.
 
 It is a full-stack web application with a React frontend, an Express backend, PostgreSQL as the database, and Docker-based environments for both development and deployment.
 
