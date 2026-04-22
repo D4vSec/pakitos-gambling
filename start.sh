@@ -1,6 +1,6 @@
 #!/bin/bash
 if [ ! -f .env ]; then
-    echo "Error: No se encuentra el fichero .env"
+    echo "Error: .env file not found. Please create a .env file with the necessary database configuration."
     exit 1
 fi
 
@@ -12,25 +12,25 @@ export CURRENT_UID=$(id -u 2>/dev/null || echo 1000)
 export CURRENT_GID=$(id -g 2>/dev/null || echo 1000)
 
 if [ "$1" == "dev" ]; then
-    echo "--- MODO DESARROLLO (HOT RELOAD ACTIVO) ---"
+    echo "--- DEVELOPMENT MODE ---"
     docker compose -f docker-compose.dev.yml up -d --build
 
-    echo -e "\n¡Entorno de desarrollo listo!"
+    echo -e "\nDevelopment environment ready!"
     echo "Frontend (Vite): http://localhost:5173"
     echo "Backend API: http://localhost:${API_PORT}"
-    echo "Para ver logs en tiempo real: docker-compose -f docker-compose.dev.yml logs -f"
+    echo "To view real-time logs: docker-compose -f docker-compose.dev.yml logs -f"
 else
-    echo "--- MODO PRODUCCIÓN (APACHE) ---"
+    echo "--- PRODUCTION MODE (APACHE) ---"
     
-    echo "Construyendo frontend estático..."
+    echo "Building static frontend..."
     cd frontend
     npm run build
     cd ..
 
-    echo "Levantando contenedores de producción..."
+    echo "Starting production containers..."
     docker-compose up -d --build
 
-    echo -e "\n¡Aplicación en producción lista!"
+    echo -e "\nProduction environment ready!"
     echo "Frontend (Apache): http://localhost:80"
     echo "Backend API: http://localhost:${API_PORT}"
 fi

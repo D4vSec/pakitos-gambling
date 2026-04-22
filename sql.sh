@@ -1,6 +1,6 @@
 #!/bin/bash
 if [ ! -f .env ]; then
-    echo "Error: No se encuentra el fichero .env"
+    echo "Error: .env file not found. Please create a .env file with the necessary database configuration."
     exit 1
 fi
 
