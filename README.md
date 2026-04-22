@@ -1,54 +1,34 @@
 # Pakitos Gambling
+Project of a simulated online casino developed as a Final Project (TFG) for the Higher Degree in Web Application Development (DAW).
 
-Proyecto de un casino online simulado desarrollado como Trabajo de Fin de Grado (TFG) del ciclo superior Desarrollo de Aplicaciones Web (DAW).
-
-## Integrantes
-
+## Team Members
 - [Alexandro Stefan Dezso](https://github.com/Roria1324)
 - [David González](https://github.com/D4vSec)
 - [Nain Pontes](https://github.com/Stevankito)
 - [Yeray Caturla](https://github.com/yeraox)
 
-## Stack Tecnológico
-
-| Área          | Tecnologías                                   |
+## Tech Stack
+| Area          | Technologies                                  |
 | ------------- | --------------------------------------------- |
 | Frontend      | React, TailwindCSS, GSAP, React Router, Axios |
 | Backend       | NodeJS, Express, JWT, Crypto                  |
-| Base de datos | PostgreSQL                                    |
+| Database      | PostgreSQL                                    |
 | DevOps        | Docker, Docker Compose                        |
 
-## Instalación y Despliegue
+## Installation and Deployment
+To facilitate development and deployment, the project is fully dockerized. 
+> Note for Windows users:** It is required to use **WSL2** (Windows Subsystem for Linux) to run the project correctly.
 
-Para facilitar el desarrollo y el despliegue, el proyecto está completamente dockerizado.
-
-### Modo Desarrollo
-
-**Windows**
-
-```ps1
-./start.bat dev
-```
-
+### Development Mode
 **Linux**
-
 ```bash
 bash start.sh dev
 ```
 
-### Modo Producción
-
-**Windows**
-
-```ps1
-./start.bat prod
-```
-
+### Production Mode
 **Linux**
-
 ```bash
 bash start.sh
 ```
-
-### Gestión de Recursos (WSL2)
-En Windows, se incluye el comando `./start.bat stop` para parar los contenedores y finalizar el proceso de docker para que no se este comiendo la RAM.
+### Resource Management (WSL2)
+On Windows, the command `powershell -Command "Start-Process wsl -ArgumentList '--shutdown' -Verb RunAs"` stops the containers and terminate the Docker process to prevent it from over-consuming RAM within the WSL2 utility VM.
