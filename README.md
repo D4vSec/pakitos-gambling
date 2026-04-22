@@ -17,7 +17,7 @@ Project of a simulated online casino developed as a Final Project (TFG) for the 
 
 ## Installation and Deployment
 To facilitate development and deployment, the project is fully dockerized. 
-> Note for Windows users:** It is required to use **WSL2** (Windows Subsystem for Linux) to run the project correctly.
+> **Note for Windows users:** It is required to use **WSL2** (Windows Subsystem for Linux) to run the project correctly.
 
 ### Development Mode
 **Linux**
