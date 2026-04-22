@@ -6,6 +6,9 @@ import { useLocale } from "@/providers/LocaleProvider"
 import Button from "@/components/buttons/Button"
 import BitcoinSVG from "@/components/svg/BitcoinSVG"
 
+// Must match STOP_DELAYS last value (700) + SlotReel landing timeout (550)
+const NOTIF_DELAY_MS = 700 + 550
+
 const SlotControls = ({ type = "3x3" }) => {
   const { session, spins, loading, createSession, spin, endSession } = useSlots()
   const { user } = useSession()
