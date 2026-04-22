@@ -2,15 +2,15 @@
 Project of a simulated online casino developed as a Final Project (TFG) for the Higher Degree in Web Application Development (DAW).
 
 ## Team Members
-- [Alexandro Stefan Dezso](https://github.com/Roria1324)
 - [David González](https://github.com/D4vSec)
-- [Nain Pontes](https://github.com/Stevankito)
 - [Yeray Caturla](https://github.com/yeraox)
+- [Nain Pontes](https://github.com/Stevankito)
+- [Alexandro Stefan Dezso](https://github.com/Roria1324)
 
 ## Tech Stack
 | Area          | Technologies                                  |
 | ------------- | --------------------------------------------- |
-| Frontend      | React, TailwindCSS, GSAP, React Router, Axios |
+| Frontend      | React, TailwindCSS, GSAP, React Router |
 | Backend       | NodeJS, Express, JWT, Crypto                  |
 | Database      | PostgreSQL                                    |
 | DevOps        | Docker, Docker Compose                        |
