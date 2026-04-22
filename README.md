@@ -52,7 +52,3 @@ bash start.sh
 
 ### Gestión de Recursos (WSL2)
 En Windows, se incluye el comando `./start.bat stop` para parar los contenedores y finalizar el proceso de docker para que no se este comiendo la RAM.
-
-## Licencia
-
-MIT License – consultar archivo LICENSE.
