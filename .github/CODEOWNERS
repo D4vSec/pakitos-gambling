@@ -1,0 +1,16 @@
+# Default owner for everything
+* @D4vSec
+
+# Backend & Database
+/backend/   @yeraox @D4vSec
+/sql/        @yeraox @D4vSec
+
+# Frontend
+/frontend/   @Stevankito @Roria1324 @D4vSec
+
+# Shared Docs
+/docs/       @yeraox @Stevankito @Roria1324 @D4vSec
+
+# Infrastructure
+/docker/     @D4vSec
+/.github/    @D4vSec
