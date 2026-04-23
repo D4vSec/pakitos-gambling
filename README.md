@@ -44,6 +44,7 @@ Grant execution permissions to the startup script if needed:
 
 ```bash
 chmod +x start.sh
+chmod +x sql.sh
 ```
 
 Run the development environment:
@@ -57,6 +58,12 @@ bash start.sh dev
 > ```bash
 > sed -i 's/\r$//' start.sh
 > ```
+
+Import teh database:
+
+```bash
+bash sql.sh
+```
 
 Available services in development:
 
