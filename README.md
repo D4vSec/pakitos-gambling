@@ -59,7 +59,7 @@ bash start.sh dev
 > sed -i 's/\r$//' start.sh
 > ```
 
-Import teh database:
+Import the database:
 
 ```bash
 bash sql.sh
