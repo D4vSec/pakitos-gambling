@@ -7,7 +7,6 @@ import NavbarLinks from "./NavbarLinks"
 import NavbarBtns from "./NavbarBtns"
 import { useLocale } from "@/providers/LocaleProvider"
 import { useNavigate } from "react-router-dom"
-import LangDropdown from "./LangDropdown"
 
 const Navbar = () => {
   const { t } = useLocale()
@@ -18,7 +17,7 @@ const Navbar = () => {
       <input id="main-drawer" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col">
         <div className="navbar bg-base-100 shadow-sm flex justify-between items-center">
-          {/* IZQUIERDA */}
+          {/* Left */}
           <div className="flex items-center gap-3">
             <label
               htmlFor="main-drawer"
@@ -40,12 +39,12 @@ const Navbar = () => {
             </div>
           </div>
 
-          {/* CENTRO */}
+          {/* Center */}
           <div className="hidden md:flex">
             <NavbarLinks className="menu-horizontal" />
           </div>
 
-          {/* DERECHA */}
+          {/* Right */}
           <NavbarBtns className="hidden md:flex" />
         </div>
       </div>
@@ -57,7 +56,7 @@ const Navbar = () => {
           aria-label="close sidebar"
           className="drawer-overlay"></label>
 
-        <div className="bg-base-200 min-h-full w-80 p-4 flex flex-col">
+        <div className="bg-base-200 min-h-full w-65 p-4 flex flex-col">
           {/* Header */}
           <div className="flex justify-between items-center">
             <h2 className="text-2xl font-bold text-base-content">
@@ -71,10 +70,9 @@ const Navbar = () => {
 
           <div className="divider"></div>
 
-          {/* Menu principal */}
+          {/* Main Links */}
           <NavbarLinks className="w-full" />
 
-          {/* Separador */}
           <div className="divider"></div>
 
           {/* Auth section mobile */}
