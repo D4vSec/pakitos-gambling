@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 if [ ! -f .env ]; then
     echo "Error: .env file not found. Please create a .env file with the necessary database configuration."
     exit 1
@@ -11,7 +11,7 @@ set +a
 export CURRENT_UID=$(id -u 2>/dev/null || echo 1000)
 export CURRENT_GID=$(id -g 2>/dev/null || echo 1000)
 
-if [ "$1" == "dev" ]; then
+if [ "$1" = "dev" ]; then
     echo "--- DEVELOPMENT MODE ---"
     docker compose -f docker-compose.dev.yml up -d --build
 
