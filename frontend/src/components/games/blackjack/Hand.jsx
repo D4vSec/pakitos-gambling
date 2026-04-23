@@ -1,67 +1,27 @@
-import React, { useState, useEffect, useRef } from "react"
+import React from "react"
 import Card from "./Card"
 
-// TODO : que las manos no hagan puf al eliminarse
-const Hand = ({ hand, isActive }) => {
-  const cards = hand?.hand || []
+const Hand = ({ hand, isActive, cardRefs }) => {
+  const cards = Array.isArray(hand?.hand) ? hand.hand : []
 
-  const [revealedCount, setRevealedCount] = useState(0)
-  const prevLengthRef = useRef(0)
-  const isRevealingRef = useRef(false)
-
-  const revealedCardsRef = useRef(new Set())
-
-  useEffect(() => {
-    const prev = prevLengthRef.current
-    const current = cards.length
-
-    const isReset = current < prev
-    const hasNew = current > prev
-
-    if (isReset) {
-      setRevealedCount(0)
-      isRevealingRef.current = false
-      revealedCardsRef.current = new Set()
-    }
-
-    if (hasNew && !isRevealingRef.current) {
-      revealSequentially(prev)
-    }
-
-    prevLengthRef.current = current
-  }, [cards])
-
-  const revealSequentially = (start) => {
-    isRevealingRef.current = true
-
-    let i = start
-
-    const reveal = () => {
-      setRevealedCount(i + 1)
-      i++
-
-      if (i < cards.length) {
-        setTimeout(reveal, 700)
-      } else {
-        isRevealingRef.current = false
-      }
-    }
-
-    reveal()
-  }
-
-  const visibleCards = cards.filter((card) => card.rank !== "hidden")
-  const hasCards = visibleCards.length > 0
+  // filtramos cartas visibles para cálculos (evita "hidden" y NaN)
+  const visibleCards = cards.filter(
+    (c) => c.rank !== "hidden" && c.suit !== "hidden",
+  )
 
   const getCardValue = (rank) => {
+    if (!rank) return 0
+    if (rank === "hidden") return 0
     if (rank === "A") return 1
     if (["J", "Q", "K"].includes(rank)) return 10
+    if (isNaN(Number(rank))) return 0
     return Number(rank)
   }
 
-  const lowValue = hasCards
-    ? visibleCards.reduce((acc, card) => acc + getCardValue(card.rank), 0)
-    : 0
+  const lowValue = visibleCards.reduce(
+    (acc, card) => acc + getCardValue(card.rank),
+    0,
+  )
 
   const hasAce = visibleCards.some((card) => card.rank === "A")
   const highValue = hasAce ? lowValue + 10 : lowValue
@@ -74,29 +34,27 @@ const Hand = ({ hand, isActive }) => {
 
   return (
     <div className="z-10 flex flex-col gap-3 justify-center items-center">
-      {hasCards && (
+      {cards.length > 0 && (
         <div className="flex items-start">
-          {cards.slice(0, revealedCount).map((card, i) => {
-            const id = `${card.rank}-${card.suit}-${i}`
-
-            const isNew = !revealedCardsRef.current.has(id)
-            revealedCardsRef.current.add(id)
-
-            return (
-              <div key={id} className={i !== 0 ? "-ml-10" : ""}>
-                <div style={{ marginTop: `${i * 1}rem` }}>
-                  <Card
-                    card={card}
-                    animate={isNew}
-                    forceHidden={
-                      card.rank === "hidden" || card.suit === "hidden"
-                    }
-                    isActive={isActive}
-                  />
-                </div>
+          {cards.map((card, i) => (
+            <div
+              key={card.id || `${card.rank}-${card.suit}-${i}`}
+              ref={(el) => {
+                if (card.id && cardRefs?.current) {
+                  cardRefs.current[card.id] = el
+                }
+              }}
+              className={i !== 0 ? "-ml-10" : ""}>
+              <div style={{ marginTop: `${i * 1}rem` }}>
+                <Card
+                  key={i}
+                  card={card}
+                  forceHidden={false}
+                  isActive={isActive}
+                />
               </div>
-            )
-          })}
+            </div>
+          ))}
         </div>
       )}
 

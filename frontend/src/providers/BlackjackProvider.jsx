@@ -19,8 +19,8 @@ const BlackjackProvider = ({ children }) => {
   const [betAmount, setBetAmount] = useState("")
   const [lastBetAmount, setLastBetAmount] = useState("")
   const [baseBet, setBaseBet] = useState("")
-
   const [allShown, setAllShown] = useState(false)
+  const [dealQueue, setDealQueue] = useState([])
 
   const { user, getRefreshToken, getAccessToken, updateBalance } = useSession()
   const { balance } = user
@@ -46,6 +46,42 @@ const BlackjackProvider = ({ children }) => {
     return Math.round(Number(value) * 100) / 100
   }
 
+  const formatGame = (game) => {
+    if (!game) return game
+
+    const generateCardId = (card, owner, handIndex, cardIndex) => {
+      return `${game.gameId}-${owner}-${handIndex}-${card.rank}-${card.suit}-${cardIndex}`
+    }
+
+    const formatHand = (hand, owner, handIndex) => {
+      if (!hand?.hand) return hand
+
+      return {
+        ...hand,
+        hand: hand.hand.map((card, i) => ({
+          ...card,
+          id: card.id || generateCardId(card, owner, handIndex, i),
+        })),
+      }
+    }
+
+    return {
+      ...game,
+
+      player: Array.isArray(game.player)
+        ? game.player.map((hand, handIndex) =>
+            formatHand(hand, "player", handIndex),
+          )
+        : game.player,
+
+      dealer: Array.isArray(game.dealer)
+        ? game.dealer.map((hand, handIndex) =>
+            formatHand(hand, "dealer", handIndex),
+          )
+        : game.dealer,
+    }
+  }
+
   const getGlobalWinner = (winners = []) => {
     const counts = winners.reduce((acc, w) => {
       acc[w] = (acc[w] || 0) + 1
@@ -62,6 +98,14 @@ const BlackjackProvider = ({ children }) => {
     if (top.length > 1) return "tie"
 
     return top[0][0]
+  }
+
+  const onQueueAnimation = (event) => {
+    setDealQueue((prev) => [...prev, event])
+  }
+
+  const resetAnimationState = () => {
+    dealQueue.length = 0
   }
 
   const startGame = async () => {
@@ -87,7 +131,7 @@ const BlackjackProvider = ({ children }) => {
 
       if (res.gameId) setGameId(res.gameId)
 
-      setGame(res)
+      setGame(formatGame(res))
     } catch (error) {
       addNotification(t(`message.error.${error.message}`), "error")
     }
@@ -108,7 +152,7 @@ const BlackjackProvider = ({ children }) => {
 
       if (res.gameId) setGameId(res.gameId)
 
-      setGame(res)
+      setGame(formatGame(res))
 
       const totalBet = res?.player
         ?.map((hand) => hand.bet)
@@ -125,7 +169,6 @@ const BlackjackProvider = ({ children }) => {
   }
 
   const finishGame = async (game) => {
-    console.log(game)
     const winner = getGlobalWinner(game?.winners)
     let type =
       winner === "dealer" ? "error" : winner === "player" ? "success" : "info"
@@ -181,7 +224,7 @@ const BlackjackProvider = ({ children }) => {
 
       if (res.code) throw new Error(res.code)
 
-      setGame(res)
+      setGame(formatGame(res))
     } catch (error) {
       addNotification(t(`message.error.${error.message}`), "error")
     }
@@ -210,6 +253,21 @@ const BlackjackProvider = ({ children }) => {
     }
   }, [])
 
+  useEffect(() => {
+    console.log("GAME UPDATED", game)
+  }, [game])
+
+  useEffect(() => {
+    if (game?.player?.length > 0) {
+      onQueueAnimation({
+        id: "test",
+        type: "DEAL_CARD",
+        card: game.player[0].hand[0],
+        to: "player",
+      })
+    }
+  }, [game])
+
   const value = {
     game,
     startGame,
@@ -224,6 +282,9 @@ const BlackjackProvider = ({ children }) => {
     stand,
     double,
     split,
+    dealQueue,
+    onQueueAnimation,
+    resetAnimationState,
     allShown,
     updateAllShown,
   }

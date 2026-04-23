@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import Hand from "./Hand"
 
-const Hands = ({ player, hands, gameState }) => {
+const Hands = ({ player, hands, gameState, cardRefs }) => {
   const [fade, setFade] = useState(false)
   const [visible, setVisible] = useState(true)
 
@@ -21,13 +21,8 @@ const Hands = ({ player, hands, gameState }) => {
       setFade(false)
       setVisible(true)
 
-      const t = setTimeout(() => {
-        setFade(true)
-      }, 2700)
-
-      const t2 = setTimeout(() => {
-        setVisible(false)
-      }, 3000)
+      const t = setTimeout(() => setFade(true), 2700)
+      const t2 = setTimeout(() => setVisible(false), 3000)
 
       return () => {
         clearTimeout(t)
@@ -53,6 +48,9 @@ const Hands = ({ player, hands, gameState }) => {
           key={i}
           hand={hand}
           isActive={player !== "dealer" && hasSplit && i === activeIndex}
+          cardRefs={cardRefs}
+          handIndex={i}
+          owner={player}
         />
       ))}
     </div>

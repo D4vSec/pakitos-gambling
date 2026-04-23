@@ -1,16 +1,17 @@
+import React from "react"
 import Card from "./Card"
 
-const Deck = () => {
+const Deck = ({ deckRef }) => {
   const deck = Array.from({ length: 10 }, () => ({
     rank: "hidden",
     suit: "hidden",
   }))
 
   return (
-    <div className="relative w-20 h-28 mt-4">
+    <div ref={deckRef} className="relative w-20 h-28 mt-4">
       {deck.map((card, i) => (
         <div key={i} className="absolute" style={{ bottom: i * 1 }}>
-          <Card card={card} forceHidden />
+          <Card key={i} card={card} forceHidden />
         </div>
       ))}
     </div>
