@@ -34,6 +34,12 @@ This repository contains the full application stack and the supporting infrastru
 
 ### Start in development mode
 
+Create the `.env` file based in `.env.example`
+
+```bash
+cp .env.example .env
+```
+
 Grant execution permissions to the startup script if needed:
 
 ```bash
@@ -46,10 +52,11 @@ Run the development environment:
 bash start.sh dev
 ```
 
-If the script fails in last line you can try removing special characters
-```bash
-sed -i 's/\r$//' start.sh
-```
+> [!TIP]
+> If you encounter \r command not found errors, it's likely due to Windows line endings (CRLF). The sed command above converts them to Linux format (LF).
+> ```bash
+> sed -i 's/\r$//' start.sh
+> ```
 
 Available services in development:
 
