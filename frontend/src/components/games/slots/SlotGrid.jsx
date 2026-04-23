@@ -1,15 +1,6 @@
 import React from "react"
 import SlotReel from "./SlotReel"
-
-const PAYLINE_POSITIONS = {
-  "3x3": {
-    H_ROW0: [[0,0],[0,1],[0,2]],
-    H_ROW1: [[1,0],[1,1],[1,2]],
-    H_ROW2: [[2,0],[2,1],[2,2]],
-    D_MAIN: [[0,0],[1,1],[2,2]],
-    D_ANTI: [[0,2],[1,1],[2,0]],
-  },
-}
+import { PAYLINE_POSITIONS, getStopDelays } from "./slotConstants"
 
 const getWinningCells = (winningLines, machineType, paylines) => {
   const winSet = new Set()
@@ -34,10 +25,6 @@ const getWinningCells = (winningLines, machineType, paylines) => {
 
   return winSet
 }
-
-// STOP_DELAYS: each column stops this many ms after isSpinning→false.
-// Left-to-right stagger gives the classic slot machine feel.
-const STOP_DELAYS = [0, 350, 700]
 
 const SlotGrid = ({
   grid,
@@ -64,7 +51,7 @@ const SlotGrid = ({
             rows={rows}
             symbols={Array.from({ length: rows }, (_, r) => grid?.[r]?.[c] ?? null)}
             isSpinning={isSpinning}
-            stopDelay={STOP_DELAYS[c] ?? c * 350}
+            stopDelay={getStopDelays(cols)[c] ?? c * 350}
             winningCells={winningCells}
           />
         </React.Fragment>

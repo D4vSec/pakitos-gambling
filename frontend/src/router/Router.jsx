@@ -11,6 +11,8 @@ import Register from "../pages/Register"
 import Roulette0Game from "@/pages/games/Roulette0Game"
 import Roulette00Game from "@/pages/games/Roulette00Game"
 import SlotsGame from "@/pages/games/SlotsGame"
+import Slots3x5Game from "@/pages/games/Slots3x5Game"
+import Slots5x5Game from "@/pages/games/Slots5x5Game"
 import ProtectedRoute from "@/components/ProtectedRoute"
 
 const Router = () => {
@@ -64,6 +66,22 @@ const Router = () => {
                 element={
                     <ProtectedRoute>
                         <SlotsGame />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/slots3x5"
+                element={
+                    <ProtectedRoute>
+                        <Slots3x5Game />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/slots5x5"
+                element={
+                    <ProtectedRoute>
+                        <Slots5x5Game />
                     </ProtectedRoute>
                 }
             />

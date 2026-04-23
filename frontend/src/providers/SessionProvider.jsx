@@ -107,12 +107,13 @@ const SessionProvider = ({ children }) => {
     }
   }
 
+  // TODO: Transicion brusca porque esta lo de protected route
   const logout = () => {
+    navigate("/")
     removeTokens()
     setUser(defaultUser)
     setIsLogged(false)
     addNotification(t("message.success.logout"), "success")
-    navigate("/")
   }
 
   const getUserData = async () => {

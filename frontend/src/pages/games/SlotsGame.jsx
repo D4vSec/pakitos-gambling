@@ -6,15 +6,13 @@ import SlotsProvider from "@/providers/SlotsProvider"
 import SlotMachine from "@/components/games/slots/SlotMachine"
 import SlotControls from "@/components/games/slots/SlotControls"
 
-const MACHINE_TYPE = "3x3"
-
-const SlotsGame = () => {
+const SlotsGame = ({ type = "3x3" }) => {
   const { t } = useLocale()
   return (
-    <SlotsProvider>
+    <SlotsProvider type={type}>
       <GameTemplate
-        game={<SlotMachine type={MACHINE_TYPE} />}
-        controls={<SlotControls type={MACHINE_TYPE} />}
+        game={<SlotMachine type={type} />}
+        controls={<SlotControls type={type} />}
         description={
           <GameDescription title={t("games.slots.title")}>
             {t("games.slots.description")}

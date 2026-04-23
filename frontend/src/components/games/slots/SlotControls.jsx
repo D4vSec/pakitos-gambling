@@ -5,11 +5,10 @@ import { useNotification } from "@/providers/NotificationProvider"
 import { useLocale } from "@/providers/LocaleProvider"
 import Button from "@/components/buttons/Button"
 import BitcoinSVG from "@/components/svg/BitcoinSVG"
-
-// Must match STOP_DELAYS last value (700) + SlotReel landing timeout (550)
-const NOTIF_DELAY_MS = 700 + 550
+import { getAnimTotalMs, COLS_BY_TYPE } from "./slotConstants"
 
 const SlotControls = ({ type = "3x3" }) => {
+  const NOTIF_DELAY_MS = getAnimTotalMs(COLS_BY_TYPE[type] ?? 3)
   const { session, spins, loading, createSession, spin, endSession } = useSlots()
   const { user } = useSession()
   const { addNotification } = useNotification()
