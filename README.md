@@ -46,6 +46,11 @@ Run the development environment:
 bash start.sh dev
 ```
 
+If the script fails in last line you can try removing special characters
+```bash
+sed -i 's/\r$//' start.sh
+```
+
 Available services in development:
 
 - Frontend: `http://localhost:5173`
