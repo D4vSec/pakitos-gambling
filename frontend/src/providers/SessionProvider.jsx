@@ -6,6 +6,8 @@ import { useLocale } from "./LocaleProvider"
 
 const SessionContext = createContext()
 
+// TDOO: Generalizar el uso del localStorage
+// TODo: La gestión de las sesiones iniciadas y cerrarlas todas
 const SessionProvider = ({ children }) => {
   const defaultUser = {}
 

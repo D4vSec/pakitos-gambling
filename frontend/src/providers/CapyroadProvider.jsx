@@ -1,26 +1,22 @@
-import React, { createContext, useContext, useEffect, useState } from "react"
-import useAPI from "@/hooks/useAPI"
-import { useNotification } from "@/providers/NotificationProvider"
+import React, { createContext, useContext, useState } from "react"
 import { useSession } from "./SessionProvider"
+import useAPI from "@/hooks/useAPI"
 import { useLocale } from "./LocaleProvider"
+import { useNotification } from "./NotificationProvider"
 
-const BlackjackContext = createContext()
+const CapyroadContext = createContext()
 
-const GAME_ID_KEY = "blackjackGameId"
+const GAME_ID_KEY = "capyRoadId"
 const HOST = "localhost:3000"
 
 const getGameId = () => localStorage.getItem(GAME_ID_KEY)
 const setGameId = (id) => localStorage.setItem(GAME_ID_KEY, id)
 const removeGameId = () => localStorage.removeItem(GAME_ID_KEY)
 
-// TODO: Revisar lso payouts con el split o no se q coño pasa
-const BlackjackProvider = ({ children }) => {
+const CapyroadProvider = ({ children }) => {
   const [game, setGame] = useState({})
   const [betAmount, setBetAmount] = useState("")
   const [lastBetAmount, setLastBetAmount] = useState("")
-  const [baseBet, setBaseBet] = useState("")
-
-  const [allShown, setAllShown] = useState(false)
 
   const { user, getRefreshToken, getAccessToken, updateBalance } = useSession()
   const { balance } = user
@@ -28,7 +24,6 @@ const BlackjackProvider = ({ children }) => {
   const { t } = useLocale()
   const { get, post, destroy } = useAPI()
 
-  const updateAllShown = (value) => setAllShown(value)
   const updateBetAmount = (amount) => setBetAmount(amount)
   const clearBet = () => setBetAmount("")
   const repeatBet = () => setBetAmount(lastBetAmount)
@@ -46,31 +41,12 @@ const BlackjackProvider = ({ children }) => {
     return Math.round(Number(value) * 100) / 100
   }
 
-  const getGlobalWinner = (winners = []) => {
-    const counts = winners.reduce((acc, w) => {
-      acc[w] = (acc[w] || 0) + 1
-      return acc
-    }, {})
-
-    const entries = Object.entries(counts)
-
-    if (entries.length === 0) return null
-
-    const max = Math.max(...entries.map(([, v]) => v))
-    const top = entries.filter(([, v]) => v === max)
-
-    if (top.length > 1) return "tie"
-
-    return top[0][0]
-  }
-
   const startGame = async () => {
     if (!theresAmount()) return
     updateBalance("withdrawal", betAmount)
     setLastBetAmount(betAmount)
-    setBaseBet(betAmount)
 
-    const url = `http://${HOST}/v1/blackjack/start`
+    const url = `http://${HOST}/v1/capyoad/start`
 
     try {
       const res = await post(url, {
@@ -85,19 +61,20 @@ const BlackjackProvider = ({ children }) => {
 
       if (res.code) throw new Error(res.code)
 
-      if (res.gameId) setGameId(res.gameId)
+      if (res.gameID) setGameId(res.gameID)
 
       setGame(res)
+      console.log(res)
     } catch (error) {
       addNotification(t(`message.error.${error.message}`), "error")
     }
   }
 
-  const continueGame = async () => {
-    const url = `http://${HOST}/v1/blackjack/${getGameId()}`
+  const jumpRoad = async () => {
+    const url = `http://${HOST}/v1/capyroad/${getGameId()}/jump`
 
     try {
-      const res = await get(url, {
+      const res = await post(url, {
         headers: {
           "x-refresh-token": getRefreshToken(),
           Authorization: `Bearer ${getAccessToken()}`,
@@ -106,10 +83,10 @@ const BlackjackProvider = ({ children }) => {
 
       if (res.code) throw new Error(res.code)
 
-      if (res.gameId) setGameId(res.gameId)
+      if (res.gameID) setGameId(res.gameI)
 
       setGame(res)
-
+      /*
       const totalBet = res?.player
         ?.map((hand) => hand.bet)
         .reduce((acc, bet) => acc + bet, 0)
@@ -119,6 +96,7 @@ const BlackjackProvider = ({ children }) => {
       if (res?.player?.length > 0) {
         setBaseBet(res.player[0].bet)
       }
+      */
     } catch (error) {
       addNotification(t(`message.error.${error.message}`), "error")
     }
@@ -126,11 +104,6 @@ const BlackjackProvider = ({ children }) => {
 
   const finishGame = async (game) => {
     console.log(game)
-    const winner = getGlobalWinner(game?.winners)
-    let type =
-      winner === "dealer" ? "error" : winner === "player" ? "success" : "info"
-    let message =
-      winner === "dealer" ? "lose" : winner === "player" ? "win" : "tie"
 
     addNotification(t(`games.result.${message}`), type, {
       scope: "games",
@@ -140,7 +113,7 @@ const BlackjackProvider = ({ children }) => {
 
     updateBalance("deposit", game?.payout)
 
-    const url = `http://${HOST}/v1/blackjack/${getGameId()}`
+    const url = `http://${HOST}/v1/capyroad/${getGameId()}`
 
     try {
       const res = await destroy(url, {
@@ -160,81 +133,30 @@ const BlackjackProvider = ({ children }) => {
 
       removeGameId()
 
-      setBaseBet(0)
-
       addNotification(t(`message.success.${res.code}`), "success")
     } catch (error) {
       addNotification(t(`message.error.${error.message}`), "error")
     }
   }
-
-  const play = async (action) => {
-    const url = `http://${HOST}/v1/blackjack/${getGameId()}/${action}`
-
-    try {
-      const res = await post(url, {
-        headers: {
-          "x-refresh-token": getRefreshToken(),
-          Authorization: `Bearer ${getAccessToken()}`,
-        },
-      })
-
-      if (res.code) throw new Error(res.code)
-
-      setGame(res)
-    } catch (error) {
-      addNotification(t(`message.error.${error.message}`), "error")
-    }
-  }
-
-  const hit = async () => await play("hit")
-  const stand = async () => await play("stand")
-
-  const double = async () => {
-    if (!theresAmount()) return
-    await play("double")
-    setBetAmount((prev) => formatMoney(prev * 2))
-    updateBalance("withdrawal", formatMoney(baseBet))
-  }
-
-  const split = async () => {
-    if (!theresAmount()) return
-    await play("split")
-    setBetAmount((prev) => formatMoney(prev + baseBet))
-    updateBalance("withdrawal", formatMoney(baseBet))
-  }
-
-  useEffect(() => {
-    if (getGameId()) {
-      continueGame()
-    }
-  }, [])
-
-  const value = {
+  const values = {
     game,
     startGame,
-    continueGame,
+    jumpRoad,
     finishGame,
     betAmount,
     updateBetAmount,
     clearBet,
     repeatBet,
     doubleBet,
-    hit,
-    stand,
-    double,
-    split,
-    allShown,
-    updateAllShown,
   }
 
-  return <BlackjackContext value={value}>{children}</BlackjackContext>
+  return <CapyroadContext value={values}>{children}</CapyroadContext>
 }
 
-export default BlackjackProvider
+export default CapyroadProvider
 
-export const useBlackjack = () => {
-  const context = useContext(BlackjackContext)
+export const useCapyroad = () => {
+  const context = useContext(CapyroadContext)
 
   if (!context) {
     throw new Error("Provider outside scope")

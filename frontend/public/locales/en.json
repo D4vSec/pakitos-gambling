@@ -117,6 +117,10 @@
         "description": "Classic blackjack game.",
         "title": "Blackjack"
       },
+      "capyroad": {
+        "description": "Why the capy crossed the road? Who knows...",
+        "title": "Capyroad"
+      },
       "playNow": "Play now",
       "roulette": {
         "american": {
