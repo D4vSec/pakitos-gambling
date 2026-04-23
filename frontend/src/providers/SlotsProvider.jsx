@@ -6,24 +6,24 @@ import { useLocale } from "@/providers/LocaleProvider"
 
 const SlotsContext = createContext()
 
-const GAME_ID_KEY = "slotsGameId"
-const PAYLINES_KEY = "slotsPaylines"
+const gameIdKey = (type) => `slotsGameId_${type}`
+const paylinesKey = (type) => `slotsPaylines_${type}`
 
-const getStoredGameId = () => localStorage.getItem(GAME_ID_KEY)
-const setStoredGameId = (id) => localStorage.setItem(GAME_ID_KEY, id)
-const removeStoredGameId = () => localStorage.removeItem(GAME_ID_KEY)
+const getStoredGameId = (type) => localStorage.getItem(gameIdKey(type))
+const setStoredGameId = (type, id) => localStorage.setItem(gameIdKey(type), id)
+const removeStoredGameId = (type) => localStorage.removeItem(gameIdKey(type))
 
-const getStoredPaylines = () => {
+const getStoredPaylines = (type) => {
   try {
-    const raw = localStorage.getItem(PAYLINES_KEY)
+    const raw = localStorage.getItem(paylinesKey(type))
     return raw ? JSON.parse(raw) : null
   } catch {
     return null
   }
 }
-const setStoredPaylines = (paylines) =>
-  localStorage.setItem(PAYLINES_KEY, JSON.stringify(paylines))
-const removeStoredPaylines = () => localStorage.removeItem(PAYLINES_KEY)
+const setStoredPaylines = (type, paylines) =>
+  localStorage.setItem(paylinesKey(type), JSON.stringify(paylines))
+const removeStoredPaylines = (type) => localStorage.removeItem(paylinesKey(type))
 
 const getDimensionsFromType = (machineType) => {
   const map = {
@@ -34,7 +34,7 @@ const getDimensionsFromType = (machineType) => {
   return map[machineType] ?? { rows: 3, cols: 5 }
 }
 
-const SlotsProvider = ({ children }) => {
+const SlotsProvider = ({ type = "3x3", children }) => {
   const { post, get, destroy, loading: apiLoading } = useAPI()
   const { getAccessToken, getRefreshToken, setUser } = useSession()
   const { addNotification } = useNotification()
@@ -78,8 +78,8 @@ const SlotsProvider = ({ children }) => {
       }
       setSession(newSession)
       setSpins([])
-      setStoredGameId(res.gameId)
-      setStoredPaylines(res.paylines)
+      setStoredGameId(type, res.gameId)
+      setStoredPaylines(type, res.paylines)
 
       if (res.balance != null) {
         setUser((prev) => ({ ...prev, balance: Number(res.balance).toFixed(2) }))
@@ -142,7 +142,7 @@ const SlotsProvider = ({ children }) => {
       if (!res || res.code) throw new Error(res?.code || "UNKNOWN_ERROR")
 
       const { rows, cols } = getDimensionsFromType(res.machineType)
-      const paylines = getStoredPaylines()
+      const paylines = getStoredPaylines(type)
 
       setSession({
         gameId: res.gameId,
@@ -176,8 +176,8 @@ const SlotsProvider = ({ children }) => {
 
       setSession(null)
       setSpins([])
-      removeStoredGameId()
-      removeStoredPaylines()
+      removeStoredGameId(type)
+      removeStoredPaylines(type)
 
       return res
     } catch (err) {
@@ -190,11 +190,11 @@ const SlotsProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    const storedId = getStoredGameId()
+    const storedId = getStoredGameId(type)
     if (storedId) {
       getSession(storedId).catch(() => {
-        removeStoredGameId()
-        removeStoredPaylines()
+        removeStoredGameId(type)
+        removeStoredPaylines(type)
       })
     }
   }, [])

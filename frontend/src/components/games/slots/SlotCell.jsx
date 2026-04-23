@@ -27,7 +27,7 @@ const SlotCell = ({ symbol, isWinning = false, animKey, isLanding = false }) => 
       {symbol ? (
         <span
           key={animKey}
-          className={`absolute inset-0 flex items-center justify-center text-3xl font-bold
+          className={`absolute inset-0 flex items-center justify-center text-4xl font-bold
             ${isLanding ? "slot-land" : "slot-spin-drop"}
           `}
         >

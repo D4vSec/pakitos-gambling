@@ -49,7 +49,7 @@ const SlotsCard = () => {
 
           <div className="p-5">
             <h3 className="text-lg font-semibold">
-              {t("general.home.slots.starwars.title")}
+              {t("general.home.slots.starwars.title")} (3×3)
             </h3>
             <p className="mt-1 text-sm text-muted-foreground">
               {t("general.home.slots.starwars.description")}
@@ -76,7 +76,7 @@ const SlotsCard = () => {
 
             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
               <Button className="bg-primary text-primary-foreground px-4 py-2 rounded-md text-sm font-medium hover:opacity-90 transition"
-              onClick={() => navigate("/slots")}
+              onClick={() => navigate("/slots3x5")}
               >
                 {t("general.home.playNow")}
               </Button>
@@ -85,7 +85,7 @@ const SlotsCard = () => {
 
           <div className="p-5">
             <h3 className="text-lg font-semibold">
-              {t("general.home.slots.stardewValley.title")}
+              {t("general.home.slots.stardewValley.title")} (3×5)
             </h3>
             <p className="mt-1 text-sm text-muted-foreground">
               {t("general.home.slots.stardewValley.description")}
@@ -112,7 +112,7 @@ const SlotsCard = () => {
 
             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
               <Button className="bg-primary text-primary-foreground px-4 py-2 rounded-md text-sm font-medium hover:opacity-90 transition"
-                onClick={() => navigate("/slots")}
+                onClick={() => navigate("/slots5x5")}
               >
                 {t("general.home.playNow")}
               </Button>
@@ -121,7 +121,7 @@ const SlotsCard = () => {
 
           <div className="p-5">
             <h3 className="text-lg font-semibold">
-              {t("general.home.slots.beer.title")}
+              {t("general.home.slots.beer.title")} (5×5)
             </h3>
             <p className="mt-1 text-sm text-muted-foreground">
               {t("general.home.slots.beer.description")}

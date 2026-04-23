@@ -5,16 +5,16 @@ import SlotGrid from "./SlotGrid"
 import BitcoinSVG from "@/components/svg/BitcoinSVG"
 import "./SlotMachine.css"
 
-// Must match SlotGrid STOP_DELAYS last value + SlotReel landing timeout
-const ANIM_TOTAL_MS = 700 + 550
+import { getAnimTotalMs, DIMS_BY_TYPE } from "./slotConstants"
 
 const SlotMachine = ({ type = "3x3" }) => {
   const { session, spins, isSpinning } = useSlots()
   const { t } = useLocale()
 
   const lastSpin = spins[spins.length - 1] ?? null
-  const rows = session?.rows ?? 3
-  const cols = session?.cols ?? 3
+  const { rows: defaultRows, cols: defaultCols } = DIMS_BY_TYPE[type] ?? { rows: 3, cols: 3 }
+  const rows = session?.rows ?? defaultRows
+  const cols = session?.cols ?? defaultCols
 
   const [showResult, setShowResult] = useState(false)
   const timerRef = useRef(null)
@@ -26,7 +26,7 @@ const SlotMachine = ({ type = "3x3" }) => {
       clearTimeout(timerRef.current)
       setShowResult(false)
     } else if (wasSpinningRef.current) {
-      timerRef.current = setTimeout(() => setShowResult(true), ANIM_TOTAL_MS)
+      timerRef.current = setTimeout(() => setShowResult(true), getAnimTotalMs(cols))
     }
     return () => clearTimeout(timerRef.current)
   }, [isSpinning])
@@ -44,8 +44,8 @@ const SlotMachine = ({ type = "3x3" }) => {
         </span>
       </div>
 
-      {/* Reel window */}
-      <div className="w-full max-w-xs">
+      {/* Reel window — wider for 5-column machines */}
+      <div className={`w-full ${cols === 5 ? "max-w-2xl" : "max-w-xs"}`}>
         {/* Top decorative bar */}
         <div className="h-3 rounded-t-xl bg-linear-to-r from-amber-700 via-yellow-500 to-amber-700" />
 
