@@ -1,0 +1,31 @@
+> ⚡ Modo pro, para que Yeray no se queje
+
+<!-- Gepeteada lo se pero me la pela -->
+
+### 🐞 Bugs
+
+- **Continuar partida (get/:gameId)**
+  - La segunda carta del dealer se devuelve con el valor verdadero, `suit` ni `value` estan como `"hidden"`.
+
+- **Lógica del dealer**
+  - Si el dealer ya ha ganado, deja de robar cartas.
+  - Ejemplo:
+    - Jugador: 11 → hace _stand_
+    - Dealer: tiene un 3 + carta oculta J (total 13)
+    - ❌ El dealer no roba más porque ya ha "ganado"
+    - ✅ Debería seguir robando hasta:
+      - llegar a 17 o más
+      - o pasarse de 21
+
+- **Split de manos**
+  - Se pueden dividir más de 2 manos
+  - ❌ Pero al calcular el final del juego:
+    - Si te plantas con 2 manos, las siguientes se ignoran y la partida termina
+
+- **(Duda pendiente)**
+  - Limitar a máximo 2 manos por comodidad o permitir más splits correctamente
+
+- **Empates (push)**
+  - ❌ Actualmente payout = 0
+  - ✅ Debería devolver lo apostado
+    - Ejemplo: apuestas 10 → empate → recibes 10
