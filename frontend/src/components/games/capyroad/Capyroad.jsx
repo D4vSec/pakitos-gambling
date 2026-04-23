@@ -1,5 +1,5 @@
 import React, { useRef } from "react"
-import Road from "./Road"
+import Road from "./roads/Road"
 import Capybara from "./Capybara"
 
 const Capyroad = () => {
