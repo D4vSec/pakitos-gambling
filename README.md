@@ -54,7 +54,7 @@ bash start.sh dev
 ```
 
 > [!TIP]
-> If you encounter \r command not found errors, it's likely due to Windows line endings (CRLF). The sed command above converts them to Linux format (LF).
+> If you encounter \r command not found errors, it's likely due to Windows line endings (CRLF). Use this sed command to convert them to Linux format (LF).
 > ```bash
 > sed -i 's/\r$//' start.sh
 > ```
