@@ -2,7 +2,7 @@
 	"name": "backend",
 	"version": "1.0.0",
 	"description": "Backend for pakitos gambling",
-	"license": "MIT",
+	"license": "GPL-3.0-only",
 	"author": "David & Yeray",
 	"type": "module",
 	"main": "server.js",
