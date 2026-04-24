@@ -34,9 +34,7 @@ const RouletteControls = () => {
       duration: 2000,
     })
 
-    setTimeout(() => {
-      spin()
-    }, 2000)
+    spin()
   }
 
   return (

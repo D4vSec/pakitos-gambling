@@ -11,22 +11,23 @@ const Roulette0SVG = () => {
   const SIZE = ROULETTE_0_ORDER.length
   const ANGLE_STEP = 360 / SIZE
 
-  const RADIUS = 100 // 145
+  // 🎯 FIJO porque la ruleta es fija (max-w-74)
+  const RADIUS = 145
 
   useEffect(() => {
     if (!spinData || !ballRef.current) return
 
     gsap.killTweensOf(ballRef.current)
 
-    const spins = 6
+    const spins = 3
 
-    const targetAngle = spinData.finalAngle
-
+    // 🔥 alineado con la ruleta
+    const target = -(spinData.finalAngle - WHEEL_OFFSET_DEG)
     gsap.fromTo(
       ballRef.current,
       { rotation: 0 },
       {
-        rotation: -(360 * spins) + targetAngle,
+        rotation: -(360 * spins) + target,
         duration: 3,
         ease: "power3.out",
       },
@@ -34,6 +35,7 @@ const Roulette0SVG = () => {
   }, [spinData])
   return (
     <div className="relative mx-auto max-w-74">
+      {/* 🎡 RULETA */}
       <img
         ref={rouletteRef}
         src={rouletteImg}
@@ -41,6 +43,7 @@ const Roulette0SVG = () => {
         className="w-full h-auto origin-center"
       />
 
+      {/* ⚪ BOLA */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <div
           ref={ballRef}
@@ -57,6 +60,7 @@ const Roulette0SVG = () => {
         </div>
       </div>
 
+      {/* 🔍 DEBUG PERFECTO ALINEADO AL MISMO SISTEMA */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{

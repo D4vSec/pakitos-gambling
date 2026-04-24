@@ -24,7 +24,7 @@ const RouletteContext = createContext()
 
 const HOST = "localhost:3000"
 const WHEEL_OFFSET_DEG = 355
-const WHEEL_INDEX_OFFSET = 0
+const WHEEL_INDEX_OFFSET = 0 // (ejemplo inicial)
 
 const RouletteProvider = ({ children }) => {
   const location = useLocation()
@@ -253,10 +253,13 @@ const RouletteProvider = ({ children }) => {
 
       updateBalance("deposit", payout)
 
+      // 🔧 SOLO CAMBIO: número limpio (sin "00")
       const winningNumber = res?.result?.winningNumber
 
+      // 🔧 NUEVO: preparación para animación (NO GSAP aún)
       const index = getIndexFromNumber(winningNumber)
       const finalAngle = getFinalAngleFromIndex(index)
+      // 🔧 NUEVO: guardamos datos de animación
 
       console.log("1", {
         winningNumber,
@@ -353,7 +356,6 @@ const RouletteProvider = ({ children }) => {
     setBetAmount(0)
   }
 
-  // TODO: Dejar quieto el 0
   useEffect(() => {
     if (!spinData || !rouletteRef.current) return
 
@@ -361,10 +363,12 @@ const RouletteProvider = ({ children }) => {
 
     const extraSpins = 360 * 5
 
+    // 🔥 clave: normalizar acumulado
     const current = currentRotationRef.current % 360
 
     const target = spinData.finalAngle
 
+    // 🔥 diferencia real mínima hacia el target
     let delta = target - current
 
     // forzar giro en sentido positivo (horario suave)
