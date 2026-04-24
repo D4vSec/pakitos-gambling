@@ -1,22 +1,31 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
+import Card from "./Card"
 
-const CardAnimationsLayer = ({ dealQueue }) => {
-  useEffect(() => {
-    console.log("Animation queue:", dealQueue)
-  }, [dealQueue])
+const CardAnimationsLayer = ({ dealQueue, deckRef }) => {
+  const getDeckPosition = () => {
+    const rect = deckRef.current?.getBoundingClientRect()
+    if (!rect) return { top: 0, left: 0 }
+
+    return {
+      top: rect.top + rect.height / 2,
+      left: rect.left + rect.width / 2,
+    }
+  }
+
+  const deckPos = getDeckPosition()
 
   return (
     <div className="fixed inset-0 pointer-events-none z-50">
-      {dealQueue.map((event) => (
+      {dealQueue.map((event, i) => (
         <div
           key={event.id}
-          className="absolute w-20 h-28 bg-red-500 rounded-lg shadow-lg flex items-center justify-center text-white font-bold"
+          className="absolute"
           style={{
-            top: "50%",
-            left: "50%",
+            top: deckPos.top + i * 20,
+            left: deckPos.left + i * 20,
             transform: "translate(-50%, -50%)",
           }}>
-          {event.type}
+          <Card card={event.card} forceHidden={event.card.faceDown} />
         </div>
       ))}
     </div>

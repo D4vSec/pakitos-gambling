@@ -60,7 +60,11 @@ const BlackjackBoard = () => {
         </div>
       </div>
 
-      <CardAnimationsLayer dealQueue={dealQueue} />
+      <CardAnimationsLayer
+        dealQueue={dealQueue}
+        deckRef={deckRef}
+        gameId={game?.gameId}
+      />
     </div>
   )
 }
