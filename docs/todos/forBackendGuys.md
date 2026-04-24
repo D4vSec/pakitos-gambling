@@ -29,3 +29,15 @@
   - ❌ Actualmente payout = 0
   - ✅ Debería devolver lo apostado
     - Ejemplo: apuestas 10 → empate → recibes 10
+
+- **Broken Object Level Authorization**
+  - The Blackjack session store trusts gameId alone. None of the mutation endpoints (hit, stand, double, split, delete) verify that the session belongs to req.user.id, and payouts are applied to the current caller's balance.
+## CHECKLIST
+
+- [X] Continuar partida (get/:gameId)
+- [X] Lógica del dealer
+- [X] Split de manos
+- [X] Empates (push)
+- [X] Broken Object Level Authorization
+- [ ] Refactor del BJ
+

@@ -2,30 +2,27 @@ const rateLimitConfig = {
 	auth: {
 		windowMs: 15 * 60 * 1000,
 		max: 10,
-		message:
-			"Has excedido el número de intentos de inicio de sesión. Por favor, espera un momento antes de volver a intentarlo.",
+		code : 'TOO_MANY_ATTEMPTS',
 	},
 	registration: {
 		windowMs: 60 * 60 * 1000,
 		max: 10,
-		message: "Has alcanzado el límite de creación de cuentas. Intenta registrarte más tarde.",
+		code: 'TOO_MANY_REGISTRATIONS',
 	},
 	games: {
 		windowMs: 1000,
 		max: 5,
-		message: "Solo puedes realizar un giro por segundo. ¡Tómalo con calma!",
+		code: 'TOO_MANY_GAMES',
 	},
 	history: {
 		windowMs: 60 * 1000,
 		max: 20,
-		message:
-			"Estás generando demasiadas solicitudes al historial de jugadas. Espera un momento antes de continuar.",
+		code: 'TOO_MANY_HISTORY_REQUESTS',
 	},
 	global: {
 		windowMs: 1 * 60 * 1000,
 		max: 100,
-		message:
-			"Hemos detectado tráfico inusual desde tu IP. Por favor, reduce la frecuencia de tus acciones.",
+		code: 'TOO_MANY_REQUESTS',
 	},
 }
 
