@@ -15,6 +15,13 @@ const isGameValid = (gameId, game) => {
 }
 // GAME_NOT_VALID
 
+const isUserGameValid = (game, userId) => {
+    if (game.userId !== userId) {
+        return false
+    }
+    return true
+}
+
 export const startGame = async (req, res) => {
     const id = req.user.id
     const wallet = await User.getUserBalance(id)
@@ -40,6 +47,7 @@ export const startGame = async (req, res) => {
 
         const game = {
             gameId,
+            userId: id,
             game: "blackjack",
             status: "ongoing", // ongoing | finished
             split: false,
@@ -118,6 +126,9 @@ export const hit = async (req, res) => {
         if (!isGameValid(gameId, game)) {
             return res.status(400).json({ code: "GAME_NOT_VALID" })
         }
+        if (!isUserGameValid(game, id)) {
+            return res.status(403).json({ code: "FORBIDDEN" })
+        }
         //TODO: HIT WITH SPLIT IS NOT WORKING
         if (game.split === true) {
             if (game.player[0].resolved === true) {
@@ -148,7 +159,7 @@ export const hit = async (req, res) => {
                         const winner = blackJack.determinateWinner(game.player[0].value, game.dealer[0].value)
                         game.winners.push(winner)
                     }
-                    
+
                     if (!game.player[1].bust) {
                         const winner2 = blackJack.determinateWinner(game.player[1].value, game.dealer[0].value)
                         game.winners.push(winner2)
@@ -247,6 +258,9 @@ export const stand = async (req, res) => {
         if (!isGameValid(gameId, game)) {
             return res.status(400).json({ code: "GAME_NOT_VALID" })
         }
+        if (!isUserGameValid(game, id)) {
+            return res.status(403).json({ code: "FORBIDDEN" })
+        }
         //If there is a split, we have two branches of logic, one for the first hand and one for the second hand
         if (game.split === true) {
             //If the player is already resolved the first hand, and decides to stand with the second hand,
@@ -340,6 +354,10 @@ export const double = async (req, res) => {
 
         if (!isGameValid(gameId, game)) {
             return res.status(400).json({ code: "GAME_NOT_VALID" })
+        }
+
+        if (!isUserGameValid(game, id)) {
+            return res.status(403).json({ code: "FORBIDDEN" })
         }
 
         await User.updateUserBalance(id, -game.player[0].bet)
@@ -449,6 +467,14 @@ export const split = async (req, res) => {
         if (!isGameValid(gameId, game)) {
             return res.status(400).json({ code: "GAME_NOT_VALID" })
         }
+
+        if (!isUserGameValid(game, id)) {
+            return res.status(403).json({ code: "FORBIDDEN" })
+        }
+
+        if (game.split === true) {
+            return res.status(400).json({ code: "ALREADY_SPLIT" })
+        }
         //DEV: I am skipping the check for the split condition for now, but in a real game the player can only split if the first two cards have the same rank
         if (/*game.player.hand.length === 2 && game.player.hand[0].value === game.player.hand[1].value*/ true) {
             game.split = true
@@ -533,7 +559,14 @@ export const split = async (req, res) => {
 
 export const deleteGame = (req, res) => {
     try {
+        const id = req.user.id
         const { gameId } = req.params
+
+        const game = games.get(gameId)
+        if (!isUserGameValid(game, id)) {
+            return res.status(403).json({ code: "FORBIDDEN" })
+        }
+
         if (!games.has(gameId)) {
             return res.status(404).json({ code: "GAME_NOT_FOUND" })
         }
@@ -547,11 +580,17 @@ export const deleteGame = (req, res) => {
 
 export const getGame = (req, res) => {
     try {
+        const id = req.user.id
         const { gameId } = req.params
+
+        const game = games.get(gameId)
+        if (!isUserGameValid(game, id)) {
+            return res.status(403).json({ code: "FORBIDDEN" })
+        }
+
         if (!games.has(gameId)) {
             return res.status(404).json({ code: "GAME_NOT_FOUND" })
         }
-        const game = games.get(gameId)
         res.status(200).json(Object.fromEntries(Object.entries(game).filter(([key]) => key !== "deck")))
     } catch (error) {
         console.error("Error getting game:", error)
