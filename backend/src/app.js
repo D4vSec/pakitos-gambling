@@ -1,6 +1,6 @@
 import express from "express"
 import cors from "cors"
-const app = express()
+import helmet from "helmet"
 
 import { globalLimiter } from "#middlewares/rateLimitMiddleware"
 import userRoutes from "#routes/user"
@@ -14,11 +14,12 @@ import auditRoutes from "#routes/audit"
 import corsConfig from "#config/cors"
 
 const API_VERSION = "v1"
+const app = express()
 
 app.set("trust proxy", 1)
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
 app.use(express.json({ limit: "10kb" }))
+app.use(express.urlencoded({ extended: true, limit: "10kb" }))
+app.use(helmet())
 app.use(cors(corsConfig))
 app.disable("x-powered-by")
 
