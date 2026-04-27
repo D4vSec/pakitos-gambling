@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useCallback } from "react"
+import React, { useMemo, useState, useRef, useCallback, useEffect } from "react"
 import { useRoulette } from "@/providers/RouletteProvider"
 import PlacedChips from "../chips/PlacedChips"
 import NumberBet from "./NumberBet"
@@ -9,10 +9,9 @@ import "./RouletteBoard.css"
 // TODO: Mejorar el rendimiento de esto sin cargarme las chips
 const RouletteBoard = () => {
   const [hoveredCell, setHoveredCell] = useState(null)
+  const { rouletteValues, updateBets, getChipsForCell } = useRoulette()
 
-  const { getRouletteValues, updateBets, getChipsForCell } = useRoulette()
-
-  const values = getRouletteValues()
+  const boardRef = useRef(null)
 
   const highlightedSet = useMemo(() => {
     return new Set(BETTING_GROUPS[hoveredCell] || [])
@@ -34,7 +33,7 @@ const RouletteBoard = () => {
   )
 
   const { numbers, externals } = useMemo(() => {
-    return values.reduce(
+    return rouletteValues.reduce(
       (acc, cell) => {
         if (cell.type === "number") acc.numbers.push(cell)
         else acc.externals.push(cell)
@@ -42,10 +41,17 @@ const RouletteBoard = () => {
       },
       { numbers: [], externals: [] },
     )
-  }, [values])
+  }, [rouletteValues])
+
+  const onHover = useCallback((item) => {
+    console.log(item)
+    boardRef.current.dataset.hoveredcell = item
+  })
 
   return (
     <div
+      ref={boardRef}
+      data-hoverCell={hoveredCell}
       className="
     grid
     grid-cols-10 grid-rows-28
@@ -84,7 +90,7 @@ const RouletteBoard = () => {
           key={cell.text}
           item={cell}
           highlightedSet={highlightedSet}
-          onHover={updateHoveredCell}>
+          onHover={onHover}>
           <PlacedChips chips={getChipsForCell(cell)} />
         </ExternalBet>
       ))}

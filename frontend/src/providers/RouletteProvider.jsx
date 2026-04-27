@@ -195,7 +195,8 @@ const RouletteProvider = ({ children }) => {
   const getChipsForCell = useCallback(
     (cell) => {
       const key = `${cell.type}-${cell.bet}`
-      return chipsCache.get(key) || []
+      const EMPTY = []
+      return chipsCache.get(key) ?? EMPTY
     },
     [chipsCache],
   )
@@ -303,14 +304,12 @@ const RouletteProvider = ({ children }) => {
     return "tie"
   }
 
-  const getRouletteValues = () => {
+  const rouletteValues = useMemo(() => {
     return ROULETTE_VALUES.filter((item) => {
-      if (type === "Zero") {
-        return item.text !== "00"
-      }
+      if (type === "Zero") return item.text !== "00"
       return true
     })
-  }
+  }, [type])
 
   const handleFinish = () => {
     if (!spinData) return
@@ -350,7 +349,6 @@ const RouletteProvider = ({ children }) => {
     setBetAmount(0)
   }
 
-  // TODO: Dejar quieto el 0
   useEffect(() => {
     if (!spinData || !rouletteRef.current) return
 
@@ -372,29 +370,41 @@ const RouletteProvider = ({ children }) => {
     )
   }, [spinData])
 
-  const value = {
-    game,
-    clearBets,
-    updateBets,
-    doubleBets,
-    lastBet,
-    repeatBets,
-    selectedChip,
-    updateChip,
-    betAmount,
-    updateBetAmount,
-    winningNums,
-    type,
-    spin,
-    isSpinning,
-    spinData,
-    rouletteRef,
-    getRouletteValues,
-    getChipsForCell,
-    getIndexFromNumber,
-    getFinalAngleFromIndex,
-    WHEEL_OFFSET_DEG,
-  }
+  const value = useMemo(
+    () => ({
+      game,
+      clearBets,
+      updateBets,
+      doubleBets,
+      lastBet,
+      repeatBets,
+      selectedChip,
+      updateChip,
+      betAmount,
+      updateBetAmount,
+      winningNums,
+      type,
+      spin,
+      isSpinning,
+      spinData,
+      rouletteRef,
+      rouletteValues,
+      getChipsForCell,
+      getIndexFromNumber,
+      getFinalAngleFromIndex,
+      WHEEL_OFFSET_DEG,
+    }),
+    [
+      game,
+      lastBet,
+      selectedChip,
+      betAmount,
+      winningNums,
+      type,
+      isSpinning,
+      spinData,
+    ],
+  )
 
   return <RouletteContext value={value}>{children}</RouletteContext>
 }

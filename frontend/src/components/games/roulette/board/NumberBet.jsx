@@ -2,6 +2,7 @@ import React from "react"
 import { useRoulette } from "@/providers/RouletteProvider"
 import { PIECE_COLORS } from "../rouletteConsts"
 
+// TODo: Terminar de arreglar el hover
 const NumberBet = React.memo(({ item, children, highlightedSet }) => {
   const { type } = useRoulette()
 

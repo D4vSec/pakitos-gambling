@@ -2,10 +2,10 @@ import React from "react"
 import { useRoulette } from "@/providers/RouletteProvider"
 
 const LastNumber = ({ number }) => {
-  const { getRouletteValues } = useRoulette()
+  const { rouletteValues } = useRoulette()
 
   number === 37 && (number = "00")
-  const item = getRouletteValues().find((i) => i.text === String(number)) || {}
+  const item = rouletteValues.find((i) => i.text === String(number)) || {}
 
   const getBgColor = (color) => {
     switch (color) {

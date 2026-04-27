@@ -1,47 +1,40 @@
 "use strict"
 
+export const getNumberClasses = (item) => {
+  const classes = []
+  classes.push(`roulette-${item.bet}`)
+  classes.push(`roulette-${item.color}`)
+  if (item.bet !== 0 && item.bet !== 37) {
+    classes.push(item.bet % 2 === 0 ? "roulette-even" : "roulette-odd")
+  }
+  if (item.bet >= 1 && item.bet <= 12) classes.push("roulette-1-12")
+  if (item.bet >= 13 && item.bet <= 24) classes.push("roulette-13-24")
+  if (item.bet >= 25 && item.bet <= 36) classes.push("roulette-25-36")
+  return classes.join(" ")
+}
+
+const isRed = (n) =>
+  [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36].includes(
+    n,
+  )
+
 const ROULETTE_VALUES = [
-  // Numbers
   { text: "0", type: "number", bet: 0, color: "green" },
   { text: "00", type: "number", bet: 37, color: "green" },
-  { text: "1", type: "number", bet: 1, color: "red" },
-  { text: "2", type: "number", bet: 2, color: "black" },
-  { text: "3", type: "number", bet: 3, color: "red" },
-  { text: "4", type: "number", bet: 4, color: "black" },
-  { text: "5", type: "number", bet: 5, color: "red" },
-  { text: "6", type: "number", bet: 6, color: "black" },
-  { text: "7", type: "number", bet: 7, color: "red" },
-  { text: "8", type: "number", bet: 8, color: "black" },
-  { text: "9", type: "number", bet: 9, color: "red" },
-  { text: "10", type: "number", bet: 10, color: "black" },
-  { text: "11", type: "number", bet: 11, color: "black" },
-  { text: "12", type: "number", bet: 12, color: "red" },
-  { text: "13", type: "number", bet: 13, color: "black" },
-  { text: "14", type: "number", bet: 14, color: "red" },
-  { text: "15", type: "number", bet: 15, color: "black" },
-  { text: "16", type: "number", bet: 16, color: "red" },
-  { text: "17", type: "number", bet: 17, color: "black" },
-  { text: "18", type: "number", bet: 18, color: "red" },
-  { text: "19", type: "number", bet: 19, color: "red" },
-  { text: "20", type: "number", bet: 20, color: "black" },
-  { text: "21", type: "number", bet: 21, color: "red" },
-  { text: "22", type: "number", bet: 22, color: "black" },
-  { text: "23", type: "number", bet: 23, color: "red" },
-  { text: "24", type: "number", bet: 24, color: "black" },
-  { text: "25", type: "number", bet: 25, color: "red" },
-  { text: "26", type: "number", bet: 26, color: "black" },
-  { text: "27", type: "number", bet: 27, color: "red" },
-  { text: "28", type: "number", bet: 28, color: "black" },
-  { text: "29", type: "number", bet: 29, color: "black" },
-  { text: "30", type: "number", bet: 30, color: "red" },
-  { text: "31", type: "number", bet: 31, color: "black" },
-  { text: "32", type: "number", bet: 32, color: "red" },
-  { text: "33", type: "number", bet: 33, color: "black" },
-  { text: "34", type: "number", bet: 34, color: "red" },
-  { text: "35", type: "number", bet: 35, color: "black" },
-  { text: "36", type: "number", bet: 36, color: "red" },
 
-  // External bets
+  ...Array.from({ length: 36 }, (_, i) => {
+    const n = i + 1
+
+    return {
+      text: String(n),
+      type: "number",
+      bet: n,
+      color: isRed(n) ? "red" : "black",
+      classes: getNumberClasses({ bet: n, color: isRed(n) ? "red" : "black" }),
+    }
+  }),
+
+  // external bets siguen igual
   { text: "col 1", type: "row", bet: "row1", color: "default" },
   { text: "col 2", type: "row", bet: "row2", color: "default" },
   { text: "col 3", type: "row", bet: "row3", color: "default" },

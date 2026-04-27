@@ -1,4 +1,4 @@
-import React, { useCallback } from "react"
+import React from "react"
 import { useLocale } from "@/providers/LocaleProvider"
 import { PIECE_COLORS } from "../rouletteConsts"
 
@@ -22,20 +22,12 @@ const ExternalBet = React.memo(
 
     const gridClass = `roulette${item.bet}`
 
-    const handleEnter = useCallback(() => {
-      onHover(item.bet)
-    }, [onHover, item.bet])
-
-    const handleLeave = useCallback(() => {
-      onHover(null)
-    }, [onHover])
-
     return (
       <button
         className={`${gridClass} ${bgColor} ${hoverClass} text-white font-bold aspect-square md:aspect-auto w-full h-full flex justify-center items-center border border-gray-700 rounded relative transition-colors duration-200 ease-in-out`}
         data-info={JSON.stringify(item)}
-        onMouseEnter={handleEnter}
-        onMouseLeave={handleLeave}>
+        onMouseEnter={() => onHover(item.bet)}
+        onMouseLeave={() => onHover("")}>
         {["red", "black", "odd", "even"].includes(item.text)
           ? t(`games.roulette.board.${item.text}`)
           : item.text}
