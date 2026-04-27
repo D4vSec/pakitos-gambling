@@ -1,5 +1,4 @@
 import AuditService from "#services/audit"
-import { de } from "zod/v4/locales"
 
 const getAuditLogs = async (req, res) => {
 	try {
