@@ -284,6 +284,46 @@ describe('authController', () => {
 		})
 	})
 
+	it('login saves device info when useragent provided', async () => {
+		User.findUserByEmail.mockResolvedValueOnce({ id: 7, password: 'hashed' })
+		User.verifyPassword.mockResolvedValueOnce(true)
+		const res = createResponse()
+
+		const req = {
+			body: {
+				email: 'demo@example.com',
+				password: '12345678',
+			},
+			useragent: {
+				browser: 'Chrome',
+				version: '90.0',
+				os: 'Windows',
+				platform: 'Win32',
+				isMobile: false,
+				isTablet: false,
+				isDesktop: true,
+			},
+		}
+
+		await login(req, res)
+
+		const expectedDevice = JSON.stringify({
+			browser: 'Chrome',
+			version: '90.0',
+			os: 'Windows',
+			platform: 'Win32',
+			isMobile: false,
+			isTablet: false,
+			isDesktop: true,
+		})
+
+		expect(Session.createSession).toHaveBeenCalledWith(7, 'refresh-token', expectedDevice)
+		expect(res.json).toHaveBeenCalledWith({
+			accessToken: 'access-token',
+			refreshToken: 'refresh-token',
+		})
+	})
+
 	it('login returns 500 on unexpected errors', async () => {
 		User.findUserByEmail.mockRejectedValueOnce(new Error('db down'))
 		const res = createResponse()
@@ -337,6 +377,48 @@ describe('authController', () => {
 
 		expect(Session.revokeSession).toHaveBeenCalledWith(3)
 		expect(Session.createSession).toHaveBeenCalledWith(7, 'refresh-token', null)
+		expect(res.json).toHaveBeenCalledWith({
+			accessToken: 'access-token',
+			refreshToken: 'refresh-token',
+		})
+	})
+
+	it('refresh saves device info when useragent provided', async () => {
+		jwt.verify.mockReturnValueOnce({ id: 7 })
+		Session.getActiveSessionsByUserId.mockResolvedValueOnce([{ id: 3 }])
+		Session.verifyTokenMatch.mockResolvedValueOnce({
+			id: 3,
+			expires_at: '2999-12-31T23:59:59.000Z',
+		})
+		User.findUserById.mockResolvedValueOnce({ id: 7 })
+		const res = createResponse()
+
+		const req = {
+			body: { refreshToken: 'refresh-token' },
+			useragent: {
+				browser: 'Firefox',
+				version: '100.0',
+				os: 'Linux',
+				platform: 'x86_64',
+				isMobile: false,
+				isTablet: false,
+				isDesktop: true,
+			},
+		}
+
+		await refresh(req, res)
+
+		expect(Session.revokeSession).toHaveBeenCalledWith(3)
+		const expectedDevice = JSON.stringify({
+			browser: 'Firefox',
+			version: '100.0',
+			os: 'Linux',
+			platform: 'x86_64',
+			isMobile: false,
+			isTablet: false,
+			isDesktop: true,
+		})
+		expect(Session.createSession).toHaveBeenCalledWith(7, 'refresh-token', expectedDevice)
 		expect(res.json).toHaveBeenCalledWith({
 			accessToken: 'access-token',
 			refreshToken: 'refresh-token',
