@@ -6,7 +6,7 @@ import { ROULETTE_0_ORDER, ROULETTE_00_ORDER } from "../rouletteConsts"
 import gsap from "gsap"
 
 // TODO: Revisar img ruleta 00 y que cuadre
-const RouletteWheel = ({ type = "Zero", debug = true }) => {
+const RouletteWheel = ({ type = "Zero", debug }) => {
   const { rouletteRef, spinData } = useRoulette()
   const ballRef = useRef(null)
 

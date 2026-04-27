@@ -5,7 +5,7 @@ import { useLocale } from "@/providers/LocaleProvider"
 
 const RouletteNotification = ({ notification }) => {
   const [phase, setPhase] = useState("enter")
-  console.log(notification)
+
   const { t } = useLocale()
 
   const typeClasses = {

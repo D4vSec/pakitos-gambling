@@ -262,7 +262,6 @@ const SessionProvider = ({ children }) => {
 
   useEffect(() => {
     const token = getAccessToken()
-    console.log("t", token)
     getUserData()
   }, [])
 
