@@ -1,29 +1,32 @@
-import React, { useEffect, useState } from "react";
-import Card from "../landingPage/Card";
-import Button from "../buttons/Button";
-import UserSVG from "../svg/UserSVG";
-import { useForm, FormProvider } from "react-hook-form";
-import { FormField } from "@/components/forms/FormField";
-import { useSession } from "@/providers/SessionProvider";
-import { useNotification } from "@/providers/NotificationProvider";
-import { useLocale } from "@/providers/LocaleProvider";
+import React, { useEffect, useState } from "react"
+import { useForm, FormProvider } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { profileSchema } from "@/schemas/profileSchema"
+import { useSession } from "@/providers/SessionProvider"
+import { useNotification } from "@/providers/NotificationProvider"
+import { useLocale } from "@/providers/LocaleProvider"
+import Card from "../landingPage/Card"
+import Button from "../buttons/Button"
+import UserSVG from "../svg/UserSVG"
+import FormField from "@/components/forms/FormField"
 
 const ProfileCard = () => {
-  const { user, setUser, updateProfile, logout } = useSession();
-  const { addNotification } = useNotification();
-  const { t } = useLocale();
+  const { user, setUser, updateProfile, logout } = useSession()
+  const { addNotification } = useNotification()
+  const { t } = useLocale()
 
   const methods = useForm({
+    resolver: zodResolver(profileSchema),
     defaultValues: {
       username: user?.username || "",
       email: user?.email || "",
       password: "",
       confirmPassword: "",
     },
-  });
+  })
 
-  const [isEditing, setIsEditing] = useState(false);
-  const { reset, handleSubmit, watch } = methods;
+  const [isEditing, setIsEditing] = useState(false)
+  const { reset, handleSubmit, watch } = methods
 
   useEffect(() => {
     reset({
@@ -31,45 +34,39 @@ const ProfileCard = () => {
       email: user?.email || "",
       password: "",
       confirmPassword: "",
-    });
-  }, [user]);
+    })
+  }, [user])
 
   const onSubmit = async (data) => {
     if (data.password && data.password !== data.confirmPassword) {
-      addNotification(
-        t("general.form.confirmPassword.match"),
-        "error"
-      );
-      return;
+      addNotification(t("general.form.confirmPassword.match"), "error")
+      return
     }
 
     const body = {
       username: data.username,
       email: data.email,
-    };
+    }
 
-    const pwd = data.password?.trim().replace(/[\r\n]+/g, "");
-    if (pwd) body.password = pwd;
+    const pwd = data.password?.trim().replace(/[\r\n]+/g, "")
+    if (pwd) body.password = pwd
 
     try {
-      const fresh = await updateProfile(body);
+      const fresh = await updateProfile(body)
 
       if (pwd) {
-        addNotification(
-          t("message.info.passwordChanged"),
-          "info"
-        );
-        logout();
+        addNotification(t("message.info.passwordChanged"), "info")
+        logout()
       } else if (fresh && setUser) {
-        setUser(fresh);
+        setUser(fresh)
       }
 
-      reset({ ...data, password: "", confirmPassword: "" });
-      setIsEditing(false);
+      reset({ ...data, password: "", confirmPassword: "" })
+      setIsEditing(false)
     } catch (err) {
-      console.error("Update profile failed", err);
+      console.error("Update profile failed", err)
     }
-  };
+  }
 
   return (
     <Card className="py-6 px-6 border-0">
@@ -78,9 +75,7 @@ const ProfileCard = () => {
         {t("general.profile.profileCard.title")}
       </h2>
 
-      <p className="text-1lg">
-        {t("general.profile.profileCard.description")}
-      </p>
+      <p className="text-1lg">{t("general.profile.profileCard.description")}</p>
 
       <div className="mt-1">
         <div className="card w-full max-w-md bg-base-100 shadow-xl rounded-2xl">
@@ -113,16 +108,12 @@ const ProfileCard = () => {
               <FormProvider {...methods}>
                 <form
                   onSubmit={handleSubmit(onSubmit)}
-                  className="flex flex-col gap-4"
-                >
+                  className="flex flex-col gap-4">
                   <FormField
                     name="username"
                     type="text"
                     label={t("general.form.username.label")}
                     placeholder={t("general.form.username.placeholder")}
-                    rules={{
-                      required: t("general.form.username.required"),
-                    }}
                   />
 
                   <FormField
@@ -130,13 +121,6 @@ const ProfileCard = () => {
                     type="email"
                     label={t("general.form.email.label")}
                     placeholder={t("general.form.email.placeholder")}
-                    rules={{
-                      required: t("general.form.email.required"),
-                      pattern: {
-                        value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                        message: t("general.form.email.pattern"),
-                      },
-                    }}
                   />
 
                   <FormField
@@ -144,13 +128,6 @@ const ProfileCard = () => {
                     type="password"
                     label={t("general.form.password.label")}
                     placeholder={t("general.form.password.placeholder")}
-                    rules={{
-                      pattern: {
-                        value:
-                          /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9!@#$%^&*])[A-Za-z0-9!@#$%^&*]{8,}$/,
-                        message: t("general.form.password.pattern"),
-                      },
-                    }}
                   />
 
                   <FormField
@@ -158,13 +135,6 @@ const ProfileCard = () => {
                     type="password"
                     label={t("general.form.confirmPassword.label")}
                     placeholder={t("general.form.confirmPassword.placeholder")}
-                    rules={{
-                      validate: (val) =>
-                        watch("password")
-                          ? val === watch("password") ||
-                            t("general.form.confirmPassword.match")
-                          : true,
-                    }}
                   />
 
                   <div className="flex gap-2">
@@ -181,10 +151,9 @@ const ProfileCard = () => {
                           email: user?.email || "",
                           password: "",
                           confirmPassword: "",
-                        });
-                        setIsEditing(false);
-                      }}
-                    >
+                        })
+                        setIsEditing(false)
+                      }}>
                       {t("general.form.buttons.cancel")}
                     </button>
                   </div>
@@ -195,7 +164,7 @@ const ProfileCard = () => {
         </div>
       </div>
     </Card>
-  );
-};
+  )
+}
 
-export default ProfileCard;
+export default ProfileCard
