@@ -3,7 +3,9 @@ import React, {
   useContext,
   useCallback,
   useState,
+  useEffect,
   useMemo,
+  useRef,
 } from "react"
 import useAPI from "@/hooks/useAPI"
 import { useNotification } from "@/providers/NotificationProvider"
@@ -13,11 +15,16 @@ import { useLocale } from "./LocaleProvider"
 import {
   CHIPS,
   ROULETTE_VALUES,
+  ROULETTE_0_ORDER,
+  ROULETTE_00_ORDER,
 } from "@/components/games/roulette/rouletteConsts"
+import gsap from "gsap"
 
 const RouletteContext = createContext()
 
 const HOST = "localhost:3000"
+const WHEEL_OFFSET_DEG = 355
+const WHEEL_INDEX_OFFSET = 0
 
 const RouletteProvider = ({ children }) => {
   const location = useLocation()
@@ -33,10 +40,16 @@ const RouletteProvider = ({ children }) => {
     rouletteType: rouletteType,
     bets: [],
   })
+
   const [betAmount, setBetAmount] = useState(0)
   const [selectedChip, setSelectedChip] = useState(0)
   const [winningNums, setWinningNums] = useState([])
   const [lastBet, setLastBet] = useState({})
+  const [isSpinning, setIsSpinning] = useState(false)
+
+  const [spinData, setSpinData] = useState(null)
+
+  const rouletteRef = useRef(null)
 
   const { getRefreshToken, getAccessToken, updateBalance, user } = useSession()
   const { balance } = user
@@ -188,10 +201,36 @@ const RouletteProvider = ({ children }) => {
     [chipsCache],
   )
 
+  const getIndexFromNumber = (number) => {
+    const order = type === "ZeroZero" ? ROULETTE_00_ORDER : ROULETTE_0_ORDER
+    const rawIndex = order.indexOf(number)
+    return (rawIndex + WHEEL_INDEX_OFFSET + order.length) % order.length
+  }
+
+  const { anglePerSlot, rotationOffset } = useMemo(() => {
+    const order = type === "ZeroZero" ? ROULETTE_00_ORDER : ROULETTE_0_ORDER
+
+    const anglePerSlot = 360 / order.length
+    const rotationOffset = anglePerSlot / 2
+
+    return {
+      anglePerSlot,
+      rotationOffset,
+    }
+  }, [type])
+
+  const getFinalAngleFromIndex = (index) => {
+    const angle = index * anglePerSlot + rotationOffset + WHEEL_OFFSET_DEG
+
+    return angle % 360
+  }
+
   const spin = async () => {
     const url = `http://${HOST}/v1/roulette/spin`
 
     try {
+      setIsSpinning(true)
+
       const res = await post(url, {
         headers: {
           "x-refresh-token": getRefreshToken(),
@@ -207,42 +246,36 @@ const RouletteProvider = ({ children }) => {
       console.log("rouletteStatus", res)
 
       const outcome = getGameOutcome(res)
-
       const payout = getTotalPayout(res)
 
-      updateBalance("deposit", payout)
+      const randomOffset = Math.random() * 360
 
-      const winningNumber =
-        res?.result?.winningNumber === 37 ? "00" : res?.result?.winningNumber
+      const winningNumber = res?.result?.winningNumber
 
-      addNotification(
-        `${t("message.info.winningNumber")}: ${res?.result?.winningNumber === 37 ? "00" : res?.result?.winningNumber} | ${t(`games.roulette.board.${res?.result?.color}`)}`,
-        outcome === "win" ? "success" : outcome === "lose" ? "error" : "info",
-        {
-          scope: "games",
-          duration: 4000,
-          game: "roulette",
-          outcome: outcome,
-          number: winningNumber,
-          payout: payout,
-        },
-      )
+      const index = getIndexFromNumber(winningNumber)
+      const finalAngle = getFinalAngleFromIndex(index)
 
-      setLastBet(game)
+      console.log("1", {
+        winningNumber,
+        index,
+        finalAngle,
+      })
 
-      setTimeout(() => {
-        setWinningNums((prev) =>
-          [res?.result?.winningNumber, ...prev].slice(0, 10),
-        )
-      }, [300])
+      setSpinData({
+        winningNumber,
+        color: res?.result?.color,
+        index,
+        finalAngle,
+        outcome,
+        payout,
+        randomOffset,
+      })
 
-      setGame((prev) => ({
-        ...prev,
-        bets: [],
-      }))
-      setBetAmount(0)
+      // Se ejecuta handleFinish()
     } catch (error) {
       addNotification(t(`message.error.${error.message}`), "error")
+    } finally {
+      setIsSpinning(false)
     }
   }
 
@@ -282,6 +315,66 @@ const RouletteProvider = ({ children }) => {
     })
   }
 
+  const handleFinish = () => {
+    if (!spinData) return
+    const data = spinData
+
+    addNotification(
+      `${t("message.info.winningNumber")}: ${data.winningNumber} | ${t(
+        `games.roulette.board.${data.color}`,
+      )}`,
+      data.outcome === "win"
+        ? "success"
+        : data.outcome === "lose"
+          ? "error"
+          : "info",
+      {
+        scope: "games",
+        duration: 4000,
+        game: "roulette",
+        outcome: data.outcome,
+        number: data.winningNumber,
+        payout: data.payout,
+      },
+    )
+
+    setLastBet(game)
+
+    setTimeout(() => {
+      setWinningNums((prev) => [spinData?.winningNumber, ...prev].slice(0, 10))
+      updateBalance("deposit", data.payout)
+    }, 300)
+
+    setGame((prev) => ({
+      ...prev,
+      bets: [],
+    }))
+
+    setBetAmount(0)
+  }
+
+  // TODO: Dejar quieto el 0
+  useEffect(() => {
+    if (!spinData || !rouletteRef.current) return
+
+    gsap.killTweensOf(rouletteRef.current)
+
+    const spins = 3
+
+    const finalRotation = 360 * spins + spinData.randomOffset
+
+    gsap.fromTo(
+      rouletteRef.current,
+      { rotation: 0 },
+      {
+        rotation: finalRotation,
+        duration: 4,
+        ease: "power4.out",
+        onComplete: handleFinish,
+      },
+    )
+  }, [spinData])
+
   const value = {
     game,
     clearBets,
@@ -296,8 +389,14 @@ const RouletteProvider = ({ children }) => {
     winningNums,
     type,
     spin,
+    isSpinning,
+    spinData,
+    rouletteRef,
     getRouletteValues,
     getChipsForCell,
+    getIndexFromNumber,
+    getFinalAngleFromIndex,
+    WHEEL_OFFSET_DEG,
   }
 
   return <RouletteContext value={value}>{children}</RouletteContext>
@@ -314,3 +413,33 @@ export const useRoulette = () => {
 
   return context
 }
+
+/*
+  useEffect(() => {
+    if (!spinData || !rouletteRef.current) return
+
+    gsap.killTweensOf(rouletteRef.current)
+
+    const extraSpins = 360 * 5
+
+    const current = currentRotationRef.current % 360
+
+    const target = spinData.finalAngle
+
+    let delta = target - current
+
+    // forzar giro en sentido positivo (horario suave)
+    if (delta < 0) delta += 360
+
+    const finalRotation = currentRotationRef.current + extraSpins + delta
+
+    currentRotationRef.current = finalRotation
+
+    gsap.to(rouletteRef.current, {
+      rotation: finalRotation,
+      duration: 4,
+      ease: "power4.out",
+      onComplete: handleFinish,
+    })
+  }, [spinData])
+*/

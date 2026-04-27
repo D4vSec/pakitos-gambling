@@ -34,8 +34,10 @@
   - The Blackjack session store trusts gameId alone. None of the mutation endpoints (hit, stand, double, split, delete) verify that the session belongs to req.user.id, and payouts are applied to the current caller's balance.
 ## CHECKLIST
 
-- [ ] Continuar partida (get/:gameId)
-- [ ] Lógica del dealer
+- [X] Continuar partida (get/:gameId)
+- [X] Lógica del dealer
 - [X] Split de manos
-- [ ] Empates (push)
+- [X] Empates (push)
 - [X] Broken Object Level Authorization
+- [ ] Refactor del BJ
+

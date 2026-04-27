@@ -78,7 +78,6 @@ const createBlackJack = () => {
 
     //Dealer logic
     const dealerPlay = (deck, dealerHand, playerHand) => {
-        if (calculateHandValue(playerHand) < calculateHandValue(dealerHand)) return dealerHand
         while (calculateHandValue(dealerHand) < 17) {
             dealerHand = [...dealerHand, deck[0]]
             deck.shift()
@@ -87,7 +86,6 @@ const createBlackJack = () => {
     }
 
     const dealerPlaySplit = (deck, dealerHand, playerHand1, playerHand2) => {
-        if (calculateHandValue(playerHand1) < calculateHandValue(dealerHand) || calculateHandValue(playerHand2) < calculateHandValue(dealerHand)) return dealerHand
         while (calculateHandValue(dealerHand) < 17) {
             dealerHand = [...dealerHand, deck[0]]
             deck.shift()
@@ -100,7 +98,7 @@ const createBlackJack = () => {
         if (dealerHandValue > 21) return "player"
         if (playerHandValue > dealerHandValue) return "player"
         if (playerHandValue < dealerHandValue) return "dealer"
-        return "Tie"
+        return "tie"
     }
 
     return {
