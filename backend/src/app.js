@@ -1,6 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import helmet from 'helmet'
+import { express as useragent } from 'express-useragent';
 
 import { globalLimiter } from '#middlewares/rateLimitMiddleware'
 import userRoutes from '#routes/user'
@@ -21,6 +22,7 @@ app.use(express.json({ limit: '10kb', strict: true }))
 app.use(express.urlencoded({ extended: true, limit: '10kb' }))
 app.use(helmet())
 app.use(cors(corsConfig))
+app.use(useragent());
 app.disable('x-powered-by')
 
 app.use(`/${API_VERSION}`, globalLimiter)

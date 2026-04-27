@@ -79,7 +79,18 @@ const login = async (req, res) => {
 		}
 
 		const tokens = generateTokens(user)
-		await Session.createSession(user.id, tokens.refreshToken)
+		const deviceInfo = req.useragent
+			? JSON.stringify({
+				browser: req.useragent.browser,
+				version: req.useragent.version,
+				os: req.useragent.os,
+				platform: req.useragent.platform,
+				isMobile: req.useragent.isMobile,
+				isTablet: req.useragent.isTablet,
+				isDesktop: req.useragent.isDesktop,
+			})
+			: null
+		await Session.createSession(user.id, tokens.refreshToken, deviceInfo)
 		res.json(tokens)
 	} catch (err) {
 		res.status(500).json({ code: "SERVER_ERROR" })
@@ -102,7 +113,18 @@ const refresh = async (req, res) => {
 		await Session.revokeSession(validSession.id)
 		const user = await User.findUserById(decoded.id)
 		const tokens = generateTokens(user)
-		await Session.createSession(user.id, tokens.refreshToken)
+		const deviceInfo = req.useragent
+			? JSON.stringify({
+				browser: req.useragent.browser,
+				version: req.useragent.version,
+				os: req.useragent.os,
+				platform: req.useragent.platform,
+				isMobile: req.useragent.isMobile,
+				isTablet: req.useragent.isTablet,
+				isDesktop: req.useragent.isDesktop,
+			})
+			: null
+		await Session.createSession(user.id, tokens.refreshToken, deviceInfo)
 
 		res.json(tokens)
 	} catch (err) {

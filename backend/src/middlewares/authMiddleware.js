@@ -47,7 +47,7 @@ const authMiddleware = async (req, res, next) => {
 				const user = await User.findUserById(decodedRefresh.id)
 				const tokens = generateTokens(user)
 
-				await Session.createSession(user.id, tokens.refreshToken)
+				await Session.createSession(user.id, tokens.refreshToken, req.useragent ? JSON.stringify({ browser: req.useragent.browser, version: req.useragent.version, os: req.useragent.os, platform: req.useragent.platform, isMobile: req.useragent.isMobile, isTablet: req.useragent.isTablet, isDesktop: req.useragent.isDesktop }) : null)
 
 				req.user = { id: user.id, role: user.role }
 				res.setHeader("x-access-token", tokens.accessToken)

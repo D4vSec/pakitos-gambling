@@ -101,6 +101,33 @@ const createBlackJack = () => {
         return "tie"
     }
 
+
+    const hideDealerCard = (dealerHand, game) => {
+        const DEALER_HAND = 0
+        const responseGame = structuredClone(game)
+
+        if (responseGame.status !== "finished") {
+            const dealer = responseGame.dealer[DEALER_HAND]
+            dealer.hand[1] = { rank: "hidden", suit: "hidden" }
+            dealer.value = blackJack.calculateHandValue([dealer.hand[0]])
+        }
+
+        return responseGame
+    }
+
+    const setHand = (hand) => {
+        const responseHand = structuredClone(hand)
+
+        responseHand.value = blackJack.calculateHandValue(hand.hand)
+        responseHand.bust = responseHand.value > 21
+        responseHand.blackjack = responseHand.value === 21
+        if (responseHand.bust || responseHand.blackjack) {
+            responseHand.resolved = true
+        }
+
+        return responseHand
+    }
+
     return {
         createDeck,
         shuffleDeck,
@@ -112,6 +139,8 @@ const createBlackJack = () => {
         dealerPlay,
         dealerPlaySplit,
         determinateWinner,
+        hideDealerCard,
+        setHand,
     }
 }
 

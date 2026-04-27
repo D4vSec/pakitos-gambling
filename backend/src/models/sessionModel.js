@@ -1,13 +1,20 @@
 import db from "#config/db"
 import { hashPassword, comparePassword } from "#utils/password"
 
-const createSession = async (userId, refreshToken) => {
+const createSession = async (userId, refreshToken, deviceInfo = null) => {
 	const refreshHash = await hashPassword(refreshToken)
 	const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-	await db.query(
-		"INSERT INTO sessions (user_id, refresh_token_hash, expires_at) VALUES ($1, $2, $3)",
-		[userId, refreshHash, expiresAt],
-	)
+	if (deviceInfo === null || deviceInfo === undefined) {
+		await db.query(
+			"INSERT INTO sessions (user_id, refresh_token_hash, expires_at) VALUES ($1, $2, $3)",
+			[userId, refreshHash, expiresAt],
+		)
+	} else {
+		await db.query(
+			"INSERT INTO sessions (user_id, refresh_token_hash, device_info, expires_at) VALUES ($1, $2, $3, $4)",
+			[userId, refreshHash, deviceInfo, expiresAt],
+		)
+	}
 }
 
 const getActiveSessionsByUserId = async (userId) => {
