@@ -277,7 +277,7 @@ describe('authController', () => {
 			res,
 		)
 
-		expect(Session.createSession).toHaveBeenCalledWith(7, 'refresh-token')
+		expect(Session.createSession).toHaveBeenCalledWith(7, 'refresh-token', null)
 		expect(res.json).toHaveBeenCalledWith({
 			accessToken: 'access-token',
 			refreshToken: 'refresh-token',
@@ -336,7 +336,7 @@ describe('authController', () => {
 		await refresh({ body: { refreshToken: 'refresh-token' } }, res)
 
 		expect(Session.revokeSession).toHaveBeenCalledWith(3)
-		expect(Session.createSession).toHaveBeenCalledWith(7, 'refresh-token')
+		expect(Session.createSession).toHaveBeenCalledWith(7, 'refresh-token', null)
 		expect(res.json).toHaveBeenCalledWith({
 			accessToken: 'access-token',
 			refreshToken: 'refresh-token',
