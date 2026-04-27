@@ -120,15 +120,9 @@ const SessionProvider = ({ children }) => {
 
   const getUserData = async () => {
     try {
-      const accessToken = getAccessToken()
-
-      if (!accessToken) {
-        throw new Error("AUTH_NO_TOKEN_PROVIDED")
-      }
-
       const response = await get("/api/v1/user/me", {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${getAccessToken()}`,
         },
       })
 
@@ -204,7 +198,6 @@ const SessionProvider = ({ children }) => {
     }
   }
 
-  // TODO: No se si separar el balance del user y controlarlo independientemente
   const addBalance = async (amount) => {
     try {
       const response = await post("/api/v1/user/me/transactions", {
@@ -262,7 +255,13 @@ const SessionProvider = ({ children }) => {
 
   useEffect(() => {
     const token = getAccessToken()
-    getUserData()
+
+    if (token) {
+      getUserData()
+    } else {
+      setLoading(false)
+      setIsLogged(false)
+    }
   }, [])
 
   const value = {
