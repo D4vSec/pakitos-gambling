@@ -2,7 +2,7 @@ import React from "react"
 import { useRoulette } from "@/providers/RouletteProvider"
 import RouletteBoard from "./board/RouletteBoard"
 import LastNumbersList from "./lastNums/LastNumbersList"
-import Roulette0SVG from "./roulettes/Roulette0SVG"
+import RouletteWheel from "./roulettes/RouletteWheel"
 
 const Roulette = () => {
   const { type } = useRoulette()
@@ -10,7 +10,7 @@ const Roulette = () => {
   return (
     <div className="w-full h-full grid grid-rows-[45%_55%] md:grid-cols-2 gap-2">
       <div className="hidden md:flex items-center justify-center">
-        <Roulette0SVG />
+        <RouletteWheel type={type} />
       </div>
 
       <div className="hidden md:flex flex-col justify-center items-center gap-2">

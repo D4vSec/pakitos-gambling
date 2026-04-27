@@ -24,7 +24,7 @@ const RouletteContext = createContext()
 
 const HOST = "localhost:3000"
 const WHEEL_OFFSET_DEG = 355
-const WHEEL_INDEX_OFFSET = 0 // (ejemplo inicial)
+const WHEEL_INDEX_OFFSET = 0
 
 const RouletteProvider = ({ children }) => {
   const location = useLocation()
@@ -253,13 +253,10 @@ const RouletteProvider = ({ children }) => {
 
       updateBalance("deposit", payout)
 
-      // 🔧 SOLO CAMBIO: número limpio (sin "00")
       const winningNumber = res?.result?.winningNumber
 
-      // 🔧 NUEVO: preparación para animación (NO GSAP aún)
       const index = getIndexFromNumber(winningNumber)
       const finalAngle = getFinalAngleFromIndex(index)
-      // 🔧 NUEVO: guardamos datos de animación
 
       console.log("1", {
         winningNumber,
@@ -356,34 +353,26 @@ const RouletteProvider = ({ children }) => {
     setBetAmount(0)
   }
 
+  // TODO: Dejar quieto el 0
   useEffect(() => {
     if (!spinData || !rouletteRef.current) return
 
     gsap.killTweensOf(rouletteRef.current)
 
-    const extraSpins = 360 * 5
+    const spins = 5
 
-    // 🔥 clave: normalizar acumulado
-    const current = currentRotationRef.current % 360
+    const finalRotation = 360 * spins
 
-    const target = spinData.finalAngle
-
-    // 🔥 diferencia real mínima hacia el target
-    let delta = target - current
-
-    // forzar giro en sentido positivo (horario suave)
-    if (delta < 0) delta += 360
-
-    const finalRotation = currentRotationRef.current + extraSpins + delta
-
-    currentRotationRef.current = finalRotation
-
-    gsap.to(rouletteRef.current, {
-      rotation: finalRotation,
-      duration: 4,
-      ease: "power4.out",
-      onComplete: handleFinish,
-    })
+    gsap.fromTo(
+      rouletteRef.current,
+      { rotation: 0 },
+      {
+        rotation: finalRotation,
+        duration: 4,
+        ease: "power4.out",
+        onComplete: handleFinish,
+      },
+    )
   }, [spinData])
 
   const value = {
@@ -424,3 +413,33 @@ export const useRoulette = () => {
 
   return context
 }
+
+/*
+  useEffect(() => {
+    if (!spinData || !rouletteRef.current) return
+
+    gsap.killTweensOf(rouletteRef.current)
+
+    const extraSpins = 360 * 5
+
+    const current = currentRotationRef.current % 360
+
+    const target = spinData.finalAngle
+
+    let delta = target - current
+
+    // forzar giro en sentido positivo (horario suave)
+    if (delta < 0) delta += 360
+
+    const finalRotation = currentRotationRef.current + extraSpins + delta
+
+    currentRotationRef.current = finalRotation
+
+    gsap.to(rouletteRef.current, {
+      rotation: finalRotation,
+      duration: 4,
+      ease: "power4.out",
+      onComplete: handleFinish,
+    })
+  }, [spinData])
+*/

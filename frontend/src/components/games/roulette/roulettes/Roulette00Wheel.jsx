@@ -1,16 +1,16 @@
 import React, { useRef, useEffect } from "react"
-import rouletteImg from "@/assets/roulette0.png"
+import rouletteImg from "@/assets/roulette00.png"
 import { useRoulette } from "@/providers/RouletteProvider"
-import { ROULETTE_0_ORDER } from "../rouletteConsts"
+import { ROULETTE_00_ORDER } from "../rouletteConsts"
 import gsap from "gsap"
 
-const Roulette0SVG = () => {
-  const { rouletteRef, spinData, WHEEL_OFFSET_DEG } = useRoulette()
+const Roulette00Wheel = ({ debug = true }) => {
+  const { rouletteRef, spinData } = useRoulette()
   const ballRef = useRef(null)
 
-  const SIZE = ROULETTE_0_ORDER.length
+  const SIZE = ROULETTE_00_ORDER.length
   const ANGLE_STEP = 360 / SIZE
-
+  const VISUAL_OFFSET = -5
   const RADIUS = 100 // 145
 
   useEffect(() => {
@@ -20,7 +20,17 @@ const Roulette0SVG = () => {
 
     const spins = 6
 
-    const targetAngle = spinData.finalAngle
+    const anglePerSlot = 360 / ROULETTE_00_ORDER.length
+
+    const index = ROULETTE_00_ORDER.indexOf(spinData.winningNumber)
+
+    // const baseAngle = index * anglePerSlot + anglePerSlot / 2
+
+    const targetAngle =
+      index * anglePerSlot +
+      anglePerSlot / 2 +
+      spinData.randomOffset +
+      VISUAL_OFFSET
 
     gsap.fromTo(
       ballRef.current,
@@ -32,6 +42,7 @@ const Roulette0SVG = () => {
       },
     )
   }, [spinData])
+
   return (
     <div className="relative mx-auto max-w-74">
       <img
@@ -56,37 +67,38 @@ const Roulette0SVG = () => {
           />
         </div>
       </div>
+      {debug && (
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            transform: `translate(-5px, -6px)`, // 👈 ajuste fino visual
+          }}>
+          {ROULETTE_00_ORDER.map((num, i) => {
+            const angle = i * ANGLE_STEP
 
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          transform: `translate(-5px, -6px)`, // 👈 ajuste fino visual
-        }}>
-        {ROULETTE_0_ORDER.map((num, i) => {
-          const angle = i * ANGLE_STEP
-
-          return (
-            <div
-              key={num}
-              style={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: `
+            return (
+              <div
+                key={num}
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: `
             rotate(${angle}deg)
             translateY(-140px)
             rotate(-${angle}deg)
           `,
-                fontSize: "9px",
-                color: "white",
-              }}>
-              {num}
-            </div>
-          )
-        })}
-      </div>
+                  fontSize: "9px",
+                  color: "white",
+                }}>
+                {num}
+              </div>
+            )
+          })}
+        </div>
+      )}
     </div>
   )
 }
 
-export default Roulette0SVG
+export default Roulette00Wheel
