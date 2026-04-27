@@ -1,11 +1,9 @@
-# Pakitos Gambling
-
-Pakitos Gambling is a **simulated online casino** developed as a final project for the **Higher Degree in Web Application Development (DAW) in Web Application Development (FP DAW)**.
+# 🎰 Pakitos Gambling
+Pakitos Gambling is a **simulated online casino** developed as a final project for the **Higher Degree in Web Application Development (DAW)**.
 
 It is a full-stack web application with a React frontend, an Express backend, PostgreSQL as the database, and Docker-based environments for both development and deployment.
 
-## Overview
-
+## 📋 Overview
 This repository contains the full application stack and the supporting infrastructure needed to run it locally. The project is organized around:
 - **frontend** built with React and Vite
 - **backend API** built with Node.js and Express
@@ -13,104 +11,78 @@ This repository contains the full application stack and the supporting infrastru
 - **Docker Compose** workflows for development and production
 - **pgAdmin** for database management
 
-## Tech Stack
-
+# 🛠️ Tech Stack
 | Area | Technologies |
 | --- | --- |
-| Frontend | React, Vite, Tailwind CSS, GSAP, React Router |
-| Backend | Node.js, Express, JWT, Argon2, Zod |
-| Database | PostgreSQL |
-| DevOps | Docker, Docker Compose, Apache, pgAdmin |
+| **Frontend** | ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB) ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white) ![GSAP](https://img.shields.io/badge/GSAP-88CE02?style=for-the-badge&logo=greensock&logoColor=white) |
+| **Backend** | ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white) ![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white) ![Zod](https://img.shields.io/badge/zod-%233068b7.svg?style=for-the-badge&logo=zod&logoColor=white) ![Argon2](https://img.shields.io/badge/Argon2-6495ED?style=for-the-badge&logo=auth0&logoColor=white) |
+| **Database** | ![PostgreSQL](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white) |
+| **DevOps** | ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white) |
 
-## Getting Started
-
+## 🚀 Getting Started
 ### Prerequisites
-- Docker
-- Docker Compose
-- A configured `.env` file in the project root
+- Node.js (LTS recommended) and npm (or pnpm/yarn)
+- Git
+- Docker & Docker Compose for the full development stack
+- WSL2 is recommended if you are on Windows
 
-> [!NOTE]
-> On Windows, this project should be run with **WSL2** to avoid compatibility issues.
-
-### Start in development mode
-
-Create the `.env` file based in `.env.example`
+### Environment variables
+Copy `.env.example` to `.env` at the repository root and set required values
 
 ```bash
 cp .env.example .env
 ```
 
-Grant execution permissions to the startup script if needed:
+### CORS Setup
+The backend reads `CORS_ORIGIN` from the `.env` file to configure the cors middleware.
 
-```bash
-chmod +x start.sh
-chmod +x sql.sh
+```env
+CORS_ORIGIN=http://localhost:5173
 ```
 
-Run the development environment:
+> [!TIP]
+> After changing CORS_ORIGIN, always restart the backend container for the changes to take effect.
+
+### Start containers
+From the repository root:
 
 ```bash
 bash start.sh dev
 ```
 
-> [!TIP]
-> If you encounter \r command not found errors, it's likely due to Windows line endings (CRLF). Use this sed command to convert them to Linux format (LF).
-> ```bash
-> sed -i 's/\r$//' start.sh
-> ```
-
-Import the database:
+### Database
+Import the initial schema:
 
 ```bash
 bash sql.sh
 ```
 
-Available services in development:
-
-- Frontend: `http://localhost:5173`
-- Backend API: `http://localhost:3000` (or the port configured in `.env`)
-- pgAdmin: `http://localhost:5050` by default
-
-### Start in production mode
-
-Run the production setup:
-
+## 🐛 Troubleshooting
+### Carriage return (`\r`) in bash scripts
+If you encounter `\r` (carriage return) errors when running scripts on Linux, fix the line endings with:
 ```bash
-bash start.sh
+sed -i 's/\r$//' start.sh
 ```
 
-In this mode, the frontend is built as static assets and served through Apache.
+### Docker
+If you encounter that containers doesn't start or API responds with `500` you can check the docker logs using
+```bash
+docker compose logs -f <container>
+```
 
-## Local Environments
+### Database
+- Ensure PostgreSQL is running.
+- Double-check that all database credentials and connection details in your `.env` file are correct.
+- Verify container logs
 
-### Development
-
-The development stack is defined in `docker-compose.dev.yml` and includes:
-
-- a Vite frontend with live reloading
-- an Express backend container
-- PostgreSQL
-- pgAdmin
-
-### Production
-
-The production stack is defined in `docker-compose.yml` and includes:
-
-- a static frontend served by Apache
-- the backend API
-- PostgreSQL
-- pgAdmin
-
-## Resource Management on Windows
-
+## 🐋 Resource Management on Windows
 If Docker resources remain allocated inside WSL2 after use, you can shut the environment down with:
 
 ```powershell
 powershell -Command "Start-Process wsl -ArgumentList '--shutdown' -Verb RunAs"
 ```
 
-## Team
-
+## 👥 Team
 - [David Gonzalez](https://github.com/D4vSec)
 - [Yeray Caturla](https://github.com/yeraox)
 - [Nain Pontes](https://github.com/Stevankito)
