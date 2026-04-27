@@ -1,17 +1,17 @@
-import React from "react";
-import Card from "../landingPage/Card";
-import Button from "../buttons/Button";
-import LemonSVG from "../svg/LemonSVG";
-import { useLocale } from "@/providers/LocaleProvider";
-import Badge from "./Badges";
-import CrownSVG from "../svg/CrownSVG";
-import DolarSVG from "../svg/DolarSVG";
-import SparkleSVG from "../svg/SparkleSVG";
-import { useNavigate } from "react-router-dom";
+import React from "react"
+import Card from "../landingPage/Card"
+import Button from "../buttons/Button"
+import LemonSVG from "../svg/LemonSVG"
+import { useLocale } from "@/providers/LocaleProvider"
+import Badge from "./Badges"
+import CrownSVG from "../svg/CrownSVG"
+import DolarSVG from "../svg/DolarSVG"
+import SparkleSVG from "../svg/SparkleSVG"
+import { useNavigate } from "react-router-dom"
 
 const RouletteCard = () => {
-  const { t } = useLocale();
-  const navigate = useNavigate();
+  const { t } = useLocale()
+  const navigate = useNavigate()
   return (
     <section className=" max-w-6xl mx-auto px-4 md:px-8 lg:px-16 mt-12">
       <div className="mb-6 border-b-2 pb-3 text-primary">
@@ -25,7 +25,7 @@ const RouletteCard = () => {
         <Card className="relative group overflow-hidden bg-card/50 border border-border hover:bg-card/80 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 rounded-xl">
           <div className="relative h-52 w-full overflow-hidden">
             <img
-              src="https://thumbs.dreamstime.com/b/rueda-de-ruleta-americana-y-europea-58049629.jpg"
+              src="https://imgs.search.brave.com/rrjcDPedGiaTiT3xdBKZL4e3qIRVvWG0CJ9GhFRo-lM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTU1/MzU3MTQ5L3Bob3Rv/L3JvdWxldHRlLXRh/YmxlLmpwZz9zPTYx/Mng2MTImdz0wJms9/MjAmYz16QUZOSzRu/X2UtU3dqVzlRRktP/LXFtZHhRUGtQZWhn/ZWFJakxMbjhuVWVB/PQ"
               alt="Roulette"
               className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
@@ -41,8 +41,7 @@ const RouletteCard = () => {
             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
               <Button
                 className="bg-primary text-primary-foreground px-4 py-2 rounded-md text-sm font-medium hover:opacity-90 transition"
-                onClick={() => navigate("/roulette00")}
-              >
+                onClick={() => navigate("/roulette00")}>
                 {t("general.home.playNow")}
               </Button>
             </div>
@@ -74,8 +73,7 @@ const RouletteCard = () => {
             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
               <Button
                 className="bg-primary text-primary-foreground px-4 py-2 rounded-md text-sm font-medium hover:opacity-90 transition"
-                onClick={() => navigate("/roulette0")}
-              >
+                onClick={() => navigate("/roulette0")}>
                 {t("general.home.playNow")}
               </Button>
             </div>
@@ -92,7 +90,7 @@ const RouletteCard = () => {
         </Card>
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default RouletteCard;
+export default RouletteCard

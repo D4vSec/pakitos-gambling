@@ -4,6 +4,7 @@ import Card from "../landingPage/Card"
 import Badge from "./Badges"
 import SparkleSVG from "../svg/SparkleSVG"
 import CrownSVG from "../svg/CrownSVG"
+import capybaraImg from "@/assets/capybara_packet_tracer.jpeg"
 import { useNavigate } from "react-router-dom"
 import { useLocale } from "@/providers/LocaleProvider"
 
@@ -23,7 +24,7 @@ const CapyroadCard = () => {
         <Card className="group overflow-hidden bg-card/50 border border-border hover:bg-card/80 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 rounded-xl">
           <div className="relative h-52 w-full overflow-hidden">
             <img
-              src="https://imgs.search.brave.com/JxrZsoUu0-eJuywJtmLhakQevMktgMnkXxutwtPudp4/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzE2LzY1LzI4Lzgx/LzM2MF9GXzE2NjUy/ODgxOThfWjhCdjFo/ZGRlbTAzbTh4QXBL/NGo2YWtvMzN3dTZm/eGEuanBn"
+              src={capybaraImg}
               alt="Capyroad"
               className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
             />

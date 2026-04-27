@@ -39,7 +39,7 @@ const UserDropdown = ({ vertical = false }) => {
 
   return (
     <div
-      className={`dropdown ${vertical ? "w-full" : "dropdown-end"} ${noUser && "dropdown-close"}`}>
+      className={`dropdown ${vertical ? "w-full" : "dropdown-end"} ${noUser && "dropdown-close pointer-events-none"}`}>
       <div
         tabIndex={0}
         role="button"

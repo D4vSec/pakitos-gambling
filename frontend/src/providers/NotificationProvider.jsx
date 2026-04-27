@@ -1,4 +1,6 @@
 import React, { createContext, useState, useContext } from "react"
+import { useLocation } from "react-router-dom"
+import { useEffect } from "react"
 
 const NotificationContext = createContext()
 
@@ -7,6 +9,8 @@ const NotificationProvider = ({ children }) => {
     global: [],
     games: [],
   })
+
+  const location = useLocation()
 
   const addNotification = (message, type = "info", options = {}) => {
     const id = crypto.randomUUID()
@@ -29,7 +33,6 @@ const NotificationProvider = ({ children }) => {
       [scope]: [...prev[scope], notification],
     }))
 
-    // ⏱ solo auto-remove lógico (NO animación)
     if (type !== "modal" && type !== "input") {
       setTimeout(() => {
         removeNotification(id, scope)
@@ -38,7 +41,6 @@ const NotificationProvider = ({ children }) => {
   }
 
   const removeNotification = (id, scope = "games") => {
-    // 1. marcar como saliendo
     setNotifications((prev) => ({
       ...prev,
       [scope]: prev[scope].map((n) =>
@@ -46,14 +48,36 @@ const NotificationProvider = ({ children }) => {
       ),
     }))
 
-    // 2. esperar animación y eliminar
     setTimeout(() => {
       setNotifications((prev) => ({
         ...prev,
         [scope]: prev[scope].filter((n) => n.id !== id),
       }))
-    }, 500) // 👈 debe coincidir con duración animación
+    }, 500)
   }
+
+  const gameRoutes = [
+    "/roulette0",
+    "/roulette00",
+    "/slots",
+    "/slots3x5",
+    "/slots5x5",
+    "/blackjack",
+    "/capyroad",
+  ]
+
+  const isGameRoute = gameRoutes.some((route) =>
+    location.pathname.startsWith(route),
+  )
+
+  useEffect(() => {
+    if (!isGameRoute) {
+      setNotifications((prev) => ({
+        ...prev,
+        games: [],
+      }))
+    }
+  }, [location.pathname])
 
   const value = {
     notifications,

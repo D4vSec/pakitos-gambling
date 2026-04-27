@@ -2,7 +2,6 @@ import React from "react"
 import { useRoulette } from "@/providers/RouletteProvider"
 import { useLocale } from "@/providers/LocaleProvider"
 
-// TODO: Hacer el hightlight cuando haces hover
 const BoardPiece = ({ item, children }) => {
   const { type } = useRoulette()
   const { t } = useLocale()

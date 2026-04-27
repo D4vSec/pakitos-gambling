@@ -128,10 +128,8 @@ const BlackjackProvider = ({ children }) => {
     setLastBetAmount(betAmount)
     setBaseBet(betAmount)
 
-    const url = `http://${HOST}/v1/blackjack/start`
-
     try {
-      const res = await post(url, {
+      const res = await post("/api/v1/blackjack/start", {
         headers: {
           "x-refresh-token": getRefreshToken(),
           Authorization: `Bearer ${getAccessToken()}`,
@@ -152,10 +150,8 @@ const BlackjackProvider = ({ children }) => {
   }
 
   const continueGame = async () => {
-    const url = `http://${HOST}/v1/blackjack/${getGameId()}`
-
     try {
-      const res = await get(url, {
+      const res = await get(`/api/v1/blackjack/${getGameId()}`, {
         headers: {
           "x-refresh-token": getRefreshToken(),
           Authorization: `Bearer ${getAccessToken()}`,
@@ -197,10 +193,8 @@ const BlackjackProvider = ({ children }) => {
 
     updateBalance("deposit", game?.payout)
 
-    const url = `http://${HOST}/v1/blackjack/${getGameId()}`
-
     try {
-      const res = await destroy(url, {
+      const res = await destroy(`/api/v1/blackjack/${getGameId()}`, {
         headers: {
           "x-refresh-token": getRefreshToken(),
           Authorization: `Bearer ${getAccessToken()}`,
@@ -226,10 +220,8 @@ const BlackjackProvider = ({ children }) => {
   }
 
   const play = async (action) => {
-    const url = `http://${HOST}/v1/blackjack/${getGameId()}/${action}`
-
     try {
-      const res = await post(url, {
+      const res = await post(`/api/v1/blackjack/${getGameId()}/${action}`, {
         headers: {
           "x-refresh-token": getRefreshToken(),
           Authorization: `Bearer ${getAccessToken()}`,

@@ -22,7 +22,6 @@ import gsap from "gsap"
 
 const RouletteContext = createContext()
 
-const HOST = "localhost:3000"
 const WHEEL_OFFSET_DEG = 355
 const WHEEL_INDEX_OFFSET = 0
 
@@ -226,12 +225,10 @@ const RouletteProvider = ({ children }) => {
   }
 
   const spin = async () => {
-    const url = `http://${HOST}/v1/roulette/spin`
-
     try {
       setIsSpinning(true)
 
-      const res = await post(url, {
+      const res = await post("/api/v1/roulette/spin", {
         headers: {
           "x-refresh-token": getRefreshToken(),
           Authorization: `Bearer ${getAccessToken()}`,

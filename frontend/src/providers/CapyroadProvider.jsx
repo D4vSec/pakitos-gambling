@@ -46,10 +46,8 @@ const CapyroadProvider = ({ children }) => {
     updateBalance("withdrawal", betAmount)
     setLastBetAmount(betAmount)
 
-    const url = `http://${HOST}/v1/capyoad/start`
-
     try {
-      const res = await post(url, {
+      const res = await post("7api/v1/capyroad/start", {
         headers: {
           "x-refresh-token": getRefreshToken(),
           Authorization: `Bearer ${getAccessToken()}`,
@@ -71,10 +69,8 @@ const CapyroadProvider = ({ children }) => {
   }
 
   const jumpRoad = async () => {
-    const url = `http://${HOST}/v1/capyroad/${getGameId()}/jump`
-
     try {
-      const res = await post(url, {
+      const res = await post(`/api/v1/capyroad/${getGameId()}/jump`, {
         headers: {
           "x-refresh-token": getRefreshToken(),
           Authorization: `Bearer ${getAccessToken()}`,
@@ -113,10 +109,8 @@ const CapyroadProvider = ({ children }) => {
 
     updateBalance("deposit", game?.payout)
 
-    const url = `http://${HOST}/v1/capyroad/${getGameId()}`
-
     try {
-      const res = await destroy(url, {
+      const res = await destroy(`/api/v1/capyroad/${getGameId()}`, {
         headers: {
           "x-refresh-token": getRefreshToken(),
           Authorization: `Bearer ${getAccessToken()}`,
