@@ -28,6 +28,8 @@ const SlotReel = ({
   const spinTweensRef = useRef([])
   const winTweensRef = useRef([])
   const stopTimerRef = useRef(null)
+  const spinRafRef = useRef(null)
+  const landRafRef = useRef(null)
   const phaseRef = useRef("idle")
   const [phase, setPhase] = useState("idle")
   // idleSymbols drives React rendering; only updated when NOT animating
@@ -36,6 +38,14 @@ const SlotReel = ({
   )
 
   const clearSpinTweens = () => {
+    if (spinRafRef.current !== null) {
+      cancelAnimationFrame(spinRafRef.current)
+      spinRafRef.current = null
+    }
+    if (landRafRef.current !== null) {
+      cancelAnimationFrame(landRafRef.current)
+      landRafRef.current = null
+    }
     spinTweensRef.current.forEach((t) => t?.kill())
     spinTweensRef.current = []
     clearTimeout(stopTimerRef.current)
@@ -56,7 +66,10 @@ const SlotReel = ({
       phaseRef.current = "spinning"
       setPhase("spinning")
 
-      requestAnimationFrame(() => {
+      spinRafRef.current = requestAnimationFrame(() => {
+        spinRafRef.current = null
+        if (phaseRef.current !== "spinning") return
+
         spinTweensRef.current = spanRefs.current.map((span, r) => {
           if (!span) return null
           // Set initial random symbol while element is still hidden (y=-100%)
@@ -91,7 +104,10 @@ const SlotReel = ({
         const finalSyms =
           symbols.length === rows ? [...symbols] : Array(rows).fill(null)
 
-        requestAnimationFrame(() => {
+        landRafRef.current = requestAnimationFrame(() => {
+          landRafRef.current = null
+          if (phaseRef.current !== "decelerating") return
+
           spinTweensRef.current = spanRefs.current.map((span, r) => {
             if (!span) return null
             // Snap above viewport, set final content, then land smoothly
@@ -147,7 +163,13 @@ const SlotReel = ({
     const syms =
       symbols.length === rows ? [...symbols] : Array(rows).fill(null)
     setIdleSymbols(syms)
-    spanRefs.current.forEach((span) => span && gsap.set(span, { y: 0, opacity: 1 }))
+    spanRefs.current.forEach((span, r) => {
+      if (!span) return
+      const sym = syms[r]
+      // Set content via GSAP (not JSX) — span never has React-managed children
+      span.textContent = sym ? (DISPLAY[sym] ?? sym) : ""
+      gsap.set(span, { y: 0, opacity: 1 })
+    })
   }, [symbols]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
@@ -169,15 +191,20 @@ const SlotReel = ({
               }
             `}
           >
+            {/* Placeholder shown only when no symbol is set yet */}
+            {!sym && (
+              <span className="absolute inset-0 flex items-center justify-center text-xl opacity-20 text-neutral-400 pointer-events-none">
+                ?
+              </span>
+            )}
+            {/*
+              GSAP-controlled span: never has React children so React's reconciler
+              won't fight GSAP's textContent writes (avoids removeChild crash).
+            */}
             <span
               ref={(el) => { spanRefs.current[r] = el }}
               className="absolute inset-0 flex items-center justify-center text-4xl font-bold"
-            >
-              {sym
-                ? (DISPLAY[sym] ?? sym)
-                : <span className="text-xl opacity-20 text-neutral-400">?</span>
-              }
-            </span>
+            />
           </div>
         )
       })}

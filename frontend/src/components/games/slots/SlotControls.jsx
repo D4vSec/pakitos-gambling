@@ -1,16 +1,17 @@
-import React, { useState } from "react"
+import React, { useRef, useState } from "react"
 import { useSlots } from "@/providers/SlotsProvider"
 import { useSession } from "@/providers/SessionProvider"
 import { useNotification } from "@/providers/NotificationProvider"
 import { useLocale } from "@/providers/LocaleProvider"
 import Button from "@/components/buttons/Button"
 import BitcoinSVG from "@/components/svg/BitcoinSVG"
-import { getAnimTotalMs, COLS_BY_TYPE } from "./slotConstants"
+import { getAnimTotalMs, DIMS_BY_TYPE } from "./slotConstants"
 
 const NOTIF_DURATION = 1000
 
 const SlotControls = ({ type = "3x3" }) => {
-  const NOTIF_DELAY_MS = getAnimTotalMs(COLS_BY_TYPE[type] ?? 3)
+  const dims = DIMS_BY_TYPE[type] ?? { rows: 3, cols: 3 }
+  const NOTIF_DELAY_MS = getAnimTotalMs(dims.cols, dims.rows)
   const { session, spins, loading, createSession, spin, endSession } = useSlots()
   const { user, setUser } = useSession()
   const { addNotification } = useNotification()
@@ -18,10 +19,20 @@ const SlotControls = ({ type = "3x3" }) => {
 
   const [betAmount, setBetAmount] = useState("")
   const [lastBet, setLastBet] = useState("")
+  const [isAnimating, setIsAnimating] = useState(false)
+  const animTimerRef = useRef(null)
 
   const balance = parseFloat(user?.balance) || 0
   const totalPayout = spins.reduce((acc, s) => acc + (s.payout ?? 0), 0)
   const isActive = !!session
+  const isBusy = loading || isAnimating
+
+  const scheduleAnimEnd = () => {
+    clearTimeout(animTimerRef.current)
+    animTimerRef.current = setTimeout(() => {
+      setIsAnimating(false)
+    }, NOTIF_DELAY_MS)
+  }
 
   const handleStart = async () => {
     const amount = parseFloat(betAmount)
@@ -34,11 +45,13 @@ const SlotControls = ({ type = "3x3" }) => {
       return
     }
     setLastBet(betAmount)
+    setIsAnimating(true)
 
     try {
       const sessionRes = await createSession({ type, amount })
       // Use gameId directly from response — state update is async and not ready yet
       const result = await spin(sessionRes.gameId)
+      scheduleAnimEnd()
       setTimeout(() => {
         addNotification(
           t(`games.result.${result.isWinner ? "win" : "lose"}`),
@@ -51,15 +64,21 @@ const SlotControls = ({ type = "3x3" }) => {
           setUser((prev) => ({ ...prev, balance: Number(result.balance).toFixed(2) }))
       }, NOTIF_DELAY_MS + NOTIF_DURATION)
     } catch {
-      // errors already handled inside provider
+      setIsAnimating(false)
+      clearTimeout(animTimerRef.current)
     }
   }
 
   const handleSpin = async () => {
     if (!session?.gameId) return
+    setIsAnimating(true)
     const result = await spin(session.gameId).catch(() => null)
-    if (!result) return
+    if (!result) {
+      setIsAnimating(false)
+      return
+    }
 
+    scheduleAnimEnd()
     setTimeout(() => {
       addNotification(
         t(`games.result.${result.isWinner ? "win" : "lose"}`),
@@ -115,7 +134,7 @@ const SlotControls = ({ type = "3x3" }) => {
               variant="primary"
               className="flex-1 basis-0 min-w-fit"
               onClick={() => lastBet && setBetAmount(lastBet)}
-              disabled={loading || !lastBet}
+              disabled={isBusy || !lastBet}
             >
               {t("games.actions.repeatBet")}
             </Button>
@@ -127,7 +146,7 @@ const SlotControls = ({ type = "3x3" }) => {
                   String((parseFloat(prev || 0) * 2).toFixed(2)),
                 )
               }
-              disabled={loading || !betAmount}
+              disabled={isBusy || !betAmount}
             >
               {t("games.actions.doubleBet")}
             </Button>
@@ -135,7 +154,7 @@ const SlotControls = ({ type = "3x3" }) => {
               variant="primary"
               className="w-full"
               onClick={() => setBetAmount("")}
-              disabled={loading}
+              disabled={isBusy}
             >
               {t("games.actions.clearBet")}
             </Button>
@@ -145,9 +164,9 @@ const SlotControls = ({ type = "3x3" }) => {
             variant="secondary"
             className="w-full"
             onClick={handleStart}
-            disabled={loading || !betAmount}
+            disabled={isBusy || !betAmount}
           >
-            {loading ? "⏳" : `🎰 ${t("games.slots.controls.spin")}`}
+            {isBusy ? "⏳" : `🎰 ${t("games.slots.controls.spin")}`}
           </Button>
         </>
       )}
@@ -168,9 +187,9 @@ const SlotControls = ({ type = "3x3" }) => {
             variant="secondary"
             className="w-full text-lg font-bold"
             onClick={handleSpin}
-            disabled={loading}
+            disabled={isBusy}
           >
-            {loading ? "⏳" : `🎰 ${t("games.slots.controls.spin")}`}
+            {isBusy ? "⏳" : `🎰 ${t("games.slots.controls.spin")}`}
           </Button>
 
           <div className="divider my-0" />
@@ -196,7 +215,7 @@ const SlotControls = ({ type = "3x3" }) => {
             size="sm"
             className="w-full mt-auto"
             onClick={handleEnd}
-            disabled={loading}
+            disabled={isBusy}
           >
             {t("games.slots.controls.endSession")}
           </Button>
