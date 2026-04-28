@@ -1,4 +1,9 @@
 # 🎰 Pakitos Gambling
+<p align="center">
+  <a href="https://github.com/TU-USUARIO/TU-REPO/blob/main/README.md">🇬🇧 English</a> •
+  <a href="https://github.com/TU-USUARIO/TU-REPO/blob/main/docs/README.es.md">🇪🇸 Español</a>
+</p>
+
 Pakitos Gambling is a **simulated online casino** developed as a final project for the **Higher Degree in Web Application Development (DAW)**.
 
 It is a full-stack web application with a React frontend, an Express backend, PostgreSQL as the database, and Docker-based environments for both development and deployment.
