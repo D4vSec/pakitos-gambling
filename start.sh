@@ -27,6 +27,27 @@ else
     DOCKER_BE="docker-compose"
 fi
 
+MODE="${1:-prod}"
+
+if [ "$MODE" != "dev" ]; then
+    FORBIDDEN_DEFAULTS=(
+        "password" "admin" "app"
+        "jwt_secret_super_seguro_aqui_123_todo_al_rojo"
+        "jwt_secret_super_seguro_aqui_123_todo_al_negro"
+        "password_super_secreta"
+    )
+
+    CHECK_VARS=("$DB_PASSWORD" "$DB_USER" "$DB_NAME" "$JWT_SECRET" "$REFRESH_SECRET" "$PG_ADMIN_PASSWD")
+
+    for val in "${CHECK_VARS[@]}"; do
+        for forbidden in "${FORBIDDEN_DEFAULTS[@]}"; do
+            if [[ "$val" == "$forbidden" ]]; then
+                error_exit "Production deployment blocked. Insecure default value detected in .env: '$val'"
+            fi
+        done
+    done
+fi
+
 if [ "$1" = "dev" ]; then
     echo -e "${BLUE}--- DEVELOPMENT MODE ---${NC}"
     
@@ -34,8 +55,8 @@ if [ "$1" = "dev" ]; then
 
     echo -e "\n${GREEN}Development environment ready!${NC}"
     echo -e "Frontend (Vite):  ${BLUE}http://localhost:5173${NC}"
-    echo -e "Backend API:      ${BLUE}http://localhost:${API_PORT:-3000}${NC}"
-    echo -e "To view logs:     ${BLUE}$DOCKER_BE -f docker-compose.dev.yml logs -f${NC}"
+    echo -e "Backend API: ${BLUE}http://localhost:${API_PORT:-3000}${NC}"
+    echo -e "To view logs: ${BLUE}$DOCKER_BE -f docker-compose.dev.yml logs -f${NC}"
 
 else
     echo -e "${GREEN}--- PRODUCTION MODE (APACHE) ---${NC}"
@@ -52,5 +73,5 @@ else
 
     echo -e "\n${GREEN}Production environment ready!${NC}"
     echo -e "Frontend (Apache): ${BLUE}http://localhost:80${NC}"
-    echo -e "Backend API:       ${BLUE}http://localhost:${API_PORT:-3000}${NC}"
+    echo -e "Backend API: ${BLUE}http://localhost:${API_PORT:-3000}${NC}"
 fi
