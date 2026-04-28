@@ -8,6 +8,10 @@ DROP TABLE IF EXISTS transactions CASCADE;
 DROP TABLE IF EXISTS sessions CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 
+DROP TYPE IF EXISTS user_role CASCADE;
+DROP TYPE IF EXISTS transaction_type CASCADE;
+DROP TYPE IF EXISTS audit_action CASCADE;
+
 CREATE TYPE user_role AS ENUM ('user', 'admin');
 CREATE TYPE transaction_type AS ENUM ('deposit', 'withdrawal');
 CREATE TYPE audit_action AS ENUM (
@@ -24,8 +28,9 @@ CREATE TABLE users (
     username VARCHAR(50) NOT NULL,
     email VARCHAR(150) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-    balance DECIMAL(10, 2) DEFAULT 0.00,
+    balance DECIMAL(10, 2) DEFAULT 0.00 CHECK (balance >= 0),
     role user_role DEFAULT 'user',
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -37,6 +42,7 @@ CREATE TABLE sessions (
     expires_at TIMESTAMP NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     revoked BOOLEAN DEFAULT FALSE,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
@@ -86,3 +92,36 @@ CREATE TABLE audit_logs (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
 );
+
+CREATE INDEX idx_users_email ON users(email);
+CREATE INDEX idx_transactions_user_id ON transactions(user_id);
+CREATE INDEX idx_user_bets_user_id ON user_bets(user_id);
+CREATE INDEX idx_bets_options_bet_id ON bets_options(bet_id);
+
+CREATE OR REPLACE FUNCTION update_modified_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = now();
+    RETURN NEW;
+END;
+$$ language 'plpgsql';
+
+CREATE TRIGGER update_users_modtime
+    BEFORE UPDATE ON users
+    FOR EACH ROW
+    EXECUTE PROCEDURE update_modified_column();
+
+CREATE TRIGGER update_user_bets_modtime
+    BEFORE UPDATE ON user_bets
+    FOR EACH ROW
+    EXECUTE PROCEDURE update_modified_column();
+
+CREATE TRIGGER update_bets_modtime
+    BEFORE UPDATE ON bets
+    FOR EACH ROW
+    EXECUTE PROCEDURE update_modified_column();
+
+CREATE TRIGGER update_sessions_modtime
+    BEFORE UPDATE ON sessions
+    FOR EACH ROW
+    EXECUTE PROCEDURE update_modified_column();
