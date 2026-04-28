@@ -53,6 +53,7 @@ services:
             REFRESH_SECRET: ${REFRESH_SECRET}
             API_PORT: 3000
             CORS_ORIGIN: http://localhost:5173
+            NODE_ENV: ${NODE_ENV:-development}
             CHOKIDAR_USEPOLLING: 1
         depends_on:
             - database

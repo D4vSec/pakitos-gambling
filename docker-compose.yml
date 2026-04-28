@@ -52,6 +52,7 @@ services:
             REFRESH_SECRET: ${REFRESH_SECRET}
             API_PORT: ${API_PORT}
             CORS_ORIGIN: ${CORS_ORIGIN}
+            NODE_ENV: ${NODE_ENV:-production}
         expose:
             - 3000
         depends_on:
