@@ -64,6 +64,13 @@ Importa el esquema inicial:
 bash sql.sh dev
 ```
 
+### Ejecutar el backend sin Docker
+Si quieres ejecutar el backend de forma local sin Docker, debes asegurarte de estar utilizando Node.js 22. Recomendamos usar nvm para gestionar las versiones de Node. El proyecto incluye un archivo `.nvmrc` dentro de la carpeta `backend` que especifica la versión exacta de Node requerida para este proyecto.
+```bash
+nvm install
+nvm use
+```
+
 ## 🐛 Solución de problemas
 ### Retorno de carro (`\r`) en scripts bash
 Si encuentras errores con `\r` (retorno de carro) al ejecutar scripts en Linux, corrige los finales de línea con:

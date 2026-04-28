@@ -62,6 +62,13 @@ Import the initial schema:
 bash sql.sh dev
 ```
 
+### Running backend without docker
+If you want to run the backend locally without Docker, you must ensure you are using Node.js 22. We recommend using nvm to manage Node versions. The project includes a `.nvmrc` file inside `backend` folder that specifies the exact node version required for this project.
+```bash
+nvm install
+nvm use
+```
+
 ## 🐛 Troubleshooting
 ### Carriage return (`\r`) in bash scripts
 If you encounter `\r` (carriage return) errors when running scripts on Linux, fix the line endings with:
