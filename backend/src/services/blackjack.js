@@ -101,7 +101,6 @@ const createBlackJack = () => {
         return "tie"
     }
 
-
     const hideDealerCard = (dealerHand, game) => {
         const DEALER_HAND = 0
         const responseGame = structuredClone(game)
@@ -124,8 +123,35 @@ const createBlackJack = () => {
         if (responseHand.bust || responseHand.blackjack) {
             responseHand.resolved = true
         }
+        if (responseHand.doubled) {
+            responseHand.resolved = true
+        }
 
         return responseHand
+    }
+
+    const getPayout = (game) => {
+        const FIRST_HAND = 0
+        const SECOND_HAND = 1
+
+        if (game.split) {
+            let payout = 0
+            //Check the First hand
+            if (game.playerHand[FIRST_HAND].resolved && game.playerHand[FIRST_HAND].doubled && game.status === "finished" && game.determinateWinners.includes("player")) payout += game.playerHand[FIRST_HAND].bet * 2 + game.playerHand[FIRST_HAND].bet
+            if (game.playerHand[FIRST_HAND].resolved && !game.playerHand[FIRST_HAND].doubled && game.status === "finished" && game.determinateWinners.includes("player")) payout += game.playerHand[FIRST_HAND].bet * 2
+            //Check the second hand
+            if (game.playerHand[SECOND_HAND].resolved && game.playerHand[SECOND_HAND].doubled && game.status === "finished" && game.determinateWinners.includes("player")) payout += game.playerHand[SECOND_HAND].bet * 2 + game.playerHand[SECOND_HAND].bet
+            if (game.playerHand[SECOND_HAND].resolved && !game.playerHand[SECOND_HAND].doubled && game.status === "finished" && game.determinateWinners.includes("player")) payout += game.playerHand[SECOND_HAND].bet * 2
+            //Check the ties
+            if (game.winners[0] === "tie") payout = game.playerHand[FIRST_HAND].bet
+            if (game.winners[1] === "tie") payout += game.playerHand[SECOND_HAND].bet
+
+            return payout
+        } else {
+            if (game.playerHand[FIRST_HAND].resolved && game.playerHand[FIRST_HAND].doubled && game.status === "finished" && game.determinateWinners.includes("player")) return game.playerHand[FIRST_HAND].bet * 2 + game.playerHand[FIRST_HAND].bet
+            if (game.playerHand[FIRST_HAND].resolved && !game.playerHand[FIRST_HAND].doubled && game.status === "finished" && game.determinateWinners.includes("player")) return game.playerHand[FIRST_HAND].bet * 2
+            if (game.winners[0] === "tie") return game.playerHand[FIRST_HAND].bet
+        }
     }
 
     return {
@@ -141,6 +167,7 @@ const createBlackJack = () => {
         determinateWinner,
         hideDealerCard,
         setHand,
+        getPayout,
     }
 }
 
