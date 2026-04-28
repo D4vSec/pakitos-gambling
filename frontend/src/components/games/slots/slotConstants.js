@@ -9,10 +9,10 @@ export const getStopDelays = (cols) =>
   STOP_DELAYS_BY_COLS[cols] ??
   Array.from({ length: cols }, (_, i) => i * 300)
 
-// Total animation time = last reel stops + landing animation (550 ms)
-export const getAnimTotalMs = (cols) => {
+// Total animation time = last reel stops + landing (550ms) + row stagger (50ms × rows)
+export const getAnimTotalMs = (cols, rows = 3) => {
   const delays = getStopDelays(cols)
-  return delays[delays.length - 1] + 550
+  return delays[delays.length - 1] + 550 + (rows - 1) * 50
 }
 
 export const COLS_BY_TYPE = {

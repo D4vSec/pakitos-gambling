@@ -34,17 +34,26 @@ const SlotGrid = ({
   machineType = "3x3",
   paylines,
   isSpinning = false,
+  hasWon = false,
 }) => {
   const winningCells = getWinningCells(winningLines, machineType, paylines)
 
   return (
-    // Outer wrapper: dark background + gold border — the "window" of the machine
-    <div className="relative flex rounded-xl overflow-hidden border-2 border-amber-500/50 bg-neutral-900 p-2 gap-0">
+    <div
+      className={`
+        relative flex rounded-xl overflow-hidden border-2 bg-neutral-950 p-2 gap-0
+        transition-all duration-500
+        ${hasWon
+          ? "border-warning shadow-[0_0_24px_4px] shadow-warning/40"
+          : "border-amber-600/40 shadow-inner"
+        }
+      `}
+    >
       {/* Vertical dividers between reels */}
       {Array.from({ length: cols }, (_, c) => (
         <React.Fragment key={c}>
           {c > 0 && (
-            <div className="w-px self-stretch bg-amber-700/40 shrink-0" />
+            <div className="w-px self-stretch bg-amber-800/30 shrink-0" />
           )}
           <SlotReel
             colIndex={c}
@@ -57,9 +66,9 @@ const SlotGrid = ({
         </React.Fragment>
       ))}
 
-      {/* Top + bottom gradient to suggest the tape extends beyond the window */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-5 bg-linear-to-b from-neutral-900/80 to-transparent z-10" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-5 bg-linear-to-t from-neutral-900/80 to-transparent z-10" />
+      {/* Gradient vignette — suggests the tape continues beyond the window */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-6 bg-linear-to-b from-neutral-950/90 to-transparent z-10" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-6 bg-linear-to-t from-neutral-950/90 to-transparent z-10" />
     </div>
   )
 }

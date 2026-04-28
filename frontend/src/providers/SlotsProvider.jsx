@@ -119,9 +119,8 @@ const SlotsProvider = ({ type = "3x3", children }) => {
 
       setSpins((s) => [...s, spinResult])
 
-      if (res.balance != null) {
-        setUser((prev) => ({ ...prev, balance: Number(res.balance).toFixed(2) }))
-      }
+      // Balance is applied by SlotControls after the animation completes,
+      // so the player sees the result before the number changes.
 
       return res
     } catch (err) {

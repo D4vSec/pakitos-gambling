@@ -7,10 +7,12 @@ import Button from "@/components/buttons/Button"
 import BitcoinSVG from "@/components/svg/BitcoinSVG"
 import { getAnimTotalMs, COLS_BY_TYPE } from "./slotConstants"
 
+const NOTIF_DURATION = 1000
+
 const SlotControls = ({ type = "3x3" }) => {
   const NOTIF_DELAY_MS = getAnimTotalMs(COLS_BY_TYPE[type] ?? 3)
   const { session, spins, loading, createSession, spin, endSession } = useSlots()
-  const { user } = useSession()
+  const { user, setUser } = useSession()
   const { addNotification } = useNotification()
   const { t } = useLocale()
 
@@ -41,9 +43,13 @@ const SlotControls = ({ type = "3x3" }) => {
         addNotification(
           t(`games.result.${result.isWinner ? "win" : "lose"}`),
           result.isWinner ? "success" : "error",
-          { scope: "games", duration: 2500, payout: result.isWinner ? result.payout : 0 },
+          { scope: "games", duration: NOTIF_DURATION, payout: result.isWinner ? result.payout : 0 },
         )
       }, NOTIF_DELAY_MS)
+      setTimeout(() => {
+        if (result.balance != null)
+          setUser((prev) => ({ ...prev, balance: Number(result.balance).toFixed(2) }))
+      }, NOTIF_DELAY_MS + NOTIF_DURATION)
     } catch {
       // errors already handled inside provider
     }
@@ -58,9 +64,13 @@ const SlotControls = ({ type = "3x3" }) => {
       addNotification(
         t(`games.result.${result.isWinner ? "win" : "lose"}`),
         result.isWinner ? "success" : "error",
-        { scope: "games", duration: 2500, payout: result.isWinner ? result.payout : 0 },
+        { scope: "games", duration: NOTIF_DURATION, payout: result.isWinner ? result.payout : 0 },
       )
     }, NOTIF_DELAY_MS)
+    setTimeout(() => {
+      if (result.balance != null)
+        setUser((prev) => ({ ...prev, balance: Number(result.balance).toFixed(2) }))
+    }, NOTIF_DELAY_MS + NOTIF_DURATION)
   }
 
   const handleEnd = async () => {

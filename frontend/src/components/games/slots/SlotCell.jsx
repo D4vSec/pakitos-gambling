@@ -1,4 +1,5 @@
-import React from "react"
+import React, { useRef, useEffect } from "react"
+import gsap from "gsap"
 
 const SYMBOL_DISPLAY = {
   cherry: "🍒",
@@ -10,11 +11,52 @@ const SYMBOL_DISPLAY = {
   seven: "7",
 }
 
-// The container has overflow-hidden so the incoming symbol is clipped
-// until it slides into view from the top, creating the classic reel effect.
 const SlotCell = ({ symbol, isWinning = false, animKey, isLanding = false }) => {
+  const symbolRef = useRef(null)
+  const cellRef = useRef(null)
+
+  useEffect(() => {
+    if (!symbolRef.current) return
+    gsap.killTweensOf(symbolRef.current)
+
+    if (isLanding) {
+      gsap.fromTo(
+        symbolRef.current,
+        { y: "-110%", opacity: 0.5 },
+        { y: 0, opacity: 1, duration: 0.52, ease: "power3.out" },
+      )
+    } else {
+      gsap.fromTo(
+        symbolRef.current,
+        { y: "-110%", opacity: 0.5 },
+        { y: 0, opacity: 1, duration: 0.09, ease: "power1.out" },
+      )
+    }
+  }, [animKey, isLanding])
+
+  useEffect(() => {
+    if (!cellRef.current) return
+    if (isWinning) {
+      gsap.fromTo(
+        cellRef.current,
+        { scale: 1 },
+        { scale: 1.04, duration: 0.4, repeat: -1, yoyo: true, ease: "power2.inOut" },
+      )
+    } else {
+      gsap.killTweensOf(cellRef.current)
+      gsap.set(cellRef.current, { scale: 1 })
+    }
+    return () => {
+      if (cellRef.current) {
+        gsap.killTweensOf(cellRef.current)
+        gsap.set(cellRef.current, { scale: 1 })
+      }
+    }
+  }, [isWinning])
+
   return (
     <div
+      ref={cellRef}
       className={`
         relative w-full aspect-square overflow-hidden rounded-lg border-2 select-none
         transition-colors duration-300
@@ -26,10 +68,8 @@ const SlotCell = ({ symbol, isWinning = false, animKey, isLanding = false }) => 
     >
       {symbol ? (
         <span
-          key={animKey}
-          className={`absolute inset-0 flex items-center justify-center text-4xl font-bold
-            ${isLanding ? "slot-land" : "slot-spin-drop"}
-          `}
+          ref={symbolRef}
+          className="absolute inset-0 flex items-center justify-center text-4xl font-bold"
         >
           {SYMBOL_DISPLAY[symbol] ?? symbol}
         </span>
