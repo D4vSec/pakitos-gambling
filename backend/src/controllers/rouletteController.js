@@ -2,6 +2,7 @@ import createRoulette from "#services/roulette"
 import User from "#models/userModel"
 import crypto from "crypto"
 import Audit from "#services/audit"
+import logger from "#utils/logger"
 
 const spinRoulette = async (req, res) => {
     const { rouletteType, bets } = req.body
@@ -139,7 +140,7 @@ const spinRoulette = async (req, res) => {
             },
         })
     } catch (error) {
-        console.error("Error spinning roulette:", error)
+        logger.error("Error spinning roulette:", error)
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
 }

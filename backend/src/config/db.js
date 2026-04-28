@@ -1,4 +1,5 @@
 import { Pool } from "pg"
+import logger from "#utils/logger"
 
 const pool = new Pool({
 	host: process.env.DB_HOST,
@@ -12,9 +13,9 @@ const db = {
 	connect: async () => {
 		try {
 			await pool.connect()
-			console.log("Database connected")
+			logger.info("Database connected")
 		} catch (err) {
-			console.error("DB connection error:", err)
+			logger.fatal("DB connection error:", err)
 		}
 	},
 	query: (text, params) => pool.query(text, params),

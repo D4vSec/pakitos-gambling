@@ -1,5 +1,6 @@
 import Audit from "#models/auditModel"
 import useragent from 'express-useragent';
+import logger from "#utils/logger"
 
 const getClientIp = (req) => {
 	const xForwardedFor = req.headers["x-forwarded-for"]
@@ -38,7 +39,7 @@ const createAudit = async (auditData) => {
 
 		await Audit.logAction(user_id, action, details, ip_address, user_agent)
 	} catch (err) {
-		console.error("Audit log error:", err)
+		logger.error("Audit log error:", err)
 	}
 }
 

@@ -2,6 +2,7 @@ import createSlots from "#services/slots"
 import User from "#models/userModel"
 import { MACHINE_TYPES } from "#config/slots"
 import crypto from "crypto"
+import logger from "#utils/logger"
 
 const activeGames = new Map()
 
@@ -62,7 +63,7 @@ const createSlot = async (req, res) => {
 			balance: newBalance,
 		})
 	} catch (error) {
-		console.error(error)
+		logger.error(error)
 		return res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
 	}
 }
@@ -129,7 +130,7 @@ const spinSlot = async (req, res) => {
 			balance: finalBalance,
 		})
 	} catch (error) {
-		console.error(error)
+		logger.error(error)
 		return res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
 	}
 }
@@ -164,7 +165,7 @@ const getSlotSession = async (req, res) => {
 			spins: session.spins,
 		})
 	} catch (error) {
-		console.error(error)
+		logger.error(error)
 		return res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
 	}
 }
@@ -204,7 +205,7 @@ const endSlotSession = async (req, res) => {
 
 		return res.json(summary)
 	} catch (error) {
-		console.error(error)
+		logger.error(error)
 		return res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
 	}
 }

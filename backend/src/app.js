@@ -13,6 +13,7 @@ import betsRoutes from '#routes/bets'
 import auditRoutes from '#routes/audit'
 
 import corsConfig from '#config/cors'
+import logger from '#utils/logger'
 
 const API_VERSION = 'v1'
 const app = express()
@@ -41,7 +42,7 @@ app.use((req, res) => {
 })
 
 app.use((err, req, res, next) => {
-	console.error('[Error]:', err)
+	logger.error('[Error]:', err)
 	const statusCode = err.status || err.statusCode || 500
 
 	res.status(statusCode).json({

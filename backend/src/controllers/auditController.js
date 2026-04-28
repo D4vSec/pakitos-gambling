@@ -1,5 +1,6 @@
 import AuditService from "#services/audit"
 import * as z from 'zod'
+import logger from "#utils/logger"
 
 const getAuditLogs = async (req, res) => {
 	const querySchema = z.object({
@@ -19,7 +20,7 @@ const getAuditLogs = async (req, res) => {
 		const logs = await AuditService.getAuditLogs(page, limit)
 		res.json(logs || [])
 	} catch (err) {
-		console.error(err)
+		logger.error(err)
 		res.status(500).json({ code: "SERVER_ERROR" })
 	}
 }

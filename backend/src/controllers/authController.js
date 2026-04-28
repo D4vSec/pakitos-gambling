@@ -5,6 +5,7 @@ import jwtConfig from "#config/jwt"
 import User from "#models/userModel"
 import Session from "#models/sessionModel"
 import Audit from "#services/audit"
+import logger from "#utils/logger"
 
 const { secret, refreshSecret, accessExpiresIn, refreshExpiresIn } = jwtConfig
 
@@ -58,7 +59,7 @@ const register = async (req, res) => {
 				code: "AUTH_EMAIL_ALREADY_REGISTERED",
 			})
 
-		console.error(err)
+		logger.error(err)
 		res.status(500).json({ code: "SERVER_ERROR" })
 	}
 }

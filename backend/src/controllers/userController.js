@@ -1,5 +1,6 @@
 import User from '#models/userModel'
 import * as z from 'zod'
+import logger from "#utils/logger"
 
 const getProfile = async (req, res) => {
 	try {
@@ -15,7 +16,7 @@ const getProfile = async (req, res) => {
 			balance: user.balance,
 		})
 	} catch (err) {
-		console.error(err)
+		logger.error(err)
 		res.status(500).json({ code: 'SERVER_ERROR' })
 	}
 }
@@ -25,7 +26,7 @@ const getAllUsers = async (req, res) => {
 		const users = await User.findAllUsers()
 		res.json(users || [])
 	} catch (err) {
-		console.error(err)
+		logger.error(err)
 		res.status(500).json({ code: 'SERVER_ERROR' })
 	}
 }
@@ -39,7 +40,7 @@ const deleteSelf = async (req, res) => {
 
 		res.status(204).send()
 	} catch (err) {
-		console.error(err)
+		logger.error(err)
 		res.status(500).json({ code: 'SERVER_ERROR' })
 	}
 }
@@ -66,7 +67,7 @@ const updateSelf = async (req, res) => {
 		if (err instanceof z.ZodError) {
 			return res.status(400).json({ errors: err.errors })
 		}
-		console.error(err)
+		logger.error(err)
 		res.status(500).json({ code: 'SERVER_ERROR' })
 	}
 }
@@ -86,7 +87,7 @@ const getUserById = async (req, res) => {
 			balance: user.balance,
 		})
 	} catch (err) {
-		console.error(err)
+		logger.error(err)
 		res.status(500).json({ code: 'SERVER_ERROR' })
 	}
 }
@@ -117,7 +118,7 @@ const updateUserById = async (req, res) => {
 		if (err instanceof z.ZodError) {
 			return res.status(400).json({ errors: err.errors })
 		}
-		console.error(err)
+		logger.error(err)
 		res.status(500).json({ code: 'SERVER_ERROR' })
 	}
 }
@@ -131,7 +132,7 @@ const deleteUserById = async (req, res) => {
 
 		res.status(204).send()
 	} catch (err) {
-		console.error(err)
+		logger.error(err)
 		res.status(500).json({ code: 'SERVER_ERROR' })
 	}
 }
@@ -145,7 +146,7 @@ const getSelfBalance = async (req, res) => {
 
 		res.json({ balance })
 	} catch (err) {
-		console.error(err)
+		logger.error(err)
 		res.status(500).json({ code: 'SERVER_ERROR' })
 	}
 }
@@ -165,7 +166,7 @@ const getTransactions = async (req, res) => {
 		res.json({ page, limit, transactions: txs })
 	} catch (err) {
 		if (err instanceof z.ZodError) return res.status(400).json({ errors: err.errors })
-		console.error(err)
+		logger.error(err)
 		res.status(500).json({ code: 'SERVER_ERROR' })
 	}
 }
@@ -217,7 +218,7 @@ const createTransaction = async (req, res) => {
 		res.status(200).json({ balance: newBalance })
 	} catch (err) {
 		if (err instanceof z.ZodError) return res.status(400).json({ errors: err.errors })
-		console.error(err)
+		logger.error(err)
 		res.status(500).json({ code: 'SERVER_ERROR' })
 	}
 }
@@ -241,7 +242,7 @@ const getTransactionsByUserId = async (req, res) => {
 		res.json({ page, limit, transactions: txs })
 	} catch (err) {
 		if (err instanceof z.ZodError) return res.status(400).json({ errors: err.errors })
-		console.error(err)
+		logger.error(err)
 		res.status(500).json({ code: 'SERVER_ERROR' })
 	}
 }

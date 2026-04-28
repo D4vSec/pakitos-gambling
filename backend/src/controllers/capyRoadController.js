@@ -1,6 +1,7 @@
 import createCapyRoad from "#services/capyroad"
 import User from "#models/User"
 import { randomId } from "#utils/rng"
+import logger from "#utils/logger"
 
 const games = new Map()
 
@@ -54,7 +55,7 @@ const startGame = async (req, res) => {
 
         return res.status(200).json(game)
     } catch (error) {
-        console.error("Error starting CapyRoad game:", error)
+        logger.error("Error starting CapyRoad game:", error)
         return res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
 }
@@ -84,14 +85,14 @@ const jumpRoad = async (req, res) => {
                 try {
                     await User.updateUserBalance(req.user.id, game.payout)
                 } catch (error) {
-                    console.error("Error updating user balance after CapyRoad win:", error)
+                    logger.error("Error updating user balance after CapyRoad win:", error)
                 }
             }
         }
 
         return res.status(200).json({ message: "Salto realizado", game })
     } catch (error) {
-        console.error("Error processing jump in CapyRoad game:", error)
+        logger.error("Error processing jump in CapyRoad game:", error)
         return res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
 }
@@ -106,7 +107,7 @@ const destroyGame = (req, res) => {
         games.delete(gameId)
         return res.status(200).json({ code: "GAME_DELETED_SUCCESSFULLY" })
     } catch (error) {
-        console.error("Error destroying CapyRoad game:", error)
+        logger.error("Error destroying CapyRoad game:", error)
         return res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
 }
@@ -117,7 +118,7 @@ const getGames = (req, res) => {
         const allGames = Array.from(games.values())
         return res.status(200).json(allGames)
     } catch (error) {
-        console.error("Error fetching CapyRoad games:", error)
+        logger.error("Error fetching CapyRoad games:", error)
         return res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
 }

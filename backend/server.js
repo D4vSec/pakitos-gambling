@@ -1,9 +1,18 @@
 import app from "#@/app"
 import db from "#config/db"
+import logger from "#utils/logger"
+
+
 const PORT = process.env.API_PORT || 3000
 
 db.connect()
     .then(() => {
-        app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`))
+        app.listen(PORT, () => {
+            logger.info(`Server running on http://localhost:${PORT}`)
+
+            if (process.env.NODE_ENV === "development")
+                logger.warn("Running in development mode. Don't use this in production!")
+            
+        })
     })
-    .catch((err) => console.error("DB connection error:", err))
+    .catch((err) => logger.fatal("DB connection error:", err))

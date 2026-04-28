@@ -1,5 +1,6 @@
 import db from "#config/db"
 import Bets from "#models/betsModel"
+import logger from "#utils/logger"
 
 const calculateOdds = (poolDistribution) => {
     const totalPool = poolDistribution.reduce(
@@ -46,7 +47,7 @@ const updateOddsForBet = async (betId) => {
 
         return newOdds
     } catch (error) {
-        console.error(`Error updating odds for bet ${betId}:`, error)
+        logger.error(`Error updating odds for bet ${betId}:`, error)
         throw error
     }
 }

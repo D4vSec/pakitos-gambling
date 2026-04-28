@@ -1,5 +1,6 @@
 import createBlackJack from "#services/blackjack"
 import User from "#models/userModel"
+import logger from "#utils/logger"
 
 const games = new Map()
 
@@ -125,7 +126,7 @@ export const startGame = async (req, res) => {
 
         res.status(200).json(Object.fromEntries(Object.entries(responseGame).filter(([key]) => key !== "deck")))
     } catch (error) {
-        console.error("Error starting game:", error)
+        logger.error("Error starting game:", error)
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
 }
@@ -219,7 +220,7 @@ export const hit = async (req, res) => {
 
         res.status(200).json(Object.fromEntries(Object.entries(responseGame).filter(([key]) => key !== "deck")))
     } catch (error) {
-        console.error("Error hitting:", error)
+        logger.error("Error hitting:", error)
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
 }
@@ -280,7 +281,7 @@ export const stand = async (req, res) => {
 
         res.status(200).json(Object.fromEntries(Object.entries(responseGame).filter(([key]) => key !== "deck")))
     } catch (error) {
-        console.error("Error standing:", error)
+        logger.error("Error standing:", error)
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
 }
@@ -374,7 +375,7 @@ export const double = async (req, res) => {
 
         res.status(200).json(Object.fromEntries(Object.entries(responseGame).filter(([key]) => key !== "deck")))
     } catch (error) {
-        console.error("Error doubling:", error)
+        logger.error("Error doubling:", error)
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
 }
@@ -464,7 +465,7 @@ export const split = async (req, res) => {
             return res.status(400).json({ code: "CANNOT_SPLIT" })
         }
     } catch (error) {
-        console.error("Error splitting:", error)
+        logger.error("Error splitting:", error)
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
 }
@@ -485,7 +486,7 @@ export const deleteGame = (req, res) => {
         games.delete(gameId)
         res.status(200).json({ code: "GAME_DELETED_SUCCESSFULLY" })
     } catch (error) {
-        console.error("Error deleting game:", error)
+        logger.error("Error deleting game:", error)
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
 }
@@ -511,7 +512,7 @@ export const getGame = (req, res) => {
 
         res.status(200).json(Object.fromEntries(Object.entries(responseGame).filter(([key]) => key !== "deck")))
     } catch (error) {
-        console.error("Error getting game:", error)
+        logger.error("Error getting game:", error)
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
 }
@@ -522,7 +523,7 @@ export const getGames = (req, res) => {
         const gamesArray = Array.from(games.values())
         res.status(200).json(gamesArray)
     } catch (error) {
-        console.error("Error getting games:", error)
+        logger.error("Error getting games:", error)
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
 }
