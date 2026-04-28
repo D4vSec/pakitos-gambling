@@ -25,6 +25,12 @@ const UserDropdown = ({ vertical = false }) => {
     },
     { key: "coupon", label: "general.navbar.userPill.coupon", href: "" },
     {
+      key: "adminPanel",
+      label: "general.navbar.userPill.adminPanel",
+      href: "/admin/users",
+      className: `${user.role !== "admin" && "hidden"} text-warning`,
+    },
+    {
       key: "logout",
       label: "general.navbar.userPill.logout",
       className: "text-error",

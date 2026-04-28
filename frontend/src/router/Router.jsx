@@ -1,5 +1,5 @@
 import React from "react"
-import { Routes, Route } from "react-router-dom"
+import { Routes, Route, Navigate } from "react-router-dom"
 import AddBalance from "@/pages/AddBalance"
 import BlackjackGame from "@/pages/games/BlackjackGame"
 import Error from "../pages/Error"
@@ -15,6 +15,9 @@ import Slots3x5Game from "@/pages/games/Slots3x5Game"
 import Slots5x5Game from "@/pages/games/Slots5x5Game"
 import ProtectedRoute from "@/components/ProtectedRoute"
 import CapyroadGame from "@/pages/games/CapyroadGame"
+import AllUsers from "@/pages/admin/AllUsers"
+import AdminLayout from "@/pages/admin/AdminLayout"
+import UserForm from "@/pages/admin/UserForm"
 
 const Router = () => {
   return (
@@ -30,6 +33,7 @@ const Router = () => {
       />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      {/* User Related */}
       <Route
         path="/settings"
         element={
@@ -38,6 +42,29 @@ const Router = () => {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/addBalance"
+        element={
+          <ProtectedRoute>
+            <AddBalance />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute requireAdmin>
+            <AdminLayout />
+          </ProtectedRoute>
+        }>
+        <Route index element={<Navigate to="users" replace />} />
+
+        <Route path="users" element={<AllUsers />} />
+        <Route path="users/create" element={<UserForm />} />
+        <Route path="users/edit/:id" element={<UserForm />} />
+      </Route>
+
+      {/* Games */}
       <Route
         path="/roulette0"
         element={
@@ -94,14 +121,7 @@ const Router = () => {
           </ProtectedRoute>
         }
       />
-      <Route
-        path="/addBalance"
-        element={
-          <ProtectedRoute>
-            <AddBalance />
-          </ProtectedRoute>
-        }
-      />
+
       <Route path="*" element={<Error />} />
     </Routes>
   )

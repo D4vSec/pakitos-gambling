@@ -21,7 +21,7 @@ const FormField = ({
   const baseClass = `w-full ${
     as === "input" ? "input input-lg" : ""
   } ${as === "textarea" ? "textarea textarea-md" : ""} ${
-    as === "select" ? "select select-md" : ""
+    as === "select" ? "select select-lg" : ""
   } ${error ? "input-error" : ""}`
 
   const commonProps = {
@@ -40,10 +40,6 @@ const FormField = ({
     if (as === "select") {
       return (
         <select {...commonProps}>
-          <option value="" disabled>
-            {placeholder}
-          </option>
-
           {options.map((opt) => (
             <option key={opt.value} value={opt.value}>
               {opt.label}

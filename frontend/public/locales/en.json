@@ -217,6 +217,7 @@
       "userPill": {
         "balance": "Add balance",
         "coupon": "Enter coupon",
+        "adminPanel": "Admin panel",
         "guest": "Guest",
         "logout": "Logout",
         "settings": "User settings"
