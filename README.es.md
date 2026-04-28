@@ -1,7 +1,7 @@
 # 🎰 Pakitos Gambling
 <p align="center">
-  <a href="https://github.com/TU-USUARIO/TU-REPO/blob/main/README.md">🇬🇧 English</a> •
-  <a href="https://github.com/TU-USUARIO/TU-REPO/blob/main/docs/README.es.md">🇪🇸 Español</a>
+  <a href="https://github.com/D4vSec/pakitos-gambling/blob/main/README.md">🇬🇧 English</a> •
+  <a href="https://github.com/D4vSec/pakitos-gambling/blob/main/README.es.mdd">🇪🇸 Español</a>
 </p>
 
 Pakitos Gambling es un **casino en línea simulado** desarrollado como proyecto final del **Ciclo Formativo de Grado Superior en Desarrollo de Aplicaciones Web (DAW)**.
