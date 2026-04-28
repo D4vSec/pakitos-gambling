@@ -1,25 +1,14 @@
-import React, { useMemo, useState, useRef, useCallback, useEffect } from "react"
+import React, { useMemo, useRef, useCallback, useEffect } from "react"
 import { useRoulette } from "@/providers/RouletteProvider"
 import PlacedChips from "../chips/PlacedChips"
 import NumberBet from "./NumberBet"
 import ExternalBet from "./ExternalBet"
-import { BETTING_GROUPS } from "../rouletteConsts"
 import "./RouletteBoard.css"
 
-// TODO: Mejorar el rendimiento de esto sin cargarme las chips
 const RouletteBoard = () => {
-  const [hoveredCell, setHoveredCell] = useState(null)
   const { rouletteValues, updateBets, getChipsForCell } = useRoulette()
 
   const boardRef = useRef(null)
-
-  const highlightedSet = useMemo(() => {
-    return new Set(BETTING_GROUPS[hoveredCell] || [])
-  }, [hoveredCell])
-
-  const updateHoveredCell = useCallback((cell) => {
-    setHoveredCell(cell)
-  }, [])
 
   const handleClick = useCallback(
     (e) => {
@@ -44,14 +33,14 @@ const RouletteBoard = () => {
   }, [rouletteValues])
 
   const onHover = useCallback((item) => {
-    console.log(item)
-    boardRef.current.dataset.hoveredcell = item
-  })
+    if (!boardRef.current) return
+    boardRef.current.dataset.hovercell = item || ""
+  }, [])
 
   return (
     <div
+      id="rouletteBoard"
       ref={boardRef}
-      data-hoverCell={hoveredCell}
       className="
     grid
     grid-cols-10 grid-rows-28
@@ -76,21 +65,16 @@ const RouletteBoard = () => {
     2xl:h-[calc(100%-2rem)]
     2xl:w-[calc(100%-6rem)]
     aspect-10/28 md:aspect-28/10
-    text-white
-  "
+    text-white"
       onClick={handleClick}>
       {numbers.map((cell) => (
-        <NumberBet key={cell.text} item={cell} highlightedSet={highlightedSet}>
+        <NumberBet key={cell.text} item={cell}>
           <PlacedChips chips={getChipsForCell(cell)} />
         </NumberBet>
       ))}
 
       {externals.map((cell) => (
-        <ExternalBet
-          key={cell.text}
-          item={cell}
-          highlightedSet={highlightedSet}
-          onHover={onHover}>
+        <ExternalBet key={cell.text} item={cell} onHover={onHover}>
           <PlacedChips chips={getChipsForCell(cell)} />
         </ExternalBet>
       ))}

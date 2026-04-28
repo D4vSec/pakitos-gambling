@@ -14,7 +14,8 @@ import { useLocation } from "react-router-dom"
 import { useLocale } from "./LocaleProvider"
 import {
   CHIPS,
-  ROULETTE_VALUES,
+  ROULETTE_0_VALUES,
+  ROULETTE_00_VALUES,
   ROULETTE_0_ORDER,
   ROULETTE_00_ORDER,
 } from "@/components/games/roulette/rouletteConsts"
@@ -305,10 +306,9 @@ const RouletteProvider = ({ children }) => {
   }
 
   const rouletteValues = useMemo(() => {
-    return ROULETTE_VALUES.filter((item) => {
-      if (type === "Zero") return item.text !== "00"
-      return true
-    })
+    if (type === "ZeroZero") return ROULETTE_00_VALUES
+    if (type === "Zero") return ROULETTE_0_VALUES
+    return []
   }, [type])
 
   const handleFinish = () => {
@@ -420,33 +420,3 @@ export const useRoulette = () => {
 
   return context
 }
-
-/*
-  useEffect(() => {
-    if (!spinData || !rouletteRef.current) return
-
-    gsap.killTweensOf(rouletteRef.current)
-
-    const extraSpins = 360 * 5
-
-    const current = currentRotationRef.current % 360
-
-    const target = spinData.finalAngle
-
-    let delta = target - current
-
-    // forzar giro en sentido positivo (horario suave)
-    if (delta < 0) delta += 360
-
-    const finalRotation = currentRotationRef.current + extraSpins + delta
-
-    currentRotationRef.current = finalRotation
-
-    gsap.to(rouletteRef.current, {
-      rotation: finalRotation,
-      duration: 4,
-      ease: "power4.out",
-      onComplete: handleFinish,
-    })
-  }, [spinData])
-*/
