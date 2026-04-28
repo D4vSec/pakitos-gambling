@@ -59,7 +59,7 @@ bash start.sh dev
 Import the initial schema:
 
 ```bash
-bash sql.sh
+bash sql.sh dev
 ```
 
 ## 🐛 Troubleshooting

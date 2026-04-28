@@ -61,7 +61,7 @@ bash start.sh dev
 Importa el esquema inicial:
 
 ```bash
-bash sql.sh
+bash sql.sh dev
 ```
 
 ## 🐛 Solución de problemas
