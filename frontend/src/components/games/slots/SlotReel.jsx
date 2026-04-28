@@ -1,12 +1,20 @@
 import React, { useEffect, useRef, useState } from "react"
-import SlotCell from "./SlotCell"
+import gsap from "gsap"
 
 const POOL = ["cherry", "lemon", "orange", "plum", "bell", "bar", "seven"]
+const DISPLAY = {
+  cherry: "🍒",
+  lemon: "🍋",
+  orange: "🍊",
+  plum: "🍇",
+  bell: "🔔",
+  bar: "BAR",
+  seven: "7",
+}
 const rand = () => POOL[Math.floor(Math.random() * POOL.length)]
 
-// Phases: "idle" → "spinning" → "decelerating" → "landing" → "stopped"
-// Using explicit phase state avoids the ref-truthy bug where intervalRef.current
-// stays non-null after clearInterval(), causing isWinning to never activate.
+// SlotReel manages all animation via GSAP directly on the DOM — no setInterval,
+// no React re-renders during spin — so there are no "cut" artifacts between frames.
 const SlotReel = ({
   symbols = [],
   rows = 3,
@@ -15,72 +23,164 @@ const SlotReel = ({
   stopDelay = 0,
   winningCells,
 }) => {
-  const [display, setDisplay] = useState(() => Array(rows).fill(null))
-  const [animCounter, setAnimCounter] = useState(0)
+  const spanRefs = useRef([])
+  const cellRefs = useRef([])
+  const spinTweensRef = useRef([])
+  const winTweensRef = useRef([])
+  const stopTimerRef = useRef(null)
+  const phaseRef = useRef("idle")
   const [phase, setPhase] = useState("idle")
+  // idleSymbols drives React rendering; only updated when NOT animating
+  const [idleSymbols, setIdleSymbols] = useState(() =>
+    symbols.length === rows ? [...symbols] : Array(rows).fill(null),
+  )
 
-  const hasSpunRef = useRef(false)
-  const intervalRef = useRef(null)
-  const stopRef = useRef(null)
-  const landRef = useRef(null)
+  const clearSpinTweens = () => {
+    spinTweensRef.current.forEach((t) => t?.kill())
+    spinTweensRef.current = []
+    clearTimeout(stopTimerRef.current)
+    stopTimerRef.current = null
+  }
 
-  const clearTimers = () => {
-    clearInterval(intervalRef.current)
-    intervalRef.current = null
-    clearTimeout(stopRef.current)
-    stopRef.current = null
-    clearTimeout(landRef.current)
-    landRef.current = null
+  const clearWinTweens = () => {
+    winTweensRef.current.forEach((t) => t?.kill())
+    winTweensRef.current = []
+    cellRefs.current.forEach((el) => el && gsap.set(el, { scale: 1 }))
   }
 
   useEffect(() => {
-    clearTimers()
+    clearSpinTweens()
+    clearWinTweens()
 
     if (isSpinning) {
-      hasSpunRef.current = true
+      phaseRef.current = "spinning"
       setPhase("spinning")
-      intervalRef.current = setInterval(() => {
-        setDisplay(Array.from({ length: rows }, rand))
-        setAnimCounter((c) => c + 1)
-      }, 100)
-    } else if (hasSpunRef.current) {
-      setPhase("decelerating")
-      intervalRef.current = setInterval(() => {
-        setDisplay(Array.from({ length: rows }, rand))
-        setAnimCounter((c) => c + 1)
-      }, 175)
 
-      stopRef.current = setTimeout(() => {
-        clearInterval(intervalRef.current)
-        intervalRef.current = null
-        setDisplay(symbols.length === rows ? [...symbols] : Array(rows).fill(null))
-        setAnimCounter((c) => c + 1)
-        setPhase("landing")
-        landRef.current = setTimeout(() => setPhase("stopped"), 550)
+      requestAnimationFrame(() => {
+        spinTweensRef.current = spanRefs.current.map((span, r) => {
+          if (!span) return null
+          // Set initial random symbol while element is still hidden (y=-100%)
+          gsap.set(span, { y: "-100%" })
+          const sym = rand()
+          span.textContent = DISPLAY[sym] ?? sym
+
+          return gsap.to(span, {
+            y: "0%",
+            duration: 0.1,
+            ease: "none",
+            repeat: -1,
+            // Tiny cascade: each row starts slightly after the one above
+            delay: r * 0.018,
+            onRepeat() {
+              // Symbol changes while hidden above viewport — no visible jump
+              const next = rand()
+              span.textContent = DISPLAY[next] ?? next
+              gsap.set(span, { y: "-100%" })
+            },
+          })
+        })
+      })
+    } else if (phaseRef.current === "spinning") {
+      phaseRef.current = "decelerating"
+      setPhase("decelerating")
+
+      stopTimerRef.current = setTimeout(() => {
+        stopTimerRef.current = null
+        clearSpinTweens()
+
+        const finalSyms =
+          symbols.length === rows ? [...symbols] : Array(rows).fill(null)
+
+        requestAnimationFrame(() => {
+          spinTweensRef.current = spanRefs.current.map((span, r) => {
+            if (!span) return null
+            // Snap above viewport, set final content, then land smoothly
+            gsap.set(span, { y: "-100%", opacity: 0.6 })
+            const sym = finalSyms[r]
+            span.textContent = sym ? (DISPLAY[sym] ?? sym) : "?"
+
+            return gsap.to(span, {
+              y: "0%",
+              opacity: 1,
+              duration: 0.55,
+              ease: "power3.out",
+              // Top-to-bottom cascade stop, matching roulette deceleration style
+              delay: r * 0.05,
+              onComplete:
+                r === rows - 1
+                  ? () => {
+                      setIdleSymbols([...finalSyms])
+                      phaseRef.current = "stopped"
+                      setPhase("stopped")
+                    }
+                  : undefined,
+            })
+          })
+        })
       }, stopDelay)
     }
 
-    return clearTimers
+    return () => {
+      clearSpinTweens()
+      clearWinTweens()
+    }
   }, [isSpinning]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Sync display when symbols arrive while reel is still idle (recovery from localStorage)
+  // Winning cell pulse — fires after landing completes
   useEffect(() => {
-    if (phase === "idle") {
-      setDisplay(symbols.length === rows ? [...symbols] : Array(rows).fill(null))
-    }
+    clearWinTweens()
+    if (phase !== "stopped" || !winningCells?.size) return
+
+    winTweensRef.current = cellRefs.current.map((el, r) => {
+      if (!el || !winningCells.has(`${r},${colIndex}`)) return null
+      return gsap.fromTo(
+        el,
+        { scale: 1 },
+        { scale: 1.05, duration: 0.4, repeat: -1, yoyo: true, ease: "power2.inOut" },
+      )
+    })
+  }, [phase, winningCells, colIndex]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Sync static display when idle (initial load or session recovery)
+  useEffect(() => {
+    if (phaseRef.current !== "idle") return
+    const syms =
+      symbols.length === rows ? [...symbols] : Array(rows).fill(null)
+    setIdleSymbols(syms)
+    spanRefs.current.forEach((span) => span && gsap.set(span, { y: 0, opacity: 1 }))
   }, [symbols]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="flex flex-col gap-1.5 flex-1 px-1.5">
-      {display.map((symbol, rowIndex) => (
-        <SlotCell
-          key={`${colIndex}-${rowIndex}`}
-          symbol={symbol}
-          animKey={`${colIndex}-${rowIndex}-${animCounter}`}
-          isWinning={phase === "stopped" && !!winningCells?.has(`${rowIndex},${colIndex}`)}
-          isLanding={phase === "landing"}
-        />
-      ))}
+      {Array.from({ length: rows }, (_, r) => {
+        const sym = idleSymbols[r]
+        const isWin =
+          phase === "stopped" && !!winningCells?.has(`${r},${colIndex}`)
+        return (
+          <div
+            key={r}
+            ref={(el) => { cellRefs.current[r] = el }}
+            className={`
+              relative w-full aspect-square overflow-hidden rounded-lg border-2 select-none
+              transition-colors duration-300
+              ${isWin
+                ? "border-warning bg-warning/15 shadow-[0_0_12px_2px] shadow-warning/50"
+                : "border-neutral-700 bg-neutral-800"
+              }
+            `}
+          >
+            <span
+              ref={(el) => { spanRefs.current[r] = el }}
+              className="absolute inset-0 flex items-center justify-center text-4xl font-bold"
+            >
+              {sym
+                ? (DISPLAY[sym] ?? sym)
+                : <span className="text-xl opacity-20 text-neutral-400">?</span>
+              }
+            </span>
+          </div>
+        )
+      })}
     </div>
   )
 }
