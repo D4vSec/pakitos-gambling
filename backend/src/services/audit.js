@@ -1,7 +1,6 @@
 import Audit from "#models/auditModel"
 import useragent from 'express-useragent';
 
-
 const getClientIp = (req) => {
 	const xForwardedFor = req.headers["x-forwarded-for"]
 
@@ -10,17 +9,25 @@ const getClientIp = (req) => {
 	return req.socket?.remoteAddress || null
 }
 
+const getUserAgentRaw = (req) => {
+	if (!req.useragent) return null
+
+	const { browser, version, os, platform, isMobile, isTablet, isDesktop } = req.useragent
+
+	let deviceType = 'Unknown'
+	if (isMobile) deviceType = 'Mobile'
+	else if (isTablet) deviceType = 'Tablet'
+	else if (isDesktop) deviceType = 'Desktop'
+
+	const raw = { browser, version, os, platform, isMobile, isTablet, isDesktop }
+	const formatted = `${browser} ${version} / ${os} (${deviceType})`
+
+	return { raw, formatted }
+}
+
 const getUserAgent = (req) => {
-    if (!req.useragent) return "Unknown";
-
-    const { browser, version, os, platform, isMobile, isTablet, isDesktop } = req.useragent;
-    
-    let deviceType = 'Unknown';
-    if (isMobile) deviceType = 'Mobile';
-    if (isTablet) deviceType = 'Tablet';
-    if (isDesktop) deviceType = 'Desktop';
-
-    return `${browser} ${version} / ${os} (${deviceType})`;
+	const info = getUserAgentRaw(req)
+	return info ? info.formatted : 'Unknown'
 }
 
 const createAudit = async (auditData) => {
@@ -43,5 +50,6 @@ export default {
 	createAudit,
 	getAuditLogs,
 	getClientIp,
+	getUserAgentRaw,
 	getUserAgent,
 }

@@ -1,6 +1,7 @@
 import createRoulette from "#services/roulette"
 import User from "#models/userModel"
 import crypto from "crypto"
+import Audit from "#services/audit"
 
 const spinRoulette = async (req, res) => {
     const { rouletteType, bets } = req.body
@@ -106,6 +107,23 @@ const spinRoulette = async (req, res) => {
 
         const color = roulette.getColor(winningNumber)
 
+        const deviceInfo = Audit.getUserAgentRaw(req)
+        Audit.createAudit({
+            user_id: id,
+            action: "GAME_RESULT",
+            details: {
+                type: "ROULETTE",
+                rouletteType,
+                bets,
+                winningNumber: winningNumber === 37 ? "00" : winningNumber,
+                color,
+                payout: totalPayout,
+                date: new Date().toISOString(),
+            },
+            ip_address: Audit.getClientIp(req),
+			user_agent: deviceInfo ? JSON.stringify(deviceInfo.raw) : null,
+        })
+    
         res.json({
             gameId: crypto.randomUUID(),
             game: "roulette",

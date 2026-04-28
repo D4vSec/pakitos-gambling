@@ -4,6 +4,7 @@ import * as z from "zod"
 import jwtConfig from "#config/jwt"
 import User from "#models/userModel"
 import Session from "#models/sessionModel"
+import Audit from "#services/audit"
 
 const { secret, refreshSecret, accessExpiresIn, refreshExpiresIn } = jwtConfig
 
@@ -79,18 +80,20 @@ const login = async (req, res) => {
 		}
 
 		const tokens = generateTokens(user)
-		const deviceInfo = req.useragent
-			? JSON.stringify({
-				browser: req.useragent.browser,
-				version: req.useragent.version,
-				os: req.useragent.os,
-				platform: req.useragent.platform,
-				isMobile: req.useragent.isMobile,
-				isTablet: req.useragent.isTablet,
-				isDesktop: req.useragent.isDesktop,
+		const deviceInfo = Audit.getUserAgentRaw(req)
+
+		await Session.createSession(user.id, tokens.refreshToken, deviceInfo ? JSON.stringify(deviceInfo.raw) : null)
+
+		if (user.role === "admin") {
+			Audit.createAudit({
+				user_id: user.id,
+				action: "ADMIN_ACTION",
+				details: { type: "ADMIN_LOGIN", date: new Date().toISOString(), username: user.username },
+				ip_address: Audit.getClientIp(req),
+				user_agent: deviceInfo ? JSON.stringify(deviceInfo.raw) : null,
 			})
-			: null
-		await Session.createSession(user.id, tokens.refreshToken, deviceInfo)
+		}	
+
 		res.json(tokens)
 	} catch (err) {
 		res.status(500).json({ code: "SERVER_ERROR" })
@@ -113,18 +116,9 @@ const refresh = async (req, res) => {
 		await Session.revokeSession(validSession.id)
 		const user = await User.findUserById(decoded.id)
 		const tokens = generateTokens(user)
-		const deviceInfo = req.useragent
-			? JSON.stringify({
-				browser: req.useragent.browser,
-				version: req.useragent.version,
-				os: req.useragent.os,
-				platform: req.useragent.platform,
-				isMobile: req.useragent.isMobile,
-				isTablet: req.useragent.isTablet,
-				isDesktop: req.useragent.isDesktop,
-			})
-			: null
-		await Session.createSession(user.id, tokens.refreshToken, deviceInfo)
+		const deviceInfo = Audit.getUserAgentRaw(req)
+
+		await Session.createSession(user.id, tokens.refreshToken, deviceInfo ? JSON.stringify(deviceInfo.raw) : null)
 
 		res.json(tokens)
 	} catch (err) {
