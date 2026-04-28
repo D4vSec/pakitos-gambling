@@ -100,6 +100,9 @@ const updateUserBalance = async (id, amount) => {
 }
 
 const findTransactionsByUser = async (userId, page = 1, limit = 20) => {
+	if (limit > 100) limit = 100
+	if (page < 1) page = 1
+	
 	const offset = (page - 1) * limit
 	const result = await db.query('SELECT id, amount, type, created_at FROM transactions WHERE user_id = $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3', [userId, limit, offset])
 	return result.rows
