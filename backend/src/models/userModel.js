@@ -146,5 +146,8 @@ export default {
 	getUserBalance,
 	updateUserBalance,
 	findTransactionsByUser,
+	findAllUsers,
+	findUsers,
+	countUsers,
 	countTransactionsByUser
 }
