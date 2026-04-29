@@ -13,32 +13,36 @@ dayjs.extend(timezone)
 dayjs().tz("Europe/Madrid").format("DD/MM/YYYY HH:mm:ss z")
 
 const UserTransactions = () => {
-  const [transactions, setTransactions] = useState(null)
   const { getTransactionsById } = useAdmin()
   const { id } = useParams()
+  const [transactionsData, setTransactionsData] = useState(null)
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10,
+  })
 
-  const firstPage = async () => {
-    const res = await getTransactionsById(id, { page: 1, limit: 20 })
-    setTransactions(res)
-  }
-
-  const secondPage = async () => {
-    const res = await getTransactionsById(id, { page: 2, limit: 20 })
-    setTransactions(res)
+  const fetchTransactions = async () => {
+    if (!id) return
+    const params = {
+      page: pagination.pageIndex + 1,
+      limit: pagination.pageSize,
+    }
+    const res = await getTransactionsById(id, params)
+    setTransactionsData(res)
   }
 
   useEffect(() => {
-    if (!id) return
-    firstPage()
-  }, [id])
+    fetchTransactions()
+  }, [id, pagination.pageIndex, pagination.pageSize])
 
   const columns = [
     { accessorKey: "type", header: "Type" },
     {
       accessorKey: "amount",
       header: "Amount",
+      sortingFn: "alphanumeric",
       cell: (info) => (
-        <div className="flex gap-1 items-center">
+        <div className="flex items-center gap-1">
           {info.getValue()} <BitcoinSVG />
         </div>
       ),
@@ -51,13 +55,15 @@ const UserTransactions = () => {
   ]
 
   return (
-    <div>
-      <button className="btn" onClick={() => secondPage()}>
-        2page
-      </button>
-      <Table data={transactions?.transactions} columns={columns} />
-    </div>
+    pagination && (
+      <Table
+        data={transactionsData?.transactions || []}
+        columns={columns}
+        pageCount={transactionsData?.totalPages || 0}
+        pagination={pagination}
+        setPagination={setPagination}
+      />
+    )
   )
 }
-
 export default UserTransactions

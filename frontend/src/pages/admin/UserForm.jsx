@@ -18,7 +18,7 @@ const UserForm = () => {
   const navigate = useNavigate()
   const { register } = useSession()
   const { t } = useLocale()
-  const { users, updateUser } = useAdmin()
+  const { users, getUserById, updateUser } = useAdmin()
   const isEdit = Boolean(id)
   const [loading, setLoading] = useState(isEdit)
 
@@ -103,18 +103,18 @@ const UserForm = () => {
     return [...baseFields, ...passwordFields, ...rest]
   }, [isEdit])
 
-  useEffect(() => {
+  const fetchUser = async () => {
     if (!isEdit) {
       setLoading(false)
       return
     }
 
-    if (!users || users.length === 0) {
+    if (!users) {
       setLoading(true)
       return
     }
 
-    const user = users.find((u) => u.id === id)
+    const user = await getUserById(id)
 
     if (!user) {
       setLoading(false)
@@ -131,6 +131,10 @@ const UserForm = () => {
     })
 
     setLoading(false)
+  }
+
+  useEffect(() => {
+    fetchUser()
   }, [users, id, isEdit])
 
   const onSubmit = async (data) => {
@@ -170,9 +174,7 @@ const UserForm = () => {
       <div className="card w-full max-w-md bg-base-100 shadow-xl rounded-2xl">
         <div className="card-body">
           <FormProvider {...methods}>
-            <form
-              onSubmit={methods.handleSubmit(onSubmit)}
-              className="flex flex-col gap-5">
+            <form onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-col gap-5">
               {formFields.map((field) => (
                 <FormField
                   key={field.name}

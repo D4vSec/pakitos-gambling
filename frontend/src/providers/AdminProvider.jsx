@@ -6,27 +6,32 @@ import { useLocale } from "./LocaleProvider"
 
 const AdminContext = createContext()
 
+// TODO: Reducir peticiones a ser posible
 const AdminProvider = ({ children }) => {
   const [users, setUsers] = useState([])
-  const { get, post, put, destroy, loading } = useAPI()
-  const { getAccessToken, getRefreshToken, user } = useSession()
+  const { get, put, destroy, loading } = useAPI()
+  const { getAccessToken, getRefreshToken } = useSession()
   const { addNotification } = useNotification()
   const { t } = useLocale()
 
-  const getAllUsers = async () => {
+  const getAllUsers = async (options = {}) => {
     try {
-      const res = await get("/api/v1/user", {
+      const { page = 1, limit = 20 } = options
+      const url = `/api/v1/user?page=${page}&limit=${limit}`
+
+      const res = await get(url, {
         headers: {
           "x-refresh-token": getRefreshToken(),
           Authorization: `Bearer ${getAccessToken()}`,
         },
       })
-      console.log(res)
+
       if (res.code) {
         throw new Error(res.code || "Error al obtener usuarios")
       }
-
+      console.log(res)
       setUsers(res)
+      return res
     } catch (error) {
       addNotification(t(`message.error.${error.message}`), "error")
     }
@@ -89,11 +94,10 @@ const AdminProvider = ({ children }) => {
         throw new Error(res.code || "Error al borrar usuario")
       }
 
-      getAllUsers()
-
       addNotification("User deleted successfully", "success")
+
+      getAllUsers()
     } catch (error) {
-      console.log(error)
       addNotification(t(`message.error.${error.message}`), "error", {
         duration: 10000,
       })
@@ -109,13 +113,9 @@ const AdminProvider = ({ children }) => {
   }
 
   const getTransactionsById = async (userId, options = {}) => {
-    console.log(options)
     try {
-      let url = `/api/v1/user/${userId}/transactions`
-      if (Object.keys(options).includes("limit") && Object.keys(options).includes("page")) {
-        url = url.concat(`?page=${options.page}&limit=${options.limit}`)
-      }
-      console.log("url", url)
+      const { page = 1, limit = 20 } = options
+      const url = `/api/v1/user/${userId}/transactions?page=${page}&limit=${limit}`
       let res = await get(url, {
         headers: {
           "x-refresh-token": getRefreshToken(),

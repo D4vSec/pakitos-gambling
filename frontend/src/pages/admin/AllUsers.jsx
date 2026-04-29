@@ -8,18 +8,12 @@ import UserPlusSVG from "@/components/svg/UserPlusSVG"
 import UsersTable from "@/components/admin/tables/UsersTable"
 
 const AllUsers = () => {
-  const { getAllUsers, users } = useAdmin()
-
   const navigate = useNavigate()
-
-  useEffect(() => {
-    getAllUsers()
-  }, [])
 
   return (
     <GradientBg>
       <Title>All Users</Title>
-      <UsersTable users={users.users} />
+      <UsersTable />
       <Button
         svg={<UserPlusSVG />}
         variant="success"

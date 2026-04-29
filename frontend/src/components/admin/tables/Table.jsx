@@ -4,23 +4,22 @@ import {
   getCoreRowModel,
   getSortedRowModel,
   getFilteredRowModel,
-  getPaginationRowModel,
   flexRender,
 } from "@tanstack/react-table"
 import CaretUpSVG from "@/components/svg/CaretUpSVG"
 import CaretDownSVG from "@/components/svg/CaretDownSVG"
 import PaginationBar from "./PaginationBar"
 
-const Table = ({ data = [], columns = [] }) => {
+// TOD0:Añadir loading
+const Table = ({ data = [], columns = [], pageCount = 0, pagination, setPagination }) => {
   const [sorting, setSorting] = useState([])
   const [globalFilter, setGlobalFilter] = useState("")
-  const [pagination, setPagination] = useState({
-    pageCount: 0,
-    pageSize: 20,
-  })
+
   const table = useReactTable({
     data,
     columns,
+    manualPagination: true,
+    pageCount: pageCount,
     state: {
       sorting,
       globalFilter,
@@ -29,7 +28,6 @@ const Table = ({ data = [], columns = [] }) => {
     onSortingChange: setSorting,
     onGlobalFilterChange: setGlobalFilter,
     onPaginationChange: setPagination,
-    getPaginationRowModel: getPaginationRowModel(),
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -37,13 +35,16 @@ const Table = ({ data = [], columns = [] }) => {
 
   return (
     <div className="overflow-x-auto bg-base-200 p-2 rounded-lg">
-      <div className="mb-3">
+      <div className="mb-3 flex">
         <input
-          className="input input-bordered w-full"
+          className="input input-bordered flex-1"
           value={globalFilter}
           onChange={(e) => setGlobalFilter(e.target.value)}
           placeholder="Search..."
         />
+        <button className="btn btn-secondary" onClick={() => setGlobalFilter("")}>
+          Clear
+        </button>
       </div>
 
       <table className="table table-zebra">
@@ -68,13 +69,21 @@ const Table = ({ data = [], columns = [] }) => {
         </thead>
 
         <tbody>
-          {table.getRowModel().rows.map((row) => (
-            <tr key={row.id}>
-              {row.getVisibleCells().map((cell) => (
-                <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-              ))}
+          {table.getRowModel().rows.length === 0 ? (
+            <tr>
+              <td colSpan={table.getAllColumns().length} className="text-center">
+                No data found
+              </td>
             </tr>
-          ))}
+          ) : (
+            table.getRowModel().rows.map((row) => (
+              <tr key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+                ))}
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
       <PaginationBar table={table} />
