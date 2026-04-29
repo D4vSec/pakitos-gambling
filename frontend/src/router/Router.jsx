@@ -18,6 +18,7 @@ import CapyroadGame from "@/pages/games/CapyroadGame"
 import AllUsers from "@/pages/admin/AllUsers"
 import AdminLayout from "@/pages/admin/AdminLayout"
 import UserForm from "@/pages/admin/UserForm"
+import UserDetails from "@/pages/admin/UserDetails"
 
 const Router = () => {
   return (
@@ -58,8 +59,8 @@ const Router = () => {
           </ProtectedRoute>
         }>
         <Route index element={<Navigate to="users" replace />} />
-
         <Route path="users" element={<AllUsers />} />
+        <Route path="users/:id" element={<UserDetails />} />
         <Route path="users/create" element={<UserForm />} />
         <Route path="users/edit/:id" element={<UserForm />} />
       </Route>

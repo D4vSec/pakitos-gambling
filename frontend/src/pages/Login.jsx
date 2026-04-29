@@ -8,10 +8,11 @@ import { useSession } from "@/providers/SessionProvider"
 import Button from "@/components/buttons/Button"
 import Title from "@/components/Title"
 import GradientBg from "@/components/layout/GradientBg"
+import { Navigate } from "react-router-dom"
 
 const Login = () => {
   const { t } = useLocale()
-  const { login } = useSession()
+  const { login, isLogged } = useSession()
 
   const methods = useForm({
     resolver: zodResolver(loginSchema),
@@ -44,7 +45,9 @@ const Login = () => {
     methods.reset()
   }
 
-  return (
+  return isLogged ? (
+    <Navigate to="/home" replace />
+  ) : (
     <GradientBg>
       <Title>{t("general.form.page.login")}</Title>
       <div className="card w-full max-w-md bg-base-100 shadow-xl rounded-2xl">

@@ -2,13 +2,20 @@ import React from "react"
 import EditSVG from "../svg/EditSVG"
 import Button from "../buttons/Button"
 import TrashXSVG from "../svg/TrashXSVG"
+import InfoSVG from "../svg/InfoSVG"
 import { useNavigate } from "react-router-dom"
 import { useAdmin } from "@/providers/AdminProvider"
 
-const Actions = ({ id }) => {
+const UserActions = ({ id }) => {
   const navigate = useNavigate()
   const { deleteModal } = useAdmin()
   const buttons = [
+    {
+      label: "Info",
+      svg: <InfoSVG />,
+      variant: "info",
+      onClick: () => navigate(`/admin/users/${id}`),
+    },
     {
       label: "Edit",
       svg: <EditSVG />,
@@ -38,4 +45,4 @@ const Actions = ({ id }) => {
   )
 }
 
-export default Actions
+export default UserActions

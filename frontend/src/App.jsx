@@ -9,6 +9,7 @@ import Loading from "./components/Loading"
 import "./App.css"
 
 // TODO: Añadir carga de páginas lazy
+// TODo: Añadir loading mientras que se inicia y cierra sesión
 const App = () => {
   const { loading } = useLocale()
   const [showApp, setShowApp] = useState(false)

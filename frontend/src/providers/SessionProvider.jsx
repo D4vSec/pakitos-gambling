@@ -253,6 +253,13 @@ const SessionProvider = ({ children }) => {
     }
   }
 
+  const isAdmin = () => {
+    if (!user || Object.keys(user).length === 0) {
+      return false
+    }
+    return user?.role === "admin"
+  }
+
   useEffect(() => {
     const token = getAccessToken()
 
@@ -273,6 +280,7 @@ const SessionProvider = ({ children }) => {
     updateBalance,
     user,
     isLogged,
+    isAdmin,
     loading,
     getAccessToken,
     getRefreshToken,

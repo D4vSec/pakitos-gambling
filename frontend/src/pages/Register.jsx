@@ -8,10 +8,11 @@ import FormField from "@/components/forms/FormField"
 import Title from "@/components/Title"
 import Button from "@/components/buttons/Button"
 import GradientBg from "@/components/layout/GradientBg"
+import { Navigate } from "react-router-dom"
 
 const Register = () => {
   const { t } = useLocale()
-  const { register } = useSession()
+  const { register, isLogged } = useSession()
 
   const methods = useForm({
     resolver: zodResolver(registerSchema),
@@ -59,7 +60,9 @@ const Register = () => {
     methods.reset()
   }
 
-  return (
+  return isLogged ? (
+    <Navigate to="/home" replace />
+  ) : (
     <GradientBg>
       <Title>{t("general.form.page.register")}</Title>
       <div className="card w-full max-w-md bg-base-100 shadow-xl rounded-2xl">

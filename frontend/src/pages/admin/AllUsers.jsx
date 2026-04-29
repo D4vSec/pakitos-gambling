@@ -1,11 +1,11 @@
 import React, { useEffect } from "react"
-import GradientBg from "@/components/layout/GradientBg"
-import Title from "@/components/Title"
+import { useNavigate } from "react-router-dom"
 import { useAdmin } from "@/providers/AdminProvider"
-import UserTable from "@/components/admin/UserTable"
+import Title from "@/components/Title"
+import GradientBg from "@/components/layout/GradientBg"
 import Button from "@/components/buttons/Button"
 import UserPlusSVG from "@/components/svg/UserPlusSVG"
-import { useNavigate } from "react-router-dom"
+import UsersTable from "@/components/admin/tables/UsersTable"
 
 const AllUsers = () => {
   const { getAllUsers, users } = useAdmin()
@@ -19,7 +19,7 @@ const AllUsers = () => {
   return (
     <GradientBg>
       <Title>All Users</Title>
-      <UserTable users={users} />
+      <UsersTable users={users} />
       <Button
         svg={<UserPlusSVG />}
         variant="success"

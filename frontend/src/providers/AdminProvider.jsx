@@ -33,6 +33,25 @@ const AdminProvider = ({ children }) => {
     }
   }
 
+  const getUserById = async (userId) => {
+    try {
+      const res = await get(`/api/v1/user/${userId}`, {
+        headers: {
+          "x-refresh-token": getRefreshToken(),
+          Authorization: `Bearer ${getAccessToken()}`,
+        },
+      })
+
+      if (res.code) {
+        throw new Error(res.code || "Error al obtener usuarios")
+      }
+
+      return res
+    } catch (error) {
+      addNotification(t(`message.error.${error.message}`), "error")
+    }
+  }
+
   const updateUser = async (userId, userData) => {
     try {
       console.log("userData", userData)
@@ -49,7 +68,6 @@ const AdminProvider = ({ children }) => {
         throw new Error(res.code || "Error al obtener usuarios")
       }
 
-      // TODO: Refrescarlo sin llamar
       getAllUsers()
 
       addNotification("User updated successfully", "success")
@@ -91,15 +109,50 @@ const AdminProvider = ({ children }) => {
     })
   }
 
+  const getTransactionsById = async (userId, options = {}) => {
+    try {
+      let url = `/api/v1/user/${userId}/transactions`
+      if (
+        Object.keys(options).includes("limit") &&
+        Object.keys(options).includes("page")
+      ) {
+        url = url.concat(`?page=${options.page}&limit=${options.limit}`)
+      }
+
+      let res = await get(`/api/v1/user/${userId}/transactions`, {
+        headers: {
+          "x-refresh-token": getRefreshToken(),
+          Authorization: `Bearer ${getAccessToken()}`,
+        },
+      })
+
+      if (!res.totalPages) {
+        res = { ...res, totalPages: 3 }
+      }
+
+      console.log(res)
+
+      if (res.code) {
+        throw new Error(res.code || "Error al obtener usuarios")
+      }
+
+      return res
+    } catch (error) {
+      addNotification(t(`message.error.${error.message}`), "error")
+    }
+  }
+
   // const createuser = async (data) => {}
 
   const value = {
     users,
     loading,
     getAllUsers,
+    getUserById,
     updateUser,
     deleteUser,
     deleteModal,
+    getTransactionsById,
   }
 
   return <AdminContext value={value}>{children}</AdminContext>
