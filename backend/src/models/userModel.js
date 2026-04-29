@@ -38,6 +38,24 @@ const findAllUsers = async () => {
 	return result.rows
 }
 
+const countUsers = async () => {
+	const result = await db.query('SELECT COUNT(*)::int AS count FROM users')
+	return result.rows[0]?.count ?? 0
+}
+
+const countTransactionsByUser = async (userId) => {
+	const result = await db.query('SELECT COUNT(*)::int AS count FROM transactions WHERE user_id = $1', [userId])
+	return result.rows[0]?.count ?? 0
+}
+
+const findUsers = async (page = 1, limit = 20) => {
+	if (limit > 100) limit = 100
+	if (page < 1) page = 1
+	const offset = (page - 1) * limit
+	const result = await db.query('SELECT id, username, email, role, balance FROM users ORDER BY username ASC LIMIT $1 OFFSET $2', [limit, offset])
+	return result.rows
+}
+
 const updateUser = async (id, newData) => {
 	if (id === undefined || id === null || id === '') return false
 	if (!newData || typeof newData !== 'object' || Array.isArray(newData)) return false
@@ -111,7 +129,7 @@ const updateUserBalance = async (id, amount, options = {}) => {
 const findTransactionsByUser = async (userId, page = 1, limit = 20) => {
 	if (limit > 100) limit = 100
 	if (page < 1) page = 1
-	
+
 	const offset = (page - 1) * limit
 	const result = await db.query('SELECT id, amount, type, created_at FROM transactions WHERE user_id = $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3', [userId, limit, offset])
 	return result.rows
@@ -128,4 +146,5 @@ export default {
 	getUserBalance,
 	updateUserBalance,
 	findTransactionsByUser,
+	countTransactionsByUser
 }

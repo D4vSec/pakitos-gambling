@@ -20,6 +20,9 @@ vi.mock('#models/userModel', () => ({
 		updateUser: vi.fn(),
 		deleteUser: vi.fn(),
 		findTransactionsByUser: vi.fn(),
+		countTransactionsByUser: vi.fn(),
+		countUsers: vi.fn(),
+		findUsers: vi.fn(),
 	},
 }))
 
@@ -64,6 +67,9 @@ describe('admin routes', () => {
 		User.updateUser.mockResolvedValue(true)
 		User.deleteUser.mockResolvedValue(true)
 		User.findTransactionsByUser.mockResolvedValue([])
+		User.countTransactionsByUser.mockResolvedValue(0)
+		User.countUsers.mockResolvedValue(1)
+		User.findUsers.mockResolvedValue([{ id: 1, username: 'admin', email: 'admin@example.com', role: 'admin', balance: 100 }])
 
 		Bets.deleteBet.mockResolvedValue(undefined)
 		Bets.updateBet.mockResolvedValue(undefined)

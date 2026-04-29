@@ -24,9 +24,22 @@ const getProfile = async (req, res) => {
 
 const getAllUsers = async (req, res) => {
 	try {
-		const users = await User.findAllUsers()
-		res.json(users || [])
+		const schema = z
+			.object({
+				page: z.preprocess((v) => parseInt(v, 10), z.number().int().positive()).optional(),
+				limit: z.preprocess((v) => parseInt(v, 10), z.number().int().positive()).optional(),
+			})
+			.strict()
+
+		const { page = 1, limit = 20 } = schema.parse(req.query)
+
+		const total = await User.countUsers()
+		const users = await User.findUsers(page, limit)
+		const totalPages = Math.max(1, Math.ceil(total / limit))
+
+		res.json({ page: page, limit: limit, totalPages: totalPages, users: users || [] })
 	} catch (err) {
+		if (err instanceof z.ZodError) return res.status(400).json({ errors: err.errors })
 		logger.error(err)
 		res.status(500).json({ code: 'SERVER_ERROR' })
 	}
@@ -163,8 +176,12 @@ const getTransactions = async (req, res) => {
 
 		const { page = 1, limit = 20 } = schema.parse(req.query)
 
+		const total = await User.countTransactionsByUser(req.user.id)
+		const totalPages = Math.max(1, Math.ceil(total / limit))
+		if (page > totalPages) return res.status(400).json({ code: 'PAGE_EXCEDED' })
+
 		const txs = await User.findTransactionsByUser(req.user.id, page, limit)
-		res.json({ page, limit, transactions: txs })
+		res.json({ page, limit, totalPages, transactions: txs })
 	} catch (err) {
 		if (err instanceof z.ZodError) return res.status(400).json({ errors: err.errors })
 		logger.error(err)
@@ -240,8 +257,12 @@ const getTransactionsByUserId = async (req, res) => {
 		const user = await User.findUserById(id)
 		if (!user) return res.status(404).json({ code: 'USER_NOT_FOUND' })
 
+		const total = await User.countTransactionsByUser(id)
+		const totalPages = Math.max(1, Math.ceil(total / limit))
+		if (page > totalPages) return res.status(400).json({ code: 'PAGE_EXCEDED' })
+
 		const txs = await User.findTransactionsByUser(id, page, limit)
-		res.json({ page, limit, transactions: txs })
+		res.json({ page, limit, totalPages, transactions: txs })
 	} catch (err) {
 		if (err instanceof z.ZodError) return res.status(400).json({ errors: err.errors })
 		logger.error(err)
