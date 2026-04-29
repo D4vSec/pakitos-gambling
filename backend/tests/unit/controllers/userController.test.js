@@ -22,11 +22,11 @@ describe('userController createTransaction', () => {
 		User.updateUserBalance.mockResolvedValue(125)
 	})
 
-	it('accepts new credit transaction types', async () => {
+	it('accepts DEPOSIT transactions', async () => {
 		const req = {
 			user: { id: 'user-1' },
 			body: {
-				type: 'BONUS',
+				type: 'DEPOSIT',
 				amount: 25,
 			},
 		}
@@ -35,17 +35,17 @@ describe('userController createTransaction', () => {
 		await createTransaction(req, res)
 
 		expect(User.updateUserBalance).toHaveBeenCalledWith('user-1', 25, {
-			type: 'BONUS',
+			type: 'DEPOSIT',
 		})
 		expect(res.status).toHaveBeenCalledWith(200)
 		expect(res.json).toHaveBeenCalledWith({ balance: 125 })
 	})
 
-	it('accepts new debit transaction types', async () => {
+	it('accepts WITHDRAWAL transactions', async () => {
 		const req = {
 			user: { id: 'user-1' },
 			body: {
-				type: 'LOSE',
+				type: 'WITHDRAWAL',
 				amount: 15,
 			},
 		}
@@ -54,7 +54,7 @@ describe('userController createTransaction', () => {
 		await createTransaction(req, res)
 
 		expect(User.updateUserBalance).toHaveBeenCalledWith('user-1', -15, {
-			type: 'LOSE',
+			type: 'WITHDRAWAL',
 		})
 		expect(res.status).toHaveBeenCalledWith(200)
 		expect(res.json).toHaveBeenCalledWith({ balance: 125 })
@@ -77,12 +77,12 @@ describe('userController createTransaction', () => {
 		expect(res.json).toHaveBeenCalledWith({ code: 'INVALID_TRANSACTION_DATA' })
 	})
 
-	it('returns insufficient funds for debit transaction types', async () => {
+	it('returns insufficient funds for withdrawal', async () => {
 		User.updateUserBalance.mockResolvedValueOnce(null)
 		const req = {
 			user: { id: 'user-1' },
 			body: {
-				type: 'BET',
+				type: 'WITHDRAWAL',
 				amount: 300,
 			},
 		}

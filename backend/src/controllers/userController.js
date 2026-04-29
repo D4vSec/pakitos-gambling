@@ -1,6 +1,6 @@
 import User from '#models/userModel'
 import * as z from 'zod'
-import { DEBIT_TRANSACTION_TYPES, TRANSACTION_TYPES, getSignedTransactionAmount } from '#config/transactions'
+import { DEBIT_TRANSACTION_TYPES, TRANSACTION_TYPES, ALLOWED_TRANSACTION_ENDPOINT, getSignedTransactionAmount } from '#config/transactions'
 import logger from "#utils/logger"
 
 const getProfile = async (req, res) => {
@@ -193,8 +193,12 @@ const createTransaction = async (req, res) => {
 	try {
 		const schema = z
 			.object({
-				type: z.enum(TRANSACTION_TYPES),
-				amount: z.number().positive(),
+				type: z.enum(Array.from(ALLOWED_TRANSACTION_ENDPOINT)),
+				amount: z.preprocess((v) => {
+					if (v === undefined || v === null) return v
+					const n = Number(v)
+					return Number.isFinite(n) ? n : v
+				}, z.number().positive()),
 			})
 			.strict()
 

@@ -21,6 +21,11 @@ export const DEBIT_TRANSACTION_TYPES = new Set([
 	"LOSE",
 ])
 
+export const ALLOWED_TRANSACTION_ENDPOINT = new Set([
+	"DEPOSIT",
+	"WITHDRAWAL",
+])
+
 export const getDefaultTransactionType = (amount) =>
 	Number(amount) >= 0 ? "DEPOSIT" : "WITHDRAWAL"
 
