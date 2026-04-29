@@ -17,19 +17,20 @@ const UserTransactions = () => {
   const { getTransactionsById } = useAdmin()
   const { id } = useParams()
 
-  const page = transactions?.page || 1
-  const limit = transactions?.limit || 5
-  const totalPages = transactions?.totalPages || 1
+  const firstPage = async () => {
+    const res = await getTransactionsById(id, { page: 1, limit: 20 })
+    setTransactions(res)
+  }
 
-  const fetchData = async (p = page, l = limit) => {
-    const res = await getTransactionsById(id, { page: p, limit: l })
+  const secondPage = async () => {
+    const res = await getTransactionsById(id, { page: 2, limit: 20 })
     setTransactions(res)
   }
 
   useEffect(() => {
     if (!id) return
-    fetchData()
-  }, [id, page, limit])
+    firstPage()
+  }, [id])
 
   const columns = [
     { accessorKey: "type", header: "Type" },
@@ -50,17 +51,12 @@ const UserTransactions = () => {
   ]
 
   return (
-    <Table
-      data={transactions?.transactions || []}
-      columns={columns}
-      paginationEvents={{
-        page,
-        totalPages,
-        limit,
-        setPage: (p) => fetchData(p, limit),
-        setLimit: (l) => fetchData(1, l),
-      }}
-    />
+    <div>
+      <button className="btn" onClick={() => secondPage()}>
+        2page
+      </button>
+      <Table data={transactions?.transactions} columns={columns} />
+    </div>
   )
 }
 

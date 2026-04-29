@@ -4,25 +4,32 @@ import {
   getCoreRowModel,
   getSortedRowModel,
   getFilteredRowModel,
+  getPaginationRowModel,
   flexRender,
 } from "@tanstack/react-table"
 import CaretUpSVG from "@/components/svg/CaretUpSVG"
 import CaretDownSVG from "@/components/svg/CaretDownSVG"
-import CustomPaginationBar from "./CustomPaginationBar"
+import PaginationBar from "./PaginationBar"
 
-const Table = ({ data = [], columns = [], paginationEvents }) => {
+const Table = ({ data = [], columns = [] }) => {
   const [sorting, setSorting] = useState([])
   const [globalFilter, setGlobalFilter] = useState("")
-
+  const [pagination, setPagination] = useState({
+    pageCount: 0,
+    pageSize: 20,
+  })
   const table = useReactTable({
     data,
     columns,
     state: {
       sorting,
       globalFilter,
+      pagination,
     },
     onSortingChange: setSorting,
     onGlobalFilterChange: setGlobalFilter,
+    onPaginationChange: setPagination,
+    getPaginationRowModel: getPaginationRowModel(),
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -47,7 +54,8 @@ const Table = ({ data = [], columns = [], paginationEvents }) => {
                 <th
                   key={h.id}
                   onClick={h.column.getToggleSortingHandler()}
-                  className="cursor-pointer">
+                  className="cursor-pointer"
+                >
                   <div className="flex gap-1 items-center">
                     {flexRender(h.column.columnDef.header, h.getContext())}
                     {h.column.getIsSorted() === "asc" && <CaretUpSVG />}
@@ -63,16 +71,13 @@ const Table = ({ data = [], columns = [], paginationEvents }) => {
           {table.getRowModel().rows.map((row) => (
             <tr key={row.id}>
               {row.getVisibleCells().map((cell) => (
-                <td key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
+                <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
               ))}
             </tr>
           ))}
         </tbody>
       </table>
-
-      <CustomPaginationBar events={paginationEvents} />
+      <PaginationBar table={table} />
     </div>
   )
 }

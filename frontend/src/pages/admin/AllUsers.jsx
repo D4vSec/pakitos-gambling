@@ -19,11 +19,12 @@ const AllUsers = () => {
   return (
     <GradientBg>
       <Title>All Users</Title>
-      <UsersTable users={users} />
+      <UsersTable users={users.users} />
       <Button
         svg={<UserPlusSVG />}
         variant="success"
-        onClick={() => navigate("/admin/users/create")}>
+        onClick={() => navigate("/admin/users/create")}
+      >
         Create New User
       </Button>
     </GradientBg>

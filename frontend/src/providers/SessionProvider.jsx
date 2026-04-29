@@ -126,11 +126,12 @@ const SessionProvider = ({ children }) => {
         },
       })
 
+      if (response.code === "AUTH_INVALID_TOKEN") return
+
       if (response.code) {
         throw new Error(response?.code)
       }
 
-      console.log("user", response)
       setUser(response)
       setIsLogged(true)
       return response
@@ -172,27 +173,19 @@ const SessionProvider = ({ children }) => {
         const message =
           response?.message ||
           (response?.errors
-            ? response.errors
-                .map((e) => e.message || JSON.stringify(e))
-                .join(" \n")
+            ? response.errors.map((e) => e.message || JSON.stringify(e)).join(" \n")
             : response?.code || "UNKNOWN_ERROR")
         throw new Error(message)
       }
 
-      addNotification(
-        t ? t("message.success.USER_UPDATED") : "Profile updated",
-        "success",
-      )
+      addNotification(t ? t("message.success.USER_UPDATED") : "Profile updated", "success")
 
       const userData = await getUserData()
       setUser(userData)
 
       return userData
     } catch (error) {
-      addNotification(
-        t ? t(`message.error.${error?.message}`) : "Error updating profile",
-        "error",
-      )
+      addNotification(t ? t(`message.error.${error?.message}`) : "Error updating profile", "error")
     } finally {
       setLoading(false)
     }
@@ -206,7 +199,7 @@ const SessionProvider = ({ children }) => {
           Authorization: `Bearer ${getAccessToken()}`,
         },
         body: {
-          type: "deposit",
+          type: "DEPOSIT",
           amount: amount,
         },
       })
@@ -219,10 +212,7 @@ const SessionProvider = ({ children }) => {
 
       console.log("balance", response)
 
-      addNotification(
-        t(`message.success.BALANCE_ADDED_SUCCESSFULLY`),
-        "success",
-      )
+      addNotification(t(`message.success.BALANCE_ADDED_SUCCESSFULLY`), "success")
     } catch (error) {
       addNotification(t(`message.error.${error?.message}`), "error")
     } finally {
@@ -237,9 +227,7 @@ const SessionProvider = ({ children }) => {
         const parsedAmount = parseFloat(amount) || 0
 
         const newBalance =
-          type === "deposit"
-            ? currentBalance + parsedAmount
-            : currentBalance - parsedAmount
+          type === "deposit" ? currentBalance + parsedAmount : currentBalance - parsedAmount
 
         return {
           ...prev,
@@ -288,9 +276,7 @@ const SessionProvider = ({ children }) => {
     setUser,
   }
 
-  return (
-    <SessionContext.Provider value={value}>{children}</SessionContext.Provider>
-  )
+  return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>
 }
 
 export default SessionProvider

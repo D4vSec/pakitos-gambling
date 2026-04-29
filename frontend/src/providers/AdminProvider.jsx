@@ -8,7 +8,6 @@ const AdminContext = createContext()
 
 const AdminProvider = ({ children }) => {
   const [users, setUsers] = useState([])
-
   const { get, post, put, destroy, loading } = useAPI()
   const { getAccessToken, getRefreshToken, user } = useSession()
   const { addNotification } = useNotification()
@@ -110,25 +109,19 @@ const AdminProvider = ({ children }) => {
   }
 
   const getTransactionsById = async (userId, options = {}) => {
+    console.log(options)
     try {
       let url = `/api/v1/user/${userId}/transactions`
-      if (
-        Object.keys(options).includes("limit") &&
-        Object.keys(options).includes("page")
-      ) {
+      if (Object.keys(options).includes("limit") && Object.keys(options).includes("page")) {
         url = url.concat(`?page=${options.page}&limit=${options.limit}`)
       }
-
-      let res = await get(`/api/v1/user/${userId}/transactions`, {
+      console.log("url", url)
+      let res = await get(url, {
         headers: {
           "x-refresh-token": getRefreshToken(),
           Authorization: `Bearer ${getAccessToken()}`,
         },
       })
-
-      if (!res.totalPages) {
-        res = { ...res, totalPages: 3 }
-      }
 
       console.log(res)
 
