@@ -19,7 +19,7 @@ const UserActions = ({ id }) => {
     {
       label: "Edit",
       svg: <EditSVG />,
-      variant: "secondary",
+      variant: "warning",
       onClick: () => navigate(`/admin/users/edit/${id}`),
     },
     {
@@ -37,7 +37,8 @@ const UserActions = ({ id }) => {
           variant={button.variant}
           size={"sm"}
           svg={button.svg}
-          onClick={button.onClick}>
+          onClick={button.onClick}
+        >
           {button.label}
         </Button>
       ))}

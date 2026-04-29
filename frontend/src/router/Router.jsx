@@ -19,6 +19,7 @@ import AllUsers from "@/pages/admin/AllUsers"
 import AdminLayout from "@/pages/admin/AdminLayout"
 import UserForm from "@/pages/admin/UserForm"
 import UserDetails from "@/pages/admin/UserDetails"
+import LogsPage from "@/pages/admin/LogsPage"
 
 const Router = () => {
   return (
@@ -57,12 +58,14 @@ const Router = () => {
           <ProtectedRoute requireAdmin>
             <AdminLayout />
           </ProtectedRoute>
-        }>
+        }
+      >
         <Route index element={<Navigate to="users" replace />} />
         <Route path="users" element={<AllUsers />} />
         <Route path="users/:id" element={<UserDetails />} />
         <Route path="users/create" element={<UserForm />} />
         <Route path="users/edit/:id" element={<UserForm />} />
+        <Route path="logs" element={<LogsPage />} />
       </Route>
 
       {/* Games */}

@@ -135,6 +135,29 @@ const AdminProvider = ({ children }) => {
     }
   }
 
+  const getLogs = async (options = {}) => {
+    try {
+      const { page = 1, limit = 20 } = options
+      const url = `/api/v1/audit?page=${page}&limit=${limit}`
+      let res = await get(url, {
+        headers: {
+          "x-refresh-token": getRefreshToken(),
+          Authorization: `Bearer ${getAccessToken()}`,
+        },
+      })
+
+      console.log(res)
+
+      if (res.code) {
+        throw new Error(res.code || "Error al obtener usuarios")
+      }
+
+      return res
+    } catch (error) {
+      addNotification(t(`message.error.${error.message}`), "error")
+    }
+  }
+
   // const createuser = async (data) => {}
 
   const value = {
@@ -146,6 +169,7 @@ const AdminProvider = ({ children }) => {
     deleteUser,
     deleteModal,
     getTransactionsById,
+    getLogs,
   }
 
   return <AdminContext value={value}>{children}</AdminContext>
