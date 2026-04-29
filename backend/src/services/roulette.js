@@ -1,4 +1,4 @@
-import { randomInt } from "#utils/rng"
+import { randomIntInclusive } from "#utils/rng"
 
 //This factory contains all the necessary functions to manage the logic of the roulette
 const createRoulette = () => {
@@ -22,8 +22,8 @@ const createRoulette = () => {
   ]
 
   const spinRoulette = (rouletteType) => {
-    if (rouletteType === "Zero") return randomInt(0, 36)
-    if (rouletteType === "ZeroZero") return randomInt(0, 37) //0-36 for numbers, 37 for 00
+    if (rouletteType === "Zero") return randomIntInclusive(0, 36)
+    if (rouletteType === "ZeroZero") return randomIntInclusive(0, 37) //0-36 for numbers, 37 for 00
   }
   const isZero = (type) => type === 0
   const isZeroZero = (type) => type === 37

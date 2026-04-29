@@ -6,103 +6,86 @@ import logger from "#utils/logger"
 
 const spinRoulette = async (req, res) => {
     const { rouletteType, bets } = req.body
+    const normalizedBets = Array.isArray(bets) ? bets : [bets]
 
-    //All the validations for the request body (I might want to move this to a middleware or something later)
-    if (!["Zero", "ZeroZero"].includes(rouletteType)) {
-        return res.status(400).json({ code: "INVALID_ROULETTE_TYPE" })
+    const isAllowedRoulette = (rt) => ["Zero", "ZeroZero"].includes(rt)
+
+    const isValidBetShape = (bet) => bet && typeof bet === "object" && Number.isFinite(bet.amount) && bet.amount > 0
+
+    const numberBetOutOfRange = (bet, rt) => {
+        if (bet.type !== "number") return false
+        const max = rt === "Zero" ? 36 : 37
+        return !Number.isInteger(bet.bet) || bet.bet < 0 || bet.bet > max
     }
 
-    if (rouletteType === "Zero" && (bets.bet < 0 || bets.bet > 36)) {
-        return res.status(400).json({ code: "INVALID_BET" })
+    const invalidBetTypeFor = (bet) => {
+        if (bet.type === "color") return !["red", "black"].includes(bet.bet)
+        if (bet.type === "odd/even") return !["odd", "even"].includes(bet.bet)
+        if (bet.type === "twelve") return !["1-12", "13-24", "25-36"].includes(bet.bet)
+        if (bet.type === "row") return !["row1", "row2", "row3"].includes(bet.bet)
+        if (bet.type === "half") return !["1-18", "19-36"].includes(bet.bet)
+        return false
     }
 
-    if (rouletteType === "ZeroZero" && (bets.bet < 0 || bets.bet > 37)) {
-        return res.status(400).json({ code: "INVALID_BET" })
-    }
+    if (!isAllowedRoulette(rouletteType)) return res.status(400).json({ code: "INVALID_ROULETTE_TYPE" })
 
-    if (bets.type === "color" && !["red", "black"].includes(bets.bet)) {
-        return res.status(400).json({ code: "INVALID_BET_TYPE" })
-    }
+    if (normalizedBets.some((b) => !isValidBetShape(b))) return res.status(400).json({ code: "INVALID_BET" })
 
-    if (bets.type === "odd/even" && !["odd", "even"].includes(bets.bet)) {
-        return res.status(400).json({ code: "INVALID_BET_TYPE" })
-    }
+    if (normalizedBets.some((b) => numberBetOutOfRange(b, rouletteType))) return res.status(400).json({ code: "INVALID_BET" })
 
-    if (
-        bets.type === "twelve" &&
-        !["1-12", "13-24", "25-36"].includes(bets.bet)
-    ) {
-        return res.status(400).json({ code: "INVALID_BET_TYPE" })
-    }
-
-    if (bets.type === "row" && !["row1", "row2", "row3"].includes(bets.bet)) {
-        return res.status(400).json({ code: "INVALID_BET_TYPE" })
-    }
-
-    if (bets.type === "half" && !["1-18", "19-36"].includes(bets.bet)) {
-        return res.status(400).json({ code: "INVALID_BET_TYPE" })
-    }
+    if (normalizedBets.some((b) => invalidBetTypeFor(b))) return res.status(400).json({ code: "INVALID_BET_TYPE" })
 
     const id = req.user.id
     const wallet = await User.getUserBalance(id)
+    const totalAmount = normalizedBets.reduce((acc, b) => acc + b.amount, 0)
 
-    const totalAmount = bets.reduce((acc, bet) => acc + bet.amount, 0)
-
-    if (totalAmount > wallet) {
-        return res.status(400).json({ code: "INSUFFICIENT_BALANCE" })
-    }
+    if (totalAmount > wallet) return res.status(400).json({ code: "INSUFFICIENT_BALANCE" })
 
     const roulette = createRoulette()
+
+    const evaluateBet = (bet, winningNumber) => {
+        let isWinner = false
+        let multiplier = 0
+        const { type, bet: singleBet, amount } = bet
+
+        if (roulette.isNumberBet(type)) {
+            isWinner = roulette.isNumberWinner(singleBet, winningNumber)
+            multiplier = 36
+        } else if (roulette.isColorBet(type)) {
+            isWinner = roulette.isColorWinner(singleBet, winningNumber)
+            multiplier = 2
+        } else if (roulette.isOddBet(type)) {
+            isWinner = roulette.isOddWinner(singleBet, winningNumber)
+            multiplier = 2
+        } else if (roulette.isTwelveBet(type)) {
+            isWinner = roulette.isTwelveWinner(singleBet, winningNumber)
+            multiplier = 3
+        } else if (roulette.isRowBet(type)) {
+            isWinner = roulette.isRowWinner(singleBet, winningNumber)
+            multiplier = 3
+        } else if (roulette.isHalfBet(type)) {
+            isWinner = roulette.isHalfWinner(singleBet, winningNumber)
+            multiplier = 2
+        }
+
+        return {
+            ...bet,
+            type,
+            singleBet,
+            amount,
+            isWinner,
+            payout: isWinner ? amount * multiplier : 0,
+            multiplier,
+        }
+    }
 
     try {
         await User.updateUserBalance(id, -totalAmount, { type: "BET" })
 
         const winningNumber = roulette.spinRoulette(rouletteType)
-        //We check each bet against the winning number and also calculate the payout for each one
-        const results = await bets.map((bet) => {
-            let isWinner = false
-            let multiplier = 0
-            const { type, bet: singleBet, amount } = bet
-            if (roulette.isNumberBet(type)) {
-                isWinner = roulette.isNumberWinner(singleBet, winningNumber)
-                multiplier = 36
-            }
-            if (roulette.isColorBet(type)) {
-                isWinner = roulette.isColorWinner(singleBet, winningNumber)
-                multiplier = 2
-            }
-            if (roulette.isOddBet(type)) {
-                isWinner = roulette.isOddWinner(singleBet, winningNumber)
-                multiplier = 2
-            }
-            if (roulette.isTwelveBet(type)) {
-                isWinner = roulette.isTwelveWinner(singleBet, winningNumber)
-                multiplier = 3
-            }
-            if (roulette.isRowBet(type)) {
-                isWinner = roulette.isRowWinner(singleBet, winningNumber)
-                multiplier = 3
-            }
-            if (roulette.isHalfBet(type)) {
-                isWinner = roulette.isHalfWinner(singleBet, winningNumber)
-                multiplier = 2
-            }
+        const results = normalizedBets.map((b) => evaluateBet(b, winningNumber))
 
-            return {
-                ...bet,
-                type,
-                singleBet,
-                amount,
-                isWinner,
-                payout: isWinner ? amount * multiplier : 0,
-                multiplier,
-            }
-        })
-
-        const totalPayout = results.reduce(
-            (acc, result) => acc + result.payout,
-            0,
-        )
+        const totalPayout = results.reduce((acc, r) => acc + r.payout, 0)
 
         if (totalPayout > 0) await User.updateUserBalance(id, totalPayout, { type: "WIN" })
 
@@ -115,16 +98,16 @@ const spinRoulette = async (req, res) => {
             details: {
                 type: "ROULETTE",
                 rouletteType,
-                bets,
+                bets: normalizedBets,
                 winningNumber: winningNumber === 37 ? "00" : winningNumber,
                 color,
                 payout: totalPayout,
                 date: new Date().toISOString(),
             },
             ip_address: Audit.getClientIp(req),
-			user_agent: deviceInfo ? JSON.stringify(deviceInfo.raw) : null,
+            user_agent: deviceInfo ? JSON.stringify(deviceInfo.raw) : null,
         })
-    
+
         res.json({
             gameId: crypto.randomUUID(),
             game: "roulette",
@@ -135,8 +118,8 @@ const spinRoulette = async (req, res) => {
             result: {
                 winningNumber: winningNumber === 37 ? "00" : winningNumber,
                 color,
-                isZero: roulette.isZero,
-                isZeroZero: roulette.isZeroZero,
+                isZero: roulette.isZero(winningNumber),
+                isZeroZero: roulette.isZeroZero(winningNumber),
             },
         })
     } catch (error) {
