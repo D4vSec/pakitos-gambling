@@ -1,6 +1,5 @@
 import rateLimit from "express-rate-limit"
 import rateLimitConfig from "#config/ratelimit"
-import { isDev } from "#utils/logger"
 
 const authLimiter = rateLimit({
 	windowMs: rateLimitConfig.auth.windowMs,
@@ -8,7 +7,6 @@ const authLimiter = rateLimit({
 	message: { error: rateLimitConfig.auth.message },
 	standardHeaders: true,
 	legacyHeaders: false,
-	skip: () => isDev,
 })
 
 const registrationLimiter = rateLimit({
@@ -17,7 +15,6 @@ const registrationLimiter = rateLimit({
 	message: { error: rateLimitConfig.registration.message },
 	standardHeaders: true,
 	legacyHeaders: false,
-	skip: () => isDev,
 })
 
 const gameLimiter = rateLimit({
@@ -26,7 +23,6 @@ const gameLimiter = rateLimit({
 	message: { error: rateLimitConfig.games.message },
 	standardHeaders: true,
 	legacyHeaders: false,
-	skip: () => isDev,
 })
 
 const historyLimiter = rateLimit({
@@ -35,7 +31,6 @@ const historyLimiter = rateLimit({
 	message: { error: rateLimitConfig.history.message },
 	standardHeaders: true,
 	legacyHeaders: false,
-	skip: () => isDev,
 })
 
 const globalLimiter = rateLimit({
@@ -44,7 +39,6 @@ const globalLimiter = rateLimit({
 	message: { error: rateLimitConfig.global.message },
 	standardHeaders: true,
 	legacyHeaders: false,
-	skip: () => isDev,
 })
 
 export { authLimiter, registrationLimiter, gameLimiter, historyLimiter, globalLimiter }
