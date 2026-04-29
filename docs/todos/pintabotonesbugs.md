@@ -13,7 +13,7 @@
 - Si no estas registrado que la parte de invitado no te aparezca para hacerle click, puede ser confuso para el usuario
 - El capyroad no va xd
 - Un ojete para ver la contraseña estaria guapo la verdad
-- La zona de juegos en general necesita cariño, esta un poco fea... 
+- La zona de juegos en general necesita cariño, esta un poco fea...
 
 # Notas de los pintabotones
 
@@ -22,7 +22,7 @@
 # Checklist
 
 - [x] Expresion regular fixeada
-- [ ] Notificaciones de inicio
+- [x] Notificaciones de inicio
 - [ ] Animacions BJ
 - [x] Animaciones Ruleta
 - [ ] Slots animaciones
@@ -31,5 +31,5 @@
 - [ ] Impedir tiradas durante animacion
 - [x] Mejora de UI para usuarios
 - [ ] CapyRoad hace cosas
-- [ ] Ojete para ver contraseña
+- [x] Ojete para ver contraseña
 - [ ] Dar cariño a la zona de juegos

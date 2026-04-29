@@ -10,7 +10,7 @@ const AdminContext = createContext()
 const AdminProvider = ({ children }) => {
   const [users, setUsers] = useState([])
   const { get, put, destroy, loading } = useAPI()
-  const { getAccessToken, getRefreshToken } = useSession()
+  const { getAccessToken, getRefreshToken, user } = useSession()
   const { addNotification } = useNotification()
   const { t } = useLocale()
 
@@ -105,11 +105,15 @@ const AdminProvider = ({ children }) => {
   }
 
   const deleteModal = (userId) => {
-    addNotification("Sure wanna delete user?", "modal", {
-      onAccept: () => deleteUser(userId),
-      acceptLabel: "Sure, 1 gambler less",
-      cancelLabel: "No, I regret my decision",
-    })
+    if (userId === user?.id) {
+      addNotification("You can't delete yourself, dummy", "warning")
+    } else {
+      addNotification("Sure wanna delete user?", "modal", {
+        onAccept: () => deleteUser(userId),
+        acceptLabel: "Sure, 1 gambler less",
+        cancelLabel: "No, I regret my decision",
+      })
+    }
   }
 
   const getTransactionsById = async (userId, options = {}) => {

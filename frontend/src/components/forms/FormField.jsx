@@ -1,11 +1,15 @@
+import { useState } from "react"
 import { useFormContext } from "react-hook-form"
 import { useLocale } from "@/providers/LocaleProvider"
+import EyeSVG from "@/components/svg/EyeSVG"
+import EyeOffSVG from "@/components/svg/EyeOffSVG"
+
 const FormField = ({
   name,
   label,
   type = "text",
   placeholder,
-  as = "input", // "input" | "textarea" | "select"
+  as = "input",
   options = [],
   ...rest
 }) => {
@@ -15,8 +19,11 @@ const FormField = ({
   } = useFormContext()
 
   const { t } = useLocale()
+  const [showPassword, setShowPassword] = useState(false)
 
   const error = errors?.[name]
+  const isPasswordField = type === "password"
+  const inputType = isPasswordField && showPassword ? "text" : type
 
   const baseClass = `w-full ${
     as === "input" ? "input input-lg" : ""
@@ -28,8 +35,6 @@ const FormField = ({
     className: baseClass,
     ...register(name),
     ...rest,
-    "aria-invalid": !!error,
-    "aria-describedby": error ? `${name}-error` : undefined,
   }
 
   const renderField = () => {
@@ -52,7 +57,7 @@ const FormField = ({
     return (
       <input
         {...commonProps}
-        type={type}
+        type={inputType}
         placeholder={placeholder}
         {...(type === "number" ? { step: "0.01" } : {})}
       />
@@ -61,24 +66,27 @@ const FormField = ({
 
   return (
     <div className="w-full">
-      {/* INPUT / TEXTAREA / SELECT */}
       {type !== "checkbox" && type !== "radio" && (
-        <label className="floating-label w-full">
+        <label className="floating-label w-full relative">
           <span>{label}</span>
-
           {renderField()}
+          {isPasswordField && (
+            <button
+              type="button"
+              className="absolute right-4 top-1/2 -translate-y-1/2 z-10 text-base-content/50 hover:text-base-content transition-colors"
+              onClick={() => setShowPassword(!showPassword)}
+              tabIndex="-1"
+            >
+              {showPassword ? <EyeOffSVG /> : <EyeSVG />}
+            </button>
+          )}
         </label>
       )}
 
       {/* CHECKBOX SIMPLE */}
       {type === "checkbox" && options.length === 0 && (
         <label className="label cursor-pointer gap-3">
-          <input
-            type="checkbox"
-            className="checkbox checkbox-lg"
-            {...register(name)}
-            {...rest}
-          />
+          <input type="checkbox" className="checkbox checkbox-lg" {...register(name)} {...rest} />
           <span className="label-text">{label}</span>
         </label>
       )}
@@ -92,15 +100,8 @@ const FormField = ({
 
           <div role="group" aria-labelledby={`${name}-label`}>
             {options.map((opt) => (
-              <label
-                key={opt.value}
-                className="label cursor-pointer gap-3 justify-start">
-                <input
-                  type="checkbox"
-                  value={opt.value}
-                  className="checkbox"
-                  {...register(name)}
-                />
+              <label key={opt.value} className="label cursor-pointer gap-3 justify-start">
+                <input type="checkbox" value={opt.value} className="checkbox" {...register(name)} />
                 <span className="label-text">{opt.label}</span>
               </label>
             ))}
@@ -117,15 +118,8 @@ const FormField = ({
 
           <div role="group" aria-labelledby={`${name}-label`}>
             {options.map((opt) => (
-              <label
-                key={opt.value}
-                className="label cursor-pointer gap-3 justify-start">
-                <input
-                  type="radio"
-                  value={opt.value}
-                  className="radio"
-                  {...register(name)}
-                />
+              <label key={opt.value} className="label cursor-pointer gap-3 justify-start">
+                <input type="radio" value={opt.value} className="radio" {...register(name)} />
                 <span className="label-text">{opt.label}</span>
               </label>
             ))}
