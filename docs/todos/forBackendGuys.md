@@ -2,6 +2,13 @@
 
 <!-- Gepeteada lo se pero me la pela -->
 
+### Anotaciones
+
+<!-- 29/04/26 -->
+
+- **Registros en logs sin userID**
+  - Me he percatado que hay logs sin userID, supongo que es porque son registros que pertenecen a un usuario eliminado
+
 ### 🐞 Bugs
 
 - **Continuar partida (get/:gameId)**
@@ -32,12 +39,13 @@
 
 - **Broken Object Level Authorization**
   - The Blackjack session store trusts gameId alone. None of the mutation endpoints (hit, stand, double, split, delete) verify that the session belongs to req.user.id, and payouts are applied to the current caller's balance.
+
 ## CHECKLIST
 
-- [X] Continuar partida (get/:gameId)
-- [X] Lógica del dealer
-- [X] Split de manos
-- [X] Empates (push)
-- [X] Broken Object Level Authorization
+- [x] Continuar partida (get/:gameId)
+- [x] Lógica del dealer
+- [x] Split de manos
+- [x] Empates (push)
+- [x] Broken Object Level Authorization
 - [ ] Refactor del BJ
-
+- [ ] Mirar registros logs sin userID
