@@ -16,8 +16,8 @@ capyRoadRoutes.post("/start", gameLimiter, authMiddleware, startGame)
 capyRoadRoutes.post("/:gameId/jump", gameLimiter, authMiddleware, jumpRoad)
 capyRoadRoutes.delete("/:gameId", authMiddleware, deleteGame)
 
-if (isDev) {
+if (isDev) 
     capyRoadRoutes.get("/games", authMiddleware, adminMiddleware, getGames)
-}
+
 
 export default capyRoadRoutes

@@ -1,6 +1,7 @@
 import pino from "pino"
 
-const isDev = (process.env.MODE_ENV ?? process.env.NODE_ENV) === "development"
+const currentEnv = process.env.MODE_ENV ?? process.env.NODE_ENV
+const isDev = currentEnv === "development" || currentEnv === "test"
 
 const logger = pino({
   level: isDev ? "debug" : "fatal",

@@ -12,11 +12,11 @@ blackJackRoutes.post("/:gameId/hit", gameLimiter, authMiddleware, hit)
 blackJackRoutes.post("/:gameId/stand", gameLimiter, authMiddleware, stand)
 blackJackRoutes.post("/:gameId/double", gameLimiter, authMiddleware, double)
 blackJackRoutes.post("/:gameId/split", gameLimiter, authMiddleware, split)
+
+if (isDev) 
+    blackJackRoutes.get("/games", authMiddleware, adminMiddleware, getGames)
+
 blackJackRoutes.get("/:gameId", authMiddleware, getGame)
 blackJackRoutes.delete("/:gameId", authMiddleware, deleteGame)
-
-if (isDev) {
-    blackJackRoutes.get("/games", authMiddleware, adminMiddleware, getGames)
-}
 
 export default blackJackRoutes
