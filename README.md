@@ -16,7 +16,7 @@ This repository contains the full application stack and the supporting infrastru
 - **Docker Compose** workflows for development and production
 - **pgAdmin** for database management
 
-# 🛠️ Tech Stack
+## 🛠️ Tech Stack
 | Area | Technologies |
 | --- | --- |
 | **Frontend** | ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB) ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white) ![GSAP](https://img.shields.io/badge/GSAP-88CE02?style=for-the-badge&logo=greensock&logoColor=white) |
