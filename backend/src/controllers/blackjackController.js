@@ -59,7 +59,7 @@ export const startGame = async (req, res) => {
     const gameId = crypto.randomUUID()
 
     try {
-        await User.updateUserBalance(id, -amount)
+        await User.updateUserBalance(id, -amount, { type: "BET" })
 
         const deck = blackJack.shuffleDeck(blackJack.createDeck())
         const playerHand = blackJack.getInitialHand(deck)
@@ -109,7 +109,7 @@ export const startGame = async (req, res) => {
                 game.winners.push(winners.player)
             }
             game.payout = blackJack.getPayout(game)
-            if (game.payout > 0) await User.updateUserBalance(id, game.payout)
+            if (game.payout > 0) await User.updateUserBalance(id, game.payout, { type: "WIN" })
         }
 
         //If the dealer hits a blackJack
@@ -176,7 +176,7 @@ export const hit = async (req, res) => {
                     }
 
                     game.payout = blackJack.getPayout(game)
-                    if (game.payout > 0) await User.updateUserBalance(id, game.payout)
+                    if (game.payout > 0) await User.updateUserBalance(id, game.payout, { type: "WIN" })
                 }
             } else {
                 game.player[FIRST_HAND].hand = blackJack.hit(game.deck, game.player[FIRST_HAND].hand)
@@ -210,7 +210,7 @@ export const hit = async (req, res) => {
             game.winners.push(winner)
 
             game.payout = blackJack.getPayout(game)
-            if (game.payout > 0) await User.updateUserBalance(id, game.payout)
+            if (game.payout > 0) await User.updateUserBalance(id, game.payout, { type: "WIN" })
         }
 
         games.set(gameId, game)
@@ -254,7 +254,7 @@ export const stand = async (req, res) => {
                 game.status = GAME_STATUSES.finished
 
                 game.payout = blackJack.getPayout(game)
-                if (game.payout > 0) await User.updateUserBalance(id, game.payout)
+                if (game.payout > 0) await User.updateUserBalance(id, game.payout, { type: "WIN" })
             } else {
                 //If the player decides to stand with the first hand, we just mark it as resolved
                 //and wait for the player to play with the second hand
@@ -272,7 +272,7 @@ export const stand = async (req, res) => {
             game.status = GAME_STATUSES.finished
 
             game.payout = blackJack.getPayout(game)
-            if (game.payout > 0) await User.updateUserBalance(id, game.payout)
+            if (game.payout > 0) await User.updateUserBalance(id, game.payout, { type: "WIN" })
         }
 
         games.set(gameId, game)
@@ -306,7 +306,7 @@ export const double = async (req, res) => {
             return res.status(403).json({ code: "FORBIDDEN" })
         }
 
-        await User.updateUserBalance(id, -game.player[FIRST_HAND].bet)
+        await User.updateUserBalance(id, -game.player[FIRST_HAND].bet, { type: "BET" })
         game.player[FIRST_HAND].bet *= 2
         //If the game is not split we do the usual thing
         if (!game.split) {
@@ -324,7 +324,7 @@ export const double = async (req, res) => {
                 game.status = GAME_STATUSES.finished
 
                 game.payout = blackJack.getPayout(game)
-                if (game.payout > 0) await User.updateUserBalance(id, game.payout)
+                if (game.payout > 0) await User.updateUserBalance(id, game.payout, { type: "WIN" })
             } else {
                 game.status = GAME_STATUSES.finished
                 game.winners.push(winners.dealer)
@@ -349,7 +349,7 @@ export const double = async (req, res) => {
                     game.status = GAME_STATUSES.finished
 
                     game.payout = blackJack.getPayout(game)
-                    if (game.payout > 0) await User.updateUserBalance(id, game.payout)
+                    if (game.payout > 0) await User.updateUserBalance(id, game.payout, { type: "WIN" })
                 } else {
                     game.status = GAME_STATUSES.finished
                     game.winners.push(winners.dealer)
@@ -453,7 +453,7 @@ export const split = async (req, res) => {
                 game.winners.push(winner2)
 
                 game.payout = blackJack.getPayout(game)
-                if (game.payout > 0) await User.updateUserBalance(id, game.payout)
+                if (game.payout > 0) await User.updateUserBalance(id, game.payout, { type: "WIN" })
             }
 
             games.set(gameId, game)

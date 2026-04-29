@@ -1,5 +1,6 @@
 import { hashPassword, comparePassword } from '#utils/password'
 import db from '#config/db'
+import { getDefaultTransactionType, isTransactionType } from '#config/transactions'
 
 const updatableUserColumns = Object.freeze({
 	username: 'username',
@@ -79,7 +80,15 @@ const getUserBalance = async (id) => {
 	return result.rows[0]?.balance ?? null
 }
 
-const updateUserBalance = async (id, amount) => {
+const updateUserBalance = async (id, amount, options = {}) => {
+	const numericAmount = Number(amount)
+	if (!Number.isFinite(numericAmount) || numericAmount === 0) return null
+
+	if (options.type !== undefined && !isTransactionType(options.type)) {
+		throw new Error(`INVALID_TRANSACTION_TYPE: ${options.type}`)
+	}
+
+	const transactionType = options.type ?? getDefaultTransactionType(numericAmount)
 	const result = await db.query(
 		`WITH upd AS (
 			UPDATE users SET balance = balance + $1
@@ -87,13 +96,13 @@ const updateUserBalance = async (id, amount) => {
 			RETURNING balance
 		), ins AS (
 			INSERT INTO transactions (user_id, amount, type)
-			SELECT $2, abs($1), CASE WHEN $1 > 0 THEN 'deposit'::transaction_type ELSE 'withdrawal'::transaction_type END
+			SELECT $2, abs($1), $3::transaction_type
 			WHERE EXISTS (SELECT 1 FROM upd)
 			RETURNING id
 		)
 		SELECT balance FROM upd;
 		`,
-		[amount, id],
+		[numericAmount, id, transactionType],
 	)
 
 	return result.rows[0]?.balance ?? null

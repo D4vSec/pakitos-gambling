@@ -1,5 +1,6 @@
 import User from '#models/userModel'
 import * as z from 'zod'
+import { DEBIT_TRANSACTION_TYPES, TRANSACTION_TYPES, getSignedTransactionAmount } from '#config/transactions'
 import logger from "#utils/logger"
 
 const getProfile = async (req, res) => {
@@ -175,7 +176,7 @@ const createTransaction = async (req, res) => {
 	try {
 		const schema = z
 			.object({
-				type: z.enum(['deposit', 'withdrawal']),
+				type: z.enum(TRANSACTION_TYPES),
 				amount: z.number().positive(),
 			})
 			.strict()
@@ -195,21 +196,22 @@ const createTransaction = async (req, res) => {
 
 		const { type, amount } = parseResult.data
 
-		if (!type || !amount)
-			return res.status(400).json({
-				code: 'INVALID_TRANSACTION_DATA',
-			})
-
 		const userId = req.user.id
 
 		const user = await User.findUserById(userId)
 		if (!user) return res.status(404).json({ code: 'USER_NOT_FOUND' })
 
-		const signedAmount = type === 'deposit' ? amount : -amount
-		const newBalance = await User.updateUserBalance(userId, signedAmount)
+		const signedAmount = getSignedTransactionAmount(type, amount)
+		if (signedAmount === null) {
+			return res.status(400).json({
+				code: 'INVALID_TRANSACTION_DATA',
+			})
+		}
+
+		const newBalance = await User.updateUserBalance(userId, signedAmount, { type })
 
 		if (newBalance === null) {
-			if (type === 'withdrawal') {
+			if (DEBIT_TRANSACTION_TYPES.has(type)) {
 				return res.status(400).json({ code: 'INSUFFICIENT_FUNDS' })
 			}
 			return res.status(500).json({ code: 'ERROR_UPDATING_BALANCE' })

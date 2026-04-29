@@ -55,7 +55,7 @@ const spinRoulette = async (req, res) => {
     const roulette = createRoulette()
 
     try {
-        await User.updateUserBalance(id, -totalAmount)
+        await User.updateUserBalance(id, -totalAmount, { type: "BET" })
 
         const winningNumber = roulette.spinRoulette(rouletteType)
         //We check each bet against the winning number and also calculate the payout for each one
@@ -104,7 +104,7 @@ const spinRoulette = async (req, res) => {
             0,
         )
 
-        if (totalPayout > 0) await User.updateUserBalance(id, totalPayout)
+        if (totalPayout > 0) await User.updateUserBalance(id, totalPayout, { type: "WIN" })
 
         const color = roulette.getColor(winningNumber)
 

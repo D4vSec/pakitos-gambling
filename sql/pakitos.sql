@@ -13,7 +13,15 @@ DROP TYPE IF EXISTS transaction_type CASCADE;
 DROP TYPE IF EXISTS audit_action CASCADE;
 
 CREATE TYPE user_role AS ENUM ('user', 'admin');
-CREATE TYPE transaction_type AS ENUM ('deposit', 'withdrawal');
+CREATE TYPE transaction_type AS ENUM (
+    'DEPOSIT',
+    'WITHDRAWAL',
+    'BET',
+    'WIN',
+    'LOSE',
+    'BONUS',
+    'REFUND'
+);
 CREATE TYPE audit_action AS ENUM (
     'USER_REGISTER', 
     'BET_PLACED', 

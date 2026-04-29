@@ -1,4 +1,5 @@
 import Bets from "#models/betsModel"
+import User from "#models/userModel"
 import BetService from "#services/bets"
 import logger from "#utils/logger"
 
@@ -76,7 +77,7 @@ const placeBet = async (req, res) => {
             return res.status(400).json({ code: "INSUFFICIENT_FUNDS" })
         }
 
-        const newBalance = await User.updateUserBalance(userId, -amount)
+        const newBalance = await User.updateUserBalance(userId, -amount, { type: "BET" })
         if (newBalance === null) {
             return res.status(400).json({ code: "INSUFFICIENT_FUNDS" })
         }

@@ -34,7 +34,7 @@ const createSlot = async (req, res) => {
 			return res.status(400).json({ code: "INSUFFICIENT_FUNDS" })
 		}
 
-		const newBalance = await User.updateUserBalance(userId, -amount)
+		const newBalance = await User.updateUserBalance(userId, -amount, { type: "BET" })
 		if (newBalance === null) {
 			return res.status(400).json({ code: "INSUFFICIENT_FUNDS" })
 		}
@@ -95,7 +95,7 @@ const spinSlot = async (req, res) => {
 			return res.status(400).json({ code: "INSUFFICIENT_FUNDS" })
 		}
 
-		const newBalance = await User.updateUserBalance(userId, -bet)
+		const newBalance = await User.updateUserBalance(userId, -bet, { type: "BET" })
 		if (newBalance === null) {
 			return res.status(400).json({ code: "INSUFFICIENT_FUNDS" })
 		}
@@ -104,7 +104,7 @@ const spinSlot = async (req, res) => {
 
 		let finalBalance = newBalance
 		if (result.payout > 0) {
-			finalBalance = await User.updateUserBalance(userId, bet + result.payout)
+			finalBalance = await User.updateUserBalance(userId, bet + result.payout, { type: "WIN" })
 		}
 
 		session.spins.push({
