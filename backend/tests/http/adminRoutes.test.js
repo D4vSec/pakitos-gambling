@@ -36,6 +36,7 @@ vi.mock('#models/betsModel', () => ({
 vi.mock('#services/audit', () => ({
 	default: {
 		getAuditLogs: vi.fn(),
+		countAuditLogs: vi.fn(),
 	},
 }))
 
@@ -74,6 +75,7 @@ describe('admin routes', () => {
 		Bets.deleteBet.mockResolvedValue(undefined)
 		Bets.updateBet.mockResolvedValue(undefined)
 
+		AuditService.countAuditLogs.mockResolvedValue(0)
 		AuditService.getAuditLogs.mockResolvedValue([])
 	})
 

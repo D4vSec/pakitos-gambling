@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 vi.mock('#services/audit', () => ({
 	default: {
 		getAuditLogs: vi.fn(),
+		countAuditLogs: vi.fn(),
 	},
 }))
 
@@ -22,21 +23,23 @@ describe('auditController', () => {
 
 	it('returns audit logs when the service succeeds', async () => {
 		const logs = [{ id: 1, action: 'LOGIN' }]
+		AuditService.countAuditLogs.mockResolvedValueOnce(1)
 		AuditService.getAuditLogs.mockResolvedValueOnce(logs)
 		const res = createResponse()
 
 		await getAuditLogs({}, res)
 
-		expect(res.json).toHaveBeenCalledWith(logs)
+		expect(res.json).toHaveBeenCalledWith({ page: 1, limit: 20, totalPages: 1, logs })
 	})
 
 	it('returns an empty array when the service returns no logs', async () => {
+		AuditService.countAuditLogs.mockResolvedValueOnce(0)
 		AuditService.getAuditLogs.mockResolvedValueOnce(null)
 		const res = createResponse()
 
 		await getAuditLogs({}, res)
 
-		expect(res.json).toHaveBeenCalledWith([])
+		expect(res.json).toHaveBeenCalledWith({ page: 1, limit: 20, totalPages: 1, logs: [] })
 	})
 
 	it('returns 500 when the service throws', async () => {

@@ -17,8 +17,12 @@ const getAuditLogs = async (req, res) => {
 	const limit = query.data.limit ?? 20
 
 	try {
+		const total = await AuditService.countAuditLogs()
+		const totalPages = Math.max(1, Math.ceil(total / limit))
+		if (page > totalPages) return res.status(400).json({ code: 'PAGE_EXCEDED' })
+
 		const logs = await AuditService.getAuditLogs(page, limit)
-		res.json(logs || [])
+		res.json({ page, limit, totalPages, logs: logs || [] })
 	} catch (err) {
 		logger.error(err)
 		res.status(500).json({ code: "SERVER_ERROR" })
