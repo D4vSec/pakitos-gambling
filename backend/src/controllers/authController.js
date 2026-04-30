@@ -93,7 +93,7 @@ const login = async (req, res) => {
 				ip_address: Audit.getClientIp(req),
 				user_agent: deviceInfo ? JSON.stringify(deviceInfo.raw) : null,
 			})
-		}	
+		}
 
 		res.json(tokens)
 	} catch (err) {
