@@ -26,13 +26,13 @@ const UsersTable = () => {
   const columns = [
     {
       accessorKey: "username",
-      header: t("adminPanel.allUsers.table.username"),
+      header: t("adminPanel.users.table.username"),
     },
-    { accessorKey: "email", header: t("adminPanel.allUsers.table.email") },
-    { accessorKey: "role", header: t("adminPanel.allUsers.table.role") },
+    { accessorKey: "email", header: t("adminPanel.users.table.email") },
+    { accessorKey: "role", header: t("adminPanel.users.table.role") },
     {
       accessorKey: "balance",
-      header: t("adminPanel.allUsers.table.balance"),
+      header: t("adminPanel.users.table.balance"),
       sortingFn: "alphanumeric",
       cell: (info) => (
         <div className="flex items-center gap-1">
@@ -42,7 +42,7 @@ const UsersTable = () => {
     },
     {
       id: "actions",
-      header: t("adminPanel.allUsers.table.actions"),
+      header: t("adminPanel.users.table.actions"),
       cell: ({ row }) => <UserActions id={row.original.id} />,
     },
   ]

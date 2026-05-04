@@ -39,14 +39,14 @@ const UserForm = () => {
       {
         name: "username",
         type: "text",
-        label: "Username",
-        placeholder: "Username",
+        label: t("forms.fields.username.label"),
+        placeholder: t("forms.fields.username.placeholder"),
       },
       {
         name: "email",
         type: "email",
-        label: "Email",
-        placeholder: "Email",
+        label: t("forms.fields.email.label"),
+        placeholder: t("forms.fields.email.placeholder"),
       },
     ]
 
@@ -55,28 +55,28 @@ const UserForm = () => {
           {
             name: "password",
             type: "password",
-            label: "Password",
-            placeholder: "Enter password",
+            label: t("forms.fields.password.label"),
+            placeholder: t("forms.fields.password.placeholder"),
           },
           {
             name: "confirmPassword",
             type: "password",
-            label: "Confirm Password",
-            placeholder: "Confirm password",
+            label: t("forms.fields.confirmPassword.label"),
+            placeholder: t("forms.fields.confirmPassword.placeholder"),
           },
         ]
       : [
           {
             name: "password",
             type: "password",
-            label: "New Password (optional)",
-            placeholder: "Leave empty to keep current password",
+            label: t("forms.fields.updatePassword.label"),
+            placeholder: t("forms.fields.updatePassword.placeholder"),
           },
           {
             name: "confirmPassword",
             type: "password",
-            label: "Confirm Password",
-            placeholder: "Confirm new password",
+            label: t("forms.fields.confirmPassword.label"),
+            placeholder: t("forms.fields.confirmPassword.placeholder"),
           },
         ]
 
@@ -84,14 +84,14 @@ const UserForm = () => {
       {
         name: "balance",
         type: "number",
-        label: "Balance",
-        placeholder: "0.00",
+        label: t("forms.fields.balance.label"),
+        placeholder: t("forms.fields.balance.placeholder"),
       },
       {
         name: "role",
         type: "text",
-        label: "Role",
-        placeholder: "Select a role",
+        label: t("forms.fields.role.label"),
+        placeholder: t("forms.fields.role.placeholder"),
         as: "select",
         options: [
           { label: "User", value: "user" },
@@ -170,11 +170,15 @@ const UserForm = () => {
     <Loading />
   ) : (
     <GradientBg>
-      <Title>{isEdit ? "Edit User" : "Create User"}</Title>
+      <Title>
+        {t(isEdit ? "forms.page.updateUser" : "forms.page.createUser")}
+      </Title>
       <div className="card w-full max-w-md bg-base-100 shadow-xl rounded-2xl">
         <div className="card-body">
           <FormProvider {...methods}>
-            <form onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-col gap-5">
+            <form
+              onSubmit={methods.handleSubmit(onSubmit)}
+              className="flex flex-col gap-5">
               {formFields.map((field) => (
                 <FormField
                   key={field.name}
@@ -188,13 +192,13 @@ const UserForm = () => {
               ))}
               <div className="form-control mt-2">
                 <Button className="w-full" variant="success">
-                  {isEdit ? "Update" : "Create"}
+                  {t(isEdit ? "forms.buttons.update" : "forms.buttons.create")}
                 </Button>
               </div>
             </form>
           </FormProvider>
           <Button variant="secondary" onClick={() => navigate("/admin/users")}>
-            {isEdit ? "Go back" : "Cancel"}
+            {t("forms.buttons.goBack")}
           </Button>
         </div>
       </div>

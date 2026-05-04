@@ -58,7 +58,7 @@ const Profile = () => {
 
   return (
     <GradientBg>
-      <Title>{t("general.profile.title")}</Title>
+      <Title>{t("pages.profile.title")}</Title>
 
       <div className="w-full max-w-5xl flex flex-col gap-6">
         {/* 🔵 PERFIL */}
@@ -66,11 +66,11 @@ const Profile = () => {
           <div className="card-body">
             <h2 className="card-title text-xl">
               <UserSVG />
-              {t("general.profile.profileCard.title")}
+              {t("pages.profile.profileCard.title")}
             </h2>
 
             <p className="text-base-content mb-6">
-              {t("general.profile.profileCard.description")}
+              {t("pages.profile.profileCard.description")}
             </p>
 
             <div className="flex flex-col lg:flex-row gap-6">
@@ -92,7 +92,7 @@ const Profile = () => {
                   variant="primary"
                   className="btn-sm"
                   onClick={() => console.log("editando foto...")}>
-                  {t("general.profile.changePhoto")}
+                  {t("pages.profile.changePhoto")}
                 </Button>
               </div>
 
@@ -105,23 +105,23 @@ const Profile = () => {
                     <FormField
                       name="username"
                       type="text"
-                      label={t("general.form.username.label")}
+                      label={t("forms.fields.username.label")}
                       rules={{
-                        required: t("general.form.username.required"),
+                        required: t("forms.fields.username.required"),
                       }}
                     />
 
                     <FormField
                       name="email"
                       type="email"
-                      label={t("general.form.email.label")}
+                      label={t("forms.email.label")}
                       rules={{
-                        required: t("general.form.email.required"),
+                        required: t("forms.email.required"),
                       }}
                     />
 
                     <Button variant="primary" className="mt-2">
-                      {t("general.form.buttons.update")}
+                      {t("forms.buttons.update")}
                     </Button>
                   </form>
                 </FormProvider>
@@ -135,11 +135,11 @@ const Profile = () => {
           <div className="card-body">
             <h2 className="card-title text-xl">
               <ShieldSVG />
-              {t("general.profile.security.title")}
+              {t("pages.profile.security.title")}
             </h2>
 
             <p className="text-base-content mb-6">
-              {t("general.profile.security.description")}
+              {t("pages.profile.security.description")}
             </p>
 
             <FormProvider {...passwordMethods}>
@@ -149,19 +149,19 @@ const Profile = () => {
                 <FormField
                   name="currentPassword"
                   type="password"
-                  label={t("general.form.password.current")}
-                  rules={{ required: t("general.form.password.required") }}
+                  label={t("forms.fields.password.current")}
+                  rules={{ required: t("forms.fields.password.required") }}
                 />
 
                 <FormField
                   name="newPassword"
                   type="password"
-                  label={t("general.form.password.new")}
+                  label={t("forms.fields.password.new")}
                   rules={{
-                    required: t("general.form.password.required"),
+                    required: t("forms.fields.password.required"),
                     minLength: {
                       value: 8,
-                      message: t("general.form.password.minLength"),
+                      message: t("forms.fields.password.minLength"),
                     },
                   }}
                 />
@@ -169,16 +169,16 @@ const Profile = () => {
                 <FormField
                   name="confirmPassword"
                   type="password"
-                  label={t("general.form.password.confirm")}
+                  label={t("forms.fields.password.confirm")}
                   rules={{
                     validate: (value) =>
                       value === newPasswordValue ||
-                      t("general.form.confirmPassword.match"),
+                      t("forms.confirmPassword.match"),
                   }}
                 />
 
                 <Button variant="secondary" className="mt-2">
-                  {t("general.form.buttons.changePassword")}
+                  {t("forms.buttons.changePassword")}
                 </Button>
               </form>
             </FormProvider>
@@ -190,18 +190,18 @@ const Profile = () => {
           <div className="card-body">
             <h2 className="card-title text-error text-xl">
               <AlertTriangleSVG />
-              {t("general.profile.danger.title")}
+              {t("pages.profile.danger.title")}
             </h2>
 
             <p className="text-sm opacity-70">
-              {t("general.profile.danger.description")}
+              {t("pages.profile.danger.description")}
             </p>
 
             <Button
               variant="error"
               className="mt-4"
               onClick={handleDeleteAccount}>
-              {t("general.profile.danger.deleteAccount")}
+              {t("pages.profile.danger.deleteAccount")}
             </Button>
           </div>
         </div>

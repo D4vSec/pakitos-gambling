@@ -1,173 +1,472 @@
 {
-    "admin": {},
-    "user": {},
-    "general": {
-        "navbar": {
-            "menu": "Meniu",
-            "home": "Acasă",
-            "allGames": "Toate jocurile",
-            "favourites": "Favorite",
-            "login": "Autentificare",
-            "register": "Înregistrare",
-            "userPill": {
-                "guest": "Invitat",
-                "settings": "Setări utilizator",
-                "coupon": "Introduceți cupónul",
-                "logout": "Deconectare"
-            }
-        },
-        "copyright": "Toate drepturile rezervate de The Mafia at the Back",
-        "landingPage": {
-            "heroContent": {
-                "title": "Bine ai venit la Pakito's Gambling",
-                "text": "Cea mai bună experiență de cazino online, cu sute de jocuri palpitante, bonusuri incredibile și șansa de a câștiga premii mari. Alătură-te astăzi comunității noastre de câștigători.",
-                "join": "Alătură-te",
-                "seeGames": "Vezi jocurile"
-            },
-            "cta": {
-                "title": "Ești gata să începi aventura ta?",
-                "text": "Alătură-te miilor de jucători care deja se bucură de cea mai bună experiență de cazino online. Obține bonusul tău de bun venit de 200% chiar astăzi.",
-                "join": "Alătură-te acum",
-                "exploreGames": "Explorează jocurile"
-            },
-            "imagesGrid": {
-                "title": "Joacă oriunde vrei",
-                "text": "Accesează toate jocurile tale preferate de pe orice dispozitiv. Design responsive pentru mobil, tabletă și desktop.",
-                "image1Title": "Sărbătorește câștigurile",
-                "image1Text": "Câștigă premii mari și bucură-te de fiecare moment",
-                "image2Title": "Atmosferă premium",
-                "image2Text": "Bucură-te de o atmosferă autentică de cazino cu grafică de înaltă calitate",
-                "image3Title": "Joacă oriunde vrei",
-                "image3Text": "Accesează toate jocurile tale preferate de pe orice dispozitiv. Design responsive pentru mobil, tabletă și desktop."
-            },
-            "stats": {
-                "games": "Jocuri",
-                "players": "Jucători",
-                "support": "Suport",
-                "prizes": "Premii"
-            },
-            "features": {
-                "title": "De ce să alegi Pakito's Gambling?",
-                "text": "Oferim o experiență premium de cazino cu cele mai bune funcționalități de pe piață și un angajament total față de satisfacția jucătorului.",
-                "item1_title": "Varietate de jocuri",
-                "item1_description": "Peste 100 de jocuri premium de cazino, inclusiv sloturi, ruletă, blackjack și altele.",
-                "item2_title": "Sigur și de încredere",
-                "item2_description": "Platformă sigură cu cele mai bune tehnologii de criptare și protecție.",
-                "item3_title": "Premii mari",
-                "item3_description": "Câștigă premii mari cu jackpoturile noastre progresive și turneele exclusive.",
-                "item4_title": "Experiență rapidă",
-                "item4_description": "Jocuri optimizate pentru o experiență fluidă pe orice dispozitiv.",
-                "item5_title": "Comunitate activă",
-                "item5_description": "Alătură-te miilor de jucători din comunitatea noastră vibrantă de cazino.",
-                "item6_title": "Bonusuri exclusive",
-                "item6_description": "Primește bonusuri de bun venit și promoții speciale în mod regulat."
-            }
-        },
-        "form": {
-            "page": {
-                "register" : "Înregistrare",
-                "login" : "Autentificare"
-            },
-            "username": {
-                "label": "Nume utilizator",
-                "placeholder": "Nume utilizator",
-                "required": "Numele de utilizator este obligatoriu",
-                "minLength": "Numele de utilizator trebuie să aibă cel puțin 3 caractere",
-                "maxLength": "Numele de utilizator poate avea maximum 25 de caractere"
-            },
-            "email": {
-                "label": "Email",
-                "placeholder": "Email",
-                "required": "Email-ul este obligatoriu",
-                "pattern": "Format de email invalid"
-            },
-            "password": {
-                "label": "Parolă",
-                "placeholder": "Parolă",
-                "required": "Parola este obligatorie",
-                "pattern": "Parola trebuie să aibă cel puțin 8 caractere, să includă 1 majusculă, 1 literă minusculă și 1 număr sau caracter special"
-            },
-            "confirmPassword": {
-                "label": "Confirmă parola",
-                "placeholder": "Confirmă parola",
-                "required": "Confirmarea parolei este obligatorie",
-                "match": "Confirmarea parolei nu se potrivește"
-            },
-            "buttons": {
-                "login": "Autentificare",
-                "register": "Înregistrare",
-                "update": "Actualizează profilul"
-            }
-        },
-        "games": {
-            "slots": {
-                "title": "Sloturi",
-                "3x3": "Mașină 3x3",
-                "3x5": "Mașină 3x5",
-                "5x5": "Mașină 5x5",
-                "description": "Slot clasic. Aliniază simbolurile pe liniile de câștig pentru a câștiga. Cu cât simbolul este mai rar, cu atât câștigul este mai mare!",
-                "controls": {
-                    "betAmount": "Suma pariată",
-                    "betAmountPlaceholder": "Introduceți suma",
-                    "startSession": "Începe jocul",
-                    "spin": "Rotește",
-                    "endSession": "Încheie sesiunea",
-                    "spins": "Rotiri",
-                    "totalPayout": "Câștig total"
-                }
-            },
-            "result": {
-                "win": "Ai câștigat!",
-                "lose": "Fără noroc...",
-                "tie": "Egal"
-            },
-            "actions": {
-                "bet": "Pariază",
-                "clearBet": "Șterge pariul",
-                "doubleBet": "Dublează pariul",
-                "repeatBet": "Repetă pariul"
-            }
-        },
-        "home" : {
-            "playNow":"Joacă acum",
-            "slots": {
-                "title": "Sloturi",
-                "starwars": {
-                    "title": "Star Wars",
-                    "description": "Slot tematic Star Wars."
-                },
-                "stardewValley": {
-                    "title": "Stardew Valley",
-                    "description": "Slot tematic Stardew Valley."
-                },
-                "beer": {
-                    "title": "Beer-man",
-                    "description": "Slot tematic inspirat de cea mai bună băutură din lume."
-                }
-            },
-            "roulette": {
-                "title": "Ruletă",
-                "classic": {
-                    "title": "Ruletă clasică",
-                    "description": "Joc clasic de ruletă."
-                },
-                "american": {
-                    "title": "Ruletă americană",
-                    "description": "Joc de ruletă în stil american."
-                }
-            },
-            "blackjack": {
-                "title": "Blackjack",
-                "description": "Joc clasic de blackjack."
-            }
-        },
-        "profile": {
-            "title": "Setările contului",
-            "description": "Gestionează setările contului și preferințele",
-            "profileCard": {
-                "title": "Informații profil",
-                "description": "Actualizează informațiile personale"
-            }
-        }
+  "app": {
+    "name": "Pakito's Gambling",
+    "copyright": "Toate drepturile rezervate de mafia din spate"
+  },
+
+  "ui": {
+    "buttons": {
+      "returnHome": "Înapoi la pagina principală",
+      "goLogin": "Mergi la autentificare",
+      "info": "Informații",
+      "edit": "Editează",
+      "delete": "Șterge"
+    },
+
+    "tables": {
+      "noData": "Nu s-au găsit date",
+      "searchBar": {
+        "placeholder": "Caută...",
+        "label": "Căutare globală",
+        "clear": "Șterge căutarea"
+      },
+      "paginationBar": {
+        "first": "Prima",
+        "prev": "Anterioara",
+        "next": "Următoarea",
+        "last": "Ultima",
+        "rowsPerPage": "Rânduri pe pagină"
+      }
     }
+  },
+
+  "adminPanel": {
+    "users": {
+      "title": "Toți utilizatorii",
+      "createNewUser": "Creează utilizator nou",
+      "viewLogs": "Vezi loguri",
+      "table": {
+        "username": "Nume utilizator",
+        "email": "Email",
+        "role": "Rol",
+        "balance": "Sold",
+        "actions": "Acțiuni"
+      }
+    },
+
+    "logs": {
+      "table": {
+        "action": "Acțiune",
+        "userID": "ID utilizator",
+        "details": "Detalii",
+        "date": "Dată",
+        "ipAddress": "Adresă IP",
+        "userAgent": "Agent utilizator"
+      }
+    },
+
+    "userDetails": {
+      "detailsCard": {
+        "username": "Nume utilizator",
+        "email": "Email",
+        "role": "Rol",
+        "balance": "Sold",
+        "noUser": "Utilizator negăsit"
+      },
+      "transactions": {
+        "title": "Tranzacții",
+        "table": {
+          "type": "Tip",
+          "amount": "Sumă",
+          "date": "Dată"
+        }
+      }
+    }
+  },
+
+  "games": {
+    "betAmount": {
+      "label": "Sumă pariată",
+      "placeholder": "Introdu suma pariului"
+    },
+
+    "actions": {
+      "bet": "Pariază",
+      "clearBet": "Șterge pariul",
+      "doubleBet": "Dubleză pariul",
+      "repeatBet": "Repetă pariul"
+    },
+
+    "blackjack": {
+      "title": "Blackjack",
+      "bkPays": "Blackjack plătește 3 la 2",
+      "actions": {
+        "double": "Dubleză",
+        "hit": "Trage carte",
+        "split": "Împarte",
+        "stand": "Stai"
+      }
+    },
+
+    "roulette": {
+      "title": "Ruletă",
+      "types": {
+        "Zero": "Ruletă europeană",
+        "ZeroZero": "Ruletă americană"
+      },
+      "board": {
+        "black": "Negru",
+        "even": "Par",
+        "green": "Verde",
+        "odd": "Impar",
+        "red": "Roșu",
+        "col 1": "Col 1",
+        "col 2": "Col 2",
+        "col 3": "Col 3"
+      },
+      "lastNumbers": "Ultimele numere",
+      "controls": {
+        "spin": "Învârte",
+        "chipValue": "Valoare jeton"
+      }
+    },
+
+    "slots": {
+      "title": "Sloturi",
+      "modes": {
+        "3x3": "Mașină 3x3",
+        "3x5": "Mașină 3x5",
+        "5x5": "Mașină 5x5"
+      },
+      "description": "Slot clasic. Potrivește simbolurile pe liniile de plată pentru a câștiga. Cu cât simbolul este mai rar, cu atât câștigul este mai mare!",
+      "controls": {
+        "startSession": "Începe jocul",
+        "spin": "Învârte",
+        "endSession": "Încheie sesiunea",
+        "spins": "Rotiri",
+        "totalPayout": "Câștig total"
+      }
+    },
+
+    "capyroad": {
+      "title": "Capyroad"
+    },
+
+    "result": {
+      "lose": "Ai pierdut :/",
+      "tie": "Egalitate",
+      "win": "Ai câștigat!!!"
+    }
+  },
+
+  "forms": {
+    "buttons": {
+      "cancel": "Anulează",
+      "goBack": "Înapoi",
+      "login": "Autentificare",
+      "register": "Înregistrare",
+      "create": "Creează",
+      "update": "Actualizează",
+      "changePassword": "Schimbă parola"
+    },
+
+    "page": {
+      "login": "Autentificare",
+      "register": "Înregistrare",
+      "createUser": "Creează utilizator",
+      "updateUser": "Editează utilizator"
+    },
+
+    "fields": {
+      "email": {
+        "label": "Email",
+        "placeholder": "Email",
+        "required": "Emailul este obligatoriu",
+        "pattern": "Format de email invalid"
+      },
+
+      "username": {
+        "label": "Nume utilizator",
+        "placeholder": "Nume utilizator",
+        "required": "Numele utilizator este obligatoriu",
+        "minLength": "Minim 3 caractere",
+        "maxLength": "Maxim 25 caractere"
+      },
+
+      "password": {
+        "label": "Parolă",
+        "placeholder": "Parolă",
+        "required": "Parola este obligatorie",
+        "current": "Parola curentă",
+        "new": "Parolă nouă",
+        "confirm": "Repetă parola nouă",
+        "minLength": "Minim 8 caractere",
+        "pattern": "Trebuie să conțină majuscule, minuscule și un număr sau caracter special"
+      },
+
+      "confirmPassword": {
+        "label": "Confirmă parola",
+        "placeholder": "Confirmă parola",
+        "required": "Confirmarea parolei este obligatorie",
+        "match": "Parolele nu coincid"
+      },
+
+      "updatePassword": {
+        "label": "Actualizează parola",
+        "placeholder": "Introdu parola pentru actualizare (opțional)",
+        "required": "Confirmarea parolei este obligatorie",
+        "match": "Parolele nu coincid"
+      },
+
+      "balance": {
+        "label": "Sold",
+        "placeholder": "0.00",
+        "required": "Soldul este obligatoriu"
+      },
+
+      "role": {
+        "label": "Rol",
+        "placeholder": "Selectează un rol",
+        "required": "Rolul este obligatoriu",
+        "options": {
+          "user": "Utilizator",
+          "admin": "Administrator"
+        }
+      }
+    },
+
+    "schema": {
+      "required": "Acest câmp este obligatoriu",
+      "email": "Format de email invalid",
+      "min3Characters": "Minim 3 caractere",
+      "min8Characters": "Minim 8 caractere",
+      "maxCharacters": "Maxim 25 caractere",
+      "confirmPasswordMatch": "Parolele nu coincid",
+      "needUppercase": "Trebuie să conțină cel puțin o literă mare",
+      "needLowercase": "Trebuie să conțină cel puțin o literă mică",
+      "needNumberOrSpecial": "Trebuie să conțină cel puțin un număr sau caracter special"
+    }
+  },
+
+  "pages": {
+    "home": {
+      "cards": {
+        "blackjack": {
+          "title": "Blackjack",
+          "description": "Joc clasic de blackjack."
+        },
+
+        "capyroad": {
+          "title": "Capyroad",
+          "description": "De ce a traversat capibara drumul? Cine știe..."
+        },
+
+        "roulette": {
+          "title": "Ruletă",
+          "classic": {
+            "title": "Ruletă europeană",
+            "description": "Joc de ruletă europeană."
+          },
+          "american": {
+            "title": "Ruletă americană",
+            "description": "Joc de ruletă americană."
+          }
+        },
+
+        "slots": {
+          "title": "Sloturi",
+          "beer": {
+            "title": "Beer-Man",
+            "description": "Slot inspirat de cea mai bună băutură din lume."
+          },
+          "starwars": {
+            "title": "Star Wars",
+            "description": "Slot tematic Star Wars."
+          },
+          "stardewValley": {
+            "title": "Stardew Valley",
+            "description": "Slot tematic Stardew Valley."
+          }
+        },
+
+        "playNow": "Joacă acum"
+      }
+    },
+
+    "landingPage": {
+      "hero": {
+        "title": "Bine ai venit la Pakito's Gambling",
+        "text": "Cea mai bună experiență de cazinou online cu sute de jocuri, bonusuri și premii mari.",
+        "join": "Alătură-te",
+        "seeGames": "Vezi jocurile"
+      },
+
+      "cta": {
+        "title": "Gata să începi aventura?",
+        "text": "Alătură-te miilor de jucători și bucură-te de cea mai bună experiență de cazinou online. Primește bonusul de bun venit de 200% astăzi.",
+        "exploreGames": "Explorează jocurile",
+        "join": "Alătură-te acum"
+      },
+
+      "features": {
+        "title": "De ce să alegi Pakito's Gambling?",
+        "text": "Oferim o experiență premium de cazinou cu funcții de top și angajament total pentru satisfacția jucătorilor.",
+        "items": {
+          "1": {
+            "title": "Varietate de jocuri",
+            "description": "Peste 100 de jocuri premium, inclusiv sloturi, ruletă, blackjack și altele."
+          },
+          "2": {
+            "title": "Sigur și de încredere",
+            "description": "Platformă securizată cu tehnologii avansate de criptare."
+          },
+          "3": {
+            "title": "Premii mari",
+            "description": "Câștigă premii mari cu jackpoturi progresive și turnee exclusive."
+          },
+          "4": {
+            "title": "Experiență rapidă",
+            "description": "Jocuri optimizate pentru orice dispozitiv."
+          },
+          "5": {
+            "title": "Comunitate activă",
+            "description": "Alătură-te comunității noastre de jucători."
+          },
+          "6": {
+            "title": "Bonusuri exclusive",
+            "description": "Primește bonusuri și promoții regulate."
+          }
+        }
+      },
+
+      "imagesGrid": {
+        "title": "Joacă oriunde",
+        "text": "Accesează jocurile de pe orice dispozitiv.",
+        "items": {
+          "win": {
+            "title": "Sărbătorește câștigurile",
+            "text": "Câștigă premii mari și bucură-te de fiecare moment"
+          },
+          "premium": {
+            "title": "Atmosferă premium",
+            "text": "Bucură-te de grafică de înaltă calitate"
+          },
+          "mobile": {
+            "title": "Joacă oriunde",
+            "text": "Design responsive pentru orice dispozitiv"
+          }
+        }
+      },
+
+      "stats": {
+        "games": "Jocuri",
+        "players": "Jucători",
+        "prizes": "Premii",
+        "support": "Suport"
+      }
+    },
+
+    "profile": {
+      "title": "Profil",
+      "profileCard": {
+        "title": "Informații profil",
+        "description": "Actualizează informațiile personale"
+      },
+      "changePhoto": "Schimbă fotografia",
+
+      "security": {
+        "title": "Securitate",
+        "description": "Gestionează securitatea contului"
+      },
+
+      "danger": {
+        "title": "Zonă periculoasă",
+        "description": "Această acțiune este ireversibilă. Toate datele vor fi șterse.",
+        "deleteAccount": "Șterge contul"
+      }
+    },
+
+    "addBalance": {
+      "button": "Adaugă sold",
+      "label": "Sumă",
+      "placeholder": "Sumă de adăugat",
+      "required": "Acest câmp este obligatoriu",
+      "min": "Suma trebuie să fie > 0.01",
+      "max": "Suma trebuie să fie < 99999999999.99",
+      "title": "Adaugă sold în cont"
+    }
+  },
+
+  "navbar": {
+    "home": "Acasă",
+    "allGames": "Toate jocurile",
+    "favourites": "Favorite",
+    "menu": "Meniu",
+    "login": "Autentificare",
+    "register": "Înregistrare",
+    "userPill": {
+      "guest": "Vizitator",
+      "balance": "Adaugă sold",
+      "coupon": "Introdu cupon",
+      "adminPanel": "Panou admin",
+      "settings": "Setări utilizator",
+      "logout": "Deconectare"
+    }
+  },
+
+  "message": {
+    "error": {
+      "401": "Neautorizat",
+      "409": "Unele date există deja",
+      "429": "Prea multe cereri...",
+      "500": "Eroare server",
+      "AUTH_EMAIL_ALREADY_REGISTERED": "Există deja un cont cu acest email",
+      "AUTH_INVALID_CREDENTIALS": "Email sau parolă greșite",
+      "AUTH_INVALID_EMAIL": "Email invalid",
+      "AUTH_INVALID_PASSWORD_TOO_SHORT": "Parolă prea scurtă",
+      "AUTH_INVALID_REFRESH_TOKEN": "Token invalid",
+      "AUTH_INVALID_SESSION": "Sesiune invalidă",
+      "AUTH_INVALID_TOKEN": "Token invalid",
+      "AUTH_MISSING_FIELDS": "Lipsesc câmpuri",
+      "AUTH_NO_DATA_PROVIDED": "Nu au fost furnizate date",
+      "AUTH_NO_TOKEN_PROVIDED": "Lipsește token-ul",
+      "AUTH_USER_REGISTERED": "Utilizator deja înregistrat",
+      "INSUFFICIENT_BALANCE": "Sold insuficient pentru pariu",
+      "INSUFFICIENT_FUNDS": "Fonduri insuficiente",
+      "GAME_NOT_FOUND": "Joc negăsit",
+      "INVALID_BET_AMOUNT": "Sumă invalidă",
+      "GAME_NOT_VALID": "Joc invalid",
+      "SERVER_ERROR": "Eroare server",
+      "Update_User": "Eroare la actualizare",
+      "bet0": "Pariul nu poate fi 0",
+      "noAdmin": "Nu ai acces",
+      "noLogin": "Trebuie să fii autentificat"
+    },
+
+    "info": {
+      "loading": "Se încarcă...",
+      "registered": "Cont creat, mergi la autentificare",
+      "userData": "Datele utilizatorului au fost primite",
+      "winningNumber": "Număr câștigător"
+    },
+
+    "modal": {
+      "default": {
+        "accept": "Acceptă",
+        "cancel": "Anulează",
+        "title": "Titlu"
+      },
+      "logout": {
+        "accept": "Ieși din Pakito's :(",
+        "cancel": "Continuă jocul :)",
+        "title": "Sigur vrei să ieși?"
+      }
+    },
+
+    "success": {
+      "AUTH_USER_LOGGED": "Autentificare reușită",
+      "AUTH_USER_REGISTERED": "Cont creat cu succes",
+      "BALANCE_ADDED_SUCCESSFULLY": "Sold actualizat",
+      "LANGUAGE_CHANGED": "Limba schimbată",
+      "USER_UPDATED": "Profil actualizat",
+      "logout": "Deconectare reușită"
+    },
+
+    "warning": {
+      "cantDouble": "Nu ai fonduri pentru dublare",
+      "playFirstToRepeat": "Joacă o dată pentru a repeta",
+      "selectChipFirst": "Selectează un jeton",
+      "spinning": "Se învârte..."
+    }
+  }
 }

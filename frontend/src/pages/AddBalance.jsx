@@ -25,8 +25,8 @@ const AddBalance = () => {
     {
       name: "amount",
       type: "number",
-      label: t("general.addBalance.label"),
-      placeholder: t("general.addBalance.placeholder"),
+      label: t("pages.addBalance.label"),
+      placeholder: t("pages.addBalance.placeholder"),
     },
   ]
 
@@ -37,7 +37,7 @@ const AddBalance = () => {
 
   return (
     <GradientBg>
-      <Title>{t("general.addBalance.title")}</Title>
+      <Title>{t("pages.addBalance.title")}</Title>
       <div className="card w-full max-w-md bg-base-100 shadow-xl rounded-2xl">
         <div className="card-body">
           <FormProvider {...methods}>
@@ -56,7 +56,7 @@ const AddBalance = () => {
 
               <div className="form-control mt-2">
                 <Button className="w-full">
-                  {t("general.addBalance.button")}
+                  {t("pages.addBalance.button")}
                 </Button>
               </div>
             </form>

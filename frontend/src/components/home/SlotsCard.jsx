@@ -1,22 +1,22 @@
-import React from "react";
-import Card from "../landingPage/Card";
-import Button from "../buttons/Button";
-import CoinsSVG from "../svg/CoinsSVG";
-import { useLocale } from "@/providers/LocaleProvider";
-import Badge from "./Badges";
-import CrownSVG from "../svg/CrownSVG";
-import SparkleSVG from "../svg/SparkleSVG";
-import { useNavigate } from "react-router-dom";
+import React from "react"
+import Card from "../landingPage/Card"
+import Button from "../buttons/Button"
+import CoinsSVG from "../svg/CoinsSVG"
+import { useLocale } from "@/providers/LocaleProvider"
+import Badge from "../badges/Badges"
+import CrownSVG from "../svg/CrownSVG"
+import SparkleSVG from "../svg/SparkleSVG"
+import { useNavigate } from "react-router-dom"
 
 const SlotsCard = () => {
-  const { t } = useLocale();
+  const { t } = useLocale()
   const navigate = useNavigate()
   return (
     <section className="relative max-w-6xl mx-auto px-4 md:px-8 lg:px-16 mt-12">
       <div className="mb-6 border-b-2 pb-3 text-primary">
         <h2 className="flex items-center gap-2 text-2xl md:text-3xl font-bold text-primary">
           <CoinsSVG className="w-6 h-6 text-primary" />
-          {t("general.home.slots.title")}
+          {t("pages.home.cards.slots.title")}
         </h2>
       </div>
 
@@ -39,20 +39,20 @@ const SlotsCard = () => {
             </div>
 
             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-              <Button className="bg-primary text-primary-foreground px-4 py-2 rounded-md text-sm font-medium hover:opacity-90 transition"
-              onClick={() => navigate("/slots")}
-              >
-                {t("general.home.playNow")}
+              <Button
+                className="bg-primary text-primary-foreground px-4 py-2 rounded-md text-sm font-medium hover:opacity-90 transition"
+                onClick={() => navigate("/slots")}>
+                {t("pages.home.cards.playNow")}
               </Button>
             </div>
           </div>
 
           <div className="p-5">
             <h3 className="text-lg font-semibold">
-              {t("general.home.slots.starwars.title")} (3×3)
+              {t("pages.home.cards.slots.starwars.title")} (3×3)
             </h3>
             <p className="mt-1 text-sm text-muted-foreground">
-              {t("general.home.slots.starwars.description")}
+              {t("pages.home.cards.slots.starwars.description")}
             </p>
           </div>
         </Card>
@@ -75,20 +75,20 @@ const SlotsCard = () => {
             </div>
 
             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-              <Button className="bg-primary text-primary-foreground px-4 py-2 rounded-md text-sm font-medium hover:opacity-90 transition"
-              onClick={() => navigate("/slots3x5")}
-              >
-                {t("general.home.playNow")}
+              <Button
+                className="bg-primary text-primary-foreground px-4 py-2 rounded-md text-sm font-medium hover:opacity-90 transition"
+                onClick={() => navigate("/slots3x5")}>
+                {t("pages.home.cards.playNow")}
               </Button>
             </div>
           </div>
 
           <div className="p-5">
             <h3 className="text-lg font-semibold">
-              {t("general.home.slots.stardewValley.title")} (3×5)
+              {t("pages.home.cards.slots.stardewValley.title")} (3×5)
             </h3>
             <p className="mt-1 text-sm text-muted-foreground">
-              {t("general.home.slots.stardewValley.description")}
+              {t("pages.home.cards.slots.stardewValley.description")}
             </p>
           </div>
         </Card>
@@ -111,26 +111,26 @@ const SlotsCard = () => {
             </div>
 
             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-              <Button className="bg-primary text-primary-foreground px-4 py-2 rounded-md text-sm font-medium hover:opacity-90 transition"
-                onClick={() => navigate("/slots5x5")}
-              >
-                {t("general.home.playNow")}
+              <Button
+                className="bg-primary text-primary-foreground px-4 py-2 rounded-md text-sm font-medium hover:opacity-90 transition"
+                onClick={() => navigate("/slots5x5")}>
+                {t("pages.home.cards.playNow")}
               </Button>
             </div>
           </div>
 
           <div className="p-5">
             <h3 className="text-lg font-semibold">
-              {t("general.home.slots.beer.title")} (5×5)
+              {t("pages.home.cards.slots.beer.title")} (5×5)
             </h3>
             <p className="mt-1 text-sm text-muted-foreground">
-              {t("general.home.slots.beer.description")}
+              {t("pages.home.cards.slots.beer.description")}
             </p>
           </div>
         </Card>
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default SlotsCard;
+export default SlotsCard

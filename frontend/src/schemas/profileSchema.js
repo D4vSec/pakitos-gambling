@@ -5,9 +5,9 @@ import { passwordSchema } from "./passwordSchema"
 
 export const profileSchema = z
   .object({
-    username: z.string().min(1, { error: "general.form.username.required" }),
+    username: z.string().min(1, { error: "forms.fields.username.required" }),
 
-    email: z.email({ error: "general.form.email.pattern" }),
+    email: z.email({ error: "forms.email.pattern" }),
 
     password: passwordSchema.optional().or(z.literal("")),
 
@@ -19,7 +19,7 @@ export const profileSchema = z
       return data.password === data.confirmPassword
     },
     {
-      error: "general.form.password.pattern",
+      error: "forms.fields.password.pattern",
       path: ["confirmPassword"],
     },
   )

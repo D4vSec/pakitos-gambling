@@ -1,7 +1,7 @@
 import React from "react"
 import Button from "../buttons/Button"
 import Card from "../landingPage/Card"
-import Badge from "./Badges"
+import Badge from "../badges/Badges"
 import SparkleSVG from "../svg/SparkleSVG"
 import CrownSVG from "../svg/CrownSVG"
 import capybaraImg from "@/assets/capybara_packet_tracer.jpeg"
@@ -16,7 +16,7 @@ const CapyroadCard = () => {
       <div className="mb-6 border-b-2 pb-3 text-primary">
         <h2 className="flex items-center gap-2 text-2xl md:text-3xl font-bold text-primary">
           <CrownSVG />
-          {t("general.home.capyroad.title")}
+          {t("pages.home.cards.capyroad.title")}
         </h2>
       </div>
 
@@ -39,7 +39,7 @@ const CapyroadCard = () => {
               <Button
                 className="bg-primary text-primary-foreground px-4 py-2 rounded-md text-sm font-medium hover:opacity-90 transition"
                 onClick={() => navigate("/capyroad")}>
-                {t("general.home.playNow")}
+                {t("pages.home.cards.playNow")}
               </Button>
             </div>
           </div>
@@ -47,7 +47,7 @@ const CapyroadCard = () => {
           <div className="p-5">
             <h3 className="text-lg font-semibold">Capyroad</h3>
             <p className="mt-1 text-sm text-muted-foreground">
-              {t("general.home.capyroad.description")}
+              {t("pages.home.cards.capyroad.description")}
             </p>
           </div>
         </Card>

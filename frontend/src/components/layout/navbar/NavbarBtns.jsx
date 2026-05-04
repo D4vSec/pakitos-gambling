@@ -8,51 +8,50 @@ import UserBalance from "./UserBalance"
 import LangDropdown from "./LangDropdown"
 
 const NavbarBtns = ({ className = "", vertical = false }) => {
-    const { t } = useLocale()
-    const navigate = useNavigate()
-    const { isLogged } = useSession()
+  const { t } = useLocale()
+  const navigate = useNavigate()
+  const { isLogged } = useSession()
 
-    const buttons = [
-        {
-            key: "register",
-            label: "general.navbar.register",
-            variant: "secondary",
-            path: "/register",
-        },
-        {
-            key: "login",
-            label: "general.navbar.login",
-            variant: "primary",
-            path: "/login",
-        },
-    ]
+  const buttons = [
+    {
+      key: "register",
+      label: "navbar.register",
+      variant: "secondary",
+      path: "/register",
+    },
+    {
+      key: "login",
+      label: "navbar.login",
+      variant: "primary",
+      path: "/login",
+    },
+  ]
 
-    return (
-        <div
-            className={`flex gap-3 ${vertical ? "flex-col w-full" : "items-center"} ${className}
-            `}
-        >
-            <div className={`flex gap-2 ${vertical ? "flex-col w-full" : "items-center"}`}>
-                {isLogged ? (
-                    <UserBalance />
-                ) : (
-                    buttons.map(({ key, variant, label, path }) => (
-                        <Button
-                            key={key}
-                            variant={variant}
-                            onClick={() => navigate(path)}
-                            className={vertical ? "w-full" : ""}
-                        >
-                            {t(label)}
-                        </Button>
-                    ))
-                )}
-            </div>
+  return (
+    <div
+      className={`flex gap-3 ${vertical ? "flex-col w-full" : "items-center"} ${className}
+            `}>
+      <div
+        className={`flex gap-2 ${vertical ? "flex-col w-full" : "items-center"}`}>
+        {isLogged ? (
+          <UserBalance />
+        ) : (
+          buttons.map(({ key, variant, label, path }) => (
+            <Button
+              key={key}
+              variant={variant}
+              onClick={() => navigate(path)}
+              className={vertical ? "w-full" : ""}>
+              {t(label)}
+            </Button>
+          ))
+        )}
+      </div>
 
-            <UserDropdown vertical={vertical} />
-            <LangDropdown vertical={vertical} />
-        </div>
-    )
+      <UserDropdown vertical={vertical} />
+      <LangDropdown vertical={vertical} />
+    </div>
+  )
 }
 
 export default NavbarBtns

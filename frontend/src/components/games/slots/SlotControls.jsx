@@ -12,7 +12,8 @@ const NOTIF_DURATION = 1000
 const SlotControls = ({ type = "3x3" }) => {
   const dims = DIMS_BY_TYPE[type] ?? { rows: 3, cols: 3 }
   const NOTIF_DELAY_MS = getAnimTotalMs(dims.cols, dims.rows)
-  const { session, spins, loading, createSession, spin, endSession } = useSlots()
+  const { session, spins, loading, createSession, spin, endSession } =
+    useSlots()
   const { user, setUser } = useSession()
   const { addNotification } = useNotification()
   const { t } = useLocale()
@@ -56,12 +57,19 @@ const SlotControls = ({ type = "3x3" }) => {
         addNotification(
           t(`games.result.${result.isWinner ? "win" : "lose"}`),
           result.isWinner ? "success" : "error",
-          { scope: "games", duration: NOTIF_DURATION, payout: result.isWinner ? result.payout : 0 },
+          {
+            scope: "games",
+            duration: NOTIF_DURATION,
+            payout: result.isWinner ? result.payout : 0,
+          },
         )
       }, NOTIF_DELAY_MS)
       setTimeout(() => {
         if (result.balance != null)
-          setUser((prev) => ({ ...prev, balance: Number(result.balance).toFixed(2) }))
+          setUser((prev) => ({
+            ...prev,
+            balance: Number(result.balance).toFixed(2),
+          }))
       }, NOTIF_DELAY_MS + NOTIF_DURATION)
     } catch {
       setIsAnimating(false)
@@ -83,12 +91,19 @@ const SlotControls = ({ type = "3x3" }) => {
       addNotification(
         t(`games.result.${result.isWinner ? "win" : "lose"}`),
         result.isWinner ? "success" : "error",
-        { scope: "games", duration: NOTIF_DURATION, payout: result.isWinner ? result.payout : 0 },
+        {
+          scope: "games",
+          duration: NOTIF_DURATION,
+          payout: result.isWinner ? result.payout : 0,
+        },
       )
     }, NOTIF_DELAY_MS)
     setTimeout(() => {
       if (result.balance != null)
-        setUser((prev) => ({ ...prev, balance: Number(result.balance).toFixed(2) }))
+        setUser((prev) => ({
+          ...prev,
+          balance: Number(result.balance).toFixed(2),
+        }))
     }, NOTIF_DELAY_MS + NOTIF_DURATION)
   }
 
@@ -102,18 +117,18 @@ const SlotControls = ({ type = "3x3" }) => {
   return (
     <div className="flex flex-col gap-5 w-full h-full p-4">
       <h2 className="font-bold text-xl text-center">
-        {t(`games.slots.${type}`)}
+        {t(`games.slots.modes.${type}`)}
       </h2>
 
       {!isActive && (
         <>
           <div className="flex flex-col gap-1">
             <p className="fieldset-legend text-md">
-              {t("games.slots.controls.betAmount")}:
+              {t("games.betAmount.label")}:
             </p>
             <input
               type="number"
-              placeholder={t("games.slots.controls.betAmountPlaceholder")}
+              placeholder={t("games.betAmount.placeholder")}
               value={betAmount}
               min={0}
               step={0.01}
@@ -134,8 +149,7 @@ const SlotControls = ({ type = "3x3" }) => {
               variant="primary"
               className="flex-1 basis-0 min-w-fit"
               onClick={() => lastBet && setBetAmount(lastBet)}
-              disabled={isBusy || !lastBet}
-            >
+              disabled={isBusy || !lastBet}>
               {t("games.actions.repeatBet")}
             </Button>
             <Button
@@ -146,16 +160,14 @@ const SlotControls = ({ type = "3x3" }) => {
                   String((parseFloat(prev || 0) * 2).toFixed(2)),
                 )
               }
-              disabled={isBusy || !betAmount}
-            >
+              disabled={isBusy || !betAmount}>
               {t("games.actions.doubleBet")}
             </Button>
             <Button
               variant="primary"
               className="w-full"
               onClick={() => setBetAmount("")}
-              disabled={isBusy}
-            >
+              disabled={isBusy}>
               {t("games.actions.clearBet")}
             </Button>
           </div>
@@ -164,8 +176,7 @@ const SlotControls = ({ type = "3x3" }) => {
             variant="secondary"
             className="w-full"
             onClick={handleStart}
-            disabled={isBusy || !betAmount}
-          >
+            disabled={isBusy || !betAmount}>
             {isBusy ? "⏳" : `🎰 ${t("games.slots.controls.spin")}`}
           </Button>
         </>
@@ -175,7 +186,7 @@ const SlotControls = ({ type = "3x3" }) => {
         <>
           <div className="flex flex-col gap-1">
             <p className="fieldset-legend text-md opacity-70">
-              {t("games.slots.controls.betAmount")}:
+              {t("games.betAmount.label")}:
             </p>
             <div className="flex items-center gap-1 font-bold text-base">
               <span>{session.bet}</span>
@@ -187,8 +198,7 @@ const SlotControls = ({ type = "3x3" }) => {
             variant="secondary"
             className="w-full text-lg font-bold"
             onClick={handleSpin}
-            disabled={isBusy}
-          >
+            disabled={isBusy}>
             {isBusy ? "⏳" : `🎰 ${t("games.slots.controls.spin")}`}
           </Button>
 
@@ -196,7 +206,9 @@ const SlotControls = ({ type = "3x3" }) => {
 
           <div className="flex flex-col gap-2 text-sm">
             <div className="flex justify-between">
-              <span className="opacity-70">{t("games.slots.controls.spins")}:</span>
+              <span className="opacity-70">
+                {t("games.slots.controls.spins")}:
+              </span>
               <span className="font-bold">{spins.length}</span>
             </div>
             <div className="flex justify-between items-center">
@@ -215,8 +227,7 @@ const SlotControls = ({ type = "3x3" }) => {
             size="sm"
             className="w-full mt-auto"
             onClick={handleEnd}
-            disabled={isBusy}
-          >
+            disabled={isBusy}>
             {t("games.slots.controls.endSession")}
           </Button>
         </>

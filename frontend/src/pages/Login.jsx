@@ -27,14 +27,14 @@ const Login = () => {
       {
         name: "email",
         type: "email",
-        label: t("general.form.email.label"),
-        placeholder: t("general.form.email.placeholder"),
+        label: t("forms.fields.email.label"),
+        placeholder: t("forms.fields.email.placeholder"),
       },
       {
         name: "password",
         type: "password",
-        label: t("general.form.password.label"),
-        placeholder: t("general.form.password.placeholder"),
+        label: t("forms.fields.password.label"),
+        placeholder: t("forms.fields.password.placeholder"),
       },
     ],
     [t],
@@ -49,7 +49,7 @@ const Login = () => {
     <Navigate to="/home" replace />
   ) : (
     <GradientBg>
-      <Title>{t("general.form.page.login")}</Title>
+      <Title>{t("forms.page.login")}</Title>
       <div className="card w-full max-w-md bg-base-100 shadow-xl rounded-2xl">
         <div className="card-body">
           <FormProvider {...methods}>
@@ -67,9 +67,7 @@ const Login = () => {
               ))}
 
               <div className="form-control mt-2">
-                <Button className="w-full">
-                  {t("general.form.buttons.login")}
-                </Button>
+                <Button className="w-full">{t("forms.buttons.login")}</Button>
               </div>
             </form>
           </FormProvider>

@@ -12,7 +12,9 @@ const ExternalBet = React.memo(({ item, children, onHover }) => {
       data-info={JSON.stringify(item)}
       onMouseEnter={() => onHover(item.bet)}
       onMouseLeave={() => onHover("")}>
-      {["red", "black", "odd", "even"].includes(item.text)
+      {["red", "black", "odd", "even", "col 1", "col 2", "col 3"].includes(
+        item.text,
+      )
         ? t(`games.roulette.board.${item.text}`)
         : item.text}
 

@@ -14,19 +14,19 @@ const UserActions = ({ id }) => {
 
   const buttons = [
     {
-      label: "buttons.info",
+      label: "ui.buttons.info",
       svg: <InfoSVG />,
       variant: "info",
       onClick: () => navigate(`/admin/users/${id}`),
     },
     {
-      label: "buttons.edit",
+      label: "ui.buttons.edit",
       svg: <EditSVG />,
       variant: "warning",
       onClick: () => navigate(`/admin/users/edit/${id}`),
     },
     {
-      label: "buttons.delete",
+      label: "ui.buttons.delete",
       svg: <TrashXSVG />,
       variant: "danger",
       onClick: () => deleteModal(id),

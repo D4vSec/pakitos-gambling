@@ -40,7 +40,7 @@ const RouletteControls = () => {
   return (
     <div className="flex flex-col gap-6 w-full h-full p-4">
       <h2 className="font-bold text-xl text-center">
-        {t(`games.roulette.${type}`)}
+        {t(`games.roulette.types.${type}`)}
       </h2>
 
       <BettingInput bet={{ betAmount, updateBetAmount }} readOnly />

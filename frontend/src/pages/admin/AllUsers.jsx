@@ -14,20 +14,20 @@ const AllUsers = () => {
 
   return (
     <GradientBg>
-      <Title>{t("adminPanel.allUsers.title")}</Title>
+      <Title>{t("adminPanel.users.title")}</Title>
       <UsersTable />
       <div className="flex gap-4">
         <Button
           svg={<UserPlusSVG />}
           variant="success"
           onClick={() => navigate("/admin/users/create")}>
-          {t("adminPanel.allUsers.createNewUser")}
+          {t("adminPanel.users.createNewUser")}
         </Button>
         <Button
           svg={<LogsSVG />}
           variant="secondary"
           onClick={() => navigate("/admin/logs")}>
-          {t("adminPanel.allUsers.viewLogs")}
+          {t("adminPanel.users.viewLogs")}
         </Button>
       </div>
     </GradientBg>

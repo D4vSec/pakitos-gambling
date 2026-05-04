@@ -17,13 +17,13 @@ const PaginationBar = ({ table }) => {
           className="btn btn-sm"
           onClick={() => table.setPageIndex(0)}
           disabled={!table.getCanPreviousPage()}>
-          {t("tables.paginationBar.first")}
+          {t("ui.tables.paginationBar.first")}
         </button>
         <button
           className="btn btn-sm"
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}>
-          {t("tables.paginationBar.prev")}
+          {t("ui.tables.paginationBar.prev")}
         </button>
 
         {/* Indicador de página actual */}
@@ -35,18 +35,20 @@ const PaginationBar = ({ table }) => {
           className="btn btn-sm"
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}>
-          {t("tables.paginationBar.next")}
+          {t("ui.tables.paginationBar.next")}
         </button>
         <button
           className="btn btn-sm"
           onClick={() => table.setPageIndex(totalPages - 1)}
           disabled={!table.getCanNextPage()}>
-          {t("tables.paginationBar.last")}
+          {t("ui.tables.paginationBar.last")}
         </button>
       </div>
 
       <div className="flex items-center gap-2">
-        <span className="text-sm whitespace-nowrap">Rows per page:</span>
+        <span className="text-sm whitespace-nowrap">
+          {t("ui.tables.paginationBar.rowsPerPage")}
+        </span>
         <select
           className="select select-sm select-bordered"
           value={pageSize}

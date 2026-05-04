@@ -1,18 +1,18 @@
-import React from "react";
-import Card from "./Card";
-import { useLocale } from "@/providers/LocaleProvider";
+import React from "react"
+import Card from "./Card"
+import { useLocale } from "@/providers/LocaleProvider"
 
 const ImagesGrid = () => {
-  const { t } = useLocale();
+  const { t } = useLocale()
 
   return (
     <section className="mb-16">
       <div className="text-center mb-12">
         <h2 className="text-3xl md:text-4xl font-bold mb-4">
-          {t("general.landingPage.imagesGrid.title")}
+          {t("pages.landingPage.imagesGrid.title")}
         </h2>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-          {t("general.landingPage.imagesGrid.text")}
+          {t("pages.landingPage.imagesGrid.text")}
         </p>
       </div>
 
@@ -25,13 +25,13 @@ const ImagesGrid = () => {
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
             />
 
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
+            <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent">
               <div className="absolute bottom-0 left-0 right-0 p-6">
                 <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                  {t("general.landingPage.imagesGrid.image1Title")}
+                  {t("pages.landingPage.imagesGrid.items.win.title")}
                 </h3>
                 <p className="text-lg text-white/90 mb-6">
-                  {t("general.landingPage.imagesGrid.image1Text")}
+                  {t("pages.landingPage.imagesGrid.items.win.text")}
                 </p>
               </div>
             </div>
@@ -45,13 +45,13 @@ const ImagesGrid = () => {
               alt="imagen prueba"
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
+            <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent">
               <div className="absolute bottom-0 left-0 right-0 p-6">
                 <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                  {t("general.landingPage.imagesGrid.image2Title")}
+                  {t("pages.landingPage.imagesGrid.items.premium.title")}
                 </h3>
                 <p className="text-lg text-white/90 mb-6">
-                  {t("general.landingPage.imagesGrid.image2Text")}
+                  {t("pages.landingPage.imagesGrid.items.premium.text")}
                 </p>
               </div>
             </div>
@@ -65,14 +65,14 @@ const ImagesGrid = () => {
               alt="Juega en Móvil"
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-transparent">
+            <div className="absolute inset-0 bg-linear-to-r from-black/80 via-black/60 to-transparent">
               <div className="absolute inset-0 flex items-center md:block">
                 <div className="p-8 md:p-12 max-w-2xl md:absolute md:bottom-0">
                   <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                    {t("general.landingPage.imagesGrid.image3Title")}
+                    {t("pages.landingPage.imagesGrid.items.mobile.title")}
                   </h3>
                   <p className="text-lg text-white/90 mb-6">
-                    {t("general.landingPage.imagesGrid.image3Text")}
+                    {t("pages.landingPage.imagesGrid.items.mobile.text")}
                   </p>
                 </div>
               </div>
@@ -81,7 +81,7 @@ const ImagesGrid = () => {
         </Card>
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default ImagesGrid;
+export default ImagesGrid

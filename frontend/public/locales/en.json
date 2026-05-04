@@ -1,17 +1,49 @@
 {
+  "app": {
+    "name": "Pakito's Gambling",
+    "copyright": "All rights reserved by the mafia at the back"
+  },
+
+  "ui": {
+    "buttons": {
+      "returnHome": "Return to home",
+      "goLogin": "Go to login",
+      "info": "Info",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+
+    "tables": {
+      "noData": "No data found",
+      "searchBar": {
+        "placeholder": "Search...",
+        "label": "Global search",
+        "clear": "Clear search"
+      },
+      "paginationBar": {
+        "first": "First",
+        "prev": "Previous",
+        "next": "Next",
+        "last": "Last",
+        "rowsPerPage": "Rows per page"
+      }
+    }
+  },
+
   "adminPanel": {
-    "allUsers": {
+    "users": {
       "title": "All users",
+      "createNewUser": "Create new user",
+      "viewLogs": "View logs",
       "table": {
         "username": "Username",
         "email": "Email",
         "role": "Role",
         "balance": "Balance",
-        "actions": "Acciones"
-      },
-      "createNewUser": "Create new user",
-      "viewLogs": "View logs"
+        "actions": "Actions"
+      }
     },
+
     "logs": {
       "table": {
         "action": "Action",
@@ -22,6 +54,7 @@
         "userAgent": "User Agent"
       }
     },
+
     "userDetails": {
       "detailsCard": {
         "username": "Username",
@@ -32,63 +65,71 @@
       },
       "transactions": {
         "title": "Transactions",
-        "table": { "type": "Type", "amount": "Amount", "date": "Date" }
+        "table": {
+          "type": "Type",
+          "amount": "Amount",
+          "date": "Date"
+        }
       }
     }
   },
-  "tables": {
-    "noData": "No data found",
-    "searchBar": {
-      "placeholder": "Search...",
-      "label": "Global search",
-      "clear": "Clear"
-    },
-    "paginationBar": {
-      "first": "First",
-      "prev": "Prev",
-      "next": "Next",
-      "last": "Last",
-      "rowsPerPage": "Rows per page"
-    }
-  },
-  "buttons": {
-    "returnHome": "Return to home",
-    "goLogin": "Go to login",
-    "info": "Info",
-    "edit": "Edit",
-    "delete": "Delete"
-  },
+
   "games": {
+    "betAmount": {
+      "label": "Bet amount",
+      "placeholder": "Enter bet amount"
+    },
+
     "actions": {
       "bet": "Bet",
       "clearBet": "Clear bet",
       "doubleBet": "Double bet",
       "repeatBet": "Repeat bet"
     },
+
     "blackjack": {
+      "title": "Blackjack",
+      "bkPays": "Blackjack pays 3 to 2",
       "actions": {
         "double": "Double",
         "hit": "Hit",
         "split": "Split",
         "stand": "Stand"
+      }
+    },
+
+    "roulette": {
+      "title": "Roulette",
+      "types": {
+        "Zero": "European Roulette",
+        "ZeroZero": "American Roulette"
       },
-      "bkPays": "Blackjack pays 3 to 2",
-      "title": "Blackjack"
+      "board": {
+        "black": "Black",
+        "even": "Even",
+        "green": "Green",
+        "odd": "Odd",
+        "red": "Red",
+        "col 1": "Col 1",
+        "col 2": "Col 2",
+        "col 3": "Col 3"
+      },
+      "lastNumbers": "Last numbers",
+      "controls": {
+        "spin": "Spin",
+        "chipValue": "Chip value"
+      }
     },
-    "result": {
-      "lose": "You lose :/",
-      "tie": "Tie",
-      "win": "You win!!!"
-    },
+
     "slots": {
       "title": "Slots",
-      "3x3": "3x3 Machine",
-      "3x5": "3x5 Machine",
-      "5x5": "5x5 Machine",
-      "description": "Classic slot machine. Match symbols across the paylines to win. The rarer the symbol, the higher the payout!",
+      "modes": {
+        "3x3": "3x3 Machine",
+        "3x5": "3x5 Machine",
+        "5x5": "5x5 Machine"
+      },
+      "description": "Classic slot machine. Match symbols across paylines to win. The rarer the symbol, the higher the payout!",
       "controls": {
-        "betAmount": "Bet amount",
-        "betAmountPlaceholder": "Enter bet amount",
         "startSession": "Start game",
         "spin": "Spin",
         "endSession": "End session",
@@ -96,185 +137,222 @@
         "totalPayout": "Total payout"
       }
     },
-    "roulette": {
-      "Zero": "European Roulette",
-      "ZeroZero": "American Roulette",
-      "board": {
-        "black": "black",
-        "even": "even",
-        "green": "green",
-        "odd": "odd",
-        "red": "red"
-      },
-      "controls": {
-        "betAmount": "Bet amount",
-        "betAmountPlaceholder": "Insert bet amount",
-        "chipValue": "Chip value"
-      },
-      "lastNumbers": "Last numbers"
+
+    "capyroad": {
+      "title": "Capyroad"
+    },
+
+    "result": {
+      "lose": "You lose :/",
+      "tie": "Tie",
+      "win": "You win!!!"
     }
   },
-  "general": {
-    "addBalance": {
-      "button": "Add balance",
-      "label": "Amount",
-      "min": "The amount must be > 0.01",
-      "max": "The amount must be < 99999999999.99",
-      "placeholder": "Amount",
-      "required": "This field is required",
-      "title": "Add balance to account"
+
+  "forms": {
+    "buttons": {
+      "cancel": "Cancel",
+      "goBack": "Go back",
+      "login": "Login",
+      "register": "Register",
+      "create": "Create",
+      "update": "Update",
+      "changePassword": "Change password"
     },
-    "copyright": "All rights reserved by The Mafia at the Back",
-    "form": {
-      "buttons": {
-        "cancel": "Cancel",
-        "login": "Login",
-        "register": "Register",
-        "update": "Update profile",
-        "changePassword": "Change password"
-      },
-      "confirmPassword": {
-        "label": "Confirm password",
-        "match": "Passwords do not match",
-        "placeholder": "Confirm password",
-        "required": "Confirm password is required"
-      },
+
+    "page": {
+      "login": "Sign in",
+      "register": "Sign up",
+      "createUser": "Create user",
+      "updateUser": "Edit user"
+    },
+
+    "fields": {
       "email": {
         "label": "Email",
-        "pattern": "Invalid email format",
         "placeholder": "Email",
-        "required": "Email is required"
+        "required": "Email is required",
+        "pattern": "Invalid email format"
       },
-      "page": {
-        "login": "Login",
-        "register": "Sign up"
+
+      "username": {
+        "label": "Username",
+        "placeholder": "Username",
+        "required": "Username is required",
+        "minLength": "Minimum 3 characters",
+        "maxLength": "Maximum 25 characters"
       },
+
       "password": {
         "label": "Password",
-        "pattern": "Password must be at least 8 characters, include uppercase, lowercase and number or special character",
         "placeholder": "Password",
         "required": "Password is required",
         "current": "Current password",
         "new": "New password",
         "confirm": "Repeat new password",
-        "minLength": "Minimum 8 characters"
+        "minLength": "Minimum 8 characters",
+        "pattern": "Password must include uppercase, lowercase and number or special character"
       },
-      "username": {
-        "label": "Username",
-        "maxLength": "Username must be at most 25 characters",
-        "minLength": "Username must be at least 3 characters",
-        "placeholder": "Username",
-        "required": "Username is required"
+
+      "confirmPassword": {
+        "label": "Confirm password",
+        "placeholder": "Confirm password",
+        "required": "Confirm password is required",
+        "match": "Passwords do not match"
       },
-      "schema": {
-        "required": "This field is required",
-        "email": "Invalid email format",
-        "min3Characters": "Minimum 3 characters",
-        "min8Characters": "Minimum 8 characters",
-        "maxCharacters": "Maximum 25 characters",
-        "confirmPasswordMatch": "Passwords do not match",
-        "needUppercase": "Password must include at least one uppercase letter",
-        "needLowercase": "Password must include at least one lowercase letter",
-        "needNumberOrSpecial": "Password must include at least one number or special character"
+
+      "updatePassword": {
+        "label": "Update Password",
+        "placeholder": "Enter password to update it (optional)",
+        "required": "Confirm password is required",
+        "match": "Passwords do not match"
+      },
+
+      "balance": {
+        "label": "Balance",
+        "placeholder": "0.00",
+        "required": "Balance is required"
+      },
+
+      "role": {
+        "label": "Role",
+        "placeholder": "Select a role",
+        "required": "Role is required",
+        "options": {
+          "user": "User",
+          "admin": "Admin"
+        }
       }
     },
+
+    "schema": {
+      "required": "This field is required",
+      "email": "Invalid email format",
+      "min3Characters": "Minimum 3 characters",
+      "min8Characters": "Minimum 8 characters",
+      "maxCharacters": "Maximum 25 characters",
+      "confirmPasswordMatch": "Passwords do not match",
+      "needUppercase": "Must include at least one uppercase letter",
+      "needLowercase": "Must include at least one lowercase letter",
+      "needNumberOrSpecial": "Must include at least one number or special character"
+    }
+  },
+
+  "pages": {
     "home": {
-      "blackjack": {
-        "description": "Classic blackjack game.",
-        "title": "Blackjack"
-      },
-      "capyroad": {
-        "description": "Why the capy crossed the road? Who knows...",
-        "title": "Capyroad"
-      },
-      "playNow": "Play now",
-      "roulette": {
-        "american": {
-          "description": "American roulette game.",
-          "title": "American Roulette"
+      "cards": {
+        "blackjack": {
+          "title": "Blackjack",
+          "description": "Classic blackjack game."
         },
-        "classic": {
-          "description": "Classic roulette game.",
-          "title": "Classic Roulette"
+
+        "capyroad": {
+          "title": "Capyroad",
+          "description": "Why did the capybara cross the road? Who knows..."
         },
-        "title": "Roulette"
-      },
-      "slots": {
-        "beer": {
-          "description": "Slot game inspired by the best drink in the world.",
-          "title": "Beer-Man"
+
+        "roulette": {
+          "title": "Roulette",
+          "classic": {
+            "title": "European Roulette",
+            "description": "European roulette game."
+          },
+          "american": {
+            "title": "American Roulette",
+            "description": "American roulette game."
+          }
         },
-        "starwars": {
-          "description": "Star Wars themed slot game.",
-          "title": "Star Wars"
+
+        "slots": {
+          "title": "Slots",
+          "beer": {
+            "title": "Beer-Man",
+            "description": "Slot game inspired by the best drink in the world."
+          },
+          "starwars": {
+            "title": "Star Wars",
+            "description": "Star Wars themed slot game."
+          },
+          "stardewValley": {
+            "title": "Stardew Valley",
+            "description": "Stardew Valley themed slot game."
+          }
         },
-        "stardewValley": {
-          "description": "Stardew Valley themed slot game.",
-          "title": "Stardew Valley"
-        },
-        "title": "Slots"
+
+        "playNow": "Play now"
       }
     },
+
     "landingPage": {
-      "cta": {
-        "exploreGames": "Explore games",
-        "join": "Join now",
-        "text": "Join thousands of players enjoying the best online casino experience. Get your 200% welcome bonus today.",
-        "title": "Ready to start your adventure?"
-      },
-      "features": {
-        "item1_description": "Over 100 premium casino games including slots, roulette, blackjack and more.",
-        "item1_title": "Game variety",
-        "item2_description": "Secure platform with top encryption and protection technologies.",
-        "item2_title": "Safe and reliable",
-        "item3_description": "Win big prizes with progressive jackpots and exclusive tournaments.",
-        "item3_title": "Big prizes",
-        "item4_description": "Optimized games for smooth experience on any device.",
-        "item4_title": "Fast experience",
-        "item5_description": "Join thousands of players in our casino community.",
-        "item5_title": "Active community",
-        "item6_description": "Receive welcome bonuses and special promotions regularly.",
-        "item6_title": "Exclusive bonuses",
-        "text": "We offer a premium casino experience with top features and full commitment to player satisfaction.",
-        "title": "Why choose Pakito's Gambling?"
-      },
-      "heroContent": {
-        "join": "Join",
-        "seeGames": "View games",
+      "hero": {
+        "title": "Welcome to Pakito's Gambling",
         "text": "The best online casino experience with hundreds of games, bonuses and big prizes.",
-        "title": "Welcome to Pakito's Gambling"
+        "join": "Join",
+        "seeGames": "View games"
       },
+
+      "cta": {
+        "title": "Ready to start your adventure?",
+        "text": "Join thousands of players enjoying the best online casino experience. Get your 200% welcome bonus today.",
+        "exploreGames": "Explore games",
+        "join": "Join now"
+      },
+
+      "features": {
+        "title": "Why choose Pakito's Gambling?",
+        "text": "We offer a premium casino experience with top features and full commitment to player satisfaction.",
+        "items": {
+          "1": {
+            "title": "Game variety",
+            "description": "Over 100 premium casino games including slots, roulette, blackjack and more."
+          },
+          "2": {
+            "title": "Safe and reliable",
+            "description": "Secure platform with top encryption and protection technologies."
+          },
+          "3": {
+            "title": "Big prizes",
+            "description": "Win big prizes with progressive jackpots and exclusive tournaments."
+          },
+          "4": {
+            "title": "Fast experience",
+            "description": "Optimized games for smooth experience on any device."
+          },
+          "5": {
+            "title": "Active community",
+            "description": "Join thousands of players in our casino community."
+          },
+          "6": {
+            "title": "Exclusive bonuses",
+            "description": "Receive welcome bonuses and special promotions regularly."
+          }
+        }
+      },
+
       "imagesGrid": {
-        "image1Text": "Win big prizes and enjoy every moment",
-        "image1Title": "Celebrate your wins",
-        "image2Text": "Enjoy a premium casino atmosphere with high quality graphics",
-        "image2Title": "Premium atmosphere",
-        "image3Text": "Access your games from any device. Responsive design.",
-        "image3Title": "Play anywhere",
+        "title": "Play anywhere",
         "text": "Access your games from any device.",
-        "title": "Play anywhere"
+        "items": {
+          "win": {
+            "title": "Celebrate your wins",
+            "text": "Win big prizes and enjoy every moment"
+          },
+          "premium": {
+            "title": "Premium atmosphere",
+            "text": "Enjoy a premium casino atmosphere with high quality graphics"
+          },
+          "mobile": {
+            "title": "Play anywhere",
+            "text": "Access your games from any device. Responsive design."
+          }
+        }
       },
+
       "stats": {
         "games": "Games",
         "players": "Players",
         "prizes": "Prizes",
         "support": "Support"
-      }
-    },
-    "navbar": {
-      "allGames": "All games",
-      "favourites": "Favourites",
-      "home": "Home",
-      "login": "Sign in",
-      "menu": "Menu",
-      "register": "Sign up",
-      "userPill": {
-        "balance": "Add balance",
-        "coupon": "Enter coupon",
-        "adminPanel": "Admin panel",
-        "guest": "Guest",
-        "logout": "Logout",
-        "settings": "User settings"
       }
     },
     "profile": {
@@ -284,17 +362,47 @@
         "description": "Update your personal information"
       },
       "changePhoto": "Change photo",
+
       "security": {
         "title": "Security",
         "description": "Manage your account security"
       },
+
       "danger": {
         "title": "Danger zone",
         "description": "This action is irreversible. All your data will be deleted.",
         "deleteAccount": "Delete account"
       }
+    },
+
+    "addBalance": {
+      "button": "Add balance",
+      "label": "Amount",
+      "placeholder": "Amount to add",
+      "required": "This field is required",
+      "min": "The amount must be > 0.01",
+      "max": "The amount must be < 99999999999.99",
+      "title": "Add balance to account"
     }
   },
+
+  "navbar": {
+    "home": "Home",
+    "allGames": "All games",
+    "favourites": "Favourites",
+    "menu": "Menu",
+    "login": "Sign in",
+    "register": "Sign up",
+    "userPill": {
+      "guest": "Guest",
+      "balance": "Add balance",
+      "coupon": "Enter coupon",
+      "adminPanel": "Admin panel",
+      "settings": "User settings",
+      "logout": "Logout"
+    }
+  },
+
   "message": {
     "error": {
       "401": "Unauthorized",
@@ -336,8 +444,8 @@
         "title": "Modal title"
       },
       "logout": {
-        "accept": "Exit Pakito's",
-        "cancel": "Keep playing",
+        "accept": "Exit Pakito's :(",
+        "cancel": "Keep Gambing :)",
         "title": "Are you sure you want to exit?"
       }
     },
@@ -355,6 +463,5 @@
       "selectChipFirst": "Select a chip first to place it",
       "spinning": "Spinning..."
     }
-  },
-  "user": {}
+  }
 }

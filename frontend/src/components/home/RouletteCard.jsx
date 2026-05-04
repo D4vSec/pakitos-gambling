@@ -3,7 +3,7 @@ import Card from "../landingPage/Card"
 import Button from "../buttons/Button"
 import LemonSVG from "../svg/LemonSVG"
 import { useLocale } from "@/providers/LocaleProvider"
-import Badge from "./Badges"
+import Badge from "../badges/Badges"
 import CrownSVG from "../svg/CrownSVG"
 import DolarSVG from "../svg/DolarSVG"
 import SparkleSVG from "../svg/SparkleSVG"
@@ -17,7 +17,7 @@ const RouletteCard = () => {
       <div className="mb-6 border-b-2 pb-3 text-primary">
         <h2 className="flex items-center gap-2 text-2xl md:text-3xl font-bold text-primary">
           <LemonSVG className="w-6 h-6 text-primary" />
-          {t("general.home.roulette.title")}
+          {t("pages.home.cards.roulette.title")}
         </h2>
       </div>
 
@@ -42,17 +42,17 @@ const RouletteCard = () => {
               <Button
                 className="bg-primary text-primary-foreground px-4 py-2 rounded-md text-sm font-medium hover:opacity-90 transition"
                 onClick={() => navigate("/roulette00")}>
-                {t("general.home.playNow")}
+                {t("pages.home.cards.playNow")}
               </Button>
             </div>
           </div>
 
           <div className="p-5">
             <h3 className="text-lg font-semibold">
-              {t("general.home.roulette.american.title")}
+              {t("pages.home.cards.roulette.american.title")}
             </h3>
             <p className="mt-1 text-sm text-muted-foreground">
-              {t("general.home.roulette.american.description")}
+              {t("pages.home.cards.roulette.american.description")}
             </p>
           </div>
         </Card>
@@ -74,17 +74,17 @@ const RouletteCard = () => {
               <Button
                 className="bg-primary text-primary-foreground px-4 py-2 rounded-md text-sm font-medium hover:opacity-90 transition"
                 onClick={() => navigate("/roulette0")}>
-                {t("general.home.playNow")}
+                {t("pages.home.cards.playNow")}
               </Button>
             </div>
           </div>
 
           <div className="p-5">
             <h3 className="text-lg font-semibold">
-              {t("general.home.roulette.classic.title")}
+              {t("pages.home.cards.roulette.classic.title")}
             </h3>
             <p className="mt-1 text-sm text-muted-foreground">
-              {t("general.home.roulette.classic.description")}
+              {t("pages.home.cards.roulette.classic.description")}
             </p>
           </div>
         </Card>

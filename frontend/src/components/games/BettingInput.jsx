@@ -7,12 +7,10 @@ const BettingInput = ({ bet, readOnly }) => {
   return (
     <div className="flex flex-col md:flex-row items-baseline gap-1">
       <div className="flex flex-col gap-1 w-full">
-        <p className="fieldset-legend text-md">
-          {t("games.roulette.controls.betAmount")}:
-        </p>
+        <p className="fieldset-legend text-md">{t("games.betAmount.label")}:</p>
         <input
           type="number"
-          placeholder={t("games.roulette.controls.betAmountPlaceholder")}
+          placeholder={t("games.betAmount.placeholder")}
           name="betAmount"
           value={betAmount ?? ""}
           readOnly={readOnly || false}

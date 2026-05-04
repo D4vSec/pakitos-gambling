@@ -46,7 +46,7 @@ const Table = ({
     <div className="bg-base-200 p-2 rounded-lg">
       <div className="mb-3 flex">
         <label htmlFor="" className="floating-label flex-1">
-          <span>{t("tables.searchBar.label")}</span>
+          <span>{t("ui.tables.searchBar.label")}</span>
           <input
             className="input input-bordered w-full"
             value={globalFilter}
@@ -57,7 +57,7 @@ const Table = ({
         <button
           className="btn btn-secondary"
           onClick={() => setGlobalFilter("")}>
-          {t("tables.searchBar.clear")}
+          {t("ui.tables.searchBar.clear")}
         </button>
       </div>
 
@@ -87,7 +87,7 @@ const Table = ({
               <td
                 colSpan={table.getAllColumns().length}
                 className="text-center">
-                {t("tables.noData")}
+                {t("ui.tables.noData")}
               </td>
             </tr>
           ) : (

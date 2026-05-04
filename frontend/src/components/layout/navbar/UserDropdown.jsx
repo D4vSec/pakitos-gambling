@@ -15,25 +15,25 @@ const UserDropdown = ({ vertical = false }) => {
   const userDropdownLinks = [
     {
       key: "settings",
-      label: "general.navbar.userPill.settings",
+      label: "navbar.userPill.settings",
       href: "/settings",
     },
     {
       key: "balance",
-      label: "general.navbar.userPill.balance",
+      label: "navbar.userPill.balance",
       href: "/addBalance",
     },
-    { key: "coupon", label: "general.navbar.userPill.coupon", href: "" },
+    { key: "coupon", label: "navbar.userPill.coupon", href: "" },
     // TODO: Esconderlo sin el hidden
     {
       key: "adminPanel",
-      label: "general.navbar.userPill.adminPanel",
+      label: "navbar.userPill.adminPanel",
       href: "/admin/users",
       className: `${user.role !== "admin" && "hidden"} text-warning`,
     },
     {
       key: "logout",
-      label: "general.navbar.userPill.logout",
+      label: "navbar.userPill.logout",
       className: "text-error",
       onClick: () =>
         addNotification(t("message.modal.logout.title"), "modal", {
@@ -54,7 +54,7 @@ const UserDropdown = ({ vertical = false }) => {
           vertical ? "w-full justify-center" : "hover:bg-base-300"
         }`}>
         <UserSVG />
-        <p>{user?.username || t("general.navbar.userPill.guest")}</p>
+        <p>{user?.username || t("navbar.userPill.guest")}</p>
       </div>
       {vertical && !noUser ? (
         <ul className="menu bg-base-100 rounded-box w-full mt-2 p-2">

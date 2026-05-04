@@ -39,7 +39,7 @@ const ProfileCard = () => {
 
   const onSubmit = async (data) => {
     if (data.password && data.password !== data.confirmPassword) {
-      addNotification(t("general.form.confirmPassword.match"), "error")
+      addNotification(t("forms.confirmPassword.match"), "error")
       return
     }
 
@@ -72,10 +72,10 @@ const ProfileCard = () => {
     <Card className="py-6 px-6 border-0">
       <h2 className="flex items-center gap-2 text-2xl">
         <UserSVG />
-        {t("general.profile.profileCard.title")}
+        {t("pages.profile.profileCard.title")}
       </h2>
 
-      <p className="text-1lg">{t("general.profile.profileCard.description")}</p>
+      <p className="text-1lg">{t("pages.profile.profileCard.description")}</p>
 
       <div className="mt-1">
         <div className="card w-full max-w-md bg-base-100 shadow-xl rounded-2xl">
@@ -84,7 +84,7 @@ const ProfileCard = () => {
               <div className="flex flex-col gap-4">
                 <div>
                   <div className="text-sm text-muted-foreground">
-                    {t("general.form.username.label")}
+                    {t("forms.fields.username.label")}
                   </div>
                   <div className="text-lg font-medium">
                     {user?.username || "-"}
@@ -93,7 +93,7 @@ const ProfileCard = () => {
 
                 <div>
                   <div className="text-sm text-muted-foreground">
-                    {t("general.form.email.label")}
+                    {t("forms.email.label")}
                   </div>
                   <div className="text-lg font-medium">
                     {user?.email || "-"}
@@ -101,7 +101,7 @@ const ProfileCard = () => {
                 </div>
 
                 <Button onClick={() => setIsEditing(true)} className="w-full">
-                  {t("general.form.buttons.update")}
+                  {t("forms.buttons.update")}
                 </Button>
               </div>
             ) : (
@@ -112,34 +112,34 @@ const ProfileCard = () => {
                   <FormField
                     name="username"
                     type="text"
-                    label={t("general.form.username.label")}
-                    placeholder={t("general.form.username.placeholder")}
+                    label={t("forms.fields.username.label")}
+                    placeholder={t("forms.fields.username.placeholder")}
                   />
 
                   <FormField
                     name="email"
                     type="email"
-                    label={t("general.form.email.label")}
-                    placeholder={t("general.form.email.placeholder")}
+                    label={t("forms.email.label")}
+                    placeholder={t("forms.email.placeholder")}
                   />
 
                   <FormField
                     name="password"
                     type="password"
-                    label={t("general.form.password.label")}
-                    placeholder={t("general.form.password.placeholder")}
+                    label={t("forms.fields.password.label")}
+                    placeholder={t("forms.fields.password.placeholder")}
                   />
 
                   <FormField
                     name="confirmPassword"
                     type="password"
-                    label={t("general.form.confirmPassword.label")}
-                    placeholder={t("general.form.confirmPassword.placeholder")}
+                    label={t("forms.confirmPassword.label")}
+                    placeholder={t("forms.confirmPassword.placeholder")}
                   />
 
                   <div className="flex gap-2">
                     <Button className="flex-1">
-                      {t("general.form.buttons.update")}
+                      {t("forms.buttons.update")}
                     </Button>
 
                     <button
@@ -154,7 +154,7 @@ const ProfileCard = () => {
                         })
                         setIsEditing(false)
                       }}>
-                      {t("general.form.buttons.cancel")}
+                      {t("forms.buttons.cancel")}
                     </button>
                   </div>
                 </form>

@@ -13,7 +13,7 @@ const Navbar = () => {
   const navigate = useNavigate()
 
   return (
-    <div className="drawer sticky top-0 z-999 m">
+    <div className="drawer sticky top-0 z-999">
       <input id="main-drawer" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col">
         <div className="navbar bg-base-100 shadow-sm flex justify-between items-center">
@@ -60,7 +60,7 @@ const Navbar = () => {
           {/* Header */}
           <div className="flex justify-between items-center">
             <h2 className="text-2xl font-bold text-base-content">
-              {t("general.navbar.menu")}
+              {t("navbar.menu")}
             </h2>
 
             <label htmlFor="main-drawer" className="btn btn-ghost btn-circle">
