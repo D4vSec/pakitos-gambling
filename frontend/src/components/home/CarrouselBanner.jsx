@@ -53,16 +53,17 @@ const CarrouselBanner = () => {
     // Position incoming slide on the correct side before animating
     gsap.set(imgRefs.current[targetIndex], { x: dir > 0 ? "100%" : "-100%" })
 
-    gsap.timeline({
-      defaults: { duration: DURATION, ease: "power2.inOut" },
-      onComplete: () => {
-        // Park the outgoing slide off-screen right (neutral ready state)
-        gsap.set(imgRefs.current[from], { x: "100%" })
-        currentRef.current = targetIndex
-        isAnimatingRef.current = false
-        updateDots(targetIndex)
-      },
-    })
+    gsap
+      .timeline({
+        defaults: { duration: DURATION, ease: "power2.inOut" },
+        onComplete: () => {
+          // Park the outgoing slide off-screen right (neutral ready state)
+          gsap.set(imgRefs.current[from], { x: "100%" })
+          currentRef.current = targetIndex
+          isAnimatingRef.current = false
+          updateDots(targetIndex)
+        },
+      })
       .to(imgRefs.current[from], { x: dir > 0 ? "-100%" : "100%" }, 0)
       .to(imgRefs.current[targetIndex], { x: "0%" }, 0)
   }
@@ -96,7 +97,9 @@ const CarrouselBanner = () => {
         {images.map((src, i) => (
           <img
             key={i}
-            ref={(el) => { imgRefs.current[i] = el }}
+            ref={(el) => {
+              imgRefs.current[i] = el
+            }}
             src={src}
             draggable={false}
             className="absolute inset-0 w-full h-full object-contain select-none"
@@ -108,16 +111,14 @@ const CarrouselBanner = () => {
       {/* Prev button */}
       <Button
         onClick={handlePrev}
-        className="absolute left-6 top-1/2 -translate-y-1/2 z-10 bg-black/50 text-white p-2 rounded-full"
-      >
+        className="absolute left-6 top-1/2 -translate-y-1/2 z-10 bg-black/50 text-white p-2 rounded-full">
         &lt;
       </Button>
 
       {/* Next button */}
       <Button
         onClick={handleNext}
-        className="absolute right-6 top-1/2 -translate-y-1/2 z-10 bg-black/50 text-white p-2 rounded-full"
-      >
+        className="absolute right-6 top-1/2 -translate-y-1/2 z-10 bg-black/50 text-white p-2 rounded-full">
         &gt;
       </Button>
 
@@ -126,13 +127,18 @@ const CarrouselBanner = () => {
         {images.map((_, i) => (
           <button
             key={i}
-            ref={(el) => { dotsRef.current[i] = el }}
+            ref={(el) => {
+              dotsRef.current[i] = el
+            }}
             onClick={() => {
               advanceTo(i, i > currentRef.current ? 1 : -1)
               startAutoPlay()
             }}
             className="h-2 w-2 rounded-full bg-white origin-center"
-            style={{ opacity: i === 0 ? 1 : 0.4, transform: i === 0 ? "scaleX(2.5)" : "scaleX(1)" }}
+            style={{
+              opacity: i === 0 ? 1 : 0.4,
+              transform: i === 0 ? "scaleX(2.5)" : "scaleX(1)",
+            }}
             aria-label={`Go to slide ${i + 1}`}
           />
         ))}
