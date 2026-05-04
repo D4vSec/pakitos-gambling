@@ -1,8 +1,62 @@
 {
-  "admin": {},
+  "adminPanel": {
+    "allUsers": {
+      "title": "All users",
+      "table": {
+        "username": "Username",
+        "email": "Email",
+        "role": "Role",
+        "balance": "Balance",
+        "actions": "Acciones"
+      },
+      "createNewUser": "Create new user",
+      "viewLogs": "View logs"
+    },
+    "logs": {
+      "table": {
+        "action": "Action",
+        "userID": "User ID",
+        "details": "Details",
+        "date": "Date",
+        "ipAddress": "IP Address",
+        "userAgent": "User Agent"
+      }
+    },
+    "userDetails": {
+      "detailsCard": {
+        "username": "Username",
+        "email": "Email",
+        "role": "Role",
+        "balance": "Balance",
+        "noUser": "User not found"
+      },
+      "transactions": {
+        "title": "Transactions",
+        "table": { "type": "Type", "amount": "Amount", "date": "Date" }
+      }
+    }
+  },
+  "tables": {
+    "noData": "No data found",
+    "searchBar": {
+      "placeholder": "Search...",
+      "label": "Global search",
+      "clear": "Clear"
+    },
+    "paginationBar": {
+      "first": "First",
+      "prev": "Prev",
+      "next": "Next",
+      "last": "Last",
+      "rowsPerPage": "Rows per page"
+    }
+  },
   "buttons": {
     "returnHome": "Return to home",
-    "goLogin": "Go to login"
+    "goLogin": "Go to login",
+    "info": "Info",
+    "edit": "Edit",
+    "delete": "Delete"
   },
   "games": {
     "actions": {

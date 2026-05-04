@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 import Table from "./Table"
 import { useParams } from "react-router-dom"
 import { useAdmin } from "@/providers/AdminProvider"
+import { useLocale } from "@/providers/LocaleProvider"
 
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
@@ -15,6 +16,8 @@ dayjs().tz("Europe/Madrid").format("DD/MM/YYYY HH:mm:ss z")
 const UserTransactions = () => {
   const { getTransactionsById } = useAdmin()
   const { id } = useParams()
+  const { t } = useLocale()
+
   const [transactionsData, setTransactionsData] = useState(null)
   const [pagination, setPagination] = useState({
     pageIndex: 0,
@@ -36,10 +39,13 @@ const UserTransactions = () => {
   }, [id, pagination.pageIndex, pagination.pageSize])
 
   const columns = [
-    { accessorKey: "type", header: "Type" },
+    {
+      accessorKey: "type",
+      header: t("adminPanel.userDetails.transactions.table.type"),
+    },
     {
       accessorKey: "amount",
-      header: "Amount",
+      header: t("adminPanel.userDetails.transactions.table.amount"),
       sortingFn: "alphanumeric",
       cell: (info) => (
         <div className="flex items-center gap-1">
@@ -49,7 +55,7 @@ const UserTransactions = () => {
     },
     {
       accessorKey: "created_at",
-      header: "Date",
+      header: t("adminPanel.userDetails.transactions.table.date"),
       cell: (info) => dayjs(info.getValue()).format("DD/MM/YYYY HH:mm:ss Z"),
     },
   ]

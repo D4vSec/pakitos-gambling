@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react"
 import { useAdmin } from "@/providers/AdminProvider"
+import { useLocale } from "@/providers/LocaleProvider"
 import Table from "./Table"
 import UserActions from "../UserActions"
 import BitcoinSVG from "@/components/svg/BitcoinSVG"
 
 const UsersTable = () => {
   const { getAllUsers, users } = useAdmin()
+  const { t } = useLocale()
   const [usersData, setUsersData] = useState(null)
   const [pagination, setPagination] = useState({
     pageIndex: 0,
@@ -21,17 +23,16 @@ const UsersTable = () => {
     setUsersData(res)
   }
 
-  useEffect(() => {
-    fetchUsers()
-  }, [pagination.pageIndex, pagination.pageSize])
-
   const columns = [
-    { accessorKey: "username", header: "Username" },
-    { accessorKey: "email", header: "Email" },
-    { accessorKey: "role", header: "Role" },
+    {
+      accessorKey: "username",
+      header: t("adminPanel.allUsers.table.username"),
+    },
+    { accessorKey: "email", header: t("adminPanel.allUsers.table.email") },
+    { accessorKey: "role", header: t("adminPanel.allUsers.table.role") },
     {
       accessorKey: "balance",
-      header: "Balance",
+      header: t("adminPanel.allUsers.table.balance"),
       sortingFn: "alphanumeric",
       cell: (info) => (
         <div className="flex items-center gap-1">
@@ -41,10 +42,14 @@ const UsersTable = () => {
     },
     {
       id: "actions",
-      header: "Actions",
+      header: t("adminPanel.allUsers.table.actions"),
       cell: ({ row }) => <UserActions id={row.original.id} />,
     },
   ]
+
+  useEffect(() => {
+    fetchUsers()
+  }, [pagination.pageIndex, pagination.pageSize])
 
   return (
     pagination && (

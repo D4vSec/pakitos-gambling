@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { useAdmin } from "@/providers/AdminProvider"
+import { useLocale } from "@/providers/LocaleProvider"
 import Table from "./Table"
 
 import dayjs from "dayjs"
@@ -12,6 +13,7 @@ dayjs().tz("Europe/Madrid").format("DD/MM/YYYY HH:mm:ss z")
 
 const LogsTable = () => {
   const { getLogs } = useAdmin()
+  const { t } = useLocale()
   const [logsData, setLogsData] = useState(null)
   const [pagination, setPagination] = useState({
     pageIndex: 0,
@@ -28,19 +30,23 @@ const LogsTable = () => {
   }
 
   const columns = [
-    { accessorKey: "action", header: "Action" },
-    { accessorKey: "user_id", header: "User ID" },
-    { accessorKey: "details", header: "Details", cell: (info) => JSON.stringify(info.getValue()) },
+    { accessorKey: "action", header: t("adminPanel.logs.table.action") },
+    { accessorKey: "user_id", header: t("adminPanel.logs.table.userID") },
+    {
+      accessorKey: "details",
+      header: t("adminPanel.logs.table.details"),
+      cell: (info) => JSON.stringify(info.getValue()),
+    },
     {
       accessorKey: "created_at",
-      header: "Date",
+      header: t("adminPanel.logs.table.date"),
       cell: (info) => dayjs(info.getValue()).format("DD/MM/YYYY HH:mm:ss Z"),
     },
     ,
-    { accessorKey: "ip_address", header: "IP Address" },
+    { accessorKey: "ip_address", header: t("adminPanel.logs.table.ipAddress") },
     {
       accessorKey: "user_agent",
-      header: "User Agent",
+      header: t("adminPanel.logs.table.userAgent"),
       cell: (info) => JSON.stringify(JSON.parse(info.getValue())),
     },
   ]

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react"
-import Loading from "@/components/Loading"
-import GradientBg from "@/components/layout/GradientBg"
 import { useAdmin } from "@/providers/AdminProvider"
 import { useParams } from "react-router-dom"
+import { useLocale } from "@/providers/LocaleProvider"
+import Loading from "@/components/Loading"
+import GradientBg from "@/components/layout/GradientBg"
 import UserTransactions from "@/components/admin/tables/UserTransactions"
 
 const UserDetails = () => {
@@ -10,6 +11,7 @@ const UserDetails = () => {
   const [loading, setLoading] = useState(true)
   const { getUserById } = useAdmin()
   const { id } = useParams()
+  const { t } = useLocale()
 
   const loadUser = async () => {
     setLoading(true)
@@ -33,20 +35,34 @@ const UserDetails = () => {
               <>
                 <h2 className="card-title">User Details</h2>
                 <p>
-                  <strong>Name:</strong> {user.username}
+                  <strong>
+                    {`${t("adminPanel.userDetails.detailsCard.username")}: `}
+                  </strong>
+                  {user.username}
                 </p>
                 <p>
-                  <strong>Email:</strong> {user.email}
+                  <strong>
+                    {`${t("adminPanel.userDetails.detailsCard.email")}: `}
+                  </strong>{" "}
+                  {user.email}
                 </p>
                 <p>
-                  <strong>Role:</strong> {user.role}
+                  <strong>
+                    {`${t("adminPanel.userDetails.detailsCard.role")}: `}
+                  </strong>{" "}
+                  {user.role}
                 </p>
                 <p>
-                  <strong>Balance:</strong> {user.balance}
+                  <strong>
+                    {`${t("adminPanel.userDetails.detailsCard.balance")}: `}
+                  </strong>
+                  {user.balance}
                 </p>
               </>
             ) : (
-              <h3 className="text-center text-lg">User not found</h3>
+              <h3 className="text-center text-lg">
+                {t("adminPanel.userDetails.detailsCard.noUser")}
+              </h3>
             )}
           </div>
         </div>

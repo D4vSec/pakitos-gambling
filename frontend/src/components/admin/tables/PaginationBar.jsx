@@ -1,6 +1,8 @@
 import React from "react"
+import { useLocale } from "@/providers/LocaleProvider"
 
 const PaginationBar = ({ table }) => {
+  const { t } = useLocale()
   const state = table.getState()
 
   if (!state || !state.pagination) return null
@@ -14,16 +16,14 @@ const PaginationBar = ({ table }) => {
         <button
           className="btn btn-sm"
           onClick={() => table.setPageIndex(0)}
-          disabled={!table.getCanPreviousPage()}
-        >
-          First
+          disabled={!table.getCanPreviousPage()}>
+          {t("tables.paginationBar.first")}
         </button>
         <button
           className="btn btn-sm"
           onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Prev
+          disabled={!table.getCanPreviousPage()}>
+          {t("tables.paginationBar.prev")}
         </button>
 
         {/* Indicador de página actual */}
@@ -34,16 +34,14 @@ const PaginationBar = ({ table }) => {
         <button
           className="btn btn-sm"
           onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Next
+          disabled={!table.getCanNextPage()}>
+          {t("tables.paginationBar.next")}
         </button>
         <button
           className="btn btn-sm"
           onClick={() => table.setPageIndex(totalPages - 1)}
-          disabled={!table.getCanNextPage()}
-        >
-          Last
+          disabled={!table.getCanNextPage()}>
+          {t("tables.paginationBar.last")}
         </button>
       </div>
 
@@ -55,8 +53,7 @@ const PaginationBar = ({ table }) => {
           onChange={(e) => {
             const size = Number(e.target.value)
             table.setPageSize(size)
-          }}
-        >
+          }}>
           {[1, 5, 10, 20, 50, 100].map((size) => (
             <option key={size} value={size}>
               {size}
