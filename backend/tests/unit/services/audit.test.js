@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import auditService from '../../../src/services/audit.js'
+import auditService from '../../../src/services/audit.service.js'
 import Audit from '#models/audit.model'
 
 vi.mock('#models/audit.model', () => ({

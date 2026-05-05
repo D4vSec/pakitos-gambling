@@ -4,7 +4,7 @@ vi.mock('#utils/rng', () => ({
 	randomIntInclusive: vi.fn(),
 }))
 
-import createRoulette from '../../../src/services/roulette.js'
+import createRoulette from '../../../src/services/roulette.service.js'
 import { randomIntInclusive } from '#utils/rng'
 
 describe('roulette service', () => {

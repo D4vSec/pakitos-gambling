@@ -1,4 +1,4 @@
-import createBlackJack from "#services/blackjack"
+import createBlackJack from "#services/blackjack.service"
 import User from "#models/user.model"
 import logger from "#utils/logger"
 

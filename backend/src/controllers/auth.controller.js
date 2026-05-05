@@ -4,7 +4,7 @@ import * as z from "zod"
 import jwtConfig from "#config/jwt.config"
 import User from "#models/user.model"
 import Session from "#models/session.model"
-import Audit from "#services/audit"
+import Audit from "#services/audit.service"
 import logger from "#utils/logger"
 
 const { secret, refreshSecret, accessExpiresIn, refreshExpiresIn } = jwtConfig

@@ -1,5 +1,5 @@
-import createCapyRoad from "#services/capyroad"
-import User from "#models/User"
+import createCapyRoad from "#services/capyroad.service"
+import User from "#models/user.model"
 import { randomId } from "#utils/rng"
 import logger from "#utils/logger"
 

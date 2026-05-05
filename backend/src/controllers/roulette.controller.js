@@ -1,7 +1,7 @@
-import createRoulette from "#services/roulette"
+import createRoulette from "#services/roulette.service"
 import User from "#models/user.model"
 import crypto from "crypto"
-import Audit from "#services/audit"
+import Audit from "#services/audit.service"
 import logger from "#utils/logger"
 
 const spinRoulette = async (req, res) => {

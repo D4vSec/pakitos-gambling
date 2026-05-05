@@ -33,7 +33,7 @@ vi.mock('#models/bets.model', () => ({
 	},
 }))
 
-vi.mock('#services/audit', () => ({
+vi.mock('#services/audit.service', () => ({
 	default: {
 		getAuditLogs: vi.fn(),
 		countAuditLogs: vi.fn(),
@@ -43,7 +43,7 @@ vi.mock('#services/audit', () => ({
 const { default: app } = await import('../../src/app.js')
 const { default: User } = await import('#models/user.model')
 const { default: Bets } = await import('#models/bets.model')
-const { default: AuditService } = await import('#services/audit')
+const { default: AuditService } = await import('#services/audit.service')
 
 const adminRoutes = getDiscoveredRoutes().filter((route) => route.isAdmin)
 

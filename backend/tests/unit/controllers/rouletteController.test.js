@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-vi.mock('#services/roulette', () => ({
+vi.mock('#services/roulette.service', () => ({
 	default: vi.fn(),
 }))
 
@@ -11,7 +11,7 @@ vi.mock('#models/user.model', () => ({
 	},
 }))
 
-vi.mock('#services/audit', () => ({
+vi.mock('#services/audit.service', () => ({
 	default: {
 		getUserAgentRaw: vi.fn(),
 		getClientIp: vi.fn(),
@@ -32,9 +32,9 @@ vi.mock('crypto', () => ({
 }))
 
 import spinRoulette from '../../../src/controllers/roulette.controller.js'
-import createRoulette from '#services/roulette'
+import createRoulette from '#services/roulette.service'
 import User from '#models/user.model'
-import Audit from '#services/audit'
+import Audit from '#services/audit.service'
 
 const createResponse = () => ({
 	status: vi.fn().mockReturnThis(),

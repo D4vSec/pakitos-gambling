@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-vi.mock('#services/audit', () => ({
+vi.mock('#services/audit.service', () => ({
 	default: {
 		getAuditLogs: vi.fn(),
 		countAuditLogs: vi.fn(),
@@ -8,7 +8,7 @@ vi.mock('#services/audit', () => ({
 }))
 
 import getAuditLogs from '../../../src/controllers/audit.controller.js'
-import AuditService from '#services/audit'
+import AuditService from '#services/audit.service'
 
 const createResponse = () => ({
 	status: vi.fn().mockReturnThis(),
