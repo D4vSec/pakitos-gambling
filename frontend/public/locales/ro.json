@@ -18,7 +18,9 @@
       "hot": "FIERBINTE",
       "new": "NOU",
       "popular": "POPULAR",
-      "teachers": "COLABORARE PROFESORI"
+      "teachers": "COLABORARE PROFESORI",
+      "user": "Utilizator",
+      "admin": "Admin"
     },
 
     "tables": {

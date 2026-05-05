@@ -18,7 +18,9 @@
       "hot": "HOT",
       "new": "NEW",
       "popular": "POPULAR",
-      "teachers": "TEACHERS COLAB"
+      "teachers": "TEACHERS COLAB",
+      "user": "User",
+      "admin": "Admin"
     },
 
     "tables": {

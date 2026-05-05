@@ -10,6 +10,7 @@ import { useLocale } from "@/providers/LocaleProvider"
 import CaretUpSVG from "@/components/svg/flags/CaretUpSVG"
 import CaretDownSVG from "@/components/svg/actions/CaretDownSVG"
 import PaginationBar from "./PaginationBar"
+import SearchBar from "./SearchBar"
 
 // TODO:Añadir loading
 // TODO: Arreglar diseño tabla
@@ -44,23 +45,10 @@ const Table = ({
 
   return (
     <div className="bg-base-200 p-2 rounded-lg">
-      <div className="mb-3 flex">
-        <label htmlFor="" className="floating-label flex-1">
-          <span>{t("ui.tables.searchBar.label")}</span>
-          <input
-            className="input input-bordered w-full"
-            value={globalFilter}
-            onChange={(e) => setGlobalFilter(e.target.value)}
-            placeholder="Search..."
-          />
-        </label>
-        <button
-          className="btn btn-secondary"
-          onClick={() => setGlobalFilter("")}>
-          {t("ui.tables.searchBar.clear")}
-        </button>
-      </div>
-
+      <SearchBar
+        globalFilter={globalFilter}
+        setGlobalFilter={setGlobalFilter}
+      />
       <table className="table table-zebra">
         <thead>
           {table.getHeaderGroups().map((hg) => (

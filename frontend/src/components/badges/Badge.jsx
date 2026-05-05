@@ -9,6 +9,7 @@ const variantMap = {
   success: "badge-success",
   warning: "badge-warning",
   error: "badge-error",
+  ghost: "badgd-ghost",
 }
 
 const sizeMap = {
@@ -30,7 +31,7 @@ const Badge = ({
   return (
     <div
       className={`badge ${safeVariant} ${safeSize} ${className} flex items-center gap-1 rounded-lg`}>
-      {svg}
+      <div className="scale-[0.8]">{svg}</div>
       {children}
     </div>
   )
