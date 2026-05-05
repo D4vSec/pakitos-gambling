@@ -1,6 +1,6 @@
 import app from "#@/app"
-import db from "#config/db"
-import logger from "#utils/logger"
+import db from "#config/db.config"
+import logger from "#utils/logger.utils"
 
 
 const PORT = process.env.API_PORT || 3000

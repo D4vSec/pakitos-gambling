@@ -3,17 +3,17 @@ import cors from 'cors'
 import helmet from 'helmet'
 import { express as useragent } from 'express-useragent';
 
-import { globalLimiter } from '#middlewares/rateLimitMiddleware'
-import userRoutes from '#routes/user'
-import authRoutes from '#routes/auth'
-import rouletteRoutes from '#routes/roulette'
-import slotsRoutes from '#routes/slots'
-import blackJackRoutes from '#routes/blackjack'
-import betsRoutes from '#routes/bets'
-import auditRoutes from '#routes/audit'
+import { globalLimiter } from '#middlewares/ratelimit.middleware'
+import userRoutes from '#routes/user.route'
+import authRoutes from '#routes/auth.route'
+import rouletteRoutes from '#routes/roulette.route'
+import slotsRoutes from '#routes/slots.route'
+import blackJackRoutes from '#routes/blackjack.route'
+import betsRoutes from '#routes/bets.route'
+import auditRoutes from '#routes/audit.route'
 
-import corsConfig from '#config/cors'
-import logger from '#utils/logger'
+import corsConfig from '#config/cors.config'
+import logger from '#utils/logger.utils'
 
 const API_VERSION = 'v1'
 const app = express()
