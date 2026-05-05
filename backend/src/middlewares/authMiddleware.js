@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken"
 import jwtConfig from "#config/jwt"
-import User from "#models/userModel"
-import Session from "#models/sessionModel"
+import User from "#models/user.model"
+import Session from "#models/session.model"
 import { generateTokens } from "#controllers/authController"
 
 const { secret, refreshSecret } = jwtConfig

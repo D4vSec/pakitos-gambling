@@ -1,9 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import auditService from '../../../src/services/audit.js'
-import Audit from '#models/auditModel'
+import Audit from '#models/audit.model'
 
-vi.mock('#models/auditModel', () => ({
+vi.mock('#models/audit.model', () => ({
 	default: {
 		logAction: vi.fn(),
 		getAuditLogs: vi.fn(),

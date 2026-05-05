@@ -7,7 +7,7 @@ vi.mock('jsonwebtoken', () => ({
 	},
 }))
 
-vi.mock('#models/userModel', () => ({
+vi.mock('#models/user.model', () => ({
 	default: {
 		createUser: vi.fn(),
 		findUserByEmail: vi.fn(),
@@ -16,7 +16,7 @@ vi.mock('#models/userModel', () => ({
 	},
 }))
 
-vi.mock('#models/sessionModel', () => ({
+vi.mock('#models/session.model', () => ({
 	default: {
 		createSession: vi.fn(),
 		getActiveSessionsByUserId: vi.fn(),
@@ -28,8 +28,8 @@ vi.mock('#models/sessionModel', () => ({
 import jwt from 'jsonwebtoken'
 
 import { generateTokens, login, refresh, register } from '../../../src/controllers/authController.js'
-import Session from '#models/sessionModel'
-import User from '#models/userModel'
+import Session from '#models/session.model'
+import User from '#models/user.model'
 
 const createResponse = () => ({
 	status: vi.fn().mockReturnThis(),

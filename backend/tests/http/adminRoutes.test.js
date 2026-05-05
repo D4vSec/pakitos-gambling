@@ -13,7 +13,7 @@ vi.mock('#middlewares/authMiddleware', () => ({
 	},
 }))
 
-vi.mock('#models/userModel', () => ({
+vi.mock('#models/user.model', () => ({
 	default: {
 		findAllUsers: vi.fn(),
 		findUserById: vi.fn(),
@@ -26,7 +26,7 @@ vi.mock('#models/userModel', () => ({
 	},
 }))
 
-vi.mock('#models/betsModel', () => ({
+vi.mock('#models/bets.model', () => ({
 	default: {
 		deleteBet: vi.fn(),
 		updateBet: vi.fn(),
@@ -41,8 +41,8 @@ vi.mock('#services/audit', () => ({
 }))
 
 const { default: app } = await import('../../src/app.js')
-const { default: User } = await import('#models/userModel')
-const { default: Bets } = await import('#models/betsModel')
+const { default: User } = await import('#models/user.model')
+const { default: Bets } = await import('#models/bets.model')
 const { default: AuditService } = await import('#services/audit')
 
 const adminRoutes = getDiscoveredRoutes().filter((route) => route.isAdmin)

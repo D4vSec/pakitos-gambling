@@ -1,4 +1,4 @@
-import User from '#models/userModel'
+import User from '#models/user.model'
 import * as z from 'zod'
 import { DEBIT_TRANSACTION_TYPES, TRANSACTION_TYPES, ALLOWED_TRANSACTION_ENDPOINT, getSignedTransactionAmount } from '#config/transactions'
 import logger from "#utils/logger"

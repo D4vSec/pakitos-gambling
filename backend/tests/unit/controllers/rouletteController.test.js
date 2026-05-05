@@ -4,7 +4,7 @@ vi.mock('#services/roulette', () => ({
 	default: vi.fn(),
 }))
 
-vi.mock('#models/userModel', () => ({
+vi.mock('#models/user.model', () => ({
 	default: {
 		getUserBalance: vi.fn(),
 		updateUserBalance: vi.fn(),
@@ -33,7 +33,7 @@ vi.mock('crypto', () => ({
 
 import spinRoulette from '../../../src/controllers/rouletteController.js'
 import createRoulette from '#services/roulette'
-import User from '#models/userModel'
+import User from '#models/user.model'
 import Audit from '#services/audit'
 
 const createResponse = () => ({

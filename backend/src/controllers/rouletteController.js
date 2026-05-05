@@ -1,5 +1,5 @@
 import createRoulette from "#services/roulette"
-import User from "#models/userModel"
+import User from "#models/user.model"
 import crypto from "crypto"
 import Audit from "#services/audit"
 import logger from "#utils/logger"

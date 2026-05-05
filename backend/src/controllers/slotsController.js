@@ -1,5 +1,5 @@
 import createSlots from "#services/slots"
-import User from "#models/userModel"
+import User from "#models/user.model"
 import { MACHINE_TYPES } from "#config/slots"
 import crypto from "crypto"
 import logger from "#utils/logger"

@@ -1,5 +1,5 @@
 import db from "#config/db"
-import Bets from "#models/betsModel"
+import Bets from "#models/bets.model"
 import logger from "#utils/logger"
 
 const calculateOdds = (poolDistribution) => {

@@ -1,4 +1,4 @@
-import Audit from "#models/auditModel"
+import Audit from "#models/audit.model"
 import useragent from 'express-useragent';
 import logger from "#utils/logger"
 

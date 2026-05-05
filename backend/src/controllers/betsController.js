@@ -1,5 +1,5 @@
-import Bets from "#models/betsModel"
-import User from "#models/userModel"
+import Bets from "#models/bets.model"
+import User from "#models/user.model"
 import BetService from "#services/bets"
 import logger from "#utils/logger"
 

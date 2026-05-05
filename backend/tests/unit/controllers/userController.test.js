@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-vi.mock('#models/userModel', () => ({
+vi.mock('#models/user.model', () => ({
 	default: {
 		findUserById: vi.fn(),
 		updateUserBalance: vi.fn(),
@@ -8,7 +8,7 @@ vi.mock('#models/userModel', () => ({
 }))
 
 import { createTransaction } from '../../../src/controllers/userController.js'
-import User from '#models/userModel'
+import User from '#models/user.model'
 
 const createResponse = () => ({
 	status: vi.fn().mockReturnThis(),
