@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import adminMiddleware from '../../../src/middlewares/adminMiddleware.js'
+import adminMiddleware from '../../../src/middlewares/admin.middleware.js'
 
 const createResponse = () => ({
 	status: vi.fn().mockReturnThis(),

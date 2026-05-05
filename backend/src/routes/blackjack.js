@@ -1,7 +1,7 @@
 import express from "express"
-import { gameLimiter } from "#middlewares/rateLimitMiddleware"
-import authMiddleware from "#middlewares/authMiddleware"
-import adminMiddleware from "#middlewares/adminMiddleware"
+import { gameLimiter } from "#middlewares/ratelimit.middleware"
+import authMiddleware from "#middlewares/auth.middleware"
+import adminMiddleware from "#middlewares/admin.middleware"
 import { startGame, hit, stand, double, split, getGame, deleteGame, getGames } from "#controllers/blackjack.controller"
 import { isDev } from "#utils/logger"
 

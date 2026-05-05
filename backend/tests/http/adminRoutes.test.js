@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { getDiscoveredRoutes } from '../helpers/routeDiscovery.js'
 
-vi.mock('#middlewares/authMiddleware', () => ({
+vi.mock('#middlewares/auth.middleware', () => ({
 	default: (req, res, next) => {
 		req.user = {
 			id: 1,

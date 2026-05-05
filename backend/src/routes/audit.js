@@ -1,6 +1,6 @@
 import express from 'express'
-import adminMiddleware from '#middlewares/adminMiddleware'
-import authMiddleware from '#middlewares/authMiddleware'
+import adminMiddleware from '#middlewares/admin.middleware'
+import authMiddleware from '#middlewares/auth.middleware'
 import getAuditLogs from '#controllers/audit.controller'
 
 const auditRoutes = express.Router()

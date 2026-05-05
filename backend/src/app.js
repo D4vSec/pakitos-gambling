@@ -3,7 +3,7 @@ import cors from 'cors'
 import helmet from 'helmet'
 import { express as useragent } from 'express-useragent';
 
-import { globalLimiter } from '#middlewares/rateLimitMiddleware'
+import { globalLimiter } from '#middlewares/ratelimit.middleware'
 import userRoutes from '#routes/user'
 import authRoutes from '#routes/auth'
 import rouletteRoutes from '#routes/roulette'

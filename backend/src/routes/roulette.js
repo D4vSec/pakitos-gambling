@@ -1,7 +1,7 @@
 import express from "express"
 import spinRoulette from "#controllers/roulette.controller"
-import { gameLimiter } from "#middlewares/rateLimitMiddleware"
-import authMiddleware from "#middlewares/authMiddleware"
+import { gameLimiter } from "#middlewares/ratelimit.middleware"
+import authMiddleware from "#middlewares/auth.middleware"
 
 const rouletteRoutes = express.Router()
 

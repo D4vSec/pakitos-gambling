@@ -1,8 +1,8 @@
 import express from "express"
 import { getBets, getBetInfo, deleteBet, updateBet, placeBet } from "#controllers/bets.controller"
-import authMiddleware from "#middlewares/authMiddleware"
-import adminMiddleware from "#middlewares/adminMiddleware"
-import { gameLimiter } from "#middlewares/rateLimitMiddleware"
+import authMiddleware from "#middlewares/auth.middleware"
+import adminMiddleware from "#middlewares/admin.middleware"
+import { gameLimiter } from "#middlewares/ratelimit.middleware"
 
 const betsRoutes = express.Router()
 
