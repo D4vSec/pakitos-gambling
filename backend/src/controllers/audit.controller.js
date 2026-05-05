@@ -1,4 +1,4 @@
-import Audit from '#services/audit.service'
+import Audit from '#models/audit.model'
 import * as z from 'zod'
 import logger from '#utils/logger.utils'
 
