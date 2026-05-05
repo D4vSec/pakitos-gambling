@@ -3,7 +3,7 @@ import gsap from "gsap"
 import { useSlots } from "@/providers/SlotsProvider"
 import { useLocale } from "@/providers/LocaleProvider"
 import SlotGrid from "./SlotGrid"
-import BitcoinSVG from "@/components/svg/BitcoinSVG"
+import BitcoinSVG from "@/components/svg/pictures/BitcoinSVG"
 import { getAnimTotalMs, DIMS_BY_TYPE } from "./slotConstants"
 import "./SlotMachine.css"
 
@@ -12,8 +12,10 @@ const SlotMachine = ({ type = "3x3" }) => {
   const { t } = useLocale()
 
   const lastSpin = spins[spins.length - 1] ?? null
-  const { rows: defaultRows, cols: defaultCols } =
-    DIMS_BY_TYPE[type] ?? { rows: 3, cols: 3 }
+  const { rows: defaultRows, cols: defaultCols } = DIMS_BY_TYPE[type] ?? {
+    rows: 3,
+    cols: 3,
+  }
   const rows = session?.rows ?? defaultRows
   const cols = session?.cols ?? defaultCols
 
@@ -28,9 +30,12 @@ const SlotMachine = ({ type = "3x3" }) => {
       clearTimeout(timerRef.current)
       setShowResult(false)
     } else if (wasSpinningRef.current) {
-      timerRef.current = setTimeout(() => {
-        setShowResult(true)
-      }, getAnimTotalMs(cols, rows))
+      timerRef.current = setTimeout(
+        () => {
+          setShowResult(true)
+        },
+        getAnimTotalMs(cols, rows),
+      )
     }
     return () => clearTimeout(timerRef.current)
   }, [isSpinning]) // eslint-disable-line react-hooks/exhaustive-deps
@@ -49,7 +54,6 @@ const SlotMachine = ({ type = "3x3" }) => {
 
   return (
     <div className="flex flex-col items-center justify-center gap-4 w-full h-full p-4">
-
       {/* Machine header */}
       <div className="flex flex-col items-center gap-1">
         <div className="flex items-center gap-2">
@@ -65,13 +69,16 @@ const SlotMachine = ({ type = "3x3" }) => {
       </div>
 
       {/* Reel window */}
-      <div className={`relative w-full ${cols === 5 ? "max-w-2xl" : "max-w-xs"}`}>
-
+      <div
+        className={`relative w-full ${cols === 5 ? "max-w-2xl" : "max-w-xs"}`}>
         {/* Win flash overlay */}
         <div
           ref={flashRef}
           className="pointer-events-none absolute inset-0 z-20 rounded-xl opacity-0"
-          style={{ background: "radial-gradient(ellipse at center, rgba(251,191,36,0.6) 0%, transparent 70%)" }}
+          style={{
+            background:
+              "radial-gradient(ellipse at center, rgba(251,191,36,0.6) 0%, transparent 70%)",
+          }}
         />
 
         {/* Top decorative bar */}
@@ -97,9 +104,10 @@ const SlotMachine = ({ type = "3x3" }) => {
         {lastSpin && showResult && (
           <div
             className={`flex items-center gap-2 text-lg font-bold transition-opacity duration-300 ${
-              lastSpin.isWinner ? "text-warning drop-shadow-[0_0_6px_rgba(251,191,36,0.8)]" : "text-error/80"
-            }`}
-          >
+              lastSpin.isWinner
+                ? "text-warning drop-shadow-[0_0_6px_rgba(251,191,36,0.8)]"
+                : "text-error/80"
+            }`}>
             {lastSpin.isWinner ? (
               <>
                 <span>{t("games.result.win")}</span>

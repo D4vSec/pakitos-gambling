@@ -1,6 +1,6 @@
 import React from "react"
 import Badge from "./Badge"
-import CrownSVG from "../svg/CrownSVG"
+import CrownSVG from "../svg/pictures/CrownSVG"
 import { useLocale } from "@/providers/LocaleProvider"
 
 const PopularBadge = () => {

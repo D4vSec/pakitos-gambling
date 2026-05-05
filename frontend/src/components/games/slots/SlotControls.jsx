@@ -4,7 +4,7 @@ import { useSession } from "@/providers/SessionProvider"
 import { useNotification } from "@/providers/NotificationProvider"
 import { useLocale } from "@/providers/LocaleProvider"
 import Button from "@/components/buttons/Button"
-import BitcoinSVG from "@/components/svg/BitcoinSVG"
+import BitcoinSVG from "@/components/svg/pictures/BitcoinSVG"
 import { getAnimTotalMs, DIMS_BY_TYPE } from "./slotConstants"
 
 const NOTIF_DURATION = 1000

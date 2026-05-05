@@ -1,6 +1,6 @@
 import GameCard from "./GameCard"
 import GameSection from "./GameSection"
-import CoinsSVG from "../svg/CoinsSVG"
+import CoinsSVG from "../svg/pictures/CoinsSVG"
 import StarWars from "@/assets/starwars.webp"
 import StardewValley from "@/assets/stardewvalley.webp"
 import BeerMan from "@/assets/beerman.jpeg"

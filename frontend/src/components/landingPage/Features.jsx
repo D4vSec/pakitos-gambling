@@ -1,12 +1,12 @@
 import React from "react"
 import Card from "./Card"
 import { useLocale } from "@/providers/LocaleProvider"
-import TrophySVG from "../svg/TrophySVG"
-import ControllerSVG from "../svg/ControllerSVG"
-import ShieldSVG from "../svg/ShieldSVG"
-import StarSVG from "../svg/StarSVG"
-import BoltSVG from "../svg/BoltSVG"
-import UserSVG from "../svg/UserSVG"
+import TrophySVG from "../svg/pictures/TrophySVG"
+import ControllerSVG from "../svg/pictures/ControllerSVG"
+import ShieldSVG from "../svg/pictures/ShieldSVG"
+import StarSVG from "../svg/pictures/StarSVG"
+import BoltSVG from "../svg/pictures/BoltSVG"
+import UserSVG from "../svg/users/UserSVG"
 
 const Features = () => {
   const { t } = useLocale()

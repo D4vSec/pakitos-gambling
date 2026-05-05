@@ -1,6 +1,6 @@
 import React from "react"
 import Badge from "./Badge"
-import SparkleSVG from "../svg/SparkleSVG"
+import SparkleSVG from "../svg/pictures/SparkleSVG"
 import { useLocale } from "@/providers/LocaleProvider"
 
 const NewBadge = () => {

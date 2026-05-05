@@ -2,10 +2,10 @@ import React from "react"
 import { useNavigate } from "react-router-dom"
 import { useAdmin } from "@/providers/AdminProvider"
 import { useLocale } from "@/providers/LocaleProvider"
-import EditSVG from "../svg/EditSVG"
+import EditSVG from "../svg/actions/EditSVG"
 import Button from "../buttons/Button"
-import TrashXSVG from "../svg/TrashXSVG"
-import InfoSVG from "../svg/InfoSVG"
+import TrashXSVG from "../svg/actions/TrashXSVG"
+import InfoSVG from "../svg/actions/InfoSVG"
 
 const UserActions = ({ id }) => {
   const navigate = useNavigate()

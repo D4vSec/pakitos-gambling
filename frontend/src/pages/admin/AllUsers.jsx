@@ -4,9 +4,9 @@ import { useLocale } from "@/providers/LocaleProvider"
 import Title from "@/components/Title"
 import GradientBg from "@/components/layout/GradientBg"
 import Button from "@/components/buttons/Button"
-import UserPlusSVG from "@/components/svg/UserPlusSVG"
+import UserPlusSVG from "@/components/svg/users/UserPlusSVG"
 import UsersTable from "@/components/admin/tables/UsersTable"
-import LogsSVG from "@/components/svg/LogsSVG"
+import LogsSVG from "@/components/svg/pictures/LogsSVG"
 
 const AllUsers = () => {
   const navigate = useNavigate()

@@ -7,7 +7,7 @@ import { useNotification } from "@/providers/NotificationProvider"
 import { useLocale } from "@/providers/LocaleProvider"
 import Card from "../landingPage/Card"
 import Button from "../buttons/Button"
-import UserSVG from "../svg/UserSVG"
+import UserSVG from "../svg/users/UserSVG"
 import FormField from "@/components/forms/FormField"
 
 const ProfileCard = () => {

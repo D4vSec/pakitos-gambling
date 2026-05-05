@@ -2,7 +2,7 @@ import React from "react"
 import { useLocale } from "@/providers/LocaleProvider"
 import GameCard from "./GameCard"
 import GameSection from "./GameSection"
-import BlackjackSVG from "../svg/BlackjackSVG"
+import BlackjackSVG from "../svg/pictures/BlackjackSVG"
 import Blackjack from "@/assets/blackjack.png"
 import PopularBadge from "../badges/PopularBadge"
 

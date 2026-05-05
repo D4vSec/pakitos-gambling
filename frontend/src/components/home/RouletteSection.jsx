@@ -1,7 +1,7 @@
 import React from "react"
 import GameSection from "./GameSection"
 import GameCard from "./GameCard"
-import LemonSVG from "../svg/LemonSVG"
+import LemonSVG from "../svg/pictures/LemonSVG"
 import roulette00 from "@/assets/roulette00banner.jpg"
 import roulette0 from "@/assets/roulette0banner.webp"
 import { useLocale } from "@/providers/LocaleProvider"

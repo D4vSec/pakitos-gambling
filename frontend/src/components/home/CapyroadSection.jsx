@@ -3,7 +3,7 @@ import { useLocale } from "@/providers/LocaleProvider"
 import GameCard from "./GameCard"
 import GameSection from "./GameSection"
 import capybaraImg from "@/assets/capybara_packet_tracer.jpeg"
-import CrownSVG from "../svg/CrownSVG"
+import CrownSVG from "../svg/pictures/CrownSVG"
 import NewBadge from "../badges/NewBadge"
 import CreatorsFavBadge from "../badges/CreatorsFavBadge"
 

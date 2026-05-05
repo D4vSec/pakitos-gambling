@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import LastNumber from "../games/roulette/lastNums/LastNumber"
-import BitcoinSVG from "../svg/BitcoinSVG"
+import BitcoinSVG from "../svg/pictures/BitcoinSVG"
 import { useLocale } from "@/providers/LocaleProvider"
 
 const RouletteNotification = ({ notification }) => {

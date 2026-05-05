@@ -1,6 +1,6 @@
 import React from "react"
 import Badge from "./Badge"
-import UsersSVG from "../svg/UsersSVG"
+import UsersSVG from "../svg/users/UsersSVG"
 import { useLocale } from "@/providers/LocaleProvider"
 
 const TeachersColabBadge = () => {

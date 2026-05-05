@@ -1,6 +1,6 @@
 import React from "react"
 import Badge from "./Badge"
-import DolarSVG from "../svg/DolarSVG"
+import DolarSVG from "../svg/pictures/DolarSVG"
 
 const PayoutBadge = ({ text }) => {
   return (

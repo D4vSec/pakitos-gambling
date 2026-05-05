@@ -1,6 +1,6 @@
 import React from "react"
 import Badge from "./Badge"
-import FlameSVG from "../svg/FlameSVG"
+import FlameSVG from "../svg/pictures/FlameSVG"
 import { useLocale } from "@/providers/LocaleProvider"
 
 const HotBadge = () => {

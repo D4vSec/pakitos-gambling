@@ -3,7 +3,7 @@ import { useAdmin } from "@/providers/AdminProvider"
 import { useLocale } from "@/providers/LocaleProvider"
 import Table from "./Table"
 import UserActions from "../UserActions"
-import BitcoinSVG from "@/components/svg/BitcoinSVG"
+import BitcoinSVG from "@/components/svg/pictures/BitcoinSVG"
 
 const UsersTable = () => {
   const { getAllUsers, users } = useAdmin()

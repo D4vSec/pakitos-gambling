@@ -7,7 +7,7 @@ import { useLocale } from "@/providers/LocaleProvider"
 import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 import timezone from "dayjs/plugin/timezone"
-import BitcoinSVG from "@/components/svg/BitcoinSVG"
+import BitcoinSVG from "@/components/svg/pictures/BitcoinSVG"
 
 dayjs.extend(utc)
 dayjs.extend(timezone)

@@ -1,6 +1,6 @@
 import React from "react"
 import Button from "../buttons/Button"
-import ReloadSVG from "../svg/ReloadSVG"
+import ReloadSVG from "../svg/pictures/ReloadSVG"
 import { useLocale } from "@/providers/LocaleProvider"
 
 const BettingBtns = ({ children, actions, disabled }) => {
