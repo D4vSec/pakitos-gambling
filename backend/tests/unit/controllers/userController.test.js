@@ -7,7 +7,7 @@ vi.mock('#models/user.model', () => ({
 	},
 }))
 
-import { createTransaction } from '../../../src/controllers/userController.js'
+import { createTransaction } from '../../../src/controllers/user.controller.js'
 import User from '#models/user.model'
 
 const createResponse = () => ({
@@ -15,7 +15,7 @@ const createResponse = () => ({
 	json: vi.fn(),
 })
 
-describe('userController createTransaction', () => {
+describe('user.controller createTransaction', () => {
 	beforeEach(() => {
 		vi.clearAllMocks()
 		User.findUserById.mockResolvedValue({ id: 'user-1' })

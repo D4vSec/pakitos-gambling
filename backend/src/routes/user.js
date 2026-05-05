@@ -11,7 +11,7 @@ import {
 	getTransactions,
 	createTransaction,
 	getTransactionsByUserId,
-} from "#controllers/userController"
+} from "#controllers/user.controller"
 import authMiddleware from "#middlewares/authMiddleware"
 import adminMiddleware from "#middlewares/adminMiddleware"
 

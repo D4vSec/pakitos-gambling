@@ -7,7 +7,7 @@ vi.mock('#services/audit', () => ({
 	},
 }))
 
-import getAuditLogs from '../../../src/controllers/auditController.js'
+import getAuditLogs from '../../../src/controllers/audit.controller.js'
 import AuditService from '#services/audit'
 
 const createResponse = () => ({
@@ -15,7 +15,7 @@ const createResponse = () => ({
 	json: vi.fn(),
 })
 
-describe('auditController', () => {
+describe('audit.controller', () => {
 	beforeEach(() => {
 		vi.clearAllMocks()
 		vi.spyOn(console, 'error').mockImplementation(() => {})

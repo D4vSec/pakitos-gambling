@@ -1,5 +1,5 @@
 import express from "express"
-import spinRoulette from "#controllers/rouletteController"
+import spinRoulette from "#controllers/roulette.controller"
 import { gameLimiter } from "#middlewares/rateLimitMiddleware"
 import authMiddleware from "#middlewares/authMiddleware"
 

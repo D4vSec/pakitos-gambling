@@ -31,7 +31,7 @@ vi.mock('crypto', () => ({
 	},
 }))
 
-import spinRoulette from '../../../src/controllers/rouletteController.js'
+import spinRoulette from '../../../src/controllers/roulette.controller.js'
 import createRoulette from '#services/roulette'
 import User from '#models/user.model'
 import Audit from '#services/audit'
@@ -60,7 +60,7 @@ const createRouletteMock = (winningNumber = 7) => ({
 	isZeroZero: vi.fn((value) => value === 37),
 })
 
-describe('rouletteController', () => {
+describe('roulette.controller', () => {
 	beforeEach(() => {
 		vi.clearAllMocks()
 		User.getUserBalance.mockResolvedValue(100)

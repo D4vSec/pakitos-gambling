@@ -1,5 +1,5 @@
 import express from "express"
-import { getBets, getBetInfo, deleteBet, updateBet, placeBet } from "#controllers/betsController"
+import { getBets, getBetInfo, deleteBet, updateBet, placeBet } from "#controllers/bets.controller"
 import authMiddleware from "#middlewares/authMiddleware"
 import adminMiddleware from "#middlewares/adminMiddleware"
 import { gameLimiter } from "#middlewares/rateLimitMiddleware"

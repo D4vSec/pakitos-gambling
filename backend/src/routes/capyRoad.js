@@ -7,7 +7,7 @@ import {
     jumpRoad,
     deleteGame,
     getGames,
-} from "#controllers/capyRoadController"
+} from "#controllers/capyroad.controller"
 import { isDev } from "#utils/logger"
 
 const capyRoadRoutes = express.Router()

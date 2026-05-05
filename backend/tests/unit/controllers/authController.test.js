@@ -27,7 +27,7 @@ vi.mock('#models/session.model', () => ({
 
 import jwt from 'jsonwebtoken'
 
-import { generateTokens, login, refresh, register } from '../../../src/controllers/authController.js'
+import { generateTokens, login, refresh, register } from '../../../src/controllers/auth.controller.js'
 import Session from '#models/session.model'
 import User from '#models/user.model'
 
@@ -36,7 +36,7 @@ const createResponse = () => ({
 	json: vi.fn(),
 })
 
-describe('authController', () => {
+describe('auth.controller', () => {
 	beforeEach(() => {
 		vi.clearAllMocks()
 		vi.spyOn(console, 'error').mockImplementation(() => {})

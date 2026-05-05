@@ -1,5 +1,5 @@
 import express from "express"
-import { createSlot, spinSlot, getSlotSession, endSlotSession } from "#controllers/slotsController"
+import { createSlot, spinSlot, getSlotSession, endSlotSession } from "#controllers/slots.controller"
 import authMiddleware from "#middlewares/authMiddleware"
 import { gameLimiter } from "#middlewares/rateLimitMiddleware"
 
