@@ -3,7 +3,7 @@ import { useLocale } from "@/providers/LocaleProvider"
 import GameCard from "./GameCard"
 import GameSection from "./GameSection"
 import BlackjackSVG from "../svg/pictures/BlackjackSVG"
-import Blackjack from "@/assets/blackjack.png"
+import Blackjack from "@/assets/home/blackjack.png"
 import PopularBadge from "../badges/PopularBadge"
 
 const BlackjackSection = () => {
