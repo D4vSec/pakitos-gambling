@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken"
-import jwtConfig from "#config/jwt"
+import jwtConfig from "#config/jwt.config"
 import User from "#models/user.model"
 import Session from "#models/session.model"
 import { generateTokens } from "#controllers/authController"

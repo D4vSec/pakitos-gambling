@@ -1,5 +1,5 @@
 import app from "#@/app"
-import db from "#config/db"
+import db from "#config/db.config"
 import logger from "#utils/logger"
 
 

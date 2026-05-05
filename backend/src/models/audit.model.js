@@ -1,4 +1,4 @@
-import db from "#config/db"
+import db from "#config/db.config"
 
 const logAction = async (user_id, action, details, ip_address, user_agent) => {
   await db.query(

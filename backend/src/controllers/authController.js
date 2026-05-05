@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken"
 import * as z from "zod"
 
-import jwtConfig from "#config/jwt"
+import jwtConfig from "#config/jwt.config"
 import User from "#models/user.model"
 import Session from "#models/session.model"
 import Audit from "#services/audit"

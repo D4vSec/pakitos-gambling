@@ -1,6 +1,6 @@
 import { hashPassword, comparePassword } from '#utils/password'
-import db from '#config/db'
-import { getDefaultTransactionType, isTransactionType } from '#config/transactions'
+import db from '#config/db.config'
+import { getDefaultTransactionType, isTransactionType } from '#config/transactions.config'
 
 const updatableUserColumns = Object.freeze({
 	username: 'username',

@@ -1,5 +1,5 @@
 import { randomInt } from "#utils/rng"
-import { SYMBOLS, MACHINE_TYPES, generatePaylines } from "#config/slots"
+import { SYMBOLS, MACHINE_TYPES, generatePaylines } from "#config/slots.config"
 
 const createSlots = (machineType = "3x5") => {
 	if (!MACHINE_TYPES[machineType]) {

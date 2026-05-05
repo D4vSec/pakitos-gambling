@@ -1,4 +1,4 @@
-import db from "#config/db"
+import db from "#config/db.config"
 
 const createBet = async (bet) => {
     const { label, ends_at } = bet

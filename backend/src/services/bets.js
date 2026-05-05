@@ -1,4 +1,4 @@
-import db from "#config/db"
+import db from "#config/db.config"
 import Bets from "#models/bets.model"
 import logger from "#utils/logger"
 

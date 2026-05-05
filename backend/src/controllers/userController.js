@@ -1,6 +1,6 @@
 import User from '#models/user.model'
 import * as z from 'zod'
-import { DEBIT_TRANSACTION_TYPES, TRANSACTION_TYPES, ALLOWED_TRANSACTION_ENDPOINT, getSignedTransactionAmount } from '#config/transactions'
+import { DEBIT_TRANSACTION_TYPES, TRANSACTION_TYPES, ALLOWED_TRANSACTION_ENDPOINT, getSignedTransactionAmount } from '#config/transactions.config'
 import logger from "#utils/logger"
 
 const getProfile = async (req, res) => {

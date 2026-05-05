@@ -1,5 +1,5 @@
 import rateLimit from "express-rate-limit"
-import rateLimitConfig from "#config/ratelimit"
+import rateLimitConfig from "#config/ratelimit.config"
 import { isDev } from "#utils/logger"
 
 const authLimiter = rateLimit({

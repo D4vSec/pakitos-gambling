@@ -12,7 +12,7 @@ import blackJackRoutes from '#routes/blackjack'
 import betsRoutes from '#routes/bets'
 import auditRoutes from '#routes/audit'
 
-import corsConfig from '#config/cors'
+import corsConfig from '#config/cors.config'
 import logger from '#utils/logger'
 
 const API_VERSION = 'v1'
