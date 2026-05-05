@@ -1,5 +1,5 @@
 import db from "#config/db.config"
-import { hashPassword, comparePassword } from "#utils/password"
+import { hashPassword, comparePassword } from "#utils/password.utils"
 
 const createSession = async (userId, refreshToken, deviceInfo = null) => {
 	const refreshHash = await hashPassword(refreshToken)

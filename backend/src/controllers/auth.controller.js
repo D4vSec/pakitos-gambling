@@ -5,7 +5,7 @@ import jwtConfig from "#config/jwt.config"
 import User from "#models/user.model"
 import Session from "#models/session.model"
 import Audit from "#services/audit.service"
-import logger from "#utils/logger"
+import logger from "#utils/logger.utils"
 
 const { secret, refreshSecret, accessExpiresIn, refreshExpiresIn } = jwtConfig
 

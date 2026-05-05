@@ -1,4 +1,4 @@
-import { randomIntInclusive } from "#utils/rng"
+import { randomIntInclusive } from "#utils/rng.utils"
 
 //This factory contains all the necessary functions to manage the logic of the roulette
 const createRoulette = () => {

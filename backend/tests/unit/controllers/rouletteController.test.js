@@ -19,7 +19,7 @@ vi.mock('#services/audit.service', () => ({
 	},
 }))
 
-vi.mock('#utils/logger', () => ({
+vi.mock('#utils/logger.utils', () => ({
 	default: {
 		error: vi.fn(),
 	},

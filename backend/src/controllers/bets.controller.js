@@ -1,7 +1,7 @@
 import Bets from "#models/bets.model"
 import User from "#models/user.model"
 import BetService from "#services/bets.service"
-import logger from "#utils/logger"
+import logger from "#utils/logger.utils"
 
 const getBets = async (req, res) => {
     try {

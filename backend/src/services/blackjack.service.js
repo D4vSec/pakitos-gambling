@@ -1,4 +1,4 @@
-import { randomInt } from "#utils/rng"
+import { randomInt } from "#utils/rng.utils"
 
 //This factory contains all the necessary functions to manage the logic of the BlackJack
 const createBlackJack = () => {

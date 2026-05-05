@@ -8,7 +8,7 @@ import {
     deleteGame,
     getGames,
 } from "#controllers/capyroad.controller"
-import { isDev } from "#utils/logger"
+import { isDev } from "#utils/logger.utils"
 
 const capyRoadRoutes = express.Router()
 //TODO: Test the routes

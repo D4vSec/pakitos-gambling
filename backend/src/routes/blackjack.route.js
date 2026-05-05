@@ -3,7 +3,7 @@ import { gameLimiter } from "#middlewares/ratelimit.middleware"
 import authMiddleware from "#middlewares/auth.middleware"
 import adminMiddleware from "#middlewares/admin.middleware"
 import { startGame, hit, stand, double, split, getGame, deleteGame, getGames } from "#controllers/blackjack.controller"
-import { isDev } from "#utils/logger"
+import { isDev } from "#utils/logger.utils"
 
 const blackJackRoutes = express.Router()
 

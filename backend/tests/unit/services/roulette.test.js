@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-vi.mock('#utils/rng', () => ({
+vi.mock('#utils/rng.utils', () => ({
 	randomIntInclusive: vi.fn(),
 }))
 
 import createRoulette from '../../../src/services/roulette.service.js'
-import { randomIntInclusive } from '#utils/rng'
+import { randomIntInclusive } from '#utils/rng.utils'
 
 describe('roulette service', () => {
 	beforeEach(() => {

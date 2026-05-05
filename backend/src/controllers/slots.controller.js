@@ -2,7 +2,7 @@ import createSlots from "#services/slots.service"
 import User from "#models/user.model"
 import { MACHINE_TYPES } from "#config/slots.config"
 import crypto from "crypto"
-import logger from "#utils/logger"
+import logger from "#utils/logger.utils"
 
 const activeGames = new Map()
 

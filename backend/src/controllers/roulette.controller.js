@@ -2,7 +2,7 @@ import createRoulette from "#services/roulette.service"
 import User from "#models/user.model"
 import crypto from "crypto"
 import Audit from "#services/audit.service"
-import logger from "#utils/logger"
+import logger from "#utils/logger.utils"
 
 const spinRoulette = async (req, res) => {
     const { rouletteType, bets } = req.body

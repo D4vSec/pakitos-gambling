@@ -1,6 +1,6 @@
 import db from "#config/db.config"
 import Bets from "#models/bets.model"
-import logger from "#utils/logger"
+import logger from "#utils/logger.utils"
 
 const calculateOdds = (poolDistribution) => {
     const totalPool = poolDistribution.reduce(

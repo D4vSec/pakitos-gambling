@@ -1,4 +1,4 @@
-import { hashPassword, comparePassword } from '#utils/password'
+import { hashPassword, comparePassword } from '#utils/password.utils'
 import db from '#config/db.config'
 import { getDefaultTransactionType, isTransactionType } from '#config/transactions.config'
 

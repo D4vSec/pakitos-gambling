@@ -13,7 +13,7 @@ import betsRoutes from '#routes/bets.route'
 import auditRoutes from '#routes/audit.route'
 
 import corsConfig from '#config/cors.config'
-import logger from '#utils/logger'
+import logger from '#utils/logger.utils'
 
 const API_VERSION = 'v1'
 const app = express()

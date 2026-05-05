@@ -1,6 +1,6 @@
 import Audit from "#models/audit.model"
 import useragent from 'express-useragent';
-import logger from "#utils/logger"
+import logger from "#utils/logger.utils"
 
 const getClientIp = (req) => {
 	const xForwardedFor = req.headers["x-forwarded-for"]

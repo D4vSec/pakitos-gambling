@@ -1,6 +1,6 @@
 import Audit from '#services/audit.service'
 import * as z from 'zod'
-import logger from '#utils/logger'
+import logger from '#utils/logger.utils'
 
 const getAuditLogs = async (req, res) => {
 	const querySchema = z.object({

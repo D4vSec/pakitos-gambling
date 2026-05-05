@@ -1,4 +1,4 @@
-import { randomInt } from "#utils/rng"
+import { randomInt } from "#utils/rng.utils"
 import { SYMBOLS, MACHINE_TYPES, generatePaylines } from "#config/slots.config"
 
 const createSlots = (machineType = "3x5") => {

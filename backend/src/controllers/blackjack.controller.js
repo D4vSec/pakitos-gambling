@@ -1,6 +1,6 @@
 import createBlackJack from "#services/blackjack.service"
 import User from "#models/user.model"
-import logger from "#utils/logger"
+import logger from "#utils/logger.utils"
 
 const games = new Map()
 

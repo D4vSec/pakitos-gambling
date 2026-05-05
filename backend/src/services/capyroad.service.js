@@ -1,4 +1,4 @@
-import { randomFloat, randomFloatInRange, randomId, randomInt, randomIntInclusive } from "#utils/rng"
+import { randomFloat, randomFloatInRange, randomId, randomInt, randomIntInclusive } from "#utils/rng.utils"
 
 // Cross-Road game chicken from stake
 const createCapyRoad = () => {
