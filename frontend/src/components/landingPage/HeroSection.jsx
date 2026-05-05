@@ -1,21 +1,28 @@
-import React from "react";
-import HeroContent from "./HeroContent";
+import React from "react"
+import HeroContent from "./HeroContent"
+import herobg from "@/assets/landing/herobg.jpeg"
+
 const HeroSection = () => {
   return (
-    <section className="relative overflow-hidden rounded-xl mb-12 min-h-[calc(100vh-4rem)] flex items-center">
-      <div className="absolute inset-0">
-        <img
-          src="https://images.unsplash.com/photo-1726004592905-dc5cd794bda6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjYXNpbm8lMjBnYW1pbmclMjBlbnRlcnRhaW5tZW50JTIwbmlnaHR8ZW58MXx8fHwxNzcyMTIzNDY3fDA&ixlib=rb-4.1.0&q=80&w=1080"
-          alt="Casino Gaming"
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-black/50" />
+    <section className="w-full h-[calc(100dvh-4.25rem)] p-4 md:p-6 lg:p-10">
+      <div className="relative w-full h-full overflow-hidden rounded-xl">
+        {/* Background */}
+        <div className="absolute inset-0">
+          <img
+            src={herobg}
+            alt="Casino Gaming"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-linear-to-r from-black/90 via-black/70 to-black/50" />
+        </div>
+
+        {/* Contenido centrado */}
+        <div className="relative z-10 flex items-center h-full justify-center md:justify-start text-center md:text-left">
+          <HeroContent />
+        </div>
       </div>
-
-      {/* Hero Content */}
-      <HeroContent />
     </section>
-  );
-};
+  )
+}
 
-export default HeroSection;
+export default HeroSection

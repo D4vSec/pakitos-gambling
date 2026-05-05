@@ -1,30 +1,20 @@
-import React from "react";
-import Stats from "../components/landingPage/Stats";
-import HeroSection from "../components/landingPage/HeroSection";
-import CTA from "../components/landingPage/CTA";
-import ImagesGrid from "../components/landingPage/ImagesGrid";
-import Features from "../components/landingPage/Features";
+import React from "react"
+import Stats from "../components/landingPage/Stats"
+import HeroSection from "../components/landingPage/HeroSection"
+import CTA from "../components/landingPage/CTA"
+import ImagesGrid from "../components/landingPage/ImagesGrid"
+import Features from "../components/landingPage/Features"
 
 const LandingPage = () => {
-
   return (
-    <div className="px-4 py-4 md:px-6 md:py-6 lg:px-8 lg:py-8">
-      {/*Hero Section*/}
+    <div className="grid grid-rows-[auto] gap-18 mb-18">
       <HeroSection />
-
-      {/* Features Section */}
       <Features />
-
-      {/* Image Gallery Section */}
       <ImagesGrid />
-
-      {/* CTA Section */}
       <CTA />
-
-      {/*Stats Section*/}
       <Stats />
     </div>
-  );
-};
+  )
+}
 
-export default LandingPage;
+export default LandingPage

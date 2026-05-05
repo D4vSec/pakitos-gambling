@@ -1,7 +1,7 @@
 import React from "react"
 import { useNavigate } from "react-router-dom"
 import { useLocale } from "@/providers/LocaleProvider"
-import Title from "@/components/Title"
+import Title from "@/components/layout/fonts/Title"
 import GradientBg from "@/components/layout/GradientBg"
 import Button from "@/components/buttons/Button"
 import UserPlusSVG from "@/components/svg/users/UserPlusSVG"

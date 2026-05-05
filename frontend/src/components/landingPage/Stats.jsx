@@ -12,37 +12,28 @@ const Stats = () => {
     {
       value: "100+",
       label: t("pages.landingPage.stats.games"),
-      icon: <ControllerSVG />,
     },
     {
       value: "10K+",
       label: t("pages.landingPage.stats.players"),
-      icon: <GroupSVG />,
     },
     {
       value: "24/7",
       label: t("pages.landingPage.stats.support"),
-      icon: <TwentyFourHSVG />,
     },
     {
       value: "$1M+",
       label: t("pages.landingPage.stats.prizes"),
-      icon: <DolarSVG />,
     },
   ]
 
   return (
-    <section className="mt-16">
+    <section className="px-4 md:px-6 lg:px-10">
       <div className="stats stats-vertical gap-4 lg:stats-horizontal shadow w-full">
         {stats.map((item, index) => (
           <div key={index} className="stat bg-base-100 place-items-center">
-            {item.icon && (
-              <div className="stat-figure text-primary">{item.icon}</div>
-            )}
-
-            <div className="stat-value text-primary">{item.value}</div>
-
-            <div className="stat-title text-secondary">{item.label}</div>
+            <div className="stat-value text-secondary">{item.value}</div>
+            <div className="stat-desc text-secondary">{item.label}</div>
           </div>
         ))}
       </div>
