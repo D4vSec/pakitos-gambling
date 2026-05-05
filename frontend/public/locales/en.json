@@ -445,7 +445,8 @@
       "loading": "Loading...",
       "registered": "Your account is created, you need to go to the login page",
       "userData": "User data received correctly",
-      "winningNumber": "Winning number"
+      "winningNumber": "Winning number",
+      "uuidCopiedToClipboard": "UUID copied to clipboard"
     },
     "modal": {
       "default": {

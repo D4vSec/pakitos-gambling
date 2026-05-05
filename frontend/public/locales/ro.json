@@ -447,7 +447,8 @@
       "loading": "Se încarcă...",
       "registered": "Cont creat, mergi la autentificare",
       "userData": "Datele utilizatorului au fost primite",
-      "winningNumber": "Număr câștigător"
+      "winningNumber": "Număr câștigător",
+      "uuidCopiedToClipboard": "UUID-ul a fost copiat în clipboard"
     },
 
     "modal": {

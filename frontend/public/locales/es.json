@@ -447,7 +447,8 @@
       "loading": "Cargando...",
       "registered": "Tu cuenta ha sido creada, debes ir a la página de inicio de sesión",
       "userData": "Datos de usuario recibidos correctamente",
-      "winningNumber": "Número ganador"
+      "winningNumber": "Número ganador",
+      "uuidCopiedToClipboard": "UUID copiado al portapapeles"
     },
 
     "modal": {

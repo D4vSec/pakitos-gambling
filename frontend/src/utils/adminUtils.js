@@ -9,15 +9,10 @@ dayjs.extend(timezone)
 dayjs().tz("Europe/Madrid").format("DD/MM/YYYY HH:mm:ss z")
 
 const buildUserAgent = (userAgent = {}) => {
-  const { browser, version, os, platform, isMobile, isTablet, isDesktop } =
-    userAgent
+  const { browser, version, os, platform, isMobile, isTablet, isDesktop } = JSON.parse(userAgent)
   const clean = (v) => v && v !== "unknown"
 
-  const browserPart = browser
-    ? version
-      ? `${browser}/${version}`
-      : browser
-    : null
+  const browserPart = browser ? (version ? `${browser} v.${version}` : browser) : null
 
   const systemParts = [platform, os].filter(clean)
   const systemPart = systemParts.length ? `(${systemParts.join(" | ")})` : null
@@ -26,8 +21,9 @@ const buildUserAgent = (userAgent = {}) => {
   if (isMobile) devicePart = "Mobile"
   else if (isTablet) devicePart = "Tablet"
   else if (isDesktop) devicePart = "Desktop"
-
-  return [browserPart, systemPart, devicePart].filter(Boolean).join(" ")
+  const a = [browserPart, systemPart, devicePart].filter(Boolean).join(" ")
+  console.log(a)
+  return a
 }
 
 const fullDateFormatter = (date) => dayjs(date).format("DD/MM/YYYY HH:mm:ss Z")
