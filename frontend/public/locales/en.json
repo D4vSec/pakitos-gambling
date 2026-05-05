@@ -13,6 +13,14 @@
       "delete": "Delete"
     },
 
+    "badges": {
+      "creatorsFav": "CREATORS FAV",
+      "hot": "HOT",
+      "new": "NEW",
+      "popular": "POPULAR",
+      "teachers": "TEACHERS COLAB"
+    },
+
     "tables": {
       "noData": "No data found",
       "searchBar": {

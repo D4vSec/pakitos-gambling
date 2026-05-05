@@ -5,26 +5,26 @@ import LemonSVG from "../svg/LemonSVG"
 import roulette00 from "@/assets/roulette00banner.jpg"
 import roulette0 from "@/assets/roulette0banner.webp"
 import { useLocale } from "@/providers/LocaleProvider"
+import HotBadge from "../badges/HotBadge"
+import PayoutBadge from "../badges/PayoutBadge"
 
 const RouletteSection = () => {
   const { t } = useLocale()
   const rouletteGames = [
     {
-      title: "American Roulette",
-      description: "Classic american roulette experience",
-      image: roulette00,
-      route: "/roulette00",
-      badges: [
-        { label: "POPULAR", variant: "success" },
-        { label: "NEW", variant: "primary" },
-      ],
-    },
-    {
-      title: "Classic Roulette",
-      description: "Traditional european style roulette",
+      title: "pages.home.cards.roulette.classic.title",
+      description: "pages.home.cards.roulette.classic.description",
       image: roulette0,
       route: "/roulette0",
-      badges: [{ label: "1.1M", variant: "warning" }],
+      badges: [<PayoutBadge text={50000} />],
+    },
+
+    {
+      title: "pages.home.cards.roulette.american.title",
+      description: "pages.home.cards.roulette.american.description",
+      image: roulette00,
+      route: "/roulette00",
+      badges: [<HotBadge />],
     },
   ]
 

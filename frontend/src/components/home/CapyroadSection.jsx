@@ -1,8 +1,11 @@
+import React from "react"
+import { useLocale } from "@/providers/LocaleProvider"
 import GameCard from "./GameCard"
 import GameSection from "./GameSection"
 import capybaraImg from "@/assets/capybara_packet_tracer.jpeg"
 import CrownSVG from "../svg/CrownSVG"
-import { useLocale } from "@/providers/LocaleProvider"
+import NewBadge from "../badges/NewBadge"
+import CreatorsFavBadge from "../badges/CreatorsFavBadge"
 
 const CapyroadSection = () => {
   const { t } = useLocale()
@@ -10,13 +13,13 @@ const CapyroadSection = () => {
   return (
     <GameSection
       title={t("pages.home.cards.capyroad.title")}
-      icon={<CrownSVG className="w-6 h-6" />}>
+      icon={<CrownSVG />}>
       <GameCard
         title="Capyroad"
         description={t("pages.home.cards.capyroad.description")}
         image={capybaraImg}
         route="/capyroad"
-        badges={[{ label: "NEW", variant: "primary" }]}
+        badges={[<CreatorsFavBadge />, <NewBadge />]}
       />
     </GameSection>
   )

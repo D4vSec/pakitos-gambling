@@ -1,8 +1,10 @@
+import React from "react"
+import { useLocale } from "@/providers/LocaleProvider"
 import GameCard from "./GameCard"
 import GameSection from "./GameSection"
 import BlackjackSVG from "../svg/BlackjackSVG"
 import Blackjack from "@/assets/blackjack.png"
-import { useLocale } from "@/providers/LocaleProvider"
+import PopularBadge from "../badges/PopularBadge"
 
 const BlackjackSection = () => {
   const { t } = useLocale()
@@ -16,7 +18,7 @@ const BlackjackSection = () => {
         description={t("pages.home.cards.blackjack.description")}
         image={Blackjack}
         route="/blackjack"
-        badges={[{ label: "HOT", variant: "primary" }]}
+        badges={[<PopularBadge />]}
       />
     </GameSection>
   )

@@ -13,6 +13,14 @@
       "delete": "Eliminar"
     },
 
+    "badges": {
+      "creatorsFav": "FAVORITO CREADORES",
+      "hot": "CALIENTE",
+      "new": "NUEVO",
+      "popular": "POPULAR",
+      "teachers": "COLAB PROFESORES"
+    },
+
     "tables": {
       "noData": "No se encontraron datos",
       "searchBar": {

@@ -13,6 +13,14 @@
       "delete": "Șterge"
     },
 
+    "badges": {
+      "creatorsFav": "FAVORITUL CREATORILOR",
+      "hot": "FIERBINTE",
+      "new": "NOU",
+      "popular": "POPULAR",
+      "teachers": "COLABORARE PROFESORI"
+    },
+
     "tables": {
       "noData": "Nu s-au găsit date",
       "searchBar": {

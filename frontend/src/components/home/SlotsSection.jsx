@@ -5,38 +5,31 @@ import StarWars from "@/assets/starwars.webp"
 import StardewValley from "@/assets/stardewvalley.webp"
 import BeerMan from "@/assets/beerman.jpeg"
 import { useLocale } from "@/providers/LocaleProvider"
+import CreatorsFavBadge from "../badges/CreatorsFavBadge"
+import TeachersColabBadge from "../badges/TeacharsColabBadge"
 
 const SlotsSection = () => {
   const slotsGames = [
     {
-      title: "Star Wars Slot",
-      description: "3x3 slot machine",
+      title: "pages.home.cards.slots.starwars.title",
+      description: "pages.home.cards.slots.starwars.description",
       image: StarWars,
       route: "/slots",
-      badges: [
-        { label: "POPULAR", variant: "success" },
-        { label: "NEW", variant: "primary" },
-      ],
+      badges: [<TeachersColabBadge />],
     },
     {
-      title: "Stardew Valley Slot",
-      description: "3x5 slot machine",
+      title: "pages.home.cards.slots.stardewValley.title",
+      description: "pages.home.cards.slots.stardewValley.description",
       image: StardewValley,
       route: "/slots3x5",
-      badges: [
-        { label: "POPULAR", variant: "success" },
-        { label: "NEW", variant: "primary" },
-      ],
+      badges: [<TeachersColabBadge />],
     },
     {
-      title: "Beer Slot",
-      description: "5x5 slot machine",
+      title: "pages.home.cards.slots.beer.title",
+      description: "pages.home.cards.slots.beer.description",
       image: BeerMan,
       route: "/slots5x5",
-      badges: [
-        { label: "POPULAR", variant: "success" },
-        { label: "NEW", variant: "primary" },
-      ],
+      badges: [<TeachersColabBadge />, <CreatorsFavBadge />],
     },
   ]
   const { t } = useLocale()
