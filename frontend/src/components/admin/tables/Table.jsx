@@ -44,12 +44,12 @@ const Table = ({
   })
 
   return (
-    <div className="bg-base-200 p-2 rounded-lg">
+    <div className="bg-base-200 p-4 rounded-lg">
       <SearchBar
         globalFilter={globalFilter}
         setGlobalFilter={setGlobalFilter}
       />
-      <table className="table table-zebra">
+      <table className="table table-sm md:table-md  table-zebra">
         <thead>
           {table.getHeaderGroups().map((hg) => (
             <tr key={hg.id}>

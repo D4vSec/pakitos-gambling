@@ -10,7 +10,10 @@
       "goLogin": "Ir a iniciar sesión",
       "info": "Información",
       "edit": "Editar",
-      "delete": "Eliminar"
+      "delete": "Eliminar",
+      "accept": "Aceptar",
+      "cancel": "Cancelar",
+      "close": "Cerrar"
     },
 
     "badges": {
@@ -21,6 +24,11 @@
       "teachers": "COLAB PROFESORES",
       "user": "Usuario",
       "admin": "Administrador"
+    },
+
+    "tooltip": {
+      "copyToClipboard": "Copiar al portapapeles",
+      "viewDetails": "Ver detalles"
     },
 
     "tables": {
@@ -67,6 +75,7 @@
 
     "userDetails": {
       "detailsCard": {
+        "title": "Detalles del usuario",
         "username": "Nombre de usuario",
         "email": "Correo electrónico",
         "role": "Rol",
@@ -461,6 +470,14 @@
         "accept": "Salir de Pakito's :(",
         "cancel": "Seguir jugando :)",
         "title": "¿Seguro que quieres salir?"
+      },
+      "logDetail": {
+        "jsonDetail": "Detalles JSON"
+      },
+      "deleteUser": {
+        "accept": "Si, un jugador menos",
+        "cancel": "No, perderemos un adicto",
+        "title": "¿Seguro que quieres eliminar el usuario?"
       }
     },
 
@@ -477,7 +494,8 @@
       "cantDouble": "No tienes saldo para doblar",
       "playFirstToRepeat": "Juega una vez para repetir la apuesta",
       "selectChipFirst": "Selecciona primero una ficha",
-      "spinning": "Girando..."
+      "spinning": "Girando...",
+      "deleteYourself": "No te puedes eliminar a ti mismo, friki"
     }
   }
 }

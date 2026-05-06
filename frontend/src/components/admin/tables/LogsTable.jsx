@@ -3,7 +3,9 @@ import { useAdmin } from "@/providers/AdminProvider"
 import { useLocale } from "@/providers/LocaleProvider"
 import Table from "./Table"
 import { fullDateFormatter, buildUserAgent } from "@/utils/adminUtils"
-import TruncateId from "../TruncateId"
+import TruncateId from "../renderers/TruncateId"
+import ActionDetails from "../renderers/ActionDetails"
+import AuditBadgeSelector from "../badges/AuditBadgeSelector"
 
 const LogsTable = () => {
   const { getLogs } = useAdmin()
@@ -24,7 +26,11 @@ const LogsTable = () => {
   }
 
   const columns = [
-    { accessorKey: "action", header: t("adminPanel.logs.table.action") },
+    {
+      accessorKey: "action",
+      header: t("adminPanel.logs.table.action"),
+      cell: (info) => <AuditBadgeSelector type={info.getValue()} />,
+    },
     {
       accessorKey: "user_id",
       header: t("adminPanel.logs.table.userID"),
@@ -33,7 +39,7 @@ const LogsTable = () => {
     {
       accessorKey: "details",
       header: t("adminPanel.logs.table.details"),
-      cell: (info) => JSON.stringify(info.getValue()),
+      cell: (info) => <ActionDetails value={info.getValue()} />,
     },
     {
       accessorKey: "created_at",

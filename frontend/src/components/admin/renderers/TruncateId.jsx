@@ -1,6 +1,7 @@
 import React from "react"
 import { useNotification } from "@/providers/NotificationProvider"
 import { useLocale } from "@/providers/LocaleProvider"
+import CopySVG from "../../svg/actions/CopySVG"
 
 const TruncateId = ({ id }) => {
   const { t } = useLocale()
@@ -13,8 +14,16 @@ const TruncateId = ({ id }) => {
   }
 
   return (
-    <div className="tooltip tooltip-top cursor-pointer" data-tip={id} onClick={handleCopy}>
-      <span className="font-mono text-sm hover:text-primary transition-colors">{shortId}</span>
+    <div className="tooltip tooltip-top cursor-pointer" onClick={handleCopy}>
+      <div className="tooltip-content flex gap-1 items-center justify-center">
+        <span className="scale-[0.75]">
+          <CopySVG />
+        </span>
+        {id}
+      </div>
+      <span className="font-mono text-sm hover:text-secondary hover:bg-zinc-800 transition-colors transition-200">
+        {shortId}
+      </span>
     </div>
   )
 }

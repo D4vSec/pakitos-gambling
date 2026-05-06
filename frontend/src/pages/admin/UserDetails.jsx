@@ -5,13 +5,14 @@ import { useLocale } from "@/providers/LocaleProvider"
 import Loading from "@/components/Loading"
 import GradientBg from "@/components/layout/GradientBg"
 import UserTransactions from "@/components/admin/tables/UserTransactions"
+import GoBackBtn from "@/components/buttons/GoBackBtn"
+import UserCard from "@/components/admin/components/UserCard"
 
 const UserDetails = () => {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
   const { getUserById } = useAdmin()
   const { id } = useParams()
-  const { t } = useLocale()
 
   const loadUser = async () => {
     setLoading(true)
@@ -28,52 +29,19 @@ const UserDetails = () => {
     <Loading />
   ) : (
     <GradientBg>
-      <div className="grid gap-6 w-8/10 grid-cols-1 md:grid-cols-2 md:grid-rows-[auto_1fr]">
-        <div className="card bg-base-100 shadow-sm w-full">
-          <div className="card-body">
-            {user ? (
-              <>
-                <h2 className="card-title">User Details</h2>
-                <p>
-                  <strong>
-                    {`${t("adminPanel.userDetails.detailsCard.username")}: `}
-                  </strong>
-                  {user.username}
-                </p>
-                <p>
-                  <strong>
-                    {`${t("adminPanel.userDetails.detailsCard.email")}: `}
-                  </strong>{" "}
-                  {user.email}
-                </p>
-                <p>
-                  <strong>
-                    {`${t("adminPanel.userDetails.detailsCard.role")}: `}
-                  </strong>{" "}
-                  {user.role}
-                </p>
-                <p>
-                  <strong>
-                    {`${t("adminPanel.userDetails.detailsCard.balance")}: `}
-                  </strong>
-                  {user.balance}
-                </p>
-              </>
-            ) : (
-              <h3 className="text-center text-lg">
-                {t("adminPanel.userDetails.detailsCard.noUser")}
-              </h3>
-            )}
+      <div className="flex flex-col gap-6 w-8/10">
+        <div>
+          <GoBackBtn />
+        </div>
+        <div className="grid gap-6 grid-cols-1 md:grid-cols-2 md:grid-rows-[auto_1fr] w-full">
+          <UserCard user={user} />
+          <div className="bg-accent rounded-lg flex items-center justify-center text-white">
+            Future chart
           </div>
-        </div>
-
-        <div className="bg-accent  rounded-lg flex items-center justify-center text-white">
-          Future chart
-        </div>
-
-        <div className="md:col-span-2">
-          <h2 className="text-2xl font-bold mb-2">Transactions</h2>
-          <UserTransactions />
+          <div className="md:col-span-2">
+            <h2 className="text-2xl font-bold mb-2">Transactions</h2>
+            <UserTransactions />
+          </div>
         </div>
       </div>
     </GradientBg>

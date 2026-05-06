@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react"
 import { useAdmin } from "@/providers/AdminProvider"
 import { useLocale } from "@/providers/LocaleProvider"
 import Table from "./Table"
-import UserActions from "../UserActions"
+import UserActions from "../renderers/UserActions"
 import BitcoinSVG from "@/components/svg/pictures/BitcoinSVG"
-import BadgesSelector from "../BadgesSelector"
+import RoleBadgeSelector from "../badges/RoleBadgeSelector"
 
 const UsersTable = () => {
   const { getAllUsers, users } = useAdmin()
@@ -33,7 +33,7 @@ const UsersTable = () => {
     {
       accessorKey: "role",
       header: t("adminPanel.users.table.role"),
-      cell: (info) => <BadgesSelector role={info.getValue()} />,
+      cell: (info) => <RoleBadgeSelector role={info.getValue()} />,
     },
     {
       accessorKey: "balance",

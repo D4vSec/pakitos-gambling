@@ -1,0 +1,61 @@
+.json-daisy {
+  /* base */
+  --w-rjv-color: var(--color-base-content);
+  --w-rjv-background-color: var(--color-base-200);
+
+  /* estructura */
+  --w-rjv-line-color: color-mix(
+    in oklch,
+    var(--color-base-content) 8%,
+    transparent
+  );
+  --w-rjv-arrow-color: color-mix(
+    in oklch,
+    var(--color-base-content) 60%,
+    transparent
+  );
+
+  /* keys (más neutro + elegante) */
+  --w-rjv-key-string: var(--color-secondary);
+  --w-rjv-key-number: var(--color-accent);
+
+  /* strings (verde suave, no chillón) */
+  --w-rjv-type-string-color: var(--color-success);
+
+  /* numbers (amarillo suave, no warning agresivo) */
+  --w-rjv-type-int-color: var(--color-warning);
+  --w-rjv-type-float-color: var(--color-warning);
+
+  /* boolean (info en vez de error) */
+  --w-rjv-type-boolean-color: var(--color-info);
+
+  /* null / undefined (neutral apagado) */
+  --w-rjv-type-null-color: color-mix(
+    in oklch,
+    var(--color-base-content) 35%,
+    transparent
+  );
+  --w-rjv-type-undefined-color: color-mix(
+    in oklch,
+    var(--color-base-content) 35%,
+    transparent
+  );
+
+  /* brackets / syntax */
+  --w-rjv-curlybraces-color: var(--color-base-content);
+  --w-rjv-brackets-color: var(--color-base-content);
+  --w-rjv-colon-color: color-mix(
+    in oklch,
+    var(--color-base-content) 50%,
+    transparent
+  );
+  --w-rjv-quotes-color: color-mix(
+    in oklch,
+    var(--color-base-content) 70%,
+    transparent
+  );
+
+  /* UX extras */
+  --w-rjv-copied-success-color: var(--color-success);
+  --w-rjv-info-color: transparent;
+}

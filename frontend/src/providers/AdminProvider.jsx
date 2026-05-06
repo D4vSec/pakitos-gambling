@@ -106,12 +106,12 @@ const AdminProvider = ({ children }) => {
 
   const deleteModal = (userId) => {
     if (userId === user?.id) {
-      addNotification("You can't delete yourself, dummy", "warning")
+      addNotification(t("message.warning.deleteYourself"), "warning")
     } else {
-      addNotification("Sure wanna delete user?", "modal", {
+      addNotification(t("message.modal.deleteUser.title"), "modal", {
         onAccept: () => deleteUser(userId),
-        acceptLabel: "Sure, 1 gambler less",
-        cancelLabel: "No, I regret my decision",
+        acceptLabel: t("message.modal.deleteUser.accept"),
+        cancelLabel: t("message.modal.deleteUser.cancel"),
       })
     }
   }

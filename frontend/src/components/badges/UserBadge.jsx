@@ -7,7 +7,10 @@ const UserBadge = () => {
   const { t } = useLocale()
 
   return (
-    <Badge variant="info" svg={<UserSVG />}>
+    <Badge
+      variant="ghost"
+      svg={<UserSVG />}
+      className="bg-zinc-400 text-neutral">
       {t("ui.badges.user")}
     </Badge>
   )

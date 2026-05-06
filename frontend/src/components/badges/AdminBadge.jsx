@@ -7,7 +7,7 @@ const AdminBadge = () => {
   const { t } = useLocale()
 
   return (
-    <Badge variant="error" svg={<UserKeySVG />}>
+    <Badge variant="info" svg={<UserKeySVG />}>
       {t("ui.badges.admin")}
     </Badge>
   )

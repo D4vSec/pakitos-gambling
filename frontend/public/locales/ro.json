@@ -10,7 +10,10 @@
       "goLogin": "Mergi la autentificare",
       "info": "Informații",
       "edit": "Editează",
-      "delete": "Șterge"
+      "delete": "Șterge",
+      "accept": "Acceptă",
+      "cancel": "Anulează",
+      "close": "Închide"
     },
 
     "badges": {
@@ -21,6 +24,11 @@
       "teachers": "COLABORARE PROFESORI",
       "user": "Utilizator",
       "admin": "Admin"
+    },
+
+    "tooltip": {
+      "copyToClipboard": "Copiere în clipboard",
+      "viewDetails": "Vizualizare detalii"
     },
 
     "tables": {
@@ -67,6 +75,7 @@
 
     "userDetails": {
       "detailsCard": {
+        "title": "Detalii utilizator",
         "username": "Nume utilizator",
         "email": "Email",
         "role": "Rol",
@@ -461,6 +470,14 @@
         "accept": "Ieși din Pakito's :(",
         "cancel": "Continuă jocul :)",
         "title": "Sigur vrei să ieși?"
+      },
+      "logDetail": {
+        "jsonDetail": "Detalii JSON"
+      },
+      "deleteUser": {
+        "accept": "Sigur, 1 jucător mai puțin",
+        "cancel": "Nu, regret decizia mea",
+        "title": "Sigur vrei să ștergi utilizatorul?"
       }
     },
 
@@ -477,7 +494,8 @@
       "cantDouble": "Nu ai fonduri pentru dublare",
       "playFirstToRepeat": "Joacă o dată pentru a repeta",
       "selectChipFirst": "Selectează un jeton",
-      "spinning": "Se învârte..."
+      "spinning": "Se învârte...",
+      "deleteYourself": "Nu te poți șterge singur, prostuțo"
     }
   }
 }

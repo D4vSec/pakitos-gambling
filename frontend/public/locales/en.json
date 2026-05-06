@@ -10,7 +10,10 @@
       "goLogin": "Go to login",
       "info": "Info",
       "edit": "Edit",
-      "delete": "Delete"
+      "delete": "Delete",
+      "accept": "Accept",
+      "cancel": "Cancel",
+      "close": "Close"
     },
 
     "badges": {
@@ -21,6 +24,11 @@
       "teachers": "TEACHERS COLAB",
       "user": "User",
       "admin": "Admin"
+    },
+
+    "tooltip": {
+      "copyToClipboard": "Copy to clipboard",
+      "viewDetails": "View details"
     },
 
     "tables": {
@@ -67,6 +75,7 @@
 
     "userDetails": {
       "detailsCard": {
+        "title": "User Details",
         "username": "Username",
         "email": "Email",
         "role": "Role",
@@ -458,6 +467,14 @@
         "accept": "Exit Pakito's :(",
         "cancel": "Keep Gambing :)",
         "title": "Are you sure you want to exit?"
+      },
+      "logDetail": {
+        "jsonDetail": "JSON Details"
+      },
+      "deleteUser": {
+        "accept": "Sure, 1 gambler less",
+        "cancel": "No, I regret my decision",
+        "title": "Sure wanna delete user?"
       }
     },
     "success": {
@@ -472,7 +489,8 @@
       "cantDouble": "You don't have the currency to double",
       "playFirstToRepeat": "Play 1 time to repeat the bet",
       "selectChipFirst": "Select a chip first to place it",
-      "spinning": "Spinning..."
+      "spinning": "Spinning...",
+      "deleteYourself": "You can't delete yourself, dummy"
     }
   }
 }

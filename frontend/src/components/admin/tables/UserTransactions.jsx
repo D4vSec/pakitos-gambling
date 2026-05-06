@@ -3,15 +3,9 @@ import Table from "./Table"
 import { useParams } from "react-router-dom"
 import { useAdmin } from "@/providers/AdminProvider"
 import { useLocale } from "@/providers/LocaleProvider"
-
-import dayjs from "dayjs"
-import utc from "dayjs/plugin/utc"
-import timezone from "dayjs/plugin/timezone"
 import BitcoinSVG from "@/components/svg/pictures/BitcoinSVG"
-
-dayjs.extend(utc)
-dayjs.extend(timezone)
-dayjs().tz("Europe/Madrid").format("DD/MM/YYYY HH:mm:ss z")
+import { fullDateFormatter } from "@/utils/adminUtils"
+import TransactionBadgeSelector from "../badges/TransactionBadgeSelector"
 
 const UserTransactions = () => {
   const { getTransactionsById } = useAdmin()
@@ -42,6 +36,7 @@ const UserTransactions = () => {
     {
       accessorKey: "type",
       header: t("adminPanel.userDetails.transactions.table.type"),
+      cell: (info) => <TransactionBadgeSelector type={info.getValue()} />,
     },
     {
       accessorKey: "amount",
@@ -56,7 +51,7 @@ const UserTransactions = () => {
     {
       accessorKey: "created_at",
       header: t("adminPanel.userDetails.transactions.table.date"),
-      cell: (info) => dayjs(info.getValue()).format("DD/MM/YYYY HH:mm:ss Z"),
+      cell: (info) => fullDateFormatter(info.getValue()),
     },
   ]
 
