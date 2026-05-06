@@ -16,7 +16,7 @@ const FeatureCard = ({ title, description, icon, className = "" }) => {
       {/* SVG fondo */}
       <div
         className="
-          absolute opacity-30
+          absolute opacity-45
           scale-750
           top-16 left-[90%]
           rotate-12
@@ -29,9 +29,9 @@ const FeatureCard = ({ title, description, icon, className = "" }) => {
       </div>
 
       {/* contenido */}
-      <div className="relative z-10 flex flex-col items-center text-center">
+      <div className="relative z-10 flex flex-col ">
         <h3 className="text-xl font-bold mb-2">{title}</h3>
-        <p className="text-muted-foreground text-sm max-w-[70%]">
+        <p className="text-muted-foreground text-sm max-w-[75%]">
           {description}
         </p>
       </div>

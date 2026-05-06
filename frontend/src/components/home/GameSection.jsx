@@ -2,15 +2,17 @@ import React from "react"
 
 const GameSection = ({ title, icon, children }) => {
   return (
-    <section className="max-w-6xl mx-auto px-4 md:px-8 lg:px-16 mt-12">
-      <div className="mb-6 border-b-2 pb-3 text-primary">
-        <h2 className="flex items-center gap-3 text-2xl md:text-3xl font-bold text-secondary">
-          <div className="bg-primary rounded-xl p-1.5">{icon}</div>
+    <section className="w-full">
+      <div className="mb-4 md:mb-6 border-b pb-2 md:pb-3 text-primary">
+        <h2 className="flex items-center gap-2 md:gap-3 text-lg sm:text-xl md:text-2xl font-bold text-secondary">
+          <div className="bg-primary rounded-lg p-1 md:p-1.5 scale-90 md:scale-100">
+            {icon}
+          </div>
           {title}
         </h2>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
         {children}
       </div>
     </section>

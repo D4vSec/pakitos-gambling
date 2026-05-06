@@ -8,7 +8,7 @@ const GameCard = ({ title, description, image, route, badges = [] }) => {
   const navigate = useNavigate()
 
   return (
-    <div className="card bg-base-100 max-w-84 shadow-sm overflow-hidden group">
+    <div className="card bg-base-100  shadow-sm overflow-hidden group hover:scale-[103%] duration-300 transition-transform">
       <figure className="relative h-52">
         <img
           src={image}

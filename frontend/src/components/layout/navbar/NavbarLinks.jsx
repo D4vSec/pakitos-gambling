@@ -18,7 +18,7 @@ const NavbarLinks = ({ className = "" }) => {
       key: "allGames",
       label: "navbar.allGames",
       Icon: CardsSVG,
-      link: "/",
+      link: "/home",
     },
     {
       key: "favourites",
