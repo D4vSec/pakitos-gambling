@@ -1,6 +1,6 @@
-import HomeSVG from "@/components/svg/HomeSVG"
-import CardsSVG from "@/components/svg/CardsSVG"
-import StarSVG from "@/components/svg/StarSVG"
+import HomeSVG from "@/components/svg/pictures/HomeSVG"
+import CardsSVG from "@/components/svg/pictures/CardsSVG"
+import StarSVG from "@/components/svg/pictures/StarSVG"
 import { useLocale } from "@/providers/LocaleProvider"
 import { useNavigate } from "react-router-dom"
 

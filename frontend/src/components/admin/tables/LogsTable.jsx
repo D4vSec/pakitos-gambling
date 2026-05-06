@@ -2,14 +2,8 @@ import React, { useEffect, useState } from "react"
 import { useAdmin } from "@/providers/AdminProvider"
 import { useLocale } from "@/providers/LocaleProvider"
 import Table from "./Table"
-
-import dayjs from "dayjs"
-import utc from "dayjs/plugin/utc"
-import timezone from "dayjs/plugin/timezone"
-
-dayjs.extend(utc)
-dayjs.extend(timezone)
-dayjs().tz("Europe/Madrid").format("DD/MM/YYYY HH:mm:ss z")
+import { fullDateFormatter, buildUserAgent } from "@/utils/adminUtils"
+import TruncateId from "../TruncateId"
 
 const LogsTable = () => {
   const { getLogs } = useAdmin()
@@ -31,7 +25,11 @@ const LogsTable = () => {
 
   const columns = [
     { accessorKey: "action", header: t("adminPanel.logs.table.action") },
-    { accessorKey: "user_id", header: t("adminPanel.logs.table.userID") },
+    {
+      accessorKey: "user_id",
+      header: t("adminPanel.logs.table.userID"),
+      cell: (info) => <TruncateId id={info.getValue()} />,
+    },
     {
       accessorKey: "details",
       header: t("adminPanel.logs.table.details"),
@@ -40,14 +38,14 @@ const LogsTable = () => {
     {
       accessorKey: "created_at",
       header: t("adminPanel.logs.table.date"),
-      cell: (info) => dayjs(info.getValue()).format("DD/MM/YYYY HH:mm:ss Z"),
+      cell: (info) => fullDateFormatter(info.getValue()),
     },
     ,
     { accessorKey: "ip_address", header: t("adminPanel.logs.table.ipAddress") },
     {
       accessorKey: "user_agent",
       header: t("adminPanel.logs.table.userAgent"),
-      cell: (info) => JSON.stringify(JSON.parse(info.getValue())),
+      cell: (info) => buildUserAgent(info.getValue()),
     },
   ]
 

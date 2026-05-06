@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react"
 import Button from "@/components/buttons/Button"
 import { useSession } from "@/providers/SessionProvider"
-import BitcoinSVG from "@/components/svg/BitcoinSVG"
+import BitcoinSVG from "@/components/svg/pictures/BitcoinSVG"
 
 const ANIMATION_DURATION = 800
 

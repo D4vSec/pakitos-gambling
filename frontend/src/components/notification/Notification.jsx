@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react"
-import InfoSVG from "../svg/InfoSVG"
-import CheckSVG from "../svg/CheckSVG"
-import AlertTriangleSVG from "../svg/AlertTriangleSVG"
-import CircleXSVG from "../svg/CircleXSVG"
+import InfoSVG from "../svg/actions/InfoSVG"
+import CheckSVG from "../svg/actions/CheckSVG"
+import AlertTriangleSVG from "../svg/actions/AlertTriangleSVG"
+import CircleXSVG from "../svg/actions/CircleXSVG"
 
 const Notification = ({ notification }) => {
   const [show, setShow] = useState(false)

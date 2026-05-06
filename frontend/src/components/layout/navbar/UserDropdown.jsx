@@ -1,6 +1,6 @@
 import React from "react"
 import { Link } from "react-router-dom"
-import UserSVG from "@/components/svg/UserSVG"
+import UserSVG from "@/components/svg/users/UserSVG"
 import { useLocale } from "@/providers/LocaleProvider"
 import { useSession } from "@/providers/SessionProvider"
 import { useNotification } from "@/providers/NotificationProvider"

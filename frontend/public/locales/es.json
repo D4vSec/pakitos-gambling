@@ -13,6 +13,16 @@
       "delete": "Eliminar"
     },
 
+    "badges": {
+      "creatorsFav": "FAVORITO CREADORES",
+      "hot": "CALIENTE",
+      "new": "NUEVO",
+      "popular": "POPULAR",
+      "teachers": "COLAB PROFESORES",
+      "user": "Usuario",
+      "admin": "Administrador"
+    },
+
     "tables": {
       "noData": "No se encontraron datos",
       "searchBar": {
@@ -437,7 +447,8 @@
       "loading": "Cargando...",
       "registered": "Tu cuenta ha sido creada, debes ir a la página de inicio de sesión",
       "userData": "Datos de usuario recibidos correctamente",
-      "winningNumber": "Número ganador"
+      "winningNumber": "Número ganador",
+      "uuidCopiedToClipboard": "UUID copiado al portapapeles"
     },
 
     "modal": {

@@ -1,8 +1,8 @@
 import { useState } from "react"
 import { useFormContext } from "react-hook-form"
 import { useLocale } from "@/providers/LocaleProvider"
-import EyeSVG from "@/components/svg/EyeSVG"
-import EyeOffSVG from "@/components/svg/EyeOffSVG"
+import EyeSVG from "@/components/svg/actions/EyeSVG"
+import EyeOffSVG from "@/components/svg/actions/EyeOffSVG"
 
 const FormField = ({
   name,
@@ -75,8 +75,7 @@ const FormField = ({
               type="button"
               className="absolute right-4 top-1/2 -translate-y-1/2 z-10 text-base-content/50 hover:text-base-content transition-colors"
               onClick={() => setShowPassword(!showPassword)}
-              tabIndex="-1"
-            >
+              tabIndex="-1">
               {showPassword ? <EyeOffSVG /> : <EyeSVG />}
             </button>
           )}
@@ -86,7 +85,12 @@ const FormField = ({
       {/* CHECKBOX SIMPLE */}
       {type === "checkbox" && options.length === 0 && (
         <label className="label cursor-pointer gap-3">
-          <input type="checkbox" className="checkbox checkbox-lg" {...register(name)} {...rest} />
+          <input
+            type="checkbox"
+            className="checkbox checkbox-lg"
+            {...register(name)}
+            {...rest}
+          />
           <span className="label-text">{label}</span>
         </label>
       )}
@@ -100,8 +104,15 @@ const FormField = ({
 
           <div role="group" aria-labelledby={`${name}-label`}>
             {options.map((opt) => (
-              <label key={opt.value} className="label cursor-pointer gap-3 justify-start">
-                <input type="checkbox" value={opt.value} className="checkbox" {...register(name)} />
+              <label
+                key={opt.value}
+                className="label cursor-pointer gap-3 justify-start">
+                <input
+                  type="checkbox"
+                  value={opt.value}
+                  className="checkbox"
+                  {...register(name)}
+                />
                 <span className="label-text">{opt.label}</span>
               </label>
             ))}
@@ -118,8 +129,15 @@ const FormField = ({
 
           <div role="group" aria-labelledby={`${name}-label`}>
             {options.map((opt) => (
-              <label key={opt.value} className="label cursor-pointer gap-3 justify-start">
-                <input type="radio" value={opt.value} className="radio" {...register(name)} />
+              <label
+                key={opt.value}
+                className="label cursor-pointer gap-3 justify-start">
+                <input
+                  type="radio"
+                  value={opt.value}
+                  className="radio"
+                  {...register(name)}
+                />
                 <span className="label-text">{opt.label}</span>
               </label>
             ))}

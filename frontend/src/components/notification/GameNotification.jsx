@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import BitcoinSVG from "../svg/BitcoinSVG"
+import BitcoinSVG from "../svg/pictures/BitcoinSVG"
 
 const GameNotification = ({ notification }) => {
   const [phase, setPhase] = useState("enter")

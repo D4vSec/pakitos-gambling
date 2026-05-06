@@ -8,26 +8,29 @@ const HeroContent = () => {
   const navigate = useNavigate()
 
   return (
-    <div className="relative py-20 md:py-32 px-6 md:px-12">
+    <div className="px-6 md:px-12 w-full">
       <div className="max-w-3xl">
-        <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+        <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight text-white">
           {t("pages.landingPage.hero.title")}
         </h1>
-        <p className="text-lg md:text-xl text-muted-foreground mb-8 leading-relaxed">
+
+        <p className="text-lg md:text-xl text-white/80 mb-8 leading-relaxed">
           {t("pages.landingPage.hero.text")}
         </p>
-        <div className="flex flex-col sm:flex-row gap-4">
+
+        <div className="flex flex-col md:flex-row gap-4">
           <Button
             variant="primary"
             size="lg"
-            className={"sm:btn-xl"}
+            className="md:btn-xl"
             onClick={() => navigate("/register")}>
             {t("pages.landingPage.hero.join")}
           </Button>
+
           <Button
             variant="accent"
             size="lg"
-            className={"sm:btn-xl"}
+            className="md:btn-xl"
             onClick={() => navigate("/home")}>
             {t("pages.landingPage.hero.seeGames")}
           </Button>

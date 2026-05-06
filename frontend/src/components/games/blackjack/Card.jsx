@@ -3,7 +3,7 @@ import Hearts from "./suits/Hearts"
 import Diamonds from "./suits/Diamonds"
 import Clubs from "./suits/Clubs"
 import Spades from "./suits/Spades"
-import CherrySVG from "@/components/svg/CherrySVG"
+import CherrySVG from "@/components/svg/pictures/CherrySVG"
 
 const Card = ({ card, forceHidden = false, isActive = false, flipped }) => {
   const { rank, suit } = card

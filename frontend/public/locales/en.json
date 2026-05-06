@@ -13,6 +13,16 @@
       "delete": "Delete"
     },
 
+    "badges": {
+      "creatorsFav": "CREATORS FAV",
+      "hot": "HOT",
+      "new": "NEW",
+      "popular": "POPULAR",
+      "teachers": "TEACHERS COLAB",
+      "user": "User",
+      "admin": "Admin"
+    },
+
     "tables": {
       "noData": "No data found",
       "searchBar": {
@@ -435,7 +445,8 @@
       "loading": "Loading...",
       "registered": "Your account is created, you need to go to the login page",
       "userData": "User data received correctly",
-      "winningNumber": "Winning number"
+      "winningNumber": "Winning number",
+      "uuidCopiedToClipboard": "UUID copied to clipboard"
     },
     "modal": {
       "default": {

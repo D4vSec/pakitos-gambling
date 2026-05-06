@@ -3,7 +3,8 @@ import { useAdmin } from "@/providers/AdminProvider"
 import { useLocale } from "@/providers/LocaleProvider"
 import Table from "./Table"
 import UserActions from "../UserActions"
-import BitcoinSVG from "@/components/svg/BitcoinSVG"
+import BitcoinSVG from "@/components/svg/pictures/BitcoinSVG"
+import BadgesSelector from "../BadgesSelector"
 
 const UsersTable = () => {
   const { getAllUsers, users } = useAdmin()
@@ -29,7 +30,11 @@ const UsersTable = () => {
       header: t("adminPanel.users.table.username"),
     },
     { accessorKey: "email", header: t("adminPanel.users.table.email") },
-    { accessorKey: "role", header: t("adminPanel.users.table.role") },
+    {
+      accessorKey: "role",
+      header: t("adminPanel.users.table.role"),
+      cell: (info) => <BadgesSelector role={info.getValue()} />,
+    },
     {
       accessorKey: "balance",
       header: t("adminPanel.users.table.balance"),

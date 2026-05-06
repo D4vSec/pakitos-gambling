@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import Title from "./Title"
+import Title from "./layout/fonts/Title"
 import GradientBg from "./layout/GradientBg"
 import Button from "./buttons/Button"
 import { useLocale } from "../providers/LocaleProvider"

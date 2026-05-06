@@ -6,7 +6,7 @@ import FormField from "@/components/forms/FormField"
 import { useLocale } from "@/providers/LocaleProvider"
 import { useSession } from "@/providers/SessionProvider"
 import Button from "@/components/buttons/Button"
-import Title from "@/components/Title"
+import Title from "@/components/layout/fonts/Title"
 import GradientBg from "@/components/layout/GradientBg"
 import { Navigate } from "react-router-dom"
 

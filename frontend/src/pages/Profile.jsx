@@ -4,12 +4,12 @@ import FormField from "@/components/forms/FormField"
 import { useSession } from "@/providers/SessionProvider"
 import { useNotification } from "@/providers/NotificationProvider"
 import { useLocale } from "@/providers/LocaleProvider"
-import Title from "@/components/Title"
+import Title from "@/components/layout/fonts/Title"
 import Button from "@/components/buttons/Button"
 import GradientBg from "@/components/layout/GradientBg"
-import UserSVG from "@/components/svg/UserSVG"
-import ShieldSVG from "@/components/svg/ShieldSVG"
-import AlertTriangleSVG from "@/components/svg/AlertTriangleSVG"
+import UserSVG from "@/components/svg/users/UserSVG"
+import ShieldSVG from "@/components/svg/pictures/ShieldSVG"
+import AlertTriangleSVG from "@/components/svg/actions/AlertTriangleSVG"
 
 const Profile = () => {
   const { user, updateProfile } = useSession()
