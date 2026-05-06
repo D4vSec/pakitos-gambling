@@ -47,10 +47,15 @@ const getAuditLogs = async (page = 1, limit = 20) => {
 	return await Audit.getAuditLogs(page, limit)
 }
 
+const countAuditLogs = async () => {
+	return await Audit.countAuditLogs()
+}
+
 export default {
 	createAudit,
 	getAuditLogs,
 	getClientIp,
 	getUserAgentRaw,
 	getUserAgent,
+	countAuditLogs
 }
