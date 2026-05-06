@@ -1,15 +1,21 @@
-> ⚡ Modo pro, para que Yeray no se queje
-
-<!-- Gepeteada lo se pero me la pela -->
-
 ### Anotaciones
 
-<!-- 29/04/26 -->
-
-- **Registros en logs sin userID**
-  - Me he percatado que hay logs sin userID, supongo que es porque son registros que pertenecen a un usuario eliminado
-
 ### 🐞 Bugs
+
+<!-- 06/05/26 -->
+
+- **No inicia el la partida del blackjack**
+  - No inicia la partida, muy probablemente sea un import / export, desconozco si fallará algo más ya que no se ha podido probar
+
+```txt
+backend_dev      | ReferenceError: hideDealerCard is not defined
+backend_dev      |     at startGame (file:///app/src/controllers/blackjack.controller.js:129:26)
+backend_dev      |     at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+backend_dev      | [11:36:03.283] ERROR (62): Error starting game:
+```
+
+- **Broken Object Level Authorization**
+  - The Blackjack session store trusts gameId alone. None of the mutation endpoints (hit, stand, double, split, delete) verify that the session belongs to req.user.id, and payouts are applied to the current caller's balance.
 
 - **Continuar partida (get/:gameId)**
   - La segunda carta del dealer se devuelve con el valor verdadero, `suit` ni `value` estan como `"hidden"`.
@@ -37,15 +43,13 @@
   - ✅ Debería devolver lo apostado
     - Ejemplo: apuestas 10 → empate → recibes 10
 
-- **Broken Object Level Authorization**
-  - The Blackjack session store trusts gameId alone. None of the mutation endpoints (hit, stand, double, split, delete) verify that the session belongs to req.user.id, and payouts are applied to the current caller's balance.
-
 ## CHECKLIST
 
+- [ ] Refactor del BJ
+- [ ] Mirar registros logs sin userID
+- [ ] Poder iniciar partida
 - [x] Continuar partida (get/:gameId)
 - [x] Lógica del dealer
 - [x] Split de manos
 - [x] Empates (push)
 - [x] Broken Object Level Authorization
-- [ ] Refactor del BJ
-- [ ] Mirar registros logs sin userID
