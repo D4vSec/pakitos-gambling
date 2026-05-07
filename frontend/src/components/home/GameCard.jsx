@@ -1,37 +1,45 @@
 import React from "react"
-import { useNavigate } from "react-router-dom"
+import Button from "@/components/buttons/Button"
 import { useLocale } from "@/providers/LocaleProvider"
-import Button from "../buttons/Button"
+import { useNavigate } from "react-router-dom"
 
-const GameCard = ({ title, description, image, route, badges = [] }) => {
+const GameCard = ({ game }) => {
   const { t } = useLocale()
   const navigate = useNavigate()
 
   return (
-    <div className="card bg-base-100  shadow-sm overflow-hidden group hover:scale-[103%] duration-300 transition-transform">
-      <figure className="relative h-52">
-        <img
-          src={image}
-          alt={title}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-        />
+    <div
+      onClick={() => navigate(game.route)}
+      className="group aspect-7/5 rounded-xl relative overflow-hidden border border-secondary/20 hover:scale-[102%] transition-transform duration-300"
+    >
+      <img
+        src={game.img}
+        alt={game.game}
+        className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+      />
 
-        <div className="absolute top-2.5 left-2.5 flex flex-col gap-2 z-10">
-          {badges.map((b, i) => (
-            <span key={i}>{b}</span>
-          ))}
-        </div>
+      <div className="absolute inset-0 bg-black/10 z-0" />
 
-        <div
-          className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center"
-          onClick={() => navigate(route)}>
-          <Button variant="primary">{t("pages.home.cards.playNow")}</Button>
-        </div>
-      </figure>
+      <div className="absolute inset-x-0 bottom-0 h-32 bg-linear-to-t from-black/90 via-black/50 to-transparent z-10" />
 
-      <div className="card-body transition duration-300 group-hover:opacity-70">
-        <h2 className="card-title">{t(title)}</h2>
-        <p>{t(description)}</p>
+      <div className="absolute top-4 left-2 flex flex-col gap-1 z-30">
+        {game.badges.map((badge, i) => (
+          <span key={i} className="scale-[0.9]">
+            {badge}
+          </span>
+        ))}
+      </div>
+
+      <div className="absolute inset-0 bg-black/60  flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
+        <Button>{t("pages.home.cards.playNow")}</Button>
+      </div>
+
+      <div className="absolute bottom-4 left-4 z-30">
+        <p className="text-lg font-semibold text-white">
+          {t(`pages.home.cards.${game.game}.title`)}
+        </p>
+
+        <p className="text-sm text-white/70">{t(`pages.home.cards.${game.game}.description`)}</p>
       </div>
     </div>
   )

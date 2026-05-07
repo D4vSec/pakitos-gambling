@@ -259,6 +259,15 @@
 
   "pages": {
     "home": {
+      "exploreGames": {
+        "title": "Explora juegos",
+        "description": "Una selección cuidada de juegos para cada estado de ánimo y estilo"
+      },
+      "randomGame": {
+        "title": "¿No sabes a qué jugar?",
+        "description": "Déjanos elegir un juego aleatorio para ti",
+        "action": "Sorpréndeme"
+      },
       "cards": {
         "blackjack": {
           "title": "Blackjack",

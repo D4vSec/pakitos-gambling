@@ -259,6 +259,15 @@
 
   "pages": {
     "home": {
+      "exploreGames": {
+        "title": "Explorează jocuri",
+        "description": "O selecție curată de jocuri pentru fiecare stare de spirit și stil"
+      },
+      "randomGame": {
+        "title": "Nu știi ce să joci?",
+        "description": "Lasă-ne să alegem un joc aleatoriu pentru tine",
+        "action": "Surprinde-mă"
+      },
       "cards": {
         "blackjack": {
           "title": "Blackjack",
