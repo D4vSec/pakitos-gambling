@@ -108,8 +108,9 @@ export const startGame = async (req, res) => {
             } else {
                 game.winners.push(winners.player)
             }
-            game.payout = blackJack.getPayout(game)
-            if (game.payout > 0) await User.updateUserBalance(id, game.payout, { type: "WIN" })
+            let result = blackJack.getPayout(game, FIRST_HAND)
+            game.payout = result ? result.payout : 0
+            if (game.payout > 0) await User.updateUserBalance(id, game.payout, { type: result.type })
         }
 
         //If the dealer hits a blackJack
@@ -122,7 +123,7 @@ export const startGame = async (req, res) => {
         games.set(gameId, game)
 
         // Create a copy for the response to avoid modifying the stored game state and hide the dealer card and the deck from the response
-        const responseGame = hideDealerCard(dealerHand, game)
+        const responseGame = blackJack.hideDealerCard(dealerHand, game)
 
         res.status(200).json(Object.fromEntries(Object.entries(responseGame).filter(([key]) => key !== "deck")))
     } catch (error) {
@@ -175,8 +176,13 @@ export const hit = async (req, res) => {
                         game.winners.push(winner2)
                     }
 
-                    game.payout = blackJack.getPayout(game)
-                    if (game.payout > 0) await User.updateUserBalance(id, game.payout, { type: "WIN" })
+                    let results = blackJack.getPayout(game, FIRST_HAND)
+                    let results2 = blackJack.getPayout(game, SECOND_HAND)
+
+                    game.payout = (results ? results.payout : 0) + (results2 ? results2.payout : 0)
+
+                    if (results.payout > 0) await User.updateUserBalance(id, results.payout, { type: results.type })
+                    if (results2.payout > 0) await User.updateUserBalance(id, results2.payout, { type: results2.type })
                 }
             } else {
                 game.player[FIRST_HAND].hand = blackJack.hit(game.deck, game.player[FIRST_HAND].hand)
@@ -185,9 +191,7 @@ export const hit = async (req, res) => {
 
                 if (game.player[FIRST_HAND].bust) game.winners.push(winners.dealer)
             }
-        }
-
-        if (!game.split) {
+        } else {
             game.player[FIRST_HAND].hand = blackJack.hit(game.deck, game.player[FIRST_HAND].hand)
 
             game.player[FIRST_HAND] = blackJack.setHand(game.player[FIRST_HAND])
@@ -208,15 +212,15 @@ export const hit = async (req, res) => {
 
             const winner = blackJack.determinateWinner(game.player[FIRST_HAND].value, game.dealer[DEALER_HAND].value)
             game.winners.push(winner)
-
-            game.payout = blackJack.getPayout(game)
-            if (game.payout > 0) await User.updateUserBalance(id, game.payout, { type: "WIN" })
+            let result = blackJack.getPayout(game, FIRST_HAND)
+            game.payout = result ? result.payout : 0
+            if (game.payout > 0) await User.updateUserBalance(id, game.payout, { type: result.type })
         }
 
         games.set(gameId, game)
 
         // Create a copy for the response
-        const responseGame = hideDealerCard(dealerHand, game)
+        const responseGame = blackJack.hideDealerCard(dealerHand, game)
 
         res.status(200).json(Object.fromEntries(Object.entries(responseGame).filter(([key]) => key !== "deck")))
     } catch (error) {
@@ -253,8 +257,11 @@ export const stand = async (req, res) => {
                 game.winners.push(winner2)
                 game.status = GAME_STATUSES.finished
 
-                game.payout = blackJack.getPayout(game)
-                if (game.payout > 0) await User.updateUserBalance(id, game.payout, { type: "WIN" })
+                const results = blackJack.getPayout(game, FIRST_HAND)
+                const results2 = blackJack.getPayout(game, SECOND_HAND)
+                game.payout = (results ? results.payout : 0) + (results2 ? results2.payout : 0)
+                if (results.payout > 0) await User.updateUserBalance(id, results.payout, { type: results.type })
+                if (results2.payout > 0) await User.updateUserBalance(id, results2.payout, { type: results2.type })
             } else {
                 //If the player decides to stand with the first hand, we just mark it as resolved
                 //and wait for the player to play with the second hand
@@ -271,13 +278,14 @@ export const stand = async (req, res) => {
             game.winners.push(winner)
             game.status = GAME_STATUSES.finished
 
-            game.payout = blackJack.getPayout(game)
-            if (game.payout > 0) await User.updateUserBalance(id, game.payout, { type: "WIN" })
+            const result = blackJack.getPayout(game, FIRST_HAND)
+            game.payout = result ? result.payout : 0
+            if (game.payout > 0) await User.updateUserBalance(id, game.payout, { type: result.type })
         }
 
         games.set(gameId, game)
 
-        const responseGame = hideDealerCard(dealerHand, game)
+        const responseGame = blackJack.hideDealerCard(dealerHand, game)
 
         res.status(200).json(Object.fromEntries(Object.entries(responseGame).filter(([key]) => key !== "deck")))
     } catch (error) {
@@ -323,8 +331,9 @@ export const double = async (req, res) => {
                 game.winners.push(winner)
                 game.status = GAME_STATUSES.finished
 
-                game.payout = blackJack.getPayout(game)
-                if (game.payout > 0) await User.updateUserBalance(id, game.payout, { type: "WIN" })
+                let result = blackJack.getPayout(game, FIRST_HAND)
+                game.payout = result ? result.payout : 0
+                if (game.payout > 0) await User.updateUserBalance(id, game.payout, { type: result.type })
             } else {
                 game.status = GAME_STATUSES.finished
                 game.winners.push(winners.dealer)
@@ -348,8 +357,11 @@ export const double = async (req, res) => {
                     game.winners.push(winner)
                     game.status = GAME_STATUSES.finished
 
-                    game.payout = blackJack.getPayout(game)
-                    if (game.payout > 0) await User.updateUserBalance(id, game.payout, { type: "WIN" })
+                    const results = blackJack.getPayout(game, FIRST_HAND)
+                    const results2 = blackJack.getPayout(game, SECOND_HAND)
+                    game.payout = (results ? results.payout : 0) + (results2 ? results2.payout : 0)
+                    if (results.payout > 0) await User.updateUserBalance(id, results.payout, { type: results.type })
+                    if (results2.payout > 0) await User.updateUserBalance(id, results2.payout, { type: results2.type })
                 } else {
                     game.status = GAME_STATUSES.finished
                     game.winners.push(winners.dealer)
@@ -452,13 +464,18 @@ export const split = async (req, res) => {
                 game.winners.push(winner)
                 game.winners.push(winner2)
 
-                game.payout = blackJack.getPayout(game)
-                if (game.payout > 0) await User.updateUserBalance(id, game.payout, { type: "WIN" })
+                const results = blackJack.getPayout(game, FIRST_HAND)
+                const results2 = blackJack.getPayout(game, SECOND_HAND)
+
+                game.payout = (results ? results.payout : 0) + (results2 ? results2.payout : 0)
+
+                if (results.payout > 0) await User.updateUserBalance(id, results.payout, { type: results.type })
+                if (results2.payout > 0) await User.updateUserBalance(id, results2.payout, { type: results2.type })
             }
 
             games.set(gameId, game)
 
-            const responseGame = hideDealerCard(dealerHand, game)
+            const responseGame = blackJack.hideDealerCard(dealerHand, game)
 
             res.status(200).json(Object.fromEntries(Object.entries(responseGame).filter(([key]) => key !== "deck")))
         } else {
@@ -508,7 +525,7 @@ export const getGame = (req, res) => {
 
         if (!games.has(gameId)) return res.status(404).json({ code: "GAME_NOT_FOUND" })
 
-        const responseGame = hideDealerCard(dealerHand, game)
+        const responseGame = blackJack.hideDealerCard(dealerHand, game)
 
         res.status(200).json(Object.fromEntries(Object.entries(responseGame).filter(([key]) => key !== "deck")))
     } catch (error) {

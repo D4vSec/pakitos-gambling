@@ -14,6 +14,8 @@ backend_dev      |     at process.processTicksAndRejections (node:internal/proce
 backend_dev      | [11:36:03.283] ERROR (62): Error starting game:
 ```
 
+SOLUCIONADO: El metodo se llamaba mal
+
 - **Broken Object Level Authorization**
   - The Blackjack session store trusts gameId alone. None of the mutation endpoints (hit, stand, double, split, delete) verify that the session belongs to req.user.id, and payouts are applied to the current caller's balance.
 
@@ -45,9 +47,9 @@ backend_dev      | [11:36:03.283] ERROR (62): Error starting game:
 
 ## CHECKLIST
 
-- [ ] Refactor del BJ
+- [X] Refactor del BJ
 - [ ] Mirar registros logs sin userID
-- [ ] Poder iniciar partida
+- [X] Poder iniciar partida
 - [x] Continuar partida (get/:gameId)
 - [x] Lógica del dealer
 - [x] Split de manos

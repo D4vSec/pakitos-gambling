@@ -130,28 +130,10 @@ const createBlackJack = () => {
         return responseHand
     }
 
-    const getPayout = (game) => {
-        const FIRST_HAND = 0
-        const SECOND_HAND = 1
-
-        if (game.split) {
-            let payout = 0
-            //Check the First hand
-            if (game.playerHand[FIRST_HAND].resolved && game.playerHand[FIRST_HAND].doubled && game.status === "finished" && game.determinateWinners.includes("player")) payout += game.playerHand[FIRST_HAND].bet * 2 + game.playerHand[FIRST_HAND].bet
-            if (game.playerHand[FIRST_HAND].resolved && !game.playerHand[FIRST_HAND].doubled && game.status === "finished" && game.determinateWinners.includes("player")) payout += game.playerHand[FIRST_HAND].bet * 2
-            //Check the second hand
-            if (game.playerHand[SECOND_HAND].resolved && game.playerHand[SECOND_HAND].doubled && game.status === "finished" && game.determinateWinners.includes("player")) payout += game.playerHand[SECOND_HAND].bet * 2 + game.playerHand[SECOND_HAND].bet
-            if (game.playerHand[SECOND_HAND].resolved && !game.playerHand[SECOND_HAND].doubled && game.status === "finished" && game.determinateWinners.includes("player")) payout += game.playerHand[SECOND_HAND].bet * 2
-            //Check the ties
-            if (game.winners[0] === "tie") payout = game.playerHand[FIRST_HAND].bet
-            if (game.winners[1] === "tie") payout += game.playerHand[SECOND_HAND].bet
-
-            return payout
-        } else {
-            if (game.playerHand[FIRST_HAND].resolved && game.playerHand[FIRST_HAND].doubled && game.status === "finished" && game.determinateWinners.includes("player")) return game.playerHand[FIRST_HAND].bet * 2 + game.playerHand[FIRST_HAND].bet
-            if (game.playerHand[FIRST_HAND].resolved && !game.playerHand[FIRST_HAND].doubled && game.status === "finished" && game.determinateWinners.includes("player")) return game.playerHand[FIRST_HAND].bet * 2
-            if (game.winners[0] === "tie") return game.playerHand[FIRST_HAND].bet
-        }
+    const getPayout = (game, handNumber) => {
+            if (game.playerHand[handNumber].resolved && game.playerHand[handNumber].doubled && game.status === "finished" && game.determinateWinners.includes("player")) return ({payout: game.playerHand[handNumber].bet * 2 + game.playerHand[handNumber].bet, type: "WIN" })
+            if (game.playerHand[handNumber].resolved && !game.playerHand[handNumber].doubled && game.status === "finished" && game.determinateWinners.includes("player")) return ({payout: game.playerHand[handNumber].bet * 2, type: "WIN" })
+            if (game.winners[0] === "tie") return ({payout: game.playerHand[handNumber].bet, type: "REFUND" })
     }
 
     return {
