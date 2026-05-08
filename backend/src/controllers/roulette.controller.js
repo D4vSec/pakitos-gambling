@@ -123,7 +123,7 @@ const spinRoulette = async (req, res) => {
             },
         })
     } catch (error) {
-        logger.error("Error spinning roulette:", error)
+        logger.error({ message: "Error spinning roulette", error })
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
 }

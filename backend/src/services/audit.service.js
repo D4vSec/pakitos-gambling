@@ -39,7 +39,7 @@ const createAudit = async (auditData) => {
 
 		await Audit.logAction(user_id, action, details, ip_address, user_agent)
 	} catch (err) {
-		logger.error("Audit log error:", err)
+		logger.error({ message: "Error creating audit log:", error: err })
 	}
 }
 

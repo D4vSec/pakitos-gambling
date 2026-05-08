@@ -8,7 +8,7 @@ const getBets = async (req, res) => {
         const bets = await Bets.getBets()
         res.status(200).json(bets)
     } catch (error) {
-        logger.error("Error loading bets:", error)
+        logger.error({ message: "Error loading bets:", error })
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
 }
@@ -19,7 +19,7 @@ const getBetInfo = async (req, res) => {
         const betInfo = await Bets.getBetInfo(betId)
         res.status(200).json(betInfo)
     } catch (error) {
-        logger.error(`Error loading bet info from bet ${betId}:`, error)
+        logger.error({ message: `Error loading bet info for bet ${betId}:`, error })
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
 }
@@ -30,7 +30,7 @@ const deleteBet = async (req, res) => {
         await Bets.deleteBet(betId)
         res.status(200).json({ code: "SUCCESS" })
     } catch (error) {
-        logger.error(`Error deleting bet ${betId}:`, error)
+        logger.error({ message: `Error deleting bet ${betId}:`, error })
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
 }
@@ -42,7 +42,7 @@ const updateBet = async (req, res) => {
         await Bets.updateBet(betId, name, description, ends_at)
         res.status(200).json({ code: "SUCCESS" })
     } catch (error) {
-        logger.error(`Error updating bet ${betId}:`, error)
+        logger.error({ message: `Error updating bet ${betId}:`, error })
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
 }
@@ -88,7 +88,7 @@ const placeBet = async (req, res) => {
 
         res.status(201).json(userBet)
     } catch (error) {
-        logger.error(`Error placing bet on option ${betOptionId}:`, error)
+        logger.error({ message: `Error placing bet on option ${betOptionId}:`, error })
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
 }
