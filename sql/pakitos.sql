@@ -18,7 +18,6 @@ CREATE TYPE transaction_type AS ENUM (
     'WITHDRAWAL',
     'BET',
     'WIN',
-    'LOSE',
     'BONUS',
     'REFUND'
 );
@@ -105,6 +104,9 @@ CREATE INDEX idx_users_email ON users(email);
 CREATE INDEX idx_transactions_user_id ON transactions(user_id);
 CREATE INDEX idx_user_bets_user_id ON user_bets(user_id);
 CREATE INDEX idx_bets_options_bet_id ON bets_options(bet_id);
+CREATE INDEX idx_audit_logs_user_id ON audit_logs(user_id);
+CREATE INDEX idx_audit_logs_action ON audit_logs(action);
+CREATE INDEX idx_audit_logs_created_at ON audit_logs(created_at);
 
 CREATE OR REPLACE FUNCTION update_modified_column()
 RETURNS TRIGGER AS $$
