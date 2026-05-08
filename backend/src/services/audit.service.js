@@ -43,19 +43,15 @@ const createAudit = async (auditData) => {
 	}
 }
 
-const getAuditLogs = async (page = 1, limit = 20) => {
-	return await Audit.getAuditLogs(page, limit)
-}
+const countAuditLogs = async (filters = {}) => await Audit.countAuditLogs(filters)
 
-const countAuditLogs = async () => {
-	return await Audit.countAuditLogs()
-}
+const getAuditLogs = async (page = 1, limit = 20, filters = {}) => await Audit.getAuditLogs(page, limit, filters)
 
 export default {
 	createAudit,
-	getAuditLogs,
 	getClientIp,
 	getUserAgentRaw,
 	getUserAgent,
-	countAuditLogs
+	countAuditLogs,
+	getAuditLogs
 }

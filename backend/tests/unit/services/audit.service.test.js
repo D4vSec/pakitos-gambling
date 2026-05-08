@@ -60,4 +60,12 @@ describe('audit service', () => {
 
 		expect(Audit.logAction).toHaveBeenCalledWith(7, 'LOGIN', { source: 'test' }, '127.0.0.1', 'Vitest')
 	})
+
+	it('delegates audit log retrieval to the model', async () => {
+		Audit.getAuditLogs.mockResolvedValueOnce([{ id: 1 }])
+
+		await expect(auditService.getAuditLogs(2, 25, { action: 'LOGIN' })).resolves.toEqual([{ id: 1 }])
+
+		expect(Audit.getAuditLogs).toHaveBeenCalledWith(2, 25, { action: 'LOGIN' })
+	})
 })
