@@ -64,6 +64,14 @@ Importa el esquema inicial:
 bash sql.sh dev
 ```
 
+Crea un usuario de prueba sin pasar por el frontend ni por el endpoint:
+
+```bash
+./create_user.sh username email@example.com 'Password123!' [user|admin] [prod|dev]
+```
+
+Esto usa `docker compose run --rm` sobre el servicio del backend, así que levanta un contenedor temporal para ejecutar el script y lo elimina al terminar. No toca el contenedor del backend que esté corriendo.
+
 ### Ejecutar el backend sin Docker
 Si quieres ejecutar el backend de forma local sin Docker, debes asegurarte de estar utilizando Node.js 22. Recomendamos usar nvm para gestionar las versiones de Node. El proyecto incluye un archivo `.nvmrc` dentro de la carpeta `backend` que especifica la versión exacta de Node requerida para este proyecto.
 ```bash
