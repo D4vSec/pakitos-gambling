@@ -108,7 +108,7 @@ const createBlackJack = () => {
         if (responseGame.status !== "finished") {
             const dealer = responseGame.dealer[DEALER_HAND]
             dealer.hand[1] = { rank: "hidden", suit: "hidden" }
-            dealer.value = blackJack.calculateHandValue([dealer.hand[0]])
+            dealer.value = calculateHandValue([dealer.hand[0]])
         }
 
         return responseGame
@@ -117,7 +117,7 @@ const createBlackJack = () => {
     const setHand = (hand) => {
         const responseHand = structuredClone(hand)
 
-        responseHand.value = blackJack.calculateHandValue(hand.hand)
+        responseHand.value = calculateHandValue(hand.hand)
         responseHand.bust = responseHand.value > 21
         responseHand.blackjack = responseHand.value === 21
         if (responseHand.bust || responseHand.blackjack) {
@@ -131,9 +131,10 @@ const createBlackJack = () => {
     }
 
     const getPayout = (game, handNumber) => {
-            if (game.playerHand[handNumber].resolved && game.playerHand[handNumber].doubled && game.status === "finished" && game.determinateWinners.includes("player")) return ({payout: game.playerHand[handNumber].bet * 2 + game.playerHand[handNumber].bet, type: "WIN" })
-            if (game.playerHand[handNumber].resolved && !game.playerHand[handNumber].doubled && game.status === "finished" && game.determinateWinners.includes("player")) return ({payout: game.playerHand[handNumber].bet * 2, type: "WIN" })
-            if (game.winners[0] === "tie") return ({payout: game.playerHand[handNumber].bet, type: "REFUND" })
+
+        if (game.playerHand[handNumber].resolved && game.playerHand[handNumber].doubled && game.status === "finished" && game.determinateWinners.includes("player")) return { payout: game.playerHand[handNumber].bet * 2 + game.playerHand[handNumber].bet, type: "WIN" }
+        if (game.playerHand[handNumber].resolved && !game.playerHand[handNumber].doubled && game.status === "finished" && game.determinateWinners.includes("player")) return { payout: game.playerHand[handNumber].bet * 2, type: "WIN" }
+        if (game.winners[0] === "tie") return { payout: game.playerHand[handNumber].bet, type: "REFUND" }
     }
 
     return {

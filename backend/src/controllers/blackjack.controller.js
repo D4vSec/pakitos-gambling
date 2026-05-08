@@ -124,10 +124,11 @@ export const startGame = async (req, res) => {
 
         // Create a copy for the response to avoid modifying the stored game state and hide the dealer card and the deck from the response
         const responseGame = blackJack.hideDealerCard(dealerHand, game)
-
+        console.log(responseGame.dealer[DEALER_HAND])
         res.status(200).json(Object.fromEntries(Object.entries(responseGame).filter(([key]) => key !== "deck")))
     } catch (error) {
-        logger.error("Error starting game:", error)
+        console.log(error)
+        logger.error("Error starting game: ", error)
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
 }
@@ -207,7 +208,7 @@ export const hit = async (req, res) => {
         if (game.player[FIRST_HAND].blackjack) {
             game.status = GAME_STATUSES.finished
 
-            game.dealer[DEALER_HAND].hand = blackJack.dealerPlay(game.deck, game.dealer[DEALER_HAND].hand, game.player[SECOND_HAND].hand)
+            game.dealer[DEALER_HAND].hand = blackJack.dealerPlay(game.deck, game.dealer[DEALER_HAND].hand, game.player[FIRST_HAND].hand)
             game.dealer[DEALER_HAND] = blackJack.setHand(game.dealer[DEALER_HAND])
 
             const winner = blackJack.determinateWinner(game.player[FIRST_HAND].value, game.dealer[DEALER_HAND].value)
@@ -220,7 +221,7 @@ export const hit = async (req, res) => {
         games.set(gameId, game)
 
         // Create a copy for the response
-        const responseGame = blackJack.hideDealerCard(dealerHand, game)
+        const responseGame = blackJack.hideDealerCard(game.dealer[DEALER_HAND].hand, game)
 
         res.status(200).json(Object.fromEntries(Object.entries(responseGame).filter(([key]) => key !== "deck")))
     } catch (error) {
@@ -271,7 +272,7 @@ export const stand = async (req, res) => {
             //If there is no split, the dealer plays his hand and we determinate the winner
             game.player[FIRST_HAND].resolved = true
 
-            game.dealer[DEALER_HAND].hand = blackJack.dealerPlay(game.deck, game.dealer[DEALER_HAND].hand, game.player[SECOND_HAND].hand)
+            game.dealer[DEALER_HAND].hand = blackJack.dealerPlay(game.deck, game.dealer[DEALER_HAND].hand, game.player[FIRST_HAND].hand)
             game.dealer[DEALER_HAND] = blackJack.setHand(game.dealer[DEALER_HAND])
 
             const winner = blackJack.determinateWinner(game.player[FIRST_HAND].value, game.dealer[DEALER_HAND].value)
@@ -279,6 +280,7 @@ export const stand = async (req, res) => {
             game.status = GAME_STATUSES.finished
 
             const result = blackJack.getPayout(game, FIRST_HAND)
+
             game.payout = result ? result.payout : 0
             if (game.payout > 0) await User.updateUserBalance(id, game.payout, { type: result.type })
         }
@@ -289,7 +291,7 @@ export const stand = async (req, res) => {
 
         res.status(200).json(Object.fromEntries(Object.entries(responseGame).filter(([key]) => key !== "deck")))
     } catch (error) {
-        logger.error("Error standing:", error)
+        logger.error({ message: "Error standing:", error })
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
 }
@@ -387,6 +389,7 @@ export const double = async (req, res) => {
 
         res.status(200).json(Object.fromEntries(Object.entries(responseGame).filter(([key]) => key !== "deck")))
     } catch (error) {
+        console.log(error)
         logger.error("Error doubling:", error)
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
