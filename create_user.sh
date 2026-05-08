@@ -62,8 +62,15 @@ export NEW_USER_ROLE="$ROLE"
 
 echo "Creating user in $MODE environment..."
 
-"${COMPOSE[@]}" -f "$COMPOSE_FILE" run --rm -T backend node --input-type=module <<'NODE'
-import User from '#models/user.model'
+"${COMPOSE[@]}" -f "$COMPOSE_FILE" run --rm -T \
+	-e NEW_USER_USERNAME \
+	-e NEW_USER_EMAIL \
+	-e NEW_USER_PASSWORD \
+	-e NEW_USER_ROLE \
+	backend node --input-type=module <<'NODE'
+import { existsSync } from 'node:fs'
+import path from 'node:path'
+import { pathToFileURL } from 'node:url'
 
 const username = process.env.NEW_USER_USERNAME
 const email = process.env.NEW_USER_EMAIL
@@ -74,6 +81,17 @@ if (!username || !email || !password) {
 	throw new Error('Missing user data.')
 }
 
+const modelCandidates = [
+	path.resolve(process.cwd(), 'src/models/user.model.js'),
+	path.resolve(process.cwd(), 'src/models/userModel.js'),
+]
+
+const modelPath = modelCandidates.find((candidate) => existsSync(candidate))
+if (!modelPath) {
+	throw new Error('User model file not found in container.')
+}
+
+const { default: User } = await import(pathToFileURL(modelPath).href)
 const userId = await User.createUser({ username, email, password })
 
 if (role !== 'user') {
