@@ -40,7 +40,7 @@ const updateOddsForBet = async (betId) => {
         const poolDistribution = await Bets.getPoolDistribution(betId)
 
         const newOdds = calculateOdds(poolDistribution)
-        
+
         for (const option of newOdds) {
             await Bets.updateOptionOdd(option.id, option.odd)
         }

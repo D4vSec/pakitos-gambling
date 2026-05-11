@@ -18,7 +18,7 @@ const createBlackJack = () => {
     const shuffleDeck = (deck) => {
         for (let i = deck.length - 1; i > 0; i--) {
             const j = randomInt(0, i + 1)
-            ;[deck[i], deck[j]] = [deck[j], deck[i]]
+                ;[deck[i], deck[j]] = [deck[j], deck[i]]
         }
         return deck
     }
