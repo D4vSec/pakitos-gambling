@@ -1,6 +1,7 @@
 import createBlackJack from "#services/blackjack.service"
 import User from "#models/user.model"
 import logger from "#utils/logger.utils"
+import { error } from "node:console"
 
 const games = new Map()
 
@@ -124,7 +125,6 @@ export const startGame = async (req, res) => {
 
         // Create a copy for the response to avoid modifying the stored game state and hide the dealer card and the deck from the response
         const responseGame = blackJack.hideDealerCard(dealerHand, game)
-        console.log(responseGame.dealer[DEALER_HAND])
         res.status(200).json(Object.fromEntries(Object.entries(responseGame).filter(([key]) => key !== "deck")))
     } catch (error) {
         console.log(error)
@@ -177,13 +177,15 @@ export const hit = async (req, res) => {
                         game.winners.push(winner2)
                     }
 
-                    let results = blackJack.getPayout(game, FIRST_HAND)
-                    let results2 = blackJack.getPayout(game, SECOND_HAND)
+                    let result = blackJack.getPayout(game, FIRST_HAND)
+                    console.log(result)
+                    let result2 = blackJack.getPayout(game, SECOND_HAND)
+                    console.log(result2)
 
-                    game.payout = (results ? results.payout : 0) + (results2 ? results2.payout : 0)
+                    game.payout = (result ? result.payout : 0) + (result2 ? result2.payout : 0)
 
-                    if (results.payout > 0) await User.updateUserBalance(id, results.payout, { type: results.type })
-                    if (results2.payout > 0) await User.updateUserBalance(id, results2.payout, { type: results2.type })
+                    if (result.payout > 0) await User.updateUserBalance(id, result.payout, { type: result.type })
+                    if (result2.payout > 0) await User.updateUserBalance(id, result2.payout, { type: result2.type })
                 }
             } else {
                 game.player[FIRST_HAND].hand = blackJack.hit(game.deck, game.player[FIRST_HAND].hand)
@@ -198,24 +200,24 @@ export const hit = async (req, res) => {
             game.player[FIRST_HAND] = blackJack.setHand(game.player[FIRST_HAND])
 
             if (game.player[FIRST_HAND].bust) game.winners.push(winners.dealer)
-        }
 
-        if (game.player[FIRST_HAND].bust) {
-            game.status = GAME_STATUSES.finished
-            game.winners.push(winners.dealer)
-        }
+            if (game.player[FIRST_HAND].bust) {
+                game.status = GAME_STATUSES.finished
+                game.winners.push(winners.dealer)
+            }
 
-        if (game.player[FIRST_HAND].blackjack) {
-            game.status = GAME_STATUSES.finished
+            if (game.player[FIRST_HAND].blackjack) {
+                game.status = GAME_STATUSES.finished
 
-            game.dealer[DEALER_HAND].hand = blackJack.dealerPlay(game.deck, game.dealer[DEALER_HAND].hand, game.player[FIRST_HAND].hand)
-            game.dealer[DEALER_HAND] = blackJack.setHand(game.dealer[DEALER_HAND])
+                game.dealer[DEALER_HAND].hand = blackJack.dealerPlay(game.deck, game.dealer[DEALER_HAND].hand, game.player[FIRST_HAND].hand)
+                game.dealer[DEALER_HAND] = blackJack.setHand(game.dealer[DEALER_HAND])
 
-            const winner = blackJack.determinateWinner(game.player[FIRST_HAND].value, game.dealer[DEALER_HAND].value)
-            game.winners.push(winner)
-            let result = blackJack.getPayout(game, FIRST_HAND)
-            game.payout = result ? result.payout : 0
-            if (game.payout > 0) await User.updateUserBalance(id, game.payout, { type: result.type })
+                const winner = blackJack.determinateWinner(game.player[FIRST_HAND].value, game.dealer[DEALER_HAND].value)
+                game.winners.push(winner)
+                let result = blackJack.getPayout(game, FIRST_HAND)
+                game.payout = result ? result.payout : 0
+                if (game.payout > 0) await User.updateUserBalance(id, game.payout, { type: result.type })
+            }
         }
 
         games.set(gameId, game)
@@ -225,6 +227,7 @@ export const hit = async (req, res) => {
 
         res.status(200).json(Object.fromEntries(Object.entries(responseGame).filter(([key]) => key !== "deck")))
     } catch (error) {
+        console.log(error)
         logger.error("Error hitting:", error)
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
@@ -287,10 +290,11 @@ export const stand = async (req, res) => {
 
         games.set(gameId, game)
 
-        const responseGame = blackJack.hideDealerCard(dealerHand, game)
+        const responseGame = blackJack.hideDealerCard(game.dealerHand, game)
 
         res.status(200).json(Object.fromEntries(Object.entries(responseGame).filter(([key]) => key !== "deck")))
     } catch (error) {
+        console.log(error)
         logger.error({ message: "Error standing:", error })
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
@@ -325,7 +329,8 @@ export const double = async (req, res) => {
             game.player[FIRST_HAND] = blackJack.setHand(game.player[FIRST_HAND])
 
             if (!game.player[FIRST_HAND].bust) {
-                game.dealer[DEALER_HAND].hand = blackJack.dealerPlay(game.deck, game.dealer[DEALER_HAND].hand, game.player[SECOND_HAND].hand)
+                console.log(game.dealer[DEALER_HAND].hand)
+                game.dealer[DEALER_HAND].hand = blackJack.dealerPlay(game.deck, game.dealer[DEALER_HAND].hand, game.player[FIRST_HAND].hand)
                 game.dealer[DEALER_HAND] = blackJack.setHand(game.dealer[DEALER_HAND])
 
                 const winner = blackJack.determinateWinner(game.player[FIRST_HAND].value, game.dealer[DEALER_HAND].value)
@@ -478,13 +483,14 @@ export const split = async (req, res) => {
 
             games.set(gameId, game)
 
-            const responseGame = blackJack.hideDealerCard(dealerHand, game)
+            const responseGame = blackJack.hideDealerCard(game.dealerHand, game)
 
             res.status(200).json(Object.fromEntries(Object.entries(responseGame).filter(([key]) => key !== "deck")))
         } else {
             return res.status(400).json({ code: "CANNOT_SPLIT" })
         }
     } catch (error) {
+        console.log(error)
         logger.error("Error splitting:", error)
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
