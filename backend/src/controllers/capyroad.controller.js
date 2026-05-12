@@ -15,6 +15,14 @@ const isGameValid = (gameId, game) => {
 
     return true
 }
+
+const isUserGameValid = (game, userId) => {
+    if (game.userId !== userId) {
+        return false
+    }
+    return true
+}
+
 //TODO: Test the game
 const startGame = async (req, res) => {
     const id = req.user.id
@@ -61,12 +69,17 @@ const startGame = async (req, res) => {
 }
 
 const jumpRoad = async (req, res) => {
+    const id = req.user.id
     const { gameId } = req.params
     const game = games.get(gameId)
 
     if (!isGameValid(gameId, game)) {
         return res.status(400).json({ code: "GAME_NOT_VALID" })
     }
+
+      if (!isUserGameValid(game, id)) {
+            return res.status(403).json({ code: "FORBIDDEN" })
+        }
 
     const capyRoad = createCapyRoad()
 
@@ -108,6 +121,25 @@ const destroyGame = (req, res) => {
         return res.status(200).json({ code: "GAME_DELETED_SUCCESSFULLY" })
     } catch (error) {
         logger.error({ message: "Error destroying CapyRoad game", error })
+        return res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
+    }
+}
+
+const getGame = (req, res) => {
+    try {
+        const id = req.user.id
+        const { gameId } = req.params
+        if (!games.has(gameId)) {
+            return res.status(404).json({ code: "GAME_NOT_FOUND" })
+        }
+
+        const game = games.get(gameId)
+        if (!isUserGameValid(game, id)) {
+            return res.status(403).json({ code: "FORBIDDEN" })
+        }
+        return res.status(200).json(game)
+    } catch (error) {
+        logger.error({ message: "Error fetching CapyRoad game", error })
         return res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
 }
