@@ -324,6 +324,11 @@ export const double = async (req, res) => {
         game.player[FIRST_HAND].bet *= 2
         //If the game is not split we do the usual thing
         if (!game.split) {
+            if (game.player[FIRST_HAND].hand.length !== 2) {
+                await User.updateUserBalance(id, game.player[FIRST_HAND].bet / 2, { type: "REFUND" })
+                return res.status(400).json({ code: "CANNOT_DOUBLE not split" })
+            }
+
             game.player[FIRST_HAND].hand = blackJack.hit(game.deck, game.player[FIRST_HAND].hand)
             game.player[FIRST_HAND].doubled = true
             game.player[FIRST_HAND] = blackJack.setHand(game.player[FIRST_HAND])
@@ -346,11 +351,14 @@ export const double = async (req, res) => {
                 game.winners.push(winners.dealer)
             }
             games.set(gameId, game)
-        }
-        //If the game is split we have to check a few things
-        if (game.split) {
-            //If the player has split and the first hand is already resolved, we double the second hand, if not we double the first hand
+        } else {
+            //If the player has split and the first hand is already resolved, we double the second hand, if not we double the first hand)
             if (game.player[FIRST_HAND].resolved) {
+                if (game.player[SECOND_HAND].hand.length !== 2) {
+                    await User.updateUserBalance(id, game.player[SECOND_HAND].bet / 2, { type: "REFUND" })
+                    return res.status(400).json({ code: "CANNOT_DOUBLE split resolved 1" })
+                }
+
                 game.player[SECOND_HAND].hand = blackJack.hit(game.deck, game.player[SECOND_HAND].hand)
                 game.player[SECOND_HAND].doubled = true
                 game.player[SECOND_HAND] = blackJack.setHand(game.player[SECOND_HAND])
@@ -375,7 +383,13 @@ export const double = async (req, res) => {
                 }
 
                 games.set(gameId, game)
-            } else {
+            }
+
+            if (!game.player[FIRST_HAND].resolved) {
+                if (game.player[FIRST_HAND].hand.length !== 2) {
+                    await User.updateUserBalance(id, game.player[FIRST_HAND].bet / 2, { type: "REFUND" })
+                    return res.status(400).json({ code: "CANNOT_DOUBLE split resolved 2" })
+                }
                 // If the player decides to double with the first hand we have to check a few things too
                 game.player[FIRST_HAND].hand = blackJack.hit(game.deck, game.player[FIRST_HAND].hand)
                 game.player[FIRST_HAND].doubled = true
@@ -422,6 +436,10 @@ export const split = async (req, res) => {
 
         if (game.split) {
             return res.status(400).json({ code: "ALREADY_SPLIT" })
+        }
+
+        if (game.player[FIRST_HAND].hand.length !== 2) {
+            return res.status(400).json({ code: "CANNOT_SPLIT" })
         }
         //DEV: I am skipping the check for the split condition for now, but in a real game the player can only split if the first two cards have the same rank
         if (/*game.player.hand.length === 2 && game.player.hand[0].value === game.player.hand[1].value*/ true) {
