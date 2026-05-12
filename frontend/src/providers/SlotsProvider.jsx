@@ -99,6 +99,8 @@ const SlotsProvider = ({ type = "3x3", children }) => {
     setLoading(true)
     setIsSpinning(true)
     setError(null)
+    const MIN_SPIN_MS = 3000
+    const t0 = Date.now()
     try {
       const res = await post(`/api/v1/slots/${gameId}/spin`, {
         headers: authHeaders(),
@@ -128,6 +130,9 @@ const SlotsProvider = ({ type = "3x3", children }) => {
       addNotification(t(`message.error.${err.message}`) || err.message, "error")
       throw err
     } finally {
+      const elapsed = Date.now() - t0
+      const remaining = MIN_SPIN_MS - elapsed
+      if (remaining > 0) await new Promise((r) => setTimeout(r, remaining))
       setLoading(false)
       setIsSpinning(false)
     }

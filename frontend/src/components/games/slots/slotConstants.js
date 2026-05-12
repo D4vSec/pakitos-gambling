@@ -1,18 +1,21 @@
 // Staggered stop delays per column (ms after isSpinning→false).
 // Each reel stops left-to-right, creating the classic slot machine effect.
 export const STOP_DELAYS_BY_COLS = {
-  3: [0, 350, 700],
-  5: [0, 300, 600, 900, 1200],
+  3: [0, 600, 1200],
+  5: [0, 400, 800, 1200, 1600],
 }
 
 export const getStopDelays = (cols) =>
   STOP_DELAYS_BY_COLS[cols] ??
   Array.from({ length: cols }, (_, i) => i * 300)
 
-// Total animation time = last reel stops + landing (550ms) + row stagger (50ms × rows)
+// Extra pause between landing and showing winning effects, so the reveal feels gradual
+export const WIN_REVEAL_DELAY_MS = 350
+
+// Total animation time = last reel stops + landing (550ms) + row stagger (50ms × rows) + reveal delay
 export const getAnimTotalMs = (cols, rows = 3) => {
   const delays = getStopDelays(cols)
-  return delays[delays.length - 1] + 550 + (rows - 1) * 50
+  return delays[delays.length - 1] + 550 + (rows - 1) * 50 + WIN_REVEAL_DELAY_MS
 }
 
 export const COLS_BY_TYPE = {
