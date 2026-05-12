@@ -44,6 +44,19 @@
         "next": "Next",
         "last": "Last",
         "rowsPerPage": "Rows per page"
+      },
+      "filters": {
+        "search": "Quick Search",
+        "searchPlaceholder": "ID, IP, User...",
+        "userIdLabel": "User ID (UUID)",
+        "action": "Action",
+        "allActions": "All Actions",
+        "result": "Result",
+        "all": "All",
+        "won": "Won",
+        "lost": "Lost",
+        "dateRange": "Date Range",
+        "clear": "Clear filters"
       }
     }
   },

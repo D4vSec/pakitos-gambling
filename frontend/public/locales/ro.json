@@ -44,6 +44,19 @@
         "next": "Următoarea",
         "last": "Ultima",
         "rowsPerPage": "Rânduri pe pagină"
+      },
+      "filters": {
+        "search": "Căutare rapidă",
+        "searchPlaceholder": "ID, IP, Utilizator...",
+        "userIdLabel": "ID Utilizator (UUID)",
+        "action": "Acțiune",
+        "allActions": "Toate acțiunile",
+        "result": "Rezultat",
+        "all": "Toate",
+        "won": "Câștigat",
+        "lost": "Pierdut",
+        "dateRange": "Interval date",
+        "clear": "Șterge filtrele"
       }
     }
   },

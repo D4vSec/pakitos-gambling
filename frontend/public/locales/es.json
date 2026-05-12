@@ -44,6 +44,19 @@
         "next": "Siguiente",
         "last": "Última",
         "rowsPerPage": "Filas por página"
+      },
+      "filters": {
+        "search": "Búsqueda rápida",
+        "searchPlaceholder": "ID, IP, Usuario...",
+        "userIdLabel": "ID de Usuario (UUID)",
+        "action": "Acción",
+        "allActions": "Todas las acciones",
+        "result": "Resultado",
+        "all": "Todos",
+        "won": "Ganado",
+        "lost": "Perdido",
+        "dateRange": "Rango de fechas",
+        "clear": "Limpiar filtros"
       }
     }
   },

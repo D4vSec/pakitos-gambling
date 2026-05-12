@@ -7,22 +7,10 @@
 - User Agent amigable, en lugar de mostrar el JSON del navegador, el campo que te sirve es combinar los datos del json.
 
 ```js
-const buildUserAgent = ({
-  browser,
-  version,
-  os,
-  platform,
-  isMobile,
-  isTablet,
-  isDesktop,
-} = {}) => {
+const buildUserAgent = ({ browser, version, os, platform, isMobile, isTablet, isDesktop } = {}) => {
   const clean = (v) => v && v !== "unknown"
 
-  const browserPart = browser
-    ? version
-      ? `${browser}/${version}`
-      : browser
-    : null
+  const browserPart = browser ? (version ? `${browser}/${version}` : browser) : null
 
   const systemParts = [platform, os].filter(clean)
   const systemPart = systemParts.length ? `(${systemParts.join(" | ")})` : null
@@ -64,10 +52,10 @@ De esta forma, pasará a ser: `Chrome/142.0.7444.265 (Microsoft Windows | Window
 [x] Mostrar el UUID completo al hacer hover.
 [x] Integrar la función buildUserAgent en el mapeo de la tabla.
 [x] Asegurar que el campo resultante sea una sola string legible en lugar de un objeto JSON.
-[ ] Evolución de Búsqueda: Implementar barra de filtros avanzados (sustituyendo o complementando la búsqueda simple).
-[ ] Selector de Acciones: Filtro desplegable con tipos de eventos (ej. GAME_RESULT, LOGIN, UPDATE_PROFILE).
-[ ] Date Range Picker: Selector de rango de fechas para consultas históricas.
-[ ] Filtro de Resultados: Lógica de filtro basada en el campo payout (Ganado vs. Perdido).
+[x] Evolución de Búsqueda: Implementar barra de filtros avanzados (sustituyendo o complementando la búsqueda simple).
+[x] Selector de Acciones: Filtro desplegable con tipos de eventos (ej. GAME_RESULT, LOGIN, UPDATE_PROFILE).
+[x] Date Range Picker: Selector de rango de fechas para consultas históricas.
+[x] Filtro de Resultados: Lógica de filtro basada en el campo payout (Ganado vs. Perdido).
 [x] Alineación de Tablas: Corregir el padding y alignment de las celdas para que coincidan perfectamente con los encabezados.
 [x] Crear componente Badge para roles.
 [x] Configurar colores: Admin (Azul suave / Indigo), User (Gris / Slate).

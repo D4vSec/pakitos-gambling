@@ -1,0 +1,11 @@
+"use strict"
+
+export const TRANSACTION_TYPES = ["BET", "BONUS", "DEPOSIT", "REFUND", "WIN", "WITHDRAWAL"]
+export const AUDIT_TYPES = [
+  "ADMIN_ACTION",
+  "BALANCE_UPDATED",
+  "BET_PLACED",
+  "BET_RESULT",
+  "GAME_RESULT",
+  "USER_REGISTER",
+]

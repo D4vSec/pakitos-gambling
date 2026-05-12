@@ -14,16 +14,9 @@ import SearchBar from "./SearchBar"
 
 // TODO:Añadir loading
 // TODO: Arreglar diseño tabla
-const Table = ({
-  data = [],
-  columns = [],
-  pageCount = 0,
-  pagination,
-  setPagination,
-}) => {
+const Table = ({ data = [], columns = [], pageCount = 0, pagination, setPagination }) => {
   const { t } = useLocale()
   const [sorting, setSorting] = useState([])
-  const [globalFilter, setGlobalFilter] = useState("")
 
   const table = useReactTable({
     data,
@@ -32,11 +25,9 @@ const Table = ({
     pageCount: pageCount,
     state: {
       sorting,
-      globalFilter,
       pagination,
     },
     onSortingChange: setSorting,
-    onGlobalFilterChange: setGlobalFilter,
     onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -44,12 +35,8 @@ const Table = ({
   })
 
   return (
-    <div className="bg-base-200 p-4 rounded-lg">
-      <SearchBar
-        globalFilter={globalFilter}
-        setGlobalFilter={setGlobalFilter}
-      />
-      <table className="table table-sm md:table-md  table-zebra">
+    <div className="bg-base-200 p-4 rounded-lg overflow-x-scroll">
+      <table className="table table-sm md:table-md table-zebra">
         <thead>
           {table.getHeaderGroups().map((hg) => (
             <tr key={hg.id}>
@@ -57,7 +44,8 @@ const Table = ({
                 <th
                   key={h.id}
                   onClick={h.column.getToggleSortingHandler()}
-                  className="cursor-pointer">
+                  className="cursor-pointer"
+                >
                   <div className="flex gap-1 items-center">
                     {flexRender(h.column.columnDef.header, h.getContext())}
                     {h.column.getIsSorted() === "asc" && <CaretUpSVG />}
@@ -72,9 +60,7 @@ const Table = ({
         <tbody>
           {table.getRowModel().rows.length === 0 ? (
             <tr>
-              <td
-                colSpan={table.getAllColumns().length}
-                className="text-center">
+              <td colSpan={table.getAllColumns().length} className="text-center">
                 {t("ui.tables.noData")}
               </td>
             </tr>
@@ -82,9 +68,7 @@ const Table = ({
             table.getRowModel().rows.map((row) => (
               <tr key={row.id}>
                 {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
+                  <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
                 ))}
               </tr>
             ))

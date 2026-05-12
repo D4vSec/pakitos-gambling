@@ -141,8 +141,21 @@ const AdminProvider = ({ children }) => {
 
   const getLogs = async (options = {}) => {
     try {
-      const { page = 1, limit = 20 } = options
-      const url = `/api/v1/audit?page=${page}&limit=${limit}`
+      const { page = 1, limit = 20, ...filters } = options
+
+      const queryParams = new URLSearchParams({
+        page: page.toString(),
+        limit: limit.toString(),
+      })
+
+      Object.keys(filters).forEach((key) => {
+        if (filters[key] !== undefined && filters[key] !== null && filters[key] !== "") {
+          queryParams.append(key, filters[key])
+        }
+      })
+
+      const url = `/api/v1/audit?${queryParams.toString()}`
+      console.log("url", url)
       let res = await get(url, {
         headers: {
           "x-refresh-token": getRefreshToken(),
@@ -150,10 +163,8 @@ const AdminProvider = ({ children }) => {
         },
       })
 
-      console.log(res)
-
       if (res.code) {
-        throw new Error(res.code || "Error al obtener usuarios")
+        throw new Error(res.code || "Error al obtener logs")
       }
 
       return res
