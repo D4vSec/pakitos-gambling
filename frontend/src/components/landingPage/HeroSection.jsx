@@ -5,7 +5,7 @@ import herobg from "@/assets/landing/herobg.jpeg"
 const HeroSection = () => {
   return (
     <section className="w-full h-[calc(100dvh-4.25rem)] p-4 md:p-6 lg:p-10">
-      <div className="relative w-full h-full overflow-hidden rounded-xl">
+      <div className="relative w-full h-full overflow-hidden rounded-2xl">
         {/* Background */}
         <div className="absolute inset-0">
           <img

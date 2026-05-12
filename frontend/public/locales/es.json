@@ -295,11 +295,11 @@
         "roulette": {
           "title": "Ruleta",
           "classic": {
-            "title": "Ruleta europea",
+            "title": "Ruleta Europea",
             "description": "Juego de ruleta europea."
           },
           "american": {
-            "title": "Ruleta americana",
+            "title": "Ruleta Americana",
             "description": "Juego de ruleta americana."
           }
         },
