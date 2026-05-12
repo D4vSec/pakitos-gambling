@@ -35,6 +35,7 @@ const SlotGrid = ({
   paylines,
   isSpinning = false,
   hasWon = false,
+  onAllSettled,
 }) => {
   const winningCells = getWinningCells(winningLines, machineType, paylines)
 
@@ -58,10 +59,12 @@ const SlotGrid = ({
           <SlotReel
             colIndex={c}
             rows={rows}
+            machineType={machineType}
             symbols={Array.from({ length: rows }, (_, r) => grid?.[r]?.[c] ?? null)}
             isSpinning={isSpinning}
             stopDelay={getStopDelays(cols)[c] ?? c * 350}
             winningCells={winningCells}
+            onSettled={c === cols - 1 ? onAllSettled : undefined}
           />
         </React.Fragment>
       ))}

@@ -1,14 +1,21 @@
 import React, { useRef, useEffect } from "react"
 import gsap from "gsap"
+import cherryImg from "@/assets/games/cherry3x3.jpg"
+import lemonImg from "@/assets/games/lemon3x3.jpg"
+import orangeImg from "@/assets/games/orange3x3.jpg"
+import plumImg from "@/assets/games/plum3x3.jpg"
+import bellImg from "@/assets/games/bell3x3.jpg"
+import barImg from "@/assets/games/bar3x3.jpg"
+import sevenImg from "@/assets/games/seven3x3.jpg"
 
 const SYMBOL_DISPLAY = {
-  cherry: "🍒",
-  lemon: "🍋",
-  orange: "🍊",
-  plum: "🍇",
-  bell: "🔔",
-  bar: "BAR",
-  seven: "7",
+  cherry: cherryImg,
+  lemon: lemonImg,
+  orange: orangeImg,
+  plum: plumImg,
+  bell: bellImg,
+  bar: barImg,
+  seven: sevenImg,
 }
 
 const SlotCell = ({ symbol, isWinning = false, animKey, isLanding = false }) => {
