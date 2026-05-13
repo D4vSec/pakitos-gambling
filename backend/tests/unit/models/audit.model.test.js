@@ -50,6 +50,19 @@ describe('audit model', () => {
 		)
 	})
 
+	it('inserts audit actions', async () => {
+		db.query.mockResolvedValueOnce({ rows: [] })
+
+		await expect(
+			auditModel.logAction(userId, 'LOGIN', { source: 'test' }, '127.0.0.1', 'Vitest'),
+		).resolves.toBeUndefined()
+
+		expect(db.query).toHaveBeenCalledWith(
+			'INSERT INTO audit_logs (user_id, action, details, ip_address, user_agent) VALUES ($1, $2, $3, $4, $5)',
+			[userId, 'LOGIN', { source: 'test' }, '127.0.0.1', 'Vitest'],
+		)
+	})
+
 	it('avoids UUID syntax errors when the user filter is invalid', async () => {
 		db.query.mockResolvedValueOnce({ rows: [{ count: 0 }] })
 
@@ -58,6 +71,34 @@ describe('audit model', () => {
 		expect(db.query).toHaveBeenCalledWith(
 			'SELECT COUNT(*)::int AS count FROM audit_logs WHERE 1 = 0',
 			[],
+		)
+	})
+
+	it('combines multiple audit filters', async () => {
+		db.query.mockResolvedValueOnce({ rows: [{ count: 1 }] })
+
+		await expect(
+			auditModel.countAuditLogs({
+				ipAddress: '203.0.113.10',
+				userAgent: 'Chrome',
+				details: 'USER_UPDATED',
+				filterField: 'action',
+				filterValue: 'ADMIN_ACTION',
+				fromDate: '2026-05-01',
+				toDate: '2026-05-08',
+			}),
+		).resolves.toBe(1)
+
+		expect(db.query).toHaveBeenCalledWith(
+			"SELECT COUNT(*)::int AS count FROM audit_logs WHERE (host(ip_address) ILIKE $1 ESCAPE '\\') AND (user_agent ILIKE $2 ESCAPE '\\') AND (details::text ILIKE $3 ESCAPE '\\') AND created_at >= $4 AND created_at <= $5 AND action = $6",
+			[
+				'%203.0.113.10%',
+				'%Chrome%',
+				'%USER\\_UPDATED%',
+				'2026-05-01T00:00:00.000Z',
+				'2026-05-08T23:59:59.999Z',
+				'ADMIN_ACTION',
+			],
 		)
 	})
 

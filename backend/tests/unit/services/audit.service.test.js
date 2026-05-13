@@ -1,7 +1,14 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
+vi.mock('#utils/logger.utils', () => ({
+	default: {
+		error: vi.fn(),
+	},
+}))
+
 import auditService from '../../../src/services/audit.service.js'
 import Audit from '#models/audit.model'
+import logger from '#utils/logger.utils'
 
 vi.mock('#models/audit.model', () => ({
 	default: {
@@ -43,6 +50,61 @@ describe('audit service', () => {
 		expect(auditService.getUserAgent({ headers: {} })).toBe('Unknown')
 	})
 
+	it('formats user agents by device type', () => {
+		expect(
+			auditService.getUserAgentRaw({
+				useragent: {
+					browser: 'Chrome',
+					version: '120.0',
+					os: 'Windows',
+					platform: 'Win32',
+					isMobile: true,
+					isTablet: false,
+					isDesktop: false,
+				},
+			}),
+		).toEqual({
+			raw: {
+				browser: 'Chrome',
+				version: '120.0',
+				os: 'Windows',
+				platform: 'Win32',
+				isMobile: true,
+				isTablet: false,
+				isDesktop: false,
+			},
+			formatted: 'Chrome 120.0 / Windows (Mobile)',
+		})
+
+		expect(
+			auditService.getUserAgentRaw({
+				useragent: {
+					browser: 'Safari',
+					version: '17.0',
+					os: 'iOS',
+					platform: 'iPhone',
+					isMobile: false,
+					isTablet: true,
+					isDesktop: false,
+				},
+			}),
+		).toEqual(expect.objectContaining({ formatted: 'Safari 17.0 / iOS (Tablet)' }))
+
+		expect(
+			auditService.getUserAgentRaw({
+				useragent: {
+					browser: 'Firefox',
+					version: '126.0',
+					os: 'Linux',
+					platform: 'x86_64',
+					isMobile: false,
+					isTablet: false,
+					isDesktop: true,
+				},
+			}),
+		).toEqual(expect.objectContaining({ formatted: 'Firefox 126.0 / Linux (Desktop)' }))
+	})
+
 	it('skips audit creation without required fields', async () => {
 		await auditService.createAudit({ action: 'LOGIN' })
 
@@ -59,6 +121,20 @@ describe('audit service', () => {
 		})
 
 		expect(Audit.logAction).toHaveBeenCalledWith(7, 'LOGIN', { source: 'test' }, '127.0.0.1', 'Vitest')
+	})
+
+	it('logs errors when audit creation fails', async () => {
+		Audit.logAction.mockRejectedValueOnce(new Error('boom'))
+
+		await auditService.createAudit({
+			user_id: 7,
+			action: 'LOGIN',
+			details: { source: 'test' },
+			ip_address: '127.0.0.1',
+			user_agent: 'Vitest',
+		})
+
+		expect(logger.error).toHaveBeenCalled()
 	})
 
 	it('delegates audit log retrieval to the model', async () => {

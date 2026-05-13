@@ -12,6 +12,7 @@ vi.mock('#utils/password.utils', () => ({
 }))
 
 import db from '#config/db.config'
+import { comparePassword, hashPassword } from '#utils/password.utils'
 import userModel from '../../../src/models/user.model.js'
 
 describe('user model list queries', () => {
@@ -81,6 +82,145 @@ describe('user model list queries', () => {
 		expect(db.query).toHaveBeenCalledWith(
 			"SELECT id, email FROM users WHERE role IN ($1, $2) AND (username ILIKE $3 ESCAPE '\\') ORDER BY email DESC LIMIT $4 OFFSET $5",
 			['admin', 'user', '%dav%', 20, 0],
+		)
+	})
+})
+
+describe('user model basic accessors', () => {
+	const userId = '11111111-1111-1111-1111-111111111111'
+
+	beforeEach(() => {
+		vi.clearAllMocks()
+	})
+
+	it('creates users with a hashed password', async () => {
+		hashPassword.mockResolvedValueOnce('hashed-password')
+		db.query.mockResolvedValueOnce({ rows: [{ id: userId }] })
+
+		await expect(
+			userModel.createUser({
+				username: 'demo',
+				email: 'demo@example.com',
+				password: 'secret123',
+			}),
+		).resolves.toBe(userId)
+
+		expect(hashPassword).toHaveBeenCalledWith('secret123')
+		expect(db.query).toHaveBeenCalledWith(
+			'INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING id',
+			['demo', 'demo@example.com', 'hashed-password'],
+		)
+	})
+
+	it('finds users by email', async () => {
+		db.query.mockResolvedValueOnce({ rows: [{ id: userId, email: 'demo@example.com' }] })
+
+		await expect(userModel.findUserByEmail('demo@example.com')).resolves.toEqual({
+			id: userId,
+			email: 'demo@example.com',
+		})
+	})
+
+	it('returns null for invalid user ids without querying postgres', async () => {
+		await expect(userModel.findUserById('bad-id')).resolves.toBeNull()
+
+		expect(db.query).not.toHaveBeenCalled()
+	})
+
+	it('finds users by id', async () => {
+		db.query.mockResolvedValueOnce({
+			rows: [{ id: userId, username: 'demo', email: 'demo@example.com', role: 'user', balance: 10 }],
+		})
+
+		await expect(userModel.findUserById(userId)).resolves.toEqual({
+			id: userId,
+			username: 'demo',
+			email: 'demo@example.com',
+			role: 'user',
+			balance: 10,
+		})
+	})
+
+	it('returns all users', async () => {
+		db.query.mockResolvedValueOnce({ rows: [{ id: userId }] })
+
+		await expect(userModel.findAllUsers()).resolves.toEqual([{ id: userId }])
+
+		expect(db.query).toHaveBeenCalledWith('SELECT id, username, email, role, balance FROM users')
+	})
+
+	it('updates users and hashes passwords when present', async () => {
+		hashPassword.mockResolvedValueOnce('hashed-password')
+		db.query.mockResolvedValueOnce({ rowCount: 1 })
+
+		await expect(
+			userModel.updateUser(userId, {
+				username: 'new-name',
+				password: 'secret123',
+			}),
+		).resolves.toBe(true)
+
+		expect(hashPassword).toHaveBeenCalledWith('secret123')
+		expect(db.query).toHaveBeenCalledWith(
+			'UPDATE users SET "username" = $1, "password" = $2 WHERE id = $3',
+			['new-name', 'hashed-password', userId],
+		)
+	})
+
+	it('delegates password verification to argon2', async () => {
+		comparePassword.mockResolvedValueOnce(true)
+
+		await expect(userModel.verifyPassword('hashed', 'plain')).resolves.toBe(true)
+
+		expect(comparePassword).toHaveBeenCalledWith('hashed', 'plain')
+	})
+
+	it('deletes users by id', async () => {
+		db.query.mockResolvedValueOnce({ rowCount: 1 })
+
+		await expect(userModel.deleteUser(userId)).resolves.toBe(true)
+
+		expect(db.query).toHaveBeenCalledWith('DELETE FROM users WHERE id = $1', [userId])
+	})
+
+	it('reads the user balance', async () => {
+		db.query.mockResolvedValueOnce({ rows: [{ balance: 125 }] })
+
+		await expect(userModel.getUserBalance(userId)).resolves.toBe(125)
+
+		expect(db.query).toHaveBeenCalledWith('SELECT balance FROM users WHERE id = $1', [userId])
+	})
+
+	it('updates the user balance and records the transaction', async () => {
+		db.query.mockResolvedValueOnce({ rows: [{ balance: 150 }] })
+
+		await expect(userModel.updateUserBalance(userId, 50, { type: 'DEPOSIT' })).resolves.toBe(150)
+
+		expect(db.query).toHaveBeenCalledWith(
+			`WITH upd AS (
+			UPDATE users SET balance = balance + $1
+			WHERE id = $2 AND (balance + $1) >= 0
+			RETURNING balance
+		), ins AS (
+			INSERT INTO transactions (user_id, amount, type)
+			SELECT $2, abs($1), $3::transaction_type
+			WHERE EXISTS (SELECT 1 FROM upd)
+			RETURNING id
+		)
+		SELECT balance FROM upd;
+		`,
+			[50, userId, 'DEPOSIT'],
+		)
+	})
+
+	it('counts transactions by user with the existing filters', async () => {
+		db.query.mockResolvedValueOnce({ rows: [{ count: 4 }] })
+
+		await expect(userModel.countTransactionsByUser(userId, { type: 'BET' })).resolves.toBe(4)
+
+		expect(db.query).toHaveBeenCalledWith(
+			'SELECT COUNT(*)::int AS count FROM transactions WHERE user_id = $1 AND type = $2',
+			[userId, 'BET'],
 		)
 	})
 })
