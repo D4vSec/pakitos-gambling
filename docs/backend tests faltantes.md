@@ -1,131 +1,126 @@
-# Backend unit test gap analysis
+# Backend tests faltantes
 
-Scope: review of `backend/src/` against the current tests in `backend/tests/`.
 
-## Already covered
+## Pendiente
 
-- `controllers/auth.controller.js`
-- `controllers/roulette.controller.js`
-- `controllers/audit.controller.js`
-- `middlewares/admin.middleware.js`
-- `services/audit.service.js`
-- `services/roulette.service.js`
-- `utils/admin-query.utils.js`
-- `models/user.model.js` (partial)
-- `models/audit.model.js` (partial)
+### `middlewares/ratelimit.middleware.js`
 
-`app.js` and the route wiring are also exercised indirectly by the HTTP tests in `backend/tests/http/`.
+- `authLimiter`
+- `registrationLimiter`
+- `gameLimiter`
+- `historyLimiter`
+- `globalLimiter`
 
-## Partially covered
+### `controllers/slots.controller.js`
 
-### `controllers/user.controller.js`
+- `createSlot`
+- `spinSlot`
+- `getSlotSession`
+- `endSlotSession`
 
-Covered:
-- `createTransaction`
-- validation failures in `getAllUsers`
-- validation failures in `getTransactionsByUserId`
+Casos clave: body inválido, tipo de máquina inválido, saldo insuficiente, sesión inexistente, usuario no dueño, victoria/derrota y cierre de sesión.
 
-Missing:
-- `getProfile`
-- `deleteSelf`
-- `updateSelf`
-- `getUserById`
-- `updateUserById`
-- `deleteUserById`
-- `getSelfBalance`
-- happy/error paths for `getAllUsers`
-- happy/error paths for `getTransactions`
-- happy/error paths for `getTransactionsByUserId`
+### `controllers/blackjack.controller.js`
 
-### `models/user.model.js`
+- `startGame`
+- `hit`
+- `stand`
+- `double`
+- `split`
+- `getGame`
+- `deleteGame`
+- `getGames`
 
-Covered:
-- `findTransactionsByUser`
-- `countUsers`
-- `findUsers`
+Casos clave: apuesta inválida, saldo insuficiente, blackjack inicial, permisos por usuario, split, dobles manos, estados finalizado/ongoing y pago/push.
 
-Missing:
-- `createUser`
-- `findUserByEmail`
-- `findUserById`
-- `findAllUsers`
-- `updateUser`
-- `verifyPassword`
-- `deleteUser`
-- `getUserBalance`
-- `updateUserBalance`
-- `countTransactionsByUser`
+### `controllers/bets.controller.js`
 
-### `models/audit.model.js`
+- `getBets`
+- `getBetInfo`
+- `deleteBet`
+- `updateBet`
+- `placeBet`
 
-Covered:
-- `countAuditLogs`
-- `getAuditLogs`
+Casos clave: opción inexistente, importe inválido, apuesta cerrada, saldo insuficiente, creación de apuesta y auditoría.
 
-Missing:
-- `logAction`
-- more filter combinations and edge cases for `buildAuditFilters`
+### `controllers/capyroad.controller.js`
 
-### `services/audit.service.js`
+- `startGame`
+- `jumpRoad`
+- `destroyGame`
+- `getGame`
+- `getGames`
 
-Covered:
-- `getClientIp`
-- `getUserAgent`
-- `createAudit` happy path
-- delegation of log retrieval
+Casos clave: saldo insuficiente, validación de dueño, juego inexistente, juego finalizado, crash/win y limpieza de sesión.
 
-Missing:
-- `getUserAgentRaw` formatted branches
-- error path in `createAudit`
+### `services/slots.service.js`
 
-### `utils/admin-query.utils.js`
+- `spinReel`
+- `spinGrid`
+- `getLineSymbols`
+- `evaluateLine`
+- `evaluateGrid`
+- `calculatePayout`
+- `spin`
+- validación de `machineType`
 
-Covered:
-- `getSelectedColumns`
-- `getSortClause`
-- `pushContainsClause`
-- `normalizeList`
+### `services/blackjack.service.js`
 
-Missing:
-- `normalizeDate`
-- `getFilterGroups`
-- `pushInClause`
-- `isValidUuid`
+- `createDeck`
+- `shuffleDeck`
+- `calculateHandValue`
+- `getInitialHand`
+- `hit`
+- `double`
+- `split`
+- `dealerPlay`
+- `dealerPlaySplit`
+- `determinateWinner`
+- `hideDealerCard`
+- `setHand`
+- `getPayout`
 
-### `middlewares/auth.middleware.js`
+### `services/bets.service.js`
 
-Only the no-token branch is hit indirectly by the HTTP tests.
+- `calculateOdds`
+- `updateOddsForBet`
 
-Missing:
-- valid bearer token flow
-- expired access token with refresh token flow
-- invalid token flow
-- invalid session flow
-- session rotation path
+### `services/capyroad.service.js`
 
-## Not covered by unit tests
-- `middlewares/ratelimit.middleware.js`
-- `services/slots.service.js`
-- `services/blackjack.service.js`
-- `services/bets.service.js`
-- `services/capyroad.service.js`
-- `controllers/slots.controller.js`
-- `controllers/blackjack.controller.js`
-- `controllers/bets.controller.js`
-- `controllers/capyroad.controller.js`
-- `models/session.model.js`
-- `models/bets.model.js`
-- `utils/password.utils.js`
-- `utils/rng.utils.js`
-- `utils/logger.utils.js`
-- `utils/admin-query-validation.utils.js`
+- `incrementMultiplier`
+- `incrementRoad`
+- `incrementCrashProbability`
+- `checkCrash`
 
-## Best next targets
+### `models/session.model.js`
 
-1. `auth.middleware.js`
-2. `utils/admin-query-validation.utils.js`
-3. `controllers/user.controller.js`
-4. `models/session.model.js` and `models/bets.model.js`
-5. `slots`, `blackjack`, `bets`, and `capyroad` controllers/services
+- `createSession`
+- `getActiveSessionsByUserId`
+- `revokeSession`
+- `verifyTokenMatch`
 
-That would close the highest-risk gaps first: auth/session flows, query validation, and game logic.
+### `models/bets.model.js`
+
+- `createBet`
+- `createBetOption`
+- `placeBet`
+- `getBets`
+- `getBetById`
+- `getBetInfo`
+- `updateOptionOdd`
+- `getOptionsByOptionId`
+- `getPoolDistribution`
+
+
+
+### `utils/admin-query-validation.utils.js`
+- `toOptionalNumber`
+- `validateDateInput`
+- `csvUuidSchema`
+- `csvEnumSchema`
+- `csvTextSchema`
+- `csvNumberSchema`
+- `optionalEnumSchema`
+- `optionalColumnsSchema`
+- `createStructuredFiltersSchema`
+- `createListQuerySchema`
