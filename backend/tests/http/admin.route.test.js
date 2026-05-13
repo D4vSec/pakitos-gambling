@@ -3,10 +3,14 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { getDiscoveredRoutes } from '../helpers/routeDiscovery.js'
 
+const ADMIN_ID = '11111111-1111-1111-1111-111111111111'
+const TARGET_USER_ID = '22222222-2222-2222-2222-222222222222'
+const normalizeAdminPath = (path) => path.replace('/v1/user/1/transactions', `/v1/user/${TARGET_USER_ID}/transactions`).replace('/v1/user/1', `/v1/user/${TARGET_USER_ID}`)
+
 vi.mock('#middlewares/auth.middleware', () => ({
 	default: (req, res, next) => {
 		req.user = {
-			id: 1,
+			id: '11111111-1111-1111-1111-111111111111',
 			role: req.headers['x-test-role'] ?? 'user',
 		}
 		next()
@@ -35,7 +39,10 @@ vi.mock('#models/bets.model', () => ({
 
 vi.mock('#services/audit.service', () => ({
 	default: {
+		createAudit: vi.fn(),
 		getAuditLogs: vi.fn(),
+		getClientIp: vi.fn().mockReturnValue('127.0.0.1'),
+		getUserAgentRaw: vi.fn().mockReturnValue(null),
 		countAuditLogs: vi.fn(),
 	},
 }))
@@ -48,7 +55,7 @@ const { default: AuditService } = await import('#services/audit.service')
 const adminRoutes = getDiscoveredRoutes().filter((route) => route.isAdmin)
 
 const getExpectedStatus = ({ method, path }) => {
-	if (method === 'delete' && path === '/v1/user/1') return 204
+	if (method === 'delete' && normalizeAdminPath(path) === `/v1/user/${TARGET_USER_ID}`) return 204
 
 	return 200
 }
@@ -57,9 +64,9 @@ describe('admin routes', () => {
 	beforeEach(() => {
 		vi.clearAllMocks()
 
-		User.findAllUsers.mockResolvedValue([{ id: 1, username: 'admin', email: 'admin@example.com', role: 'admin', balance: 100 }])
+		User.findAllUsers.mockResolvedValue([{ id: ADMIN_ID, username: 'admin', email: 'admin@example.com', role: 'admin', balance: 100 }])
 		User.findUserById.mockResolvedValue({
-			id: 1,
+			id: TARGET_USER_ID,
 			username: 'demo',
 			email: 'demo@example.com',
 			role: 'user',
@@ -70,7 +77,7 @@ describe('admin routes', () => {
 		User.findTransactionsByUser.mockResolvedValue([])
 		User.countTransactionsByUser.mockResolvedValue(0)
 		User.countUsers.mockResolvedValue(1)
-		User.findUsers.mockResolvedValue([{ id: 1, username: 'admin', email: 'admin@example.com', role: 'admin', balance: 100 }])
+		User.findUsers.mockResolvedValue([{ id: ADMIN_ID, username: 'admin', email: 'admin@example.com', role: 'admin', balance: 100 }])
 
 		Bets.deleteBet.mockResolvedValue(undefined)
 		Bets.updateBet.mockResolvedValue(undefined)
@@ -85,7 +92,7 @@ describe('admin routes', () => {
 			ipAddress: `198.51.100.${index + 1}`,
 		})),
 	)('$method $path rejects non-admin users', async ({ method, path, ipAddress }) => {
-		const response = await request(app)[method](path).set('x-test-role', 'user').set('x-forwarded-for', ipAddress).send({})
+		const response = await request(app)[method](normalizeAdminPath(path)).set('x-test-role', 'user').set('x-forwarded-for', ipAddress).send({})
 
 		expect(response.status).toBe(403)
 		expect(response.body).toEqual({ code: 'NO_PERMISSION' })
@@ -98,7 +105,7 @@ describe('admin routes', () => {
 			expectedStatus: getExpectedStatus(route),
 		})),
 	)('$method $path allows admin users', async ({ method, path, ipAddress, expectedStatus }) => {
-		const response = await request(app)[method](path).set('x-test-role', 'admin').set('x-forwarded-for', ipAddress).send({})
+		const response = await request(app)[method](normalizeAdminPath(path)).set('x-test-role', 'admin').set('x-forwarded-for', ipAddress).send({})
 
 		expect(response.status).toBe(expectedStatus)
 	})

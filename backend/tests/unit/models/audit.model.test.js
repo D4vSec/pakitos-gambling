@@ -10,6 +10,8 @@ import db from '#config/db.config'
 import auditModel from '../../../src/models/audit.model.js'
 
 describe('audit model', () => {
+	const userId = '11111111-1111-1111-1111-111111111111'
+
 	beforeEach(() => {
 		vi.clearAllMocks()
 	})
@@ -30,7 +32,7 @@ describe('audit model', () => {
 
 		await expect(
 			auditModel.getAuditLogs(3, 15, {
-				userId: 7,
+				userId,
 				fromDate: '2026-05-01T00:00:00.000Z',
 				toDate: '2026-05-08T23:59:59.999Z',
 			}),
@@ -39,12 +41,41 @@ describe('audit model', () => {
 		expect(db.query).toHaveBeenCalledWith(
 			'SELECT * FROM audit_logs WHERE user_id = $1 AND created_at >= $2 AND created_at <= $3 ORDER BY created_at DESC LIMIT $4 OFFSET $5',
 			[
-				7,
+				userId,
 				'2026-05-01T00:00:00.000Z',
 				'2026-05-08T23:59:59.999Z',
 				15,
 				30,
 			],
+		)
+	})
+
+	it('avoids UUID syntax errors when the user filter is invalid', async () => {
+		db.query.mockResolvedValueOnce({ rows: [{ count: 0 }] })
+
+		await expect(auditModel.countAuditLogs({ userId: '4' })).resolves.toBe(0)
+
+		expect(db.query).toHaveBeenCalledWith(
+			'SELECT COUNT(*)::int AS count FROM audit_logs WHERE 1 = 0',
+			[],
+		)
+	})
+
+	it('supports column selection, multi-value filters and custom sorting', async () => {
+		db.query.mockResolvedValueOnce({ rows: [{ id: 'log-1', action: 'ADMIN_ACTION' }] })
+
+		await expect(
+			auditModel.getAuditLogs(1, 20, {
+				action: ['ADMIN_ACTION', 'GAME_RESULT'],
+				columns: ['id', 'action'],
+				sortBy: 'action',
+				sortOrder: 'asc',
+			}),
+		).resolves.toEqual([{ id: 'log-1', action: 'ADMIN_ACTION' }])
+
+		expect(db.query).toHaveBeenCalledWith(
+			'SELECT id, action FROM audit_logs WHERE action IN ($1, $2) ORDER BY action ASC LIMIT $3 OFFSET $4',
+			['ADMIN_ACTION', 'GAME_RESULT', 20, 0],
 		)
 	})
 })
