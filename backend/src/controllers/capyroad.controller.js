@@ -12,7 +12,6 @@ const isGameValid = (gameId, game) => {
     if (game.status === "finished") {
         return false
     }
-
     return true
 }
 
@@ -25,19 +24,19 @@ const isUserGameValid = (game, userId) => {
 
 //TODO: Test the game
 const startGame = async (req, res) => {
-    const id = req.user.id
-    const wallet = req.user.wallet
-    const { amount } = req.body
-
-    if (amount > wallet) {
-        return res.status(400).json({ code: "INSUFFICIENT_BALANCE" })
-    }
-
-    const capyRoad = createCapyRoad()
-    const gameID = randomId()
-
     try {
-        await User.updateUserBalance(id, wallet - amount)
+        const id = req.user.id
+        const wallet = req.user.wallet
+        const { amount } = req.body
+
+        if (amount > wallet) {
+            return res.status(400).json({ code: "INSUFFICIENT_BALANCE" })
+        }
+
+        const capyRoad = createCapyRoad()
+        const gameID = randomId()
+
+        await User.updateUserBalance(id, -amount, { type: "BET" })
 
         const road = 0
         const crashProbability = 0
@@ -45,8 +44,9 @@ const startGame = async (req, res) => {
         const isCrashed = false
 
         const game = {
-            gameID: randomId(),
+            gameID,
             game: "capyroad",
+            userId: id,
             status: "ongoing",
             createdAt: new Date().toISOString(),
             amount,
@@ -55,6 +55,7 @@ const startGame = async (req, res) => {
                 crashProbability,
                 payoutMultiplier,
                 isCrashed,
+                multipliers: capyRoad.createMultiplierPath(payoutMultiplier),
             },
             payout: amount * payoutMultiplier,
         }
@@ -69,43 +70,68 @@ const startGame = async (req, res) => {
 }
 
 const jumpRoad = async (req, res) => {
-    const id = req.user.id
-    const { gameId } = req.params
-    const game = games.get(gameId)
+    const capyRoad = createCapyRoad()
+    try {
+        const id = req.user.id
+        const { gameId } = req.params
+        const game = games.get(gameId)
 
-    if (!isGameValid(gameId, game)) {
-        return res.status(400).json({ code: "GAME_NOT_VALID" })
-    }
+        if (!isGameValid(gameId, game)) {
+            return res.status(400).json({ code: "GAME_NOT_VALID" })
+        }
 
-      if (!isUserGameValid(game, id)) {
+        if (!isUserGameValid(game, id)) {
             return res.status(403).json({ code: "FORBIDDEN" })
         }
 
-    const capyRoad = createCapyRoad()
-
-    try {
         capyRoad.incrementRoad(game)
         capyRoad.incrementCrashProbability(game)
-        capyRoad.incrementMultiplier(game)
+
+        const multiplierIndex = game.info.road
+        game.info.payoutMultiplier = game.info.multipliers[multiplierIndex]
 
         if (capyRoad.checkCrash(game)) {
             game.info.isCrashed = true
             game.status = "finished"
+            game.payout = 0
+        } else {
+            game.info.isCrashed = false
+            game.payout = game.amount * game.info.payoutMultiplier
         }
 
-        if (game.status === "finished") {
-            if (!game.info.isCrashed) {
-                try {
-                    await User.updateUserBalance(req.user.id, game.payout)
-                } catch (error) {
-                    logger.error({ message: "Error updating user balance after CapyRoad win", error })
-                }
-            }
-        }
-
-        return res.status(200).json({ message: "Salto realizado", game })
+        return res.status(200).json({ game })
     } catch (error) {
         logger.error({ message: "Error processing jump in CapyRoad game", error })
+        return res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
+    }
+}
+
+const stand = async (req, res) => {
+    try {
+        const id = req.user.id
+        const { gameId } = req.params
+        const game = games.get(gameId)
+
+        if (!isGameValid(gameId, game)) {
+            return res.status(400).json({ code: "GAME_NOT_VALID" })
+        }
+
+        if (!isUserGameValid(game, id)) {
+            return res.status(403).json({ code: "FORBIDDEN" })
+        }
+
+        if (game.info.road === 0) {
+            return res.status(400).json({ code: "CANNOT_STAND_ON_FIRST_ROAD" })
+        }
+
+        game.status = "finished"
+        game.payout = game.amount * game.info.payoutMultiplier
+
+        await User.updateUserBalance(id, game.payout, { type: "WIN" })
+
+        return res.status(200).json({ game })
+    } catch (error) {
+        logger.error({ message: "Error processing stand in CapyRoad game", error })
         return res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
 }
@@ -116,7 +142,9 @@ const destroyGame = (req, res) => {
         if (!games.has(gameId)) {
             return res.status(404).json({ code: "GAME_NOT_FOUND" })
         }
-
+        if (!isUserGameValid(games.get(gameId), req.user.id)) {
+            return res.status(403).json({ code: "FORBIDDEN" })
+        }
         games.delete(gameId)
         return res.status(200).json({ code: "GAME_DELETED_SUCCESSFULLY" })
     } catch (error) {
@@ -155,9 +183,4 @@ const getGames = (req, res) => {
     }
 }
 
-export default {
-    startGame,
-    jumpRoad,
-    destroyGame,
-    getGames,
-}
+export { startGame, jumpRoad, stand, destroyGame, getGames }

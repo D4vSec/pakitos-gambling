@@ -1,30 +1,32 @@
-import { randomFloat, randomFloatInRange, randomId, randomInt, randomIntInclusive } from "#utils/rng.utils"
+import { randomIntInclusive } from "#utils/rng.utils"
 
 // Cross-Road game chicken from stake
 const createCapyRoad = () => {
-    //This will go to the controller
-    const createGame = () => {
-        
-    }
-    //This function will increment the multiplier of the next road
-    const incrementMultiplier = (game) => {
-        const maxMultiplier = 3 // tope x3
+    const maxMultiplier = 3 // tope x3
+    const multiplierPathLength = 10
+    const multiplierCurve = 0.85
 
-        const crashProb = Number(game.info.crashProbability || 0)
-        const survivalProb = Math.max(Math.min((100 - crashProb) / 100, 0.99), 0.01)
-        const targetMultiplier = Math.min(1 / survivalProb, maxMultiplier)
+    const roundMultiplier = (value) => Math.round(value * 100) / 100
 
-        const current = Number(game.info.payoutMultiplier || 1)
+    const createMultiplierPath = (startMultiplier = 1, length = multiplierPathLength) => {
+        const steps = Math.max(2, Number(length) || multiplierPathLength)
+        const start = roundMultiplier(Math.max(1, Number(startMultiplier || 1)))
+        const path = []
 
-        const diff = targetMultiplier - current
-        const minStep = 0.22
-        const step = Math.max(diff * 1.1, minStep)
+        for (let index = 0; index < steps; index++) {
+            if (index === 0) {
+                path.push(start)
+                continue
+            }
 
-        let newMultiplier = current + step
-        if (newMultiplier > targetMultiplier) newMultiplier = targetMultiplier
+            const progress = index / (steps - 1)
+            const easedProgress = Math.pow(progress, multiplierCurve)
+            const nextMultiplier = start + (maxMultiplier - start) * easedProgress
+            path.push(roundMultiplier(Math.min(nextMultiplier, maxMultiplier)))
+        }
 
-        game.info.payoutMultiplier = Math.min(newMultiplier, maxMultiplier)
-        game.info.payoutMultiplier = Math.round(game.info.payoutMultiplier * 100) / 100
+        path[path.length - 1] = maxMultiplier
+        return path
     }
 
     const incrementRoad = (game) => {
@@ -39,10 +41,10 @@ const createCapyRoad = () => {
     }
 
     const checkCrash = (game) => {
-        return randomIntInclusive(0, 99) < (game.info.crashProbability || 0)
+        return randomIntInclusive(0, 99) < game.info.crashProbability
     }
     return {
-        incrementMultiplier,
+        createMultiplierPath,
         incrementRoad,
         incrementCrashProbability,
         checkCrash,

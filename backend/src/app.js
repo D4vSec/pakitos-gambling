@@ -9,6 +9,7 @@ import authRoutes from '#routes/auth.route'
 import rouletteRoutes from '#routes/roulette.route'
 import slotsRoutes from '#routes/slots.route'
 import blackJackRoutes from '#routes/blackjack.route'
+import capyRoadRoutes from '#routes/capyroad.route'
 import betsRoutes from '#routes/bets.route'
 import auditRoutes from '#routes/audit.route'
 
@@ -33,6 +34,7 @@ app.use(`/${API_VERSION}/roulette`, rouletteRoutes)
 app.use(`/${API_VERSION}/slots`, slotsRoutes)
 app.use(`/${API_VERSION}/blackjack`, blackJackRoutes)
 app.use(`/${API_VERSION}/bets`, betsRoutes)
+app.use(`/${API_VERSION}/capyroad`, capyRoadRoutes)
 app.use(`/${API_VERSION}/audit`, auditRoutes)
 
 app.use((req, res) => {
