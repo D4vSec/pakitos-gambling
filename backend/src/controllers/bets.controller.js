@@ -1,6 +1,7 @@
 import Bets from "#models/bets.model"
 import User from "#models/user.model"
 import BetService from "#services/bets.service"
+import Audit from "#services/audit.service"
 import logger from "#utils/logger.utils"
 
 const getBets = async (req, res) => {
@@ -85,6 +86,20 @@ const placeBet = async (req, res) => {
         const userBet = await Bets.placeBet(userId, betOptionId, amount)
 
         await BetService.updateOddsForBet(betId)
+
+        const deviceInfo = Audit.getUserAgentRaw(req)
+        Audit.createAudit({
+            user_id: userId,
+            action: "BET_PLACED",
+            details: {
+                betId,
+                betOptionId,
+                amount,
+                date: new Date().toISOString(),
+            },
+            ip_address: Audit.getClientIp(req),
+            user_agent: deviceInfo ? JSON.stringify(deviceInfo.raw) : null,
+        })
 
         res.status(201).json(userBet)
     } catch (error) {
