@@ -32,7 +32,7 @@
     },
 
     "tables": {
-      "noData": "No se encontraron datos",
+      "noData": "No se han encontrado registros",
       "searchBar": {
         "placeholder": "Buscar...",
         "label": "Búsqueda global",
@@ -46,17 +46,19 @@
         "rowsPerPage": "Filas por página"
       },
       "filters": {
-        "search": "Búsqueda rápida",
-        "searchPlaceholder": "ID, IP, Usuario...",
-        "userIdLabel": "ID de Usuario (UUID)",
-        "action": "Acción",
-        "allActions": "Todas las acciones",
-        "result": "Resultado",
+        "quickSearch": "Búsqueda rápida",
+        "searchBy": "Buscar por...",
+        "selectField": "Seleccionar campo",
+        "select": "Seleccionar...",
+        "value": "Valor",
+        "typeToSearch": "Escribe para buscar...",
+        "pressEnter": "Pulsa Enter para añadir filtro",
+        "add": "Añadir",
+        "reset": "Limpiar todo",
         "all": "Todos",
-        "won": "Ganado",
-        "lost": "Perdido",
-        "dateRange": "Rango de fechas",
-        "clear": "Limpiar filtros"
+        "from": "Desde",
+        "to": "Hasta",
+        "dateRange": "Rango de fechas"
       }
     }
   },
@@ -78,11 +80,11 @@
     "logs": {
       "table": {
         "action": "Acción",
-        "userID": "ID de usuario",
+        "user_id": "ID de Usuario",
         "details": "Detalles",
-        "date": "Fecha",
-        "ipAddress": "Dirección IP",
-        "userAgent": "Agente de usuario"
+        "created_at": "Fecha",
+        "ip_address": "Dirección IP",
+        "user_agent": "Navegador / Sistema"
       }
     },
 

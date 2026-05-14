@@ -32,7 +32,7 @@
     },
 
     "tables": {
-      "noData": "Nu s-au găsit date",
+      "noData": "Nu au fost găsite înregistrări",
       "searchBar": {
         "placeholder": "Caută...",
         "label": "Căutare globală",
@@ -46,17 +46,19 @@
         "rowsPerPage": "Rânduri pe pagină"
       },
       "filters": {
-        "search": "Căutare rapidă",
-        "searchPlaceholder": "ID, IP, Utilizator...",
-        "userIdLabel": "ID Utilizator (UUID)",
-        "action": "Acțiune",
-        "allActions": "Toate acțiunile",
-        "result": "Rezultat",
+        "quickSearch": "Căutare rapidă",
+        "searchBy": "Caută după...",
+        "selectField": "Selectează câmpul",
+        "select": "Selectează...",
+        "value": "Valoare",
+        "typeToSearch": "Scrie pentru a căuta...",
+        "pressEnter": "Apasă Enter pentru a adăuga filtrul",
+        "add": "Adaugă",
+        "reset": "Resetează tot",
         "all": "Toate",
-        "won": "Câștigat",
-        "lost": "Pierdut",
-        "dateRange": "Interval date",
-        "clear": "Șterge filtrele"
+        "from": "De la",
+        "to": "Până la",
+        "dateRange": "Interval de date"
       }
     }
   },
@@ -78,11 +80,11 @@
     "logs": {
       "table": {
         "action": "Acțiune",
-        "userID": "ID utilizator",
+        "user_id": "ID Utilizator",
         "details": "Detalii",
-        "date": "Dată",
-        "ipAddress": "Adresă IP",
-        "userAgent": "Agent utilizator"
+        "created_at": "Dată",
+        "ip_address": "Adresă IP",
+        "user_agent": "Browser / Sistem"
       }
     },
 

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react"
+import React, { createContext, useCallback, useContext, useState } from "react"
 import useAPI from "@/hooks/useAPI"
 import { useSession } from "./SessionProvider"
 import { useNotification } from "./NotificationProvider"
@@ -139,7 +139,7 @@ const AdminProvider = ({ children }) => {
     }
   }
 
-  const getLogs = async (options = {}) => {
+  const getLogs = useCallback(async (options = {}) => {
     try {
       const { page = 1, limit = 20, ...filters } = options
 
@@ -149,7 +149,11 @@ const AdminProvider = ({ children }) => {
       })
 
       Object.keys(filters).forEach((key) => {
-        if (filters[key] !== undefined && filters[key] !== null && filters[key] !== "") {
+        if (
+          filters[key] !== undefined &&
+          filters[key] !== null &&
+          filters[key] !== ""
+        ) {
           queryParams.append(key, filters[key])
         }
       })
@@ -171,7 +175,7 @@ const AdminProvider = ({ children }) => {
     } catch (error) {
       addNotification(t(`message.error.${error.message}`), "error")
     }
-  }
+  }, [])
 
   // const createuser = async (data) => {}
 

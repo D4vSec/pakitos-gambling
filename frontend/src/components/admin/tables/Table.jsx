@@ -10,17 +10,24 @@ import { useLocale } from "@/providers/LocaleProvider"
 import CaretUpSVG from "@/components/svg/flags/CaretUpSVG"
 import CaretDownSVG from "@/components/svg/actions/CaretDownSVG"
 import PaginationBar from "./PaginationBar"
-import SearchBar from "./SearchBar"
 
 // TODO:Añadir loading
 // TODO: Arreglar diseño tabla
-const Table = ({ data = [], columns = [], pageCount = 0, pagination, setPagination }) => {
+const Table = ({
+  data = [],
+  columns = [],
+  pageCount = 0,
+  pagination,
+  setPagination,
+  sorting,
+  setSorting,
+}) => {
   const { t } = useLocale()
-  const [sorting, setSorting] = useState([])
 
   const table = useReactTable({
     data,
     columns,
+    manualSorting: true,
     manualPagination: true,
     pageCount: pageCount,
     state: {
@@ -30,8 +37,6 @@ const Table = ({ data = [], columns = [], pageCount = 0, pagination, setPaginati
     onSortingChange: setSorting,
     onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
   })
 
   return (
@@ -44,8 +49,7 @@ const Table = ({ data = [], columns = [], pageCount = 0, pagination, setPaginati
                 <th
                   key={h.id}
                   onClick={h.column.getToggleSortingHandler()}
-                  className="cursor-pointer"
-                >
+                  className="cursor-pointer">
                   <div className="flex gap-1 items-center">
                     {flexRender(h.column.columnDef.header, h.getContext())}
                     {h.column.getIsSorted() === "asc" && <CaretUpSVG />}
@@ -60,7 +64,9 @@ const Table = ({ data = [], columns = [], pageCount = 0, pagination, setPaginati
         <tbody>
           {table.getRowModel().rows.length === 0 ? (
             <tr>
-              <td colSpan={table.getAllColumns().length} className="text-center">
+              <td
+                colSpan={table.getAllColumns().length}
+                className="text-center">
                 {t("ui.tables.noData")}
               </td>
             </tr>
@@ -68,7 +74,9 @@ const Table = ({ data = [], columns = [], pageCount = 0, pagination, setPaginati
             table.getRowModel().rows.map((row) => (
               <tr key={row.id}>
                 {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+                  <td key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
                 ))}
               </tr>
             ))

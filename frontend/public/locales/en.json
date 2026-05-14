@@ -46,17 +46,19 @@
         "rowsPerPage": "Rows per page"
       },
       "filters": {
-        "search": "Quick Search",
-        "searchPlaceholder": "ID, IP, User...",
-        "userIdLabel": "User ID (UUID)",
-        "action": "Action",
-        "allActions": "All Actions",
-        "result": "Result",
+        "quickSearch": "Quick search",
+        "searchBy": "Search by...",
+        "selectField": "Select field",
+        "select": "Select...",
+        "value": "Value",
+        "typeToSearch": "Type to search...",
+        "pressEnter": "Press Enter to add filter",
+        "add": "Add",
+        "reset": "Clear all",
         "all": "All",
-        "won": "Won",
-        "lost": "Lost",
-        "dateRange": "Date Range",
-        "clear": "Clear filters"
+        "from": "From",
+        "to": "To",
+        "dateRange": "Date range"
       }
     }
   },
@@ -78,11 +80,11 @@
     "logs": {
       "table": {
         "action": "Action",
-        "userID": "User ID",
+        "user_id": "User ID",
         "details": "Details",
-        "date": "Date",
-        "ipAddress": "IP Address",
-        "userAgent": "User Agent"
+        "created_at": "Date",
+        "ip_address": "IP Address",
+        "user_agent": "Browser / System"
       }
     },
 
