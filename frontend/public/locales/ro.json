@@ -54,11 +54,18 @@
         "typeToSearch": "Scrie pentru a căuta...",
         "pressEnter": "Apasă Enter pentru a adăuga filtrul",
         "add": "Adaugă",
-        "reset": "Resetează tot",
+        "reset": "Șterge tot",
         "all": "Toate",
         "from": "De la",
         "to": "Până la",
-        "dateRange": "Interval de date"
+        "dateRange": "Interval de date",
+        "range": "Interval",
+        "min": "Min",
+        "max": "Max",
+        "minBalance": "Sold minim",
+        "maxBalance": "Sold maxim",
+        "minAmount": "Sumă minimă",
+        "maxAmount": "Sumă maximă"
       }
     }
   },

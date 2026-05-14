@@ -58,7 +58,14 @@
         "all": "All",
         "from": "From",
         "to": "To",
-        "dateRange": "Date range"
+        "dateRange": "Date range",
+        "range": "Range",
+        "min": "Min",
+        "max": "Max",
+        "minBalance": "Min Balance",
+        "maxBalance": "Max Balance",
+        "minAmount": "Min Amount",
+        "maxAmount": "Max Amount"
       }
     }
   },

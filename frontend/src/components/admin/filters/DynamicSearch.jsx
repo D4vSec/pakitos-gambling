@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import { useLocale } from "@/providers/LocaleProvider"
 import SearchSVG from "@/components/svg/actions/SearchSVG"
 
+// TODO: Traducir los enumerados???
 const DynamicSearch = ({ config, onAddFilter, translationPath }) => {
   const { t } = useLocale()
   const [localField, setLocalField] = useState("")
@@ -19,9 +20,7 @@ const DynamicSearch = ({ config, onAddFilter, translationPath }) => {
   return (
     <form onSubmit={handleSubmit} className="flex flex-col w-full">
       <label className="label pt-0 px-1 min-h-6">
-        <span className="label-text font-bold text-sm">
-          {t("ui.tables.filters.quickSearch")}
-        </span>
+        <span className="label-text font-bold text-sm">{t("ui.tables.filters.quickSearch")}</span>
       </label>
 
       <div className="join w-full shadow-sm h-8">
@@ -31,7 +30,8 @@ const DynamicSearch = ({ config, onAddFilter, translationPath }) => {
           onChange={(e) => {
             setLocalField(e.target.value)
             setLocalValue("")
-          }}>
+          }}
+        >
           <option value="">{t("ui.tables.filters.searchBy")}</option>
           {Object.keys(config).map((key) => (
             <option key={key} value={key} className="text-xs md:text-sm">
@@ -45,7 +45,8 @@ const DynamicSearch = ({ config, onAddFilter, translationPath }) => {
             className="select select-bordered select-sm join-item flex-1 bg-base-100 h-full min-w-0"
             value={localValue}
             onChange={(e) => setLocalValue(e.target.value)}
-            disabled={!localField}>
+            disabled={!localField}
+          >
             <option value="">{t("ui.tables.filters.select")}</option>
             {selectedConfig.options.map((opt) => (
               <option key={opt} value={opt}>
@@ -66,7 +67,8 @@ const DynamicSearch = ({ config, onAddFilter, translationPath }) => {
         <button
           type="submit"
           className="btn btn-primary btn-sm join-item h-full px-2 md:px-4"
-          disabled={!localValue}>
+          disabled={!localValue}
+        >
           <SearchSVG className="w-4 h-4" />
         </button>
       </div>

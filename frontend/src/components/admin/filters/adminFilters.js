@@ -13,7 +13,27 @@ export const AUDIT_FILTER_CONFIG = {
     ],
   },
   user_id: { type: "uuid" },
+  details: { type: "text" },
   ip_address: { type: "text" },
   user_agent: { type: "text" },
-  details: { type: "text" },
+}
+
+export const USER_FILTER_CONFIG = {
+  username: { type: "text" },
+  email: { type: "text" },
+  role: {
+    type: "enum",
+    options: ["admin", "user"],
+  },
+  balance: { type: "text" },
+}
+
+export const TRANSACTION_FILTER_CONFIG = {
+  type: {
+    type: "enum",
+    options: ["BET", "BONUS", "DEPOSIT", "REFUND", "WIN", "WITHDRAWAL"],
+  },
+  amount: {
+    type: "text",
+  },
 }

@@ -17,8 +17,7 @@ const useTable = (fetchFn, initialFilters = {}, initialSorting = []) => {
     setIsLoading(true)
 
     const sortBy = sorting.length > 0 ? sorting[0].id : undefined
-    const sortOrder =
-      sorting.length > 0 ? (sorting[0].desc ? "desc" : "asc") : "none"
+    const sortOrder = sorting.length > 0 ? (sorting[0].desc ? "desc" : "asc") : "none"
 
     const { filters: activeFilters, ...rest } = filters
 

@@ -2,6 +2,7 @@ import React from "react"
 import { useLocale } from "@/providers/LocaleProvider"
 import CloseSVG from "@/components/svg/actions/CloseSVG"
 import { AUDIT_TYPES } from "../types"
+
 const FilterBar = ({ filters, onChange }) => {
   const { t } = useLocale()
 

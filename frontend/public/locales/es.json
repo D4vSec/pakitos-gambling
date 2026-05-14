@@ -52,13 +52,20 @@
         "select": "Seleccionar...",
         "value": "Valor",
         "typeToSearch": "Escribe para buscar...",
-        "pressEnter": "Pulsa Enter para añadir filtro",
+        "pressEnter": "Presiona Enter para añadir filtro",
         "add": "Añadir",
         "reset": "Limpiar todo",
         "all": "Todos",
         "from": "Desde",
         "to": "Hasta",
-        "dateRange": "Rango de fechas"
+        "dateRange": "Rango de fechas",
+        "range": "Rango",
+        "min": "Mín",
+        "max": "Máx",
+        "minBalance": "Saldo mínimo",
+        "maxBalance": "Saldo máximo",
+        "minAmount": "Cantidad mínima",
+        "maxAmount": "Cantidad máxima"
       }
     }
   },
@@ -70,7 +77,7 @@
       "viewLogs": "Ver registros",
       "table": {
         "username": "Nombre de usuario",
-        "email": "Correo electrónico",
+        "email": "Email",
         "role": "Rol",
         "balance": "Saldo",
         "actions": "Acciones"

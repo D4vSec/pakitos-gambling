@@ -8,6 +8,7 @@ import DynamicSearch from "./DynamicSearch"
 import Button from "@/components/buttons/Button"
 import CloseSVG from "@/components/svg/actions/CloseSVG"
 
+// TODO: Añadir el filtro win/lose del payout
 const LogsFilterBar = ({ filters, onChange }) => {
   const { t } = useLocale()
 
