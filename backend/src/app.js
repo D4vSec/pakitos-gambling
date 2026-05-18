@@ -44,7 +44,14 @@ app.use((req, res) => {
 })
 
 app.use((err, req, res, next) => {
-	logger.error(err)
+	logger.error({
+		error: err,
+		request: {
+			method: req.method,
+			url: req.originalUrl,
+			data: req.body,
+		},
+	})
 	const statusCode = err.status || err.statusCode || 500
 
 	res.status(statusCode).json({
