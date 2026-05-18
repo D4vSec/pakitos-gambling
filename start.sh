@@ -3,7 +3,7 @@
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 RED='\033[0;31m'
-NC='\033[0m' 
+NC='\033[0m'
 
 error_exit() {
     echo -e "${RED}Error: $1${NC}"
@@ -48,30 +48,33 @@ if [ "$MODE" != "dev" ]; then
     done
 fi
 
-if [ "$1" = "dev" ]; then
+if [ "$MODE" = "dev" ]; then
     echo -e "${BLUE}--- DEVELOPMENT MODE ---${NC}"
-    
-    $DOCKER_BE -f docker-compose.dev.yml up -d --build || error_exit "Docker compose failed to start."
+
+    $DOCKER_BE --profile dev up -d --build || error_exit "Docker compose failed to start."
 
     echo -e "\n${GREEN}Development environment ready!${NC}"
-    echo -e "Frontend (Vite):  ${BLUE}http://localhost:5173${NC}"
+    echo -e "Frontend (Vite): ${BLUE}http://localhost:5173${NC}"
     echo -e "Backend API: ${BLUE}http://localhost:${API_PORT:-3000}${NC}"
-    echo -e "To view logs: ${BLUE}$DOCKER_BE -f docker-compose.dev.yml logs -f${NC}"
+    echo -e "pgAdmin: ${BLUE}http://localhost:${PGADMIN_PORT:-5050}${NC}"
+    echo -e "Logs: ${BLUE}$DOCKER_BE --profile dev logs -f${NC}"
 
 else
     echo -e "${GREEN}--- PRODUCTION MODE (APACHE) ---${NC}"
+
     if [ ! -d "frontend" ]; then
         error_exit "Frontend directory not found."
     fi
 
     echo "Building static frontend..."
-    
     (cd frontend && npm install && npm run build) || error_exit "Frontend build process failed."
 
     echo "Starting production containers..."
-    $DOCKER_BE up -d --build || error_exit "Docker compose failed to start."
+    $DOCKER_BE --profile prod up -d --build || error_exit "Docker compose failed to start."
 
     echo -e "\n${GREEN}Production environment ready!${NC}"
     echo -e "Frontend (Apache): ${BLUE}http://localhost:80${NC}"
     echo -e "Backend API: ${BLUE}http://localhost:${API_PORT:-3000}${NC}"
+    echo -e "pgAdmin: ${BLUE}http://localhost:${PGADMIN_PORT:-5050}${NC}"
+    echo -e "Logs: ${BLUE}$DOCKER_BE --profile prod logs -f${NC}"
 fi
