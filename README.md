@@ -52,23 +52,17 @@ CORS_ORIGIN=http://localhost:5173
 From the repository root:
 
 ```bash
-bash start.sh dev
+bash start.sh
 ```
+
+> Mode is read from `NODE_ENV` in `.env` (Current: `development` or `production`)
 
 ### Database
 Import the initial schema:
 
 ```bash
-bash sql.sh dev
+bash sql.sh
 ```
-
-Create a test user without using the frontend or the API endpoint:
-
-```bash
-./create_user.sh username email@example.com 'Password123!' [user|admin] [prod|dev]
-```
-
-This uses `docker compose run --rm` against the backend service, so it starts a temporary container for the script and removes it when the command finishes. It does not touch the long-running backend container.
 
 ### Running backend without docker
 If you want to run the backend locally without Docker, you must ensure you are using Node.js 22. We recommend using nvm to manage Node versions. The project includes a `.nvmrc` file inside `backend` folder that specifies the exact node version required for this project.
