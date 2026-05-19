@@ -96,8 +96,8 @@ If Docker resources remain allocated inside WSL2 after use, you can shut the env
 powershell -Command "Start-Process wsl -ArgumentList '--shutdown' -Verb RunAs"
 ```
 
-## 👥 Team
-- [David Gonzalez](https://github.com/D4vSec)
-- [Yeray Caturla](https://github.com/yeraox)
-- [Nain Pontes](https://github.com/Stevankito)
-- [Alexandro Stefan Dezso](https://github.com/Roria1324)
+## 👥 Collaborators
+- [D4vSec](https://github.com/D4vSec)
+- [Yeraox](https://github.com/yeraox)
+- [Stevankito](https://github.com/Stevankito)
+- [Roria1324](https://github.com/Roria1324)
