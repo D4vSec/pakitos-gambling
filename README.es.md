@@ -98,8 +98,8 @@ Si los recursos de Docker quedan asignados dentro de WSL2 después de su uso, pu
 powershell -Command "Start-Process wsl -ArgumentList '--shutdown' -Verb RunAs"
 ```
 
-## 👥 Equipo
-- [David Gonzalez](https://github.com/D4vSec)
-- [Yeray Caturla](https://github.com/yeraox)
-- [Nain Pontes](https://github.com/Stevankito)
-- [Alexandro Stefan Dezso](https://github.com/Roria1324)
+## 👥 Colaboradores
+- [D4vSec](https://github.com/D4vSec)
+- [Yeraox](https://github.com/yeraox)
+- [Stevankito](https://github.com/Stevankito)
+- [Roria1324](https://github.com/Roria1324)
