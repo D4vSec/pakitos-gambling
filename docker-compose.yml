@@ -42,6 +42,9 @@ services:
             dockerfile: docker/Dockerfile.backend
             target: ${NODE_ENV:-development}
         container_name: node_backend
+        volumes:
+            - ./backend:/app
+            - /app/node_modules
         environment:
             DB_HOST: database
             DB_PORT: 5432
