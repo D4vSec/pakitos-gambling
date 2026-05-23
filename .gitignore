@@ -5,4 +5,4 @@ frontend/node_modules/
 frontend/build/
 frontend/dist/
 docker/sql/postgres_data
-docker/sql/postgres_data_dev
+docker/sql/postgres_data_dev*Zone.Identifier
