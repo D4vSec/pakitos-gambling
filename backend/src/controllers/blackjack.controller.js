@@ -536,6 +536,9 @@ export const deleteGame = (req, res) => {
 }
 
 export const getGame = (req, res) => {
+
+    const blackJack = createBlackJack()
+
     try {
         const id = req.user.id
         const { gameId } = req.params
@@ -552,7 +555,7 @@ export const getGame = (req, res) => {
 
         if (!games.has(gameId)) return res.status(404).json({ code: "GAME_NOT_FOUND" })
 
-        const responseGame = blackJack.hideDealerCard(dealerHand, game)
+        const responseGame = blackJack.hideDealerCard(game.dealerHand, game)
 
         res.status(200).json(Object.fromEntries(Object.entries(responseGame).filter(([key]) => key !== "deck")))
     } catch (error) {
