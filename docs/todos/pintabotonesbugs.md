@@ -6,8 +6,7 @@
 # Mejoras
 
 - Faltan animaciones en al BJ
-- Las slots necesitan mas cariño, animaciones mas fluidas, estilo parecido a los otros juegos, y que todas las slots puedan ser de cada tipo
-- La animacion de la slot esta rota la primera vez
+- Se debe de arreglar la imagen inicial ya que no la detecta y cambiar imagenes de la slot de la cerveza.
 - Hay que evitar que mientras se hace una animacion se pueda tirar otra apuesta
 - Si no estas registrado que la parte de invitado no te aparezca para hacerle click, puede ser confuso para el usuario
 - El capyroad no va xd
@@ -43,3 +42,4 @@
 - [x] Ojete para ver contraseña
 - [x] Expresion regular fixeada
 - [x] Animaciones Ruleta
+- [x] Animaciones slots y las slots estan tematizadas.
