@@ -1,57 +1,19 @@
-### Anotaciones
-
 ### 🐞 Bugs
 
-<!-- 06/05/26 -->
+<!-- 23/05/26 -->
 
-- **No inicia el la partida del blackjack**
-  - No inicia la partida, muy probablemente sea un import / export, desconozco si fallará algo más ya que no se ha podido probar
+- **Error al obtener uan partida ya iniciada por id**
 
 ```txt
-backend_dev      | ReferenceError: hideDealerCard is not defined
-backend_dev      |     at startGame (file:///app/src/controllers/blackjack.controller.js:129:26)
-backend_dev      |     at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
-backend_dev      | [11:36:03.283] ERROR (62): Error starting game:
+node_backend  | ReferenceError: blackJack is not defined
+node_backend  |     at getGame (file:///app/src/controllers/blackjack.controller.js:637:26)
+node_backend  |     at Layer.handleRequest (/app/node_modules/router/lib/layer.js:152:17)
+node_backend  |     at next (/app/node_modules/router/lib/route.js:157:13)
+node_backend  |     at authMiddleware (file:///app/src/middlewares/auth.middleware.js:27:10)
+node_backend  |     at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+node_backend  | [12:14:41.401] ERROR (31): Error getting game:
 ```
-
-SOLUCIONADO: El metodo se llamaba mal
-
-- **Broken Object Level Authorization**
-  - The Blackjack session store trusts gameId alone. None of the mutation endpoints (hit, stand, double, split, delete) verify that the session belongs to req.user.id, and payouts are applied to the current caller's balance.
-
-- **Continuar partida (get/:gameId)**
-  - La segunda carta del dealer se devuelve con el valor verdadero, `suit` ni `value` estan como `"hidden"`.
-
-- **Lógica del dealer**
-  - Si el dealer ya ha ganado, deja de robar cartas.
-  - Ejemplo:
-    - Jugador: 11 → hace _stand_
-    - Dealer: tiene un 3 + carta oculta J (total 13)
-    - ❌ El dealer no roba más porque ya ha "ganado"
-    - ✅ Debería seguir robando hasta:
-      - llegar a 17 o más
-      - o pasarse de 21
-
-- **Split de manos**
-  - Se pueden dividir más de 2 manos
-  - ❌ Pero al calcular el final del juego:
-    - Si te plantas con 2 manos, las siguientes se ignoran y la partida termina
-
-- **(Duda pendiente)**
-  - Limitar a máximo 2 manos por comodidad o permitir más splits correctamente
-
-- **Empates (push)**
-  - ❌ Actualmente payout = 0
-  - ✅ Debería devolver lo apostado
-    - Ejemplo: apuestas 10 → empate → recibes 10
 
 ## CHECKLIST
 
-- [X] Refactor del BJ
-- [ ] Mirar registros logs sin userID
-- [X] Poder iniciar partida
-- [x] Continuar partida (get/:gameId)
-- [x] Lógica del dealer
-- [x] Split de manos
-- [x] Empates (push)
-- [x] Broken Object Level Authorization
+- [x] blackJack existe en getGame
