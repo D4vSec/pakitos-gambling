@@ -1,9 +1,10 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { useForm, FormProvider } from "react-hook-form"
 import FormField from "@/components/forms/FormField"
 import { useSession } from "@/providers/SessionProvider"
 import { useNotification } from "@/providers/NotificationProvider"
 import { useLocale } from "@/providers/LocaleProvider"
+import useAPI from "@/hooks/useAPI"
 import Title from "@/components/layout/fonts/Title"
 import Button from "@/components/buttons/Button"
 import GradientBg from "@/components/layout/GradientBg"
@@ -12,9 +13,12 @@ import ShieldSVG from "@/components/svg/pictures/ShieldSVG"
 import AlertTriangleSVG from "@/components/svg/actions/AlertTriangleSVG"
 
 const Profile = () => {
-  const { user, updateProfile } = useSession()
+  const { user, updateProfile, logout, getAccessToken, getRefreshToken } = useSession()
   const { addNotification } = useNotification()
   const { t } = useLocale()
+  const { destroy } = useAPI()
+  const [profileLoading, setProfileLoading] = useState(false)
+  const [passwordLoading, setPasswordLoading] = useState(false)
 
   const profileMethods = useForm({
     defaultValues: {
@@ -42,18 +46,43 @@ const Profile = () => {
     }
   }, [user])
 
-  const handleProfileSubmit = (data) => {
-    console.log("Actualizar perfil:", data)
-    // updateProfile(data)
+  const handleProfileSubmit = async (data) => {
+    setProfileLoading(true)
+    try {
+      await updateProfile({ username: data.username, email: data.email })
+    } catch {
+      // updateProfile already shows the error notification
+    } finally {
+      setProfileLoading(false)
+    }
   }
 
-  const handlePasswordSubmit = (data) => {
-    console.log("Cambiar contraseña:", data)
-    passwordMethods.reset()
+  const handlePasswordSubmit = async (data) => {
+    setPasswordLoading(true)
+    try {
+      await updateProfile({ password: data.newPassword })
+      passwordMethods.reset()
+      logout()
+    } catch {
+      // updateProfile already shows the error notification
+    } finally {
+      setPasswordLoading(false)
+    }
   }
 
-  const handleDeleteAccount = () => {
-    console.log("Eliminar cuenta")
+  const handleDeleteAccount = async () => {
+    if (!window.confirm(t("pages.profile.danger.confirm"))) return
+    try {
+      await destroy("/api/v1/user/me", {
+        headers: {
+          Authorization: `Bearer ${getAccessToken()}`,
+          "x-refresh-token": getRefreshToken(),
+        },
+      })
+      logout()
+    } catch {
+      addNotification(t("message.error.UNKNOWN_ERROR"), "error")
+    }
   }
 
   return (
@@ -120,8 +149,8 @@ const Profile = () => {
                       }}
                     />
 
-                    <Button variant="primary" className="mt-2">
-                      {t("forms.buttons.update")}
+                    <Button variant="primary" className="mt-2" disabled={profileLoading}>
+                      {profileLoading ? "..." : t("forms.buttons.update")}
                     </Button>
                   </form>
                 </FormProvider>
@@ -177,8 +206,8 @@ const Profile = () => {
                   }}
                 />
 
-                <Button variant="secondary" className="mt-2">
-                  {t("forms.buttons.changePassword")}
+                <Button variant="secondary" className="mt-2" disabled={passwordLoading}>
+                  {passwordLoading ? "..." : t("forms.buttons.changePassword")}
                 </Button>
               </form>
             </FormProvider>

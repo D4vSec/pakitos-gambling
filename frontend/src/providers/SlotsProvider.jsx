@@ -81,10 +81,6 @@ const SlotsProvider = ({ type = "3x3", children }) => {
       setStoredGameId(type, res.gameId)
       setStoredPaylines(type, res.paylines)
 
-      if (res.balance != null) {
-        setUser((prev) => ({ ...prev, balance: Number(res.balance).toFixed(2) }))
-      }
-
       return res
     } catch (err) {
       setError(err.message)
