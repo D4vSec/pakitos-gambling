@@ -1,57 +1,104 @@
-import Audit from '#services/audit.service'
-import * as z from 'zod'
-import logger from '#utils/logger.utils'
-import { AUDIT_TYPES } from '#@/config/audit.config'
+import * as z from "zod"
 
-const VALID_ACTION_PARAMS = Object.freeze({
-	"userId": ["userId"],
-	"action": ["action"],
-	"date": ["fromDate", "toDate"],
+import {
+	AUDIT_FILTER_FIELDS,
+	AUDIT_SELECTABLE_COLUMNS,
+	AUDIT_TYPES,
+	LEGACY_AUDIT_FILTERS,
+	SORT_ORDERS,
+} from "#config/admin-filters.config"
+import Audit from "#services/audit.service"
+import logger from "#utils/logger.utils"
+import {
+	createListQuerySchema,
+	createStructuredFiltersSchema,
+	csvEnumSchema,
+	csvTextSchema,
+	csvUuidSchema,
+	optionalColumnsSchema,
+	optionalEnumSchema,
+} from "#utils/admin-query-validation.utils"
+
+const auditColumnKeys = Object.freeze(Object.keys(AUDIT_SELECTABLE_COLUMNS))
+
+const auditFilterValueSchemas = Object.freeze({
+	id: csvUuidSchema(),
+	userId: csvUuidSchema(),
+	user_id: csvUuidSchema(),
+	action: csvEnumSchema(AUDIT_TYPES),
+	ip: csvTextSchema(),
+	ipAddress: csvTextSchema(),
+	ip_address: csvTextSchema(),
+	userAgent: csvTextSchema(),
+	user_agent: csvTextSchema(),
+	details: csvTextSchema(),
+	createdAt: csvTextSchema(),
+	created_at: csvTextSchema(),
+})
+
+const auditQuerySchema = createListQuerySchema({
+	filter: optionalEnumSchema(LEGACY_AUDIT_FILTERS),
+	id: auditFilterValueSchemas.id.optional(),
+	userId: auditFilterValueSchemas.userId.optional(),
+	action: auditFilterValueSchemas.action.optional(),
+	ip: auditFilterValueSchemas.ip.optional(),
+	ipAddress: auditFilterValueSchemas.ipAddress.optional(),
+	ip_address: auditFilterValueSchemas.ip_address.optional(),
+	userAgent: auditFilterValueSchemas.userAgent.optional(),
+	user_agent: auditFilterValueSchemas.user_agent.optional(),
+	details: auditFilterValueSchemas.details.optional(),
+	columns: optionalColumnsSchema(auditColumnKeys),
+	sortBy: z.enum(auditColumnKeys).optional(),
+	sortOrder: z.enum(SORT_ORDERS).optional(),
+	filterField: z.enum(AUDIT_FILTER_FIELDS).optional(),
+	filterBy: z.enum(AUDIT_FILTER_FIELDS).optional(),
+	column: z.enum(AUDIT_FILTER_FIELDS).optional(),
+	filterValue: z.unknown().optional(),
+	filterValues: z.unknown().optional(),
+	value: z.unknown().optional(),
+	filters: createStructuredFiltersSchema(AUDIT_FILTER_FIELDS, auditFilterValueSchemas),
 })
 
 const getAuditLogs = async (req, res) => {
-	const queryData = req.query || {}
-
-	const querySchema = z.object({
-		page: z.preprocess((v) => parseInt(v, 10), z.number().int().positive()).optional(),
-		limit: z.preprocess((v) => parseInt(v, 10), z.number().int().positive()).optional(),
-		filter: z.string().optional(),
-		fromDate: z.string().refine((date) => !date || !isNaN(Date.parse(date)), { message: 'INVALID_FROM_DATE' }).optional(),
-		toDate: z.string().refine((date) => !date || !isNaN(Date.parse(date)), { message: 'INVALID_TO_DATE' }).optional(),
-		userId: z.preprocess((v) => parseInt(v, 10), z.number().int().positive()).optional(),
-		action: z.enum(AUDIT_TYPES).optional()
-	})
-
-	if (queryData.filter) {
-		const filterKey = queryData.filter
-		if (!VALID_ACTION_PARAMS[filterKey])
-			return res.status(400).json({ code: 'INVALID_FILTER_KEY', expected: VALID_ACTION_PARAMS })
-
-		const missingParams = VALID_ACTION_PARAMS[filterKey].filter(param => !(param in queryData))
-
-		if (missingParams.length > 0)
-			return res.status(400).json({ code: 'MISSING_FILTER_PARAMS', missingParams })
+	const parsedQuery = auditQuerySchema.safeParse(req.query || {})
+	if (!parsedQuery.success) {
+		return res.status(400).json({ code: "INVALID_QUERY_PARAMS", errors: parsedQuery.error.issues })
 	}
 
-	const query = querySchema.safeParse(queryData)
-	if (!query.success)
-		return res.status(400).json({ code: 'INVALID_QUERY_PARAMS', errors: query.error.errors })
+	const singleFilterField = parsedQuery.data.filterField ?? parsedQuery.data.filterBy ?? parsedQuery.data.column
+	if (singleFilterField) {
+		const singleFilterValue = parsedQuery.data.filterValues ?? parsedQuery.data.filterValue ?? parsedQuery.data.value
+		const parseSingleFilter = auditFilterValueSchemas[singleFilterField]?.safeParse(singleFilterValue)
 
-	const page = query.data.page ?? 1
-	const limit = Math.min(query.data.limit ?? 20, 100)
-	const filters = {}
+		if (!parseSingleFilter?.success) {
+			return res.status(400).json({ code: "INVALID_QUERY_PARAMS", errors: parseSingleFilter?.error?.issues ?? [] })
+		}
+	}
 
-	if (query.data.userId) filters.userId = query.data.userId
-	if (query.data.action) filters.action = query.data.action
-	if (query.data.fromDate) filters.fromDate = query.data.fromDate
-	if (query.data.toDate) filters.toDate = query.data.toDate
+	const page = parsedQuery.data.page ?? 1
+	const limit = Math.min(parsedQuery.data.limit ?? 20, 100)
+
+	if (parsedQuery.data.fromDate && parsedQuery.data.toDate) {
+		const fromDate = new Date(parsedQuery.data.fromDate)
+		const toDate = new Date(parsedQuery.data.toDate)
+
+		if (!Number.isNaN(fromDate.getTime()) && !Number.isNaN(toDate.getTime()) && fromDate > toDate) {
+			return res.status(400).json({ code: "INVALID_DATE_RANGE" })
+		}
+	}
+
+	const filters = { ...parsedQuery.data }
+	delete filters.page
+	delete filters.limit
+	delete filters.filter
 
 	try {
 		const total = await Audit.countAuditLogs(filters)
 		const totalPages = Math.max(1, Math.ceil(total / limit))
 
-		if (page > totalPages)
-			return res.status(400).json({ code: 'PAGE_EXCEDED' })
+		if (page > totalPages) {
+			return res.status(400).json({ code: "PAGE_EXCEDED" })
+		}
 
 		const logs = await Audit.getAuditLogs(page, limit, filters)
 
@@ -59,12 +106,11 @@ const getAuditLogs = async (req, res) => {
 			page,
 			limit,
 			totalPages,
-			logs: logs || []
+			logs: logs || [],
 		})
-
 	} catch (err) {
 		logger.error(err)
-		res.status(500).json({ code: 'SERVER_ERROR' })
+		res.status(500).json({ code: "SERVER_ERROR" })
 	}
 }
 

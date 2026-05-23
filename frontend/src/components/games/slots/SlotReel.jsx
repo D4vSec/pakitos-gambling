@@ -3,7 +3,7 @@ import gsap from "gsap"
 import { WIN_REVEAL_DELAY_MS } from "./slotConstants"
 import imagenInicio3x3Img from "@/assets/games/imagenInicio3x3.jpg"
 import imagenInicio3x5Img from "@/assets/games/imagenInicio3x5.jpg"
-import beermanImg from "@/assets/home/beerman.jpeg"
+import beermanImg from "@/assets/home/cards/beerman.jpeg"
 import cherry3x3Img from "@/assets/games/cherry3x3.jpg"
 import lemon3x3Img from "@/assets/games/lemon3x3.jpg"
 import orange3x3Img from "@/assets/games/orange3x3.jpg"
@@ -28,9 +28,33 @@ import seven5x5Img from "@/assets/games/seven5x5.png"
 
 const SYMBOLS = ["cherry", "lemon", "orange", "plum", "bell", "bar", "seven"]
 const DISPLAY_BY_TYPE = {
-  "3x3": { cherry: cherry3x3Img, lemon: lemon3x3Img, orange: orange3x3Img, plum: plum3x3Img, bell: bell3x3Img, bar: bar3x3Img, seven: seven3x3Img },
-  "3x5": { cherry: cherry3x5Img, lemon: lemon3x5Img, orange: orange3x5Img, plum: plum3x5Img, bell: bell3x5Img, bar: bar3x5Img, seven: seven3x5Img },
-  "5x5": { cherry: cherry5x5Img, lemon: lemon5x5Img, orange: orange5x5Img, plum: plum5x5Img, bell: bell5x5Img, bar: bar5x5Img, seven: seven5x5Img },
+  "3x3": {
+    cherry: cherry3x3Img,
+    lemon: lemon3x3Img,
+    orange: orange3x3Img,
+    plum: plum3x3Img,
+    bell: bell3x3Img,
+    bar: bar3x3Img,
+    seven: seven3x3Img,
+  },
+  "3x5": {
+    cherry: cherry3x5Img,
+    lemon: lemon3x5Img,
+    orange: orange3x5Img,
+    plum: plum3x5Img,
+    bell: bell3x5Img,
+    bar: bar3x5Img,
+    seven: seven3x5Img,
+  },
+  "5x5": {
+    cherry: cherry5x5Img,
+    lemon: lemon5x5Img,
+    orange: orange5x5Img,
+    plum: plum5x5Img,
+    bell: bell5x5Img,
+    bar: bar5x5Img,
+    seven: seven5x5Img,
+  },
 }
 const PLACEHOLDER_BY_TYPE = {
   "3x3": imagenInicio3x3Img,
@@ -55,8 +79,8 @@ const SlotReel = ({
   onSettled,
 }) => {
   const DISPLAY = DISPLAY_BY_TYPE[machineType] ?? DISPLAY_BY_TYPE["3x3"]
-  const imgARefs = useRef([])   // primary img per row — used for spin, landing, idle
-  const imgBRefs = useRef([])   // secondary img per row — only active during spin
+  const imgARefs = useRef([]) // primary img per row — used for spin, landing, idle
+  const imgBRefs = useRef([]) // secondary img per row — only active during spin
   const cellRefs = useRef([])
   const spinTweensRef = useRef([])
   const winTweensRef = useRef([])
@@ -100,10 +124,13 @@ const SlotReel = ({
   // Cleanup only on unmount — NOT on every isSpinning change.
   // If cleanup ran on every change, React would kill all spin tweens the moment
   // isSpinning flips false, before each reel's individual stopDelay fires.
-  useEffect(() => () => {
-    clearSpinTweens()
-    clearWinTweens()
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(
+    () => () => {
+      clearSpinTweens()
+      clearWinTweens()
+    },
+    [],
+  ) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     clearWinTweens()
@@ -147,13 +174,9 @@ const SlotReel = ({
           const imgB = imgBRefs.current[r]
           // Cascade: each row starts slightly after the one above
           const rowOffset = r * 0.018
-          return [
-            makeTween(imgA, rowOffset),
-            makeTween(imgB, STAGGER + rowOffset),
-          ]
+          return [makeTween(imgA, rowOffset), makeTween(imgB, STAGGER + rowOffset)]
         })
       })
-
     } else if (phaseRef.current === "spinning") {
       // Do NOT call clearSpinTweens() here — each reel must keep spinning
       // until its own stopDelay fires. Clearing here would freeze all reels at once.
@@ -162,11 +185,10 @@ const SlotReel = ({
 
       stopTimerRef.current = setTimeout(() => {
         stopTimerRef.current = null
-        clearSpinTweens()   // stop only THIS reel's animation
+        clearSpinTweens() // stop only THIS reel's animation
         hideImgB()
 
-        const finalSyms =
-          symbols.length === rows ? [...symbols] : Array(rows).fill(null)
+        const finalSyms = symbols.length === rows ? [...symbols] : Array(rows).fill(null)
 
         landRafRef.current = requestAnimationFrame(() => {
           landRafRef.current = null
@@ -202,7 +224,6 @@ const SlotReel = ({
         })
       }, stopDelay)
     }
-
   }, [isSpinning]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Winning cell pulse
@@ -249,13 +270,16 @@ const SlotReel = ({
         return (
           <div
             key={r}
-            ref={(el) => { cellRefs.current[r] = el }}
+            ref={(el) => {
+              cellRefs.current[r] = el
+            }}
             className={`
               relative w-full aspect-square overflow-hidden rounded-lg border-2 select-none
               transition-all duration-500
-              ${isWin
-                ? "border-warning bg-warning/15 shadow-[0_0_12px_2px] shadow-warning/50"
-                : "border-neutral-700 bg-neutral-800"
+              ${
+                isWin
+                  ? "border-warning bg-warning/15 shadow-[0_0_12px_2px] shadow-warning/50"
+                  : "border-neutral-700 bg-neutral-800"
               }
             `}
           >
@@ -264,7 +288,9 @@ const SlotReel = ({
                 src={PLACEHOLDER_BY_TYPE[machineType]}
                 alt=""
                 className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-                onError={(e) => { e.currentTarget.style.display = "none" }}
+                onError={(e) => {
+                  e.currentTarget.style.display = "none"
+                }}
               />
             )}
             {!sym && phase === "idle" && !PLACEHOLDER_BY_TYPE[machineType] && (
@@ -274,13 +300,17 @@ const SlotReel = ({
             )}
             {/* imgA — primary, used during spin A, landing, and idle */}
             <img
-              ref={(el) => { imgARefs.current[r] = el }}
+              ref={(el) => {
+                imgARefs.current[r] = el
+              }}
               className="absolute inset-0 w-full h-full object-cover"
               alt=""
             />
             {/* imgB — secondary, only active during spin to fill the gap between imgA cycles */}
             <img
-              ref={(el) => { imgBRefs.current[r] = el }}
+              ref={(el) => {
+                imgBRefs.current[r] = el
+              }}
               className="absolute inset-0 w-full h-full object-cover"
               style={{ transform: "translateY(100%)", opacity: 0 }}
               alt=""

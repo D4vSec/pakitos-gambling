@@ -32,7 +32,7 @@
     },
 
     "tables": {
-      "noData": "No se encontraron datos",
+      "noData": "No se han encontrado registros",
       "searchBar": {
         "placeholder": "Buscar...",
         "label": "Búsqueda global",
@@ -44,6 +44,28 @@
         "next": "Siguiente",
         "last": "Última",
         "rowsPerPage": "Filas por página"
+      },
+      "filters": {
+        "quickSearch": "Búsqueda rápida",
+        "searchBy": "Buscar por...",
+        "selectField": "Seleccionar campo",
+        "select": "Seleccionar...",
+        "value": "Valor",
+        "typeToSearch": "Escribe para buscar...",
+        "pressEnter": "Presiona Enter para añadir filtro",
+        "add": "Añadir",
+        "reset": "Limpiar todo",
+        "all": "Todos",
+        "from": "Desde",
+        "to": "Hasta",
+        "dateRange": "Rango de fechas",
+        "range": "Rango",
+        "min": "Mín",
+        "max": "Máx",
+        "minBalance": "Saldo mínimo",
+        "maxBalance": "Saldo máximo",
+        "minAmount": "Cantidad mínima",
+        "maxAmount": "Cantidad máxima"
       }
     }
   },
@@ -55,7 +77,7 @@
       "viewLogs": "Ver registros",
       "table": {
         "username": "Nombre de usuario",
-        "email": "Correo electrónico",
+        "email": "Email",
         "role": "Rol",
         "balance": "Saldo",
         "actions": "Acciones"
@@ -65,11 +87,11 @@
     "logs": {
       "table": {
         "action": "Acción",
-        "userID": "ID de usuario",
+        "user_id": "ID de Usuario",
         "details": "Detalles",
-        "date": "Fecha",
-        "ipAddress": "Dirección IP",
-        "userAgent": "Agente de usuario"
+        "created_at": "Fecha",
+        "ip_address": "Dirección IP",
+        "user_agent": "Navegador / Sistema"
       }
     },
 
@@ -282,11 +304,11 @@
         "roulette": {
           "title": "Ruleta",
           "classic": {
-            "title": "Ruleta europea",
+            "title": "Ruleta Europea",
             "description": "Juego de ruleta europea."
           },
           "american": {
-            "title": "Ruleta americana",
+            "title": "Ruleta Americana",
             "description": "Juego de ruleta americana."
           }
         },

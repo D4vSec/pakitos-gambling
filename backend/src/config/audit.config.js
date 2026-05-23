@@ -1,9 +1,8 @@
 export const AUDIT_TYPES = Object.freeze([
-	"DEPOSIT",
-	"WITHDRAWAL",
-	"BET",
-	"WIN",
-	"LOSE",
-	"BONUS",
-	"REFUND",
+	"USER_REGISTER",
+	"BET_PLACED",
+	"BET_RESULT",
+	"BALANCE_UPDATED",
+	"ADMIN_ACTION",
+	"GAME_RESULT",
 ])

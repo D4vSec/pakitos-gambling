@@ -15,6 +15,8 @@
 - BJ: Si haces f5 no te devuelve a la misma partida y pierdes el dinero eso hay que arreglarlo
 - BJ: Cuando doblas o haces split se va aumentando el dinero que pone a la derecha si el usuario no se da cuenta apostara de más
 - BJ: En el split si la segunda mano es un 21 te deja seguir haciendo cosas con ella en vez de resolverla creo que el bug es de front he revisado el flujo del back y diria que el problema no esta en el back
+- BJ: Cuando una accion no esta permitida desde aunque el back la impida estaria bien que los botones estuvieran tambien disable
+- BJ: Cuando se acaba un juego justo te deja darle a apostar y se vuelve un poco loca la cosa
 
 # Notas de los pintabotones
 
@@ -35,7 +37,8 @@
 - [ ] Se pierde la partida al hacer f5 en el BJ
 - [ ] Se duplica la apuesta cuando split o double
 - [ ] En el split aunque el value sea 21 te deja seguir pidiendo cosas, creo que el bug es del front
-- [ ] 
+- [ ] Botones disabled
+- [ ] Bug al terminar y darle otra vez a jugar rapido
 
 # DONE
 

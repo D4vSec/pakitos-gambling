@@ -25,6 +25,21 @@ vi.mock('#models/session.model', () => ({
 	},
 }))
 
+vi.mock('#services/audit.service', () => ({
+	default: {
+		createAudit: vi.fn(),
+		getClientIp: vi.fn((req) => req?.headers?.['x-forwarded-for']?.split(',')[0]?.trim() || req?.socket?.remoteAddress || null),
+		getUserAgentRaw: vi.fn((req) => {
+			if (!req?.useragent) return null
+
+			const { browser, version, os, platform, isMobile, isTablet, isDesktop } = req.useragent
+			const raw = { browser, version, os, platform, isMobile, isTablet, isDesktop }
+
+			return { raw, formatted: `${browser} ${version} / ${os}` }
+		}),
+	},
+}))
+
 import jwt from 'jsonwebtoken'
 
 import { generateTokens, login, refresh, register } from '../../../src/controllers/auth.controller.js'

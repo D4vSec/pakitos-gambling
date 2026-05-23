@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react"
+import React, { createContext, useCallback, useContext, useState } from "react"
 import useAPI from "@/hooks/useAPI"
 import { useSession } from "./SessionProvider"
 import { useNotification } from "./NotificationProvider"
@@ -14,28 +14,43 @@ const AdminProvider = ({ children }) => {
   const { addNotification } = useNotification()
   const { t } = useLocale()
 
-  const getAllUsers = async (options = {}) => {
-    try {
-      const { page = 1, limit = 20 } = options
-      const url = `/api/v1/user?page=${page}&limit=${limit}`
+  const getAllUsers = useCallback(
+    async (options = {}) => {
+      try {
+        const { page = 1, limit = 20, ...filters } = options
 
-      const res = await get(url, {
-        headers: {
-          "x-refresh-token": getRefreshToken(),
-          Authorization: `Bearer ${getAccessToken()}`,
-        },
-      })
+        const queryParams = new URLSearchParams({
+          page: page.toString(),
+          limit: limit.toString(),
+        })
 
-      if (res.code) {
-        throw new Error(res.code || "Error al obtener usuarios")
+        Object.keys(filters).forEach((key) => {
+          if (filters[key] !== undefined && filters[key] !== null && filters[key] !== "") {
+            queryParams.append(key, filters[key])
+          }
+        })
+
+        const url = `/api/v1/user?${queryParams.toString()}`
+
+        const res = await get(url, {
+          headers: {
+            "x-refresh-token": getRefreshToken(),
+            Authorization: `Bearer ${getAccessToken()}`,
+          },
+        })
+
+        if (res.code) {
+          throw new Error(res.code || "Error al obtener usuarios")
+        }
+
+        setUsers(res)
+        return res
+      } catch (error) {
+        addNotification(t(`message.error.${error.message}`), "error")
       }
-      console.log(res)
-      setUsers(res)
-      return res
-    } catch (error) {
-      addNotification(t(`message.error.${error.message}`), "error")
-    }
-  }
+    },
+    [t, getAccessToken, getRefreshToken],
+  )
 
   const getUserById = async (userId) => {
     try {
@@ -116,51 +131,80 @@ const AdminProvider = ({ children }) => {
     }
   }
 
-  const getTransactionsById = async (userId, options = {}) => {
-    try {
-      const { page = 1, limit = 20 } = options
-      const url = `/api/v1/user/${userId}/transactions?page=${page}&limit=${limit}`
-      let res = await get(url, {
-        headers: {
-          "x-refresh-token": getRefreshToken(),
-          Authorization: `Bearer ${getAccessToken()}`,
-        },
-      })
+  const getTransactionsById = useCallback(
+    async (userId, options = {}) => {
+      try {
+        const { page = 1, limit = 20, ...filters } = options
 
-      console.log(res)
+        const queryParams = new URLSearchParams({
+          page: page.toString(),
+          limit: limit.toString(),
+        })
 
-      if (res.code) {
-        throw new Error(res.code || "Error al obtener usuarios")
+        // Añadir filtros dinámicos, sorting, min/maxAmount, from/toDate
+        Object.keys(filters).forEach((key) => {
+          if (filters[key] !== undefined && filters[key] !== null && filters[key] !== "") {
+            queryParams.append(key, filters[key])
+          }
+        })
+
+        const url = `/api/v1/user/${userId}/transactions?${queryParams.toString()}`
+
+        let res = await get(url, {
+          headers: {
+            "x-refresh-token": getRefreshToken(),
+            Authorization: `Bearer ${getAccessToken()}`,
+          },
+        })
+
+        if (res.code) {
+          throw new Error(res.code || "Error al obtener transacciones")
+        }
+
+        return res
+      } catch (error) {
+        addNotification(t(`message.error.${error.message}`), "error")
       }
+    },
+    [t, getAccessToken, getRefreshToken],
+  )
 
-      return res
-    } catch (error) {
-      addNotification(t(`message.error.${error.message}`), "error")
-    }
-  }
+  const getLogs = useCallback(
+    async (options = {}) => {
+      try {
+        const { page = 1, limit = 20, ...filters } = options
 
-  const getLogs = async (options = {}) => {
-    try {
-      const { page = 1, limit = 20 } = options
-      const url = `/api/v1/audit?page=${page}&limit=${limit}`
-      let res = await get(url, {
-        headers: {
-          "x-refresh-token": getRefreshToken(),
-          Authorization: `Bearer ${getAccessToken()}`,
-        },
-      })
+        const queryParams = new URLSearchParams({
+          page: page.toString(),
+          limit: limit.toString(),
+        })
 
-      console.log(res)
+        Object.keys(filters).forEach((key) => {
+          if (filters[key] !== undefined && filters[key] !== null && filters[key] !== "") {
+            queryParams.append(key, filters[key])
+          }
+        })
 
-      if (res.code) {
-        throw new Error(res.code || "Error al obtener usuarios")
+        const url = `/api/v1/audit?${queryParams.toString()}`
+        console.log("url", url)
+        let res = await get(url, {
+          headers: {
+            "x-refresh-token": getRefreshToken(),
+            Authorization: `Bearer ${getAccessToken()}`,
+          },
+        })
+
+        if (res.code) {
+          throw new Error(res.code || "Error al obtener logs")
+        }
+
+        return res
+      } catch (error) {
+        addNotification(t(`message.error.${error.message}`), "error")
       }
-
-      return res
-    } catch (error) {
-      addNotification(t(`message.error.${error.message}`), "error")
-    }
-  }
+    },
+    [t, getAccessToken, getRefreshToken],
+  )
 
   // const createuser = async (data) => {}
 

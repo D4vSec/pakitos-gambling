@@ -3,7 +3,6 @@ export const TRANSACTION_TYPES = Object.freeze([
 	"WITHDRAWAL",
 	"BET",
 	"WIN",
-	"LOSE",
 	"BONUS",
 	"REFUND",
 ])
@@ -18,7 +17,6 @@ export const CREDIT_TRANSACTION_TYPES = new Set([
 export const DEBIT_TRANSACTION_TYPES = new Set([
 	"WITHDRAWAL",
 	"BET",
-	"LOSE",
 ])
 
 export const ALLOWED_TRANSACTION_ENDPOINT = new Set([

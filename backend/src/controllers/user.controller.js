@@ -1,7 +1,131 @@
 import User from '#models/user.model'
 import * as z from 'zod'
-import { DEBIT_TRANSACTION_TYPES, TRANSACTION_TYPES, ALLOWED_TRANSACTION_ENDPOINT, getSignedTransactionAmount } from '#config/transactions.config'
+import {
+	TRANSACTION_FILTER_FIELDS,
+	TRANSACTION_SELECTABLE_COLUMNS,
+	TRANSACTION_TYPES,
+	SORT_ORDERS,
+	USER_FILTER_FIELDS,
+	USER_ROLES,
+	USER_SELECTABLE_COLUMNS,
+} from '#config/admin-filters.config'
+import Audit from '#services/audit.service'
+import { DEBIT_TRANSACTION_TYPES, ALLOWED_TRANSACTION_ENDPOINT, getSignedTransactionAmount } from '#config/transactions.config'
+import { isValidUuid } from '#utils/admin-query.utils'
+import {
+	createListQuerySchema,
+	createStructuredFiltersSchema,
+	csvEnumSchema,
+	csvNumberSchema,
+	csvTextSchema,
+	csvUuidSchema,
+	optionalColumnsSchema,
+	toOptionalNumber,
+} from '#utils/admin-query-validation.utils'
 import logger from "#utils/logger.utils"
+
+const userColumnKeys = Object.freeze(Object.keys(USER_SELECTABLE_COLUMNS))
+const transactionColumnKeys = Object.freeze(Object.keys(TRANSACTION_SELECTABLE_COLUMNS))
+
+const userFilterValueSchemas = Object.freeze({
+	id: csvUuidSchema(),
+	userId: csvUuidSchema(),
+	user_id: csvUuidSchema(),
+	username: csvTextSchema(),
+	email: csvTextSchema(),
+	role: csvEnumSchema(USER_ROLES),
+	balance: csvNumberSchema(),
+	createdAt: csvTextSchema(),
+	created_at: csvTextSchema(),
+	updatedAt: csvTextSchema(),
+	updated_at: csvTextSchema(),
+})
+
+const transactionFilterValueSchemas = Object.freeze({
+	id: csvUuidSchema(),
+	userId: csvUuidSchema(),
+	user_id: csvUuidSchema(),
+	type: csvEnumSchema(TRANSACTION_TYPES),
+	amount: csvNumberSchema(),
+	createdAt: csvTextSchema(),
+	created_at: csvTextSchema(),
+})
+
+const usersListQuerySchema = createListQuerySchema({
+	id: userFilterValueSchemas.id.optional(),
+	userId: userFilterValueSchemas.userId.optional(),
+	username: userFilterValueSchemas.username.optional(),
+	email: userFilterValueSchemas.email.optional(),
+	role: userFilterValueSchemas.role.optional(),
+	balance: userFilterValueSchemas.balance.optional(),
+	minBalance: z.preprocess((value) => toOptionalNumber(value), z.number().finite()).optional(),
+	maxBalance: z.preprocess((value) => toOptionalNumber(value), z.number().finite()).optional(),
+	columns: optionalColumnsSchema(userColumnKeys),
+	sortBy: z.enum(userColumnKeys).optional(),
+	sortOrder: z.enum(SORT_ORDERS).optional(),
+	filterField: z.enum(USER_FILTER_FIELDS).optional(),
+	filterBy: z.enum(USER_FILTER_FIELDS).optional(),
+	column: z.enum(USER_FILTER_FIELDS).optional(),
+	filterValue: z.unknown().optional(),
+	filterValues: z.unknown().optional(),
+	value: z.unknown().optional(),
+	filters: createStructuredFiltersSchema(USER_FILTER_FIELDS, userFilterValueSchemas),
+})
+
+const transactionsListQuerySchema = createListQuerySchema({
+	id: transactionFilterValueSchemas.id.optional(),
+	type: transactionFilterValueSchemas.type.optional(),
+	amount: transactionFilterValueSchemas.amount.optional(),
+	minAmount: z.preprocess((value) => toOptionalNumber(value), z.number().finite()).optional(),
+	maxAmount: z.preprocess((value) => toOptionalNumber(value), z.number().finite()).optional(),
+	columns: optionalColumnsSchema(transactionColumnKeys),
+	sortBy: z.enum(transactionColumnKeys).optional(),
+	sortOrder: z.enum(SORT_ORDERS).optional(),
+	filterField: z.enum(TRANSACTION_FILTER_FIELDS).optional(),
+	filterBy: z.enum(TRANSACTION_FILTER_FIELDS).optional(),
+	column: z.enum(TRANSACTION_FILTER_FIELDS).optional(),
+	filterValue: z.unknown().optional(),
+	filterValues: z.unknown().optional(),
+	value: z.unknown().optional(),
+	filters: createStructuredFiltersSchema(TRANSACTION_FILTER_FIELDS, transactionFilterValueSchemas),
+})
+
+const parseListQuery = (query, schema, fieldValueSchemas = {}) => {
+	const parsedQuery = schema.safeParse(query || {})
+	if (!parsedQuery.success) {
+		return { error: parsedQuery.error.issues }
+	}
+
+	const singleFilterField = parsedQuery.data.filterField ?? parsedQuery.data.filterBy ?? parsedQuery.data.column
+	if (singleFilterField) {
+		const singleFilterValue = parsedQuery.data.filterValues ?? parsedQuery.data.filterValue ?? parsedQuery.data.value
+		const singleFilterSchema = fieldValueSchemas[singleFilterField]
+		const parseSingleFilter = singleFilterSchema?.safeParse(singleFilterValue)
+
+		if (!parseSingleFilter?.success) {
+			return { error: parseSingleFilter?.error?.issues ?? [{ message: 'INVALID_FILTER_VALUE' }] }
+		}
+	}
+
+	const filters = { ...parsedQuery.data }
+	delete filters.page
+	delete filters.limit
+
+	if (parsedQuery.data.fromDate && parsedQuery.data.toDate) {
+		const fromDate = new Date(parsedQuery.data.fromDate)
+		const toDate = new Date(parsedQuery.data.toDate)
+
+		if (!Number.isNaN(fromDate.getTime()) && !Number.isNaN(toDate.getTime()) && fromDate > toDate) {
+			return { dateRangeError: true }
+		}
+	}
+
+	return {
+		page: parsedQuery.data.page ?? 1,
+		limit: Math.min(parsedQuery.data.limit ?? 20, 100),
+		filters,
+	}
+}
 
 const getProfile = async (req, res) => {
 	try {
@@ -24,20 +148,16 @@ const getProfile = async (req, res) => {
 
 const getAllUsers = async (req, res) => {
 	try {
-		const schema = z
-			.object({
-				page: z.preprocess((v) => parseInt(v, 10), z.number().int().positive()).optional(),
-				limit: z.preprocess((v) => parseInt(v, 10), z.number().int().positive()).optional(),
-			})
-			.strict()
+		const parsedQuery = parseListQuery(req.query, usersListQuerySchema, userFilterValueSchemas)
+		if (parsedQuery.error) return res.status(400).json({ errors: parsedQuery.error })
+		if (parsedQuery.dateRangeError) return res.status(400).json({ code: 'INVALID_DATE_RANGE' })
 
-		const { page = 1, limit = 20 } = schema.parse(req.query)
-
-		const total = await User.countUsers()
-		const users = await User.findUsers(page, limit)
+		const { page, limit, filters } = parsedQuery
+		const total = await User.countUsers(filters)
+		const users = await User.findUsers(page, limit, filters)
 		const totalPages = Math.max(1, Math.ceil(total / limit))
 
-		res.json({ page: page, limit: limit, totalPages: totalPages, users: users || [] })
+		res.json({ page, limit, totalPages, users: users || [] })
 	} catch (err) {
 		if (err instanceof z.ZodError) return res.status(400).json({ errors: err.errors })
 		logger.error(err)
@@ -89,6 +209,8 @@ const updateSelf = async (req, res) => {
 const getUserById = async (req, res) => {
 	try {
 		const { id } = req.params
+		if (!isValidUuid(id)) return res.status(404).json({ code: 'USER_NOT_FOUND' })
+
 		const user = await User.findUserById(id)
 
 		if (!user) return res.status(404).json({ code: 'USER_NOT_FOUND' })
@@ -109,6 +231,7 @@ const getUserById = async (req, res) => {
 const updateUserById = async (req, res) => {
 	try {
 		const { id } = req.params
+		if (!isValidUuid(id)) return res.status(404).json({ code: 'USER_NOT_FOUND' })
 
 		const schema = z
 			.object({
@@ -127,6 +250,15 @@ const updateUserById = async (req, res) => {
 
 		if (!updated) return res.status(404).json({ code: 'USER_NOT_FOUND' })
 
+		const deviceInfo = Audit.getUserAgentRaw(req)
+		Audit.createAudit({
+			user_id: req.user.id,
+			action: 'ADMIN_ACTION',
+			details: { type: 'USER_UPDATED', targetUserId: id, changes: Object.keys(data), date: new Date().toISOString() },
+			ip_address: Audit.getClientIp(req),
+			user_agent: deviceInfo ? JSON.stringify(deviceInfo.raw) : null,
+		})
+
 		res.status(200).json({ code: 'SUCCESS' })
 	} catch (err) {
 		if (err instanceof z.ZodError) {
@@ -140,9 +272,20 @@ const updateUserById = async (req, res) => {
 const deleteUserById = async (req, res) => {
 	try {
 		const { id } = req.params
+		if (!isValidUuid(id)) return res.status(404).json({ code: 'USER_NOT_FOUND' })
+
 		const deleted = await User.deleteUser(id)
 
 		if (!deleted) return res.status(404).json({ code: 'USER_NOT_FOUND' })
+
+		const deviceInfo = Audit.getUserAgentRaw(req)
+		Audit.createAudit({
+			user_id: req.user.id,
+			action: 'ADMIN_ACTION',
+			details: { type: 'USER_DELETED', targetUserId: id, date: new Date().toISOString() },
+			ip_address: Audit.getClientIp(req),
+			user_agent: deviceInfo ? JSON.stringify(deviceInfo.raw) : null,
+		})
 
 		res.status(204).send()
 	} catch (err) {
@@ -167,20 +310,16 @@ const getSelfBalance = async (req, res) => {
 
 const getTransactions = async (req, res) => {
 	try {
-		const schema = z
-			.object({
-				page: z.preprocess((v) => parseInt(v, 10), z.number().int().positive()).optional(),
-				limit: z.preprocess((v) => parseInt(v, 10), z.number().int().positive()).optional(),
-			})
-			.strict()
+		const parsedQuery = parseListQuery(req.query, transactionsListQuerySchema, transactionFilterValueSchemas)
+		if (parsedQuery.error) return res.status(400).json({ errors: parsedQuery.error })
+		if (parsedQuery.dateRangeError) return res.status(400).json({ code: 'INVALID_DATE_RANGE' })
 
-		const { page = 1, limit = 20 } = schema.parse(req.query)
-
-		const total = await User.countTransactionsByUser(req.user.id)
+		const { page, limit, filters } = parsedQuery
+		const total = await User.countTransactionsByUser(req.user.id, filters)
 		const totalPages = Math.max(1, Math.ceil(total / limit))
 		if (page > totalPages) return res.status(400).json({ code: 'PAGE_EXCEDED' })
 
-		const txs = await User.findTransactionsByUser(req.user.id, page, limit)
+		const txs = await User.findTransactionsByUser(req.user.id, page, limit, filters)
 		res.json({ page, limit, totalPages, transactions: txs })
 	} catch (err) {
 		if (err instanceof z.ZodError) return res.status(400).json({ errors: err.errors })
@@ -238,6 +377,20 @@ const createTransaction = async (req, res) => {
 			return res.status(500).json({ code: 'ERROR_UPDATING_BALANCE' })
 		}
 
+		const deviceInfo = Audit.getUserAgentRaw(req)
+		Audit.createAudit({
+			user_id: userId,
+			action: 'BALANCE_UPDATED',
+			details: {
+				type,
+				amount,
+				balance: newBalance,
+				date: new Date().toISOString(),
+			},
+			ip_address: Audit.getClientIp(req),
+			user_agent: deviceInfo ? JSON.stringify(deviceInfo.raw) : null,
+		})
+
 		res.status(200).json({ balance: newBalance })
 	} catch (err) {
 		if (err instanceof z.ZodError) return res.status(400).json({ errors: err.errors })
@@ -249,23 +402,22 @@ const createTransaction = async (req, res) => {
 const getTransactionsByUserId = async (req, res) => {
 	try {
 		const { id } = req.params
-		const schema = z
-			.object({
-				page: z.preprocess((v) => parseInt(v, 10), z.number().int().positive()).optional(),
-				limit: z.preprocess((v) => parseInt(v, 10), z.number().int().positive()).optional(),
-			})
-			.strict()
+		if (!isValidUuid(id)) return res.status(404).json({ code: 'USER_NOT_FOUND' })
 
-		const { page = 1, limit = 20 } = schema.parse(req.query)
+		const parsedQuery = parseListQuery(req.query, transactionsListQuerySchema, transactionFilterValueSchemas)
+		if (parsedQuery.error) return res.status(400).json({ errors: parsedQuery.error })
+		if (parsedQuery.dateRangeError) return res.status(400).json({ code: 'INVALID_DATE_RANGE' })
+
+		const { page, limit, filters } = parsedQuery
 
 		const user = await User.findUserById(id)
 		if (!user) return res.status(404).json({ code: 'USER_NOT_FOUND' })
 
-		const total = await User.countTransactionsByUser(id)
+		const total = await User.countTransactionsByUser(id, filters)
 		const totalPages = Math.max(1, Math.ceil(total / limit))
 		if (page > totalPages) return res.status(400).json({ code: 'PAGE_EXCEDED' })
 
-		const txs = await User.findTransactionsByUser(id, page, limit)
+		const txs = await User.findTransactionsByUser(id, page, limit, filters)
 		res.json({ page, limit, totalPages, transactions: txs })
 	} catch (err) {
 		if (err instanceof z.ZodError) return res.status(400).json({ errors: err.errors })

@@ -54,23 +54,17 @@ CORS_ORIGIN=http://localhost:5173
 Desde la raíz del repositorio:
 
 ```bash
-bash start.sh dev
+bash start.sh
 ```
+
+> El modo se lee de `NODE_ENV` en `.env` (`development` o `production`)
 
 ### Base de datos
 Importa el esquema inicial:
 
 ```bash
-bash sql.sh dev
+bash sql.sh
 ```
-
-Crea un usuario de prueba sin pasar por el frontend ni por el endpoint:
-
-```bash
-./create_user.sh username email@example.com 'Password123!' [user|admin] [prod|dev]
-```
-
-Esto usa `docker compose run --rm` sobre el servicio del backend, así que levanta un contenedor temporal para ejecutar el script y lo elimina al terminar. No toca el contenedor del backend que esté corriendo.
 
 ### Ejecutar el backend sin Docker
 Si quieres ejecutar el backend de forma local sin Docker, debes asegurarte de estar utilizando Node.js 22. Recomendamos usar nvm para gestionar las versiones de Node. El proyecto incluye un archivo `.nvmrc` dentro de la carpeta `backend` que especifica la versión exacta de Node requerida para este proyecto.
@@ -104,8 +98,8 @@ Si los recursos de Docker quedan asignados dentro de WSL2 después de su uso, pu
 powershell -Command "Start-Process wsl -ArgumentList '--shutdown' -Verb RunAs"
 ```
 
-## 👥 Equipo
-- [David Gonzalez](https://github.com/D4vSec)
-- [Yeray Caturla](https://github.com/yeraox)
-- [Nain Pontes](https://github.com/Stevankito)
-- [Alexandro Stefan Dezso](https://github.com/Roria1324)
+## 👥 Colaboradores
+- [D4vSec](https://github.com/D4vSec)
+- [Yeraox](https://github.com/yeraox)
+- [Stevankito](https://github.com/Stevankito)
+- [Roria1324](https://github.com/Roria1324)

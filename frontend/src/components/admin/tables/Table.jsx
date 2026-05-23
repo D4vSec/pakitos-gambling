@@ -10,7 +10,6 @@ import { useLocale } from "@/providers/LocaleProvider"
 import CaretUpSVG from "@/components/svg/flags/CaretUpSVG"
 import CaretDownSVG from "@/components/svg/actions/CaretDownSVG"
 import PaginationBar from "./PaginationBar"
-import SearchBar from "./SearchBar"
 
 // TODO:Añadir loading
 // TODO: Arreglar diseño tabla
@@ -20,36 +19,29 @@ const Table = ({
   pageCount = 0,
   pagination,
   setPagination,
+  sorting,
+  setSorting,
 }) => {
   const { t } = useLocale()
-  const [sorting, setSorting] = useState([])
-  const [globalFilter, setGlobalFilter] = useState("")
 
   const table = useReactTable({
     data,
     columns,
+    manualSorting: true,
     manualPagination: true,
     pageCount: pageCount,
     state: {
       sorting,
-      globalFilter,
       pagination,
     },
     onSortingChange: setSorting,
-    onGlobalFilterChange: setGlobalFilter,
     onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
   })
 
   return (
-    <div className="bg-base-200 p-4 rounded-lg">
-      <SearchBar
-        globalFilter={globalFilter}
-        setGlobalFilter={setGlobalFilter}
-      />
-      <table className="table table-sm md:table-md  table-zebra">
+    <div className="bg-base-200 p-4 rounded-lg overflow-x-scroll">
+      <table className="table table-sm md:table-md table-zebra">
         <thead>
           {table.getHeaderGroups().map((hg) => (
             <tr key={hg.id}>

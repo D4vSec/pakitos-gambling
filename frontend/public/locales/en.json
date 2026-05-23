@@ -44,6 +44,28 @@
         "next": "Next",
         "last": "Last",
         "rowsPerPage": "Rows per page"
+      },
+      "filters": {
+        "quickSearch": "Quick search",
+        "searchBy": "Search by...",
+        "selectField": "Select field",
+        "select": "Select...",
+        "value": "Value",
+        "typeToSearch": "Type to search...",
+        "pressEnter": "Press Enter to add filter",
+        "add": "Add",
+        "reset": "Clear all",
+        "all": "All",
+        "from": "From",
+        "to": "To",
+        "dateRange": "Date range",
+        "range": "Range",
+        "min": "Min",
+        "max": "Max",
+        "minBalance": "Min Balance",
+        "maxBalance": "Max Balance",
+        "minAmount": "Min Amount",
+        "maxAmount": "Max Amount"
       }
     }
   },
@@ -65,11 +87,11 @@
     "logs": {
       "table": {
         "action": "Action",
-        "userID": "User ID",
+        "user_id": "User ID",
         "details": "Details",
-        "date": "Date",
-        "ipAddress": "IP Address",
-        "userAgent": "User Agent"
+        "created_at": "Date",
+        "ip_address": "IP Address",
+        "user_agent": "Browser / System"
       }
     },
 

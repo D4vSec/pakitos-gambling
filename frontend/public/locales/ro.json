@@ -32,7 +32,7 @@
     },
 
     "tables": {
-      "noData": "Nu s-au găsit date",
+      "noData": "Nu au fost găsite înregistrări",
       "searchBar": {
         "placeholder": "Caută...",
         "label": "Căutare globală",
@@ -44,6 +44,28 @@
         "next": "Următoarea",
         "last": "Ultima",
         "rowsPerPage": "Rânduri pe pagină"
+      },
+      "filters": {
+        "quickSearch": "Căutare rapidă",
+        "searchBy": "Caută după...",
+        "selectField": "Selectează câmpul",
+        "select": "Selectează...",
+        "value": "Valoare",
+        "typeToSearch": "Scrie pentru a căuta...",
+        "pressEnter": "Apasă Enter pentru a adăuga filtrul",
+        "add": "Adaugă",
+        "reset": "Șterge tot",
+        "all": "Toate",
+        "from": "De la",
+        "to": "Până la",
+        "dateRange": "Interval de date",
+        "range": "Interval",
+        "min": "Min",
+        "max": "Max",
+        "minBalance": "Sold minim",
+        "maxBalance": "Sold maxim",
+        "minAmount": "Sumă minimă",
+        "maxAmount": "Sumă maximă"
       }
     }
   },
@@ -65,11 +87,11 @@
     "logs": {
       "table": {
         "action": "Acțiune",
-        "userID": "ID utilizator",
+        "user_id": "ID Utilizator",
         "details": "Detalii",
-        "date": "Dată",
-        "ipAddress": "Adresă IP",
-        "userAgent": "Agent utilizator"
+        "created_at": "Dată",
+        "ip_address": "Adresă IP",
+        "user_agent": "Browser / Sistem"
       }
     },
 
@@ -282,11 +304,11 @@
         "roulette": {
           "title": "Ruletă",
           "classic": {
-            "title": "Ruletă europeană",
+            "title": "Ruletă Europeană",
             "description": "Joc de ruletă europeană."
           },
           "american": {
-            "title": "Ruletă americană",
+            "title": "Ruletă Americană",
             "description": "Joc de ruletă americană."
           }
         },

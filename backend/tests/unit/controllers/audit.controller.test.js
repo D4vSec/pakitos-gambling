@@ -22,6 +22,8 @@ const createResponse = () => ({
 })
 
 describe('audit.controller', () => {
+	const userId = '11111111-1111-1111-1111-111111111111'
+
 	beforeEach(() => {
 		vi.clearAllMocks()
 	})
@@ -59,14 +61,14 @@ describe('audit.controller', () => {
 		await getAuditLogs({
 			query: {
 				filter: 'userId',
-				userId: '7',
+				userId,
 				page: '2',
 				limit: '50',
 			},
 		}, res)
 
-		expect(AuditService.countAuditLogs).toHaveBeenCalledWith({ userId: 7 })
-		expect(AuditService.getAuditLogs).toHaveBeenCalledWith(2, 50, { userId: 7 })
+		expect(AuditService.countAuditLogs).toHaveBeenCalledWith({ userId: [userId] })
+		expect(AuditService.getAuditLogs).toHaveBeenCalledWith(2, 50, { userId: [userId] })
 	})
 
 	it('returns 500 when the service throws', async () => {
@@ -78,5 +80,19 @@ describe('audit.controller', () => {
 
 		expect(res.status).toHaveBeenCalledWith(500)
 		expect(res.json).toHaveBeenCalledWith({ code: 'SERVER_ERROR' })
+	})
+
+	it('rejects invalid audit sort columns', async () => {
+		const res = createResponse()
+
+		await getAuditLogs({
+			query: {
+				sortBy: 'drop_table',
+			},
+		}, res)
+
+		expect(AuditService.countAuditLogs).not.toHaveBeenCalled()
+		expect(res.status).toHaveBeenCalledWith(400)
+		expect(res.json.mock.calls[0][0].errors).toBeDefined()
 	})
 })

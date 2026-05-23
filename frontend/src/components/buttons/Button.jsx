@@ -32,9 +32,10 @@ const Button = ({
 
   return (
     <button
-      className={`btn ${safeVariant} ${safeSize} flex justify-center items-center ${className}`}
+      className={`btn md:btn-md ${safeVariant} ${safeSize} flex justify-center items-center ${className}`}
       onClick={onClick}
-      disabled={disabled}>
+      disabled={disabled}
+    >
       {svg}
       {children}
     </button>

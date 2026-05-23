@@ -48,7 +48,16 @@ const register = async (req, res) => {
 			return res.status(400).json({ code, message: issue.message })
 		}
 
-		await User.createUser({ username, email, password })
+		const userId = await User.createUser({ username, email, password })
+
+		const deviceInfo = Audit.getUserAgentRaw(req)
+		Audit.createAudit({
+			user_id: userId,
+			action: "USER_REGISTER",
+			details: { username, email, date: new Date().toISOString() },
+			ip_address: Audit.getClientIp(req),
+			user_agent: deviceInfo ? JSON.stringify(deviceInfo.raw) : null,
+		})
 
 		res.status(201).json({
 			code: "AUTH_USER_REGISTERED",

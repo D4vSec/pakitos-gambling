@@ -22,16 +22,18 @@ const HeroContent = () => {
           <Button
             variant="primary"
             size="lg"
-            className="md:btn-xl"
-            onClick={() => navigate("/register")}>
+            className="btn-lg md:btn-xl"
+            onClick={() => navigate("/register")}
+          >
             {t("pages.landingPage.hero.join")}
           </Button>
 
           <Button
             variant="accent"
             size="lg"
-            className="md:btn-xl"
-            onClick={() => navigate("/home")}>
+            className="btn-lg md:btn-xl"
+            onClick={() => navigate("/home")}
+          >
             {t("pages.landingPage.hero.seeGames")}
           </Button>
         </div>

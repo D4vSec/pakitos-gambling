@@ -1,4 +1,3 @@
-#!/bin/bash
 set -e
 
 if [ ! -f .env ]; then
@@ -10,12 +9,7 @@ set -a
 source .env
 set +a
 
-MODE="${1:-prod}"
 CONTAINER="postgres_db"
-
-if [ "$MODE" = "dev" ]; then
-    CONTAINER="postgres_db_dev"
-fi
 
 echo "Executing SQL script on $CONTAINER..."
 
@@ -23,7 +17,7 @@ docker exec -i \
     -e PGPASSWORD="${DB_PASSWORD}" \
     "$CONTAINER" \
     psql \
-        -h "${DB_HOST:-localhost}" \
+        -h "localhost" \
         -U "${DB_USER}" \
         -d "${DB_NAME}" \
         -v ON_ERROR_STOP=1 \
