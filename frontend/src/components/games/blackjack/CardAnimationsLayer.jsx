@@ -1,34 +1,65 @@
-import React, { useEffect, useState } from "react"
-import Card from "./Card"
+import React, { useLayoutEffect } from "react"
+import AnimatedDealCard from "./AnimatedDealCard"
 
-const CardAnimationsLayer = ({ dealQueue, deckRef }) => {
-  const getDeckPosition = () => {
-    const rect = deckRef.current?.getBoundingClientRect()
-    if (!rect) return { top: 0, left: 0 }
+const FLIP_DURATION = 500
+const TRAVEL_DURATION = 0.3
+const VALUE_REVEAL_DELAY = FLIP_DURATION / 2
+const NEXT_DEAL_DELAY = 0.28
 
-    return {
-      top: rect.top + rect.height / 2,
-      left: rect.left + rect.width / 2,
+const CardAnimationsLayer = ({
+  dealQueue,
+  deckRef,
+  cardRefs,
+  cardRectsRef,
+  onCardStateChange,
+  onEventComplete,
+}) => {
+  const event = dealQueue[0]
+
+  useLayoutEffect(() => {
+    if (!event || event.type !== "REVEAL_CARD") return undefined
+
+    const revealTimer = setTimeout(() => {
+      onCardStateChange(event.card.id, "faceUp")
+    }, 80)
+
+    const completeTimer = setTimeout(() => {
+      onEventComplete(event.id)
+    }, VALUE_REVEAL_DELAY + 120)
+
+    return () => {
+      clearTimeout(revealTimer)
+      clearTimeout(completeTimer)
     }
-  }
+  }, [event, onCardStateChange, onEventComplete])
 
-  const deckPos = getDeckPosition()
+  useLayoutEffect(() => {
+    if (!event || event.type !== "MOVE_CARD") return undefined
+
+    const completeTimer = setTimeout(() => {
+      onCardStateChange(event.card.id, "faceUp")
+      onEventComplete(event.id)
+    }, 120)
+
+    return () => clearTimeout(completeTimer)
+  }, [event, onCardStateChange, onEventComplete])
+
+  if (!event || event.type !== "DEAL_CARD") return null
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-50">
-      {dealQueue.map((event, i) => (
-        <div
-          key={event.id}
-          className="absolute"
-          style={{
-            top: deckPos.top + i * 20,
-            left: deckPos.left + i * 20,
-            transform: "translate(-50%, -50%)",
-          }}>
-          <Card card={event.card} forceHidden={event.card.faceDown} />
-        </div>
-      ))}
-    </div>
+    <AnimatedDealCard
+      key={event.id}
+      event={event}
+      isLastEvent={dealQueue.length === 1}
+      deckRef={deckRef}
+      cardRefs={cardRefs}
+      cardRectsRef={cardRectsRef}
+      onCardStateChange={onCardStateChange}
+      onEventComplete={onEventComplete}
+      travelDuration={TRAVEL_DURATION}
+      valueRevealDelay={VALUE_REVEAL_DELAY}
+      nextDealDelay={NEXT_DEAL_DELAY}
+    />
   )
 }
 

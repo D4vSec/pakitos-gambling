@@ -5,8 +5,9 @@ import { useBlackjack } from "@/providers/BlackjackProvider"
 import { useLocale } from "@/providers/LocaleProvider"
 
 const BlackjackActions = ({ disabled }) => {
-  const { hit, stand, double, split } = useBlackjack()
+  const { game, hit, stand, double, split } = useBlackjack()
   const { t } = useLocale()
+
   const buttons = [
     {
       label: "games.blackjack.actions.hit",
@@ -19,6 +20,7 @@ const BlackjackActions = ({ disabled }) => {
     {
       label: "games.blackjack.actions.split",
       onClick: split,
+      disabled: Boolean(game?.split),
     },
     {
       label: "games.blackjack.actions.double",
@@ -33,7 +35,7 @@ const BlackjackActions = ({ disabled }) => {
           variant="neutral"
           className="flex-1 min-w-fit"
           onClick={btn.onClick}
-          disabled={disabled}>
+          disabled={disabled || btn.disabled}>
           {t(btn.label)}
         </Button>
       ))}

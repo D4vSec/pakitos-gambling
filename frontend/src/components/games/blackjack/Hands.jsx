@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from "react"
 import Hand from "./Hand"
 
-const Hands = ({ player, hands, gameState, cardRefs }) => {
+const Hands = ({
+  player,
+  hands,
+  gameState,
+  cardRefs,
+  cardStates,
+  canFadeOut,
+}) => {
   const [fade, setFade] = useState(false)
   const [visible, setVisible] = useState(true)
 
@@ -17,22 +24,24 @@ const Hands = ({ player, hands, gameState, cardRefs }) => {
         : null
 
   useEffect(() => {
-    if (gameState === "finished") {
+    const reset = setTimeout(() => {
       setFade(false)
       setVisible(true)
+    }, 0)
 
-      const t = setTimeout(() => setFade(true), 2700)
+    if (canFadeOut) {
+      const t = setTimeout(() => setFade(true), 2300)
       const t2 = setTimeout(() => setVisible(false), 3000)
 
       return () => {
+        clearTimeout(reset)
         clearTimeout(t)
         clearTimeout(t2)
       }
-    } else {
-      setFade(false)
-      setVisible(true)
     }
-  }, [gameState])
+
+    return () => clearTimeout(reset)
+  }, [canFadeOut, gameState])
 
   if (!safeHands.length || !visible) return null
 
@@ -49,6 +58,7 @@ const Hands = ({ player, hands, gameState, cardRefs }) => {
           hand={hand}
           isActive={player !== "dealer" && hasSplit && i === activeIndex}
           cardRefs={cardRefs}
+          cardStates={cardStates}
           handIndex={i}
           owner={player}
         />

@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react"
+import React, { createContext, useContext, useEffect, useRef, useState } from "react"
 import useAPI from "@/hooks/useAPI"
 import { useNotification } from "@/providers/NotificationProvider"
 import { useSession } from "./SessionProvider"
@@ -12,14 +6,12 @@ import { useLocale } from "./LocaleProvider"
 
 const BlackjackContext = createContext()
 
-const GAME_ID_KEY = "blackjackGameId"
-const HOST = "localhost:3000"
+const GAME_ID_KEY = "bkGameId"
 
 const getGameId = () => localStorage.getItem(GAME_ID_KEY)
 const setGameId = (id) => localStorage.setItem(GAME_ID_KEY, id)
 const removeGameId = () => localStorage.removeItem(GAME_ID_KEY)
 
-// TODO: Revisar lso payouts con el split o no se q coño pasa
 const BlackjackProvider = ({ children }) => {
   const [game, setGame] = useState({})
   const [betAmount, setBetAmount] = useState("")
@@ -28,13 +20,14 @@ const BlackjackProvider = ({ children }) => {
   const [allShown, setAllShown] = useState(false)
   const [dealQueue, setDealQueue] = useState([])
 
-  const prevGameRef = useRef(null)
-
   const { user, getRefreshToken, getAccessToken, updateBalance } = useSession()
   const { balance } = user
   const { addNotification } = useNotification()
   const { t } = useLocale()
   const { get, post, destroy } = useAPI()
+
+  const gameRef = useRef({})
+  const clearGameTimeoutRef = useRef(null)
 
   const updateAllShown = (value) => setAllShown(value)
   const updateBetAmount = (amount) => setBetAmount(amount)
@@ -54,32 +47,36 @@ const BlackjackProvider = ({ children }) => {
     return Math.round(Number(value) * 100) / 100
   }
 
-  const cardRegistry = useRef(new Map())
-
-  const getCardId = (gameId, owner, handIndex, dealIndex) => {
-    const key = `${gameId}-${owner}-${handIndex}-${dealIndex}`
-
-    if (!cardRegistry.current.has(key)) {
-      cardRegistry.current.set(key, crypto.randomUUID())
+  const getCardId = (gameId, owner, handIndex, cardIndex, card) => {
+    if (owner === "dealer" && handIndex === 0 && cardIndex === 1) {
+      return `${gameId}-dealer-hole`
     }
 
-    return cardRegistry.current.get(key)
+    if (card?.rank !== "hidden" && card?.suit !== "hidden") {
+      return `${gameId}-${card.rank}-${card.suit}`
+    }
+
+    return `${gameId}-${owner}-${handIndex}-${cardIndex}-hidden`
   }
 
   const formatGame = (game) => {
     if (!game) return game
-
-    let globalDealIndex = 0
 
     const formatHand = (hand, owner, handIndex) => {
       if (!hand?.hand) return hand
 
       return {
         ...hand,
-        hand: hand.hand.map((card) => ({
-          ...card,
-          id: getCardId(game.gameId, owner, handIndex, globalDealIndex++),
-        })),
+        hand: hand.hand.map((card, cardIndex) => {
+          const shouldHideDealerHole =
+            game.status !== "finished" && owner === "dealer" && handIndex === 0 && cardIndex === 1
+          const displayCard = shouldHideDealerHole ? { rank: "hidden", suit: "hidden" } : card
+
+          return {
+            ...displayCard,
+            id: getCardId(game.gameId, owner, handIndex, cardIndex, displayCard),
+          }
+        }),
       }
     }
 
@@ -96,34 +93,205 @@ const BlackjackProvider = ({ children }) => {
     }
   }
 
-  const getGlobalWinner = (winners = []) => {
-    const counts = winners.reduce((acc, w) => {
-      acc[w] = (acc[w] || 0) + 1
-      return acc
-    }, {})
+  const getTotalBet = (game) => {
+    if (!Array.isArray(game?.player)) return 0
 
-    const entries = Object.entries(counts)
+    return game.player.reduce((total, hand) => total + Number(hand.bet || 0), 0)
+  }
 
-    if (entries.length === 0) return null
+  const getRoundResult = (game) => {
+    const payout = Number(game?.payout || 0)
+    const totalBet = getTotalBet(game)
 
-    const max = Math.max(...entries.map(([, v]) => v))
-    const top = entries.filter(([, v]) => v === max)
-
-    if (top.length > 1) return "tie"
-
-    return top[0][0]
+    if (payout > totalBet) return { type: "success", message: "win" }
+    if (payout < totalBet) return { type: "error", message: "lose" }
+    return { type: "info", message: "tie" }
   }
 
   const onQueueAnimation = (event) => {
     setDealQueue((prev) => [...prev, event])
   }
 
+  const completeQueuedAnimation = (eventId) => {
+    setDealQueue((prev) => prev.filter((event) => event.id !== eventId))
+  }
+
   const resetAnimationState = () => {
-    dealQueue.length = 0
+    setDealQueue([])
+  }
+
+  const getCards = (source, owner) => {
+    if (!Array.isArray(source?.[owner])) return []
+
+    return source[owner].flatMap((hand, handIndex) =>
+      (hand?.hand || []).map((card, cardIndex) => ({
+        card,
+        owner,
+        handIndex,
+        cardIndex,
+      })),
+    )
+  }
+
+  const isHiddenCard = (card) => card?.rank === "hidden" || card?.suit === "hidden"
+
+  const sortByHandPosition = (a, b) => {
+    if (a.handIndex !== b.handIndex) return a.handIndex - b.handIndex
+    return a.cardIndex - b.cardIndex
+  }
+
+  const createDealEvent = (game, cardInfo, sequence) => {
+    const reveal = !isHiddenCard(cardInfo.card)
+
+    return {
+      id: `${game.gameId}-deal-${cardInfo.card.id}-${sequence}`,
+      type: "DEAL_CARD",
+      card: {
+        ...cardInfo.card,
+        faceDown: !reveal,
+      },
+      to: cardInfo.owner,
+      handIndex: cardInfo.handIndex,
+      cardIndex: cardInfo.cardIndex,
+      reveal,
+    }
+  }
+
+  const createRevealEvent = (game, cardInfo, sequence) => ({
+    id: `${game.gameId}-reveal-${cardInfo.card.id}-${sequence}`,
+    type: "REVEAL_CARD",
+    card: cardInfo.card,
+    to: cardInfo.owner,
+    handIndex: cardInfo.handIndex,
+    cardIndex: cardInfo.cardIndex,
+    reveal: true,
+  })
+
+  const createMoveEvent = (game, cardInfo, sequence) => ({
+    id: `${game.gameId}-move-${cardInfo.card.id}-${sequence}`,
+    type: "MOVE_CARD",
+    card: cardInfo.card,
+    to: cardInfo.owner,
+    handIndex: cardInfo.handIndex,
+    cardIndex: cardInfo.cardIndex,
+    reveal: true,
+  })
+
+  const buildInitialDealEvents = (current) => {
+    const events = []
+    const playerHand = current?.player?.[0]?.hand || []
+    const dealerHand = current?.dealer?.[0]?.hand || []
+    const maxCards = Math.max(playerHand.length, dealerHand.length)
+
+    for (let cardIndex = 0; cardIndex < maxCards; cardIndex += 1) {
+      if (playerHand[cardIndex]) {
+        events.push(
+          createDealEvent(
+            current,
+            {
+              card: playerHand[cardIndex],
+              owner: "player",
+              handIndex: 0,
+              cardIndex,
+            },
+            events.length,
+          ),
+        )
+      }
+
+      if (dealerHand[cardIndex]) {
+        events.push(
+          createDealEvent(
+            current,
+            {
+              card: dealerHand[cardIndex],
+              owner: "dealer",
+              handIndex: 0,
+              cardIndex,
+            },
+            events.length,
+          ),
+        )
+      }
+    }
+
+    return events
+  }
+
+  const buildAnimationEvents = (prev, current) => {
+    if (!current?.gameId) return []
+    if (!prev?.gameId || prev.gameId !== current.gameId) {
+      return buildInitialDealEvents(current)
+    }
+
+    const events = []
+    const prevCards = [...getCards(prev, "player"), ...getCards(prev, "dealer")]
+    const currentPlayerCards = getCards(current, "player")
+    const currentDealerCards = getCards(current, "dealer")
+    const prevCardIds = new Set(prevCards.map(({ card }) => card.id))
+
+    if (!prev.split && current.split) {
+      const movedSplitCards = currentPlayerCards
+        .filter(({ card, handIndex }) => prevCardIds.has(card.id) && handIndex > 0)
+        .sort(sortByHandPosition)
+
+      movedSplitCards.forEach((cardInfo) => {
+        events.push(createMoveEvent(current, cardInfo, events.length))
+      })
+    }
+
+    currentPlayerCards
+      .filter(({ card }) => !prevCardIds.has(card.id))
+      .sort(sortByHandPosition)
+      .forEach((cardInfo) => {
+        events.push(createDealEvent(current, cardInfo, events.length))
+      })
+
+    const prevDealerHole = prev?.dealer?.[0]?.hand?.[1]
+    const currentDealerHole = current?.dealer?.[0]?.hand?.[1]
+
+    if (isHiddenCard(prevDealerHole) && currentDealerHole && !isHiddenCard(currentDealerHole)) {
+      events.push(
+        createRevealEvent(
+          current,
+          {
+            card: currentDealerHole,
+            owner: "dealer",
+            handIndex: 0,
+            cardIndex: 1,
+          },
+          events.length,
+        ),
+      )
+    }
+
+    currentDealerCards
+      .filter(({ card }) => !prevCardIds.has(card.id))
+      .sort(sortByHandPosition)
+      .forEach((cardInfo) => {
+        events.push(createDealEvent(current, cardInfo, events.length))
+      })
+
+    return events
+  }
+
+  const applyGameUpdate = (nextGame, { animate = true } = {}) => {
+    const formattedGame = formatGame(nextGame)
+    const previousGame = gameRef.current
+    const events = animate ? buildAnimationEvents(previousGame, formattedGame) : []
+
+    gameRef.current = formattedGame
+    setDealQueue((prev) => [...prev, ...events])
+    setGame(formattedGame)
   }
 
   const startGame = async () => {
     if (!theresAmount()) return
+    if (clearGameTimeoutRef.current) {
+      clearTimeout(clearGameTimeoutRef.current)
+      clearGameTimeoutRef.current = null
+    }
+
     updateBalance("withdrawal", betAmount)
     setLastBetAmount(betAmount)
     setBaseBet(betAmount)
@@ -143,7 +311,7 @@ const BlackjackProvider = ({ children }) => {
 
       if (res.gameId) setGameId(res.gameId)
 
-      setGame(formatGame(res))
+      applyGameUpdate(res)
     } catch (error) {
       addNotification(t(`message.error.${error.message}`), "error")
     }
@@ -162,11 +330,9 @@ const BlackjackProvider = ({ children }) => {
 
       if (res.gameId) setGameId(res.gameId)
 
-      setGame(formatGame(res))
+      applyGameUpdate(res, { animate: false })
 
-      const totalBet = res?.player
-        ?.map((hand) => hand.bet)
-        .reduce((acc, bet) => acc + bet, 0)
+      const totalBet = res?.player?.map((hand) => hand.bet).reduce((acc, bet) => acc + bet, 0)
 
       setBetAmount(formatMoney(totalBet))
 
@@ -179,11 +345,8 @@ const BlackjackProvider = ({ children }) => {
   }
 
   const finishGame = async (game) => {
-    const winner = getGlobalWinner(game?.winners)
-    let type =
-      winner === "dealer" ? "error" : winner === "player" ? "success" : "info"
-    let message =
-      winner === "dealer" ? "lose" : winner === "player" ? "win" : "tie"
+    const { type, message } = getRoundResult(game)
+    const finishedGameId = game?.gameId
 
     addNotification(t(`games.result.${message}`), type, {
       scope: "games",
@@ -205,15 +368,16 @@ const BlackjackProvider = ({ children }) => {
         throw new Error(res.code)
       }
 
-      setTimeout(() => {
-        setGame({})
+      clearGameTimeoutRef.current = setTimeout(() => {
+        if (gameRef.current?.gameId === finishedGameId) {
+          gameRef.current = {}
+          setGame({})
+        }
+
+        clearGameTimeoutRef.current = null
       }, 3000)
-
       removeGameId()
-
       setBaseBet(0)
-
-      addNotification(t(`message.success.${res.code}`), "success")
     } catch (error) {
       addNotification(t(`message.error.${error.message}`), "error")
     }
@@ -230,7 +394,7 @@ const BlackjackProvider = ({ children }) => {
 
       if (res.code) throw new Error(res.code)
 
-      setGame(formatGame(res))
+      applyGameUpdate(res)
     } catch (error) {
       addNotification(t(`message.error.${error.message}`), "error")
     }
@@ -253,17 +417,6 @@ const BlackjackProvider = ({ children }) => {
     updateBalance("withdrawal", formatMoney(baseBet))
   }
 
-  const sortDealOrder = (events) => {
-    const order = { player: 0, dealer: 1 }
-
-    return [...events].sort((a, b) => {
-      if (a.cardIndex === b.cardIndex) {
-        return order[a.to] - order[b.to]
-      }
-      return a.cardIndex - b.cardIndex
-    })
-  }
-
   useEffect(() => {
     if (getGameId()) {
       continueGame()
@@ -275,60 +428,10 @@ const BlackjackProvider = ({ children }) => {
   }, [game])
 
   useEffect(() => {
-    if (!game) return
-
-    const prev = prevGameRef.current
-    if (!prev) {
-      prevGameRef.current = game
-      return
-    }
-
-    const events = []
-
-    const processHands = (prevHands = [], currentHands = [], owner) => {
-      currentHands.forEach((hand, handIndex) => {
-        const prevCount = prevHands?.[handIndex]?.hand?.length || 0
-        const currentCount = hand?.hand?.length || 0
-
-        if (currentCount > prevCount) {
-          const newCards = hand.hand.slice(prevCount, currentCount)
-
-          newCards.forEach((card, i) => {
-            const eventId = `${game.gameId}-${owner}-${handIndex}-${prevCount + i}`
-
-            events.push({
-              id: eventId,
-              type: "DEAL_CARD",
-              card: {
-                ...card,
-                faceDown: owner === "dealer" && card.rank === "hidden",
-              },
-              to: owner,
-              handIndex,
-              cardIndex: prevCount + i,
-            })
-          })
-        }
-      })
-    }
-
-    processHands(prev.player, game.player, "player")
-    processHands(prev.dealer, game.dealer, "dealer")
-
-    const sorted = sortDealOrder(events)
-
-    sorted.forEach((event) => {
-      onQueueAnimation(event)
-    })
-
-    prevGameRef.current = game
-  }, [game])
-
-  useEffect(() => {
     if (!game?.gameId) {
+      gameRef.current = {}
       setGame({})
       setDealQueue([])
-      cardRegistry.current.clear()
     }
   }, [game?.gameId])
 
@@ -348,6 +451,7 @@ const BlackjackProvider = ({ children }) => {
     split,
     dealQueue,
     onQueueAnimation,
+    completeQueuedAnimation,
     resetAnimationState,
     allShown,
     updateAllShown,

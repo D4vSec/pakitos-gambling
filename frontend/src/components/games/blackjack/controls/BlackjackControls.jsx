@@ -1,19 +1,12 @@
-import React, { useState } from "react"
+import React from "react"
 import BettingInput from "../../BettingInput"
 import BlackjackActions from "./BlackjackActions"
 import { useBlackjack } from "@/providers/BlackjackProvider"
 import BettingBtns from "../../BettingBtns"
 
 const BlackjackControls = () => {
-  const {
-    startGame,
-    betAmount,
-    updateBetAmount,
-    repeatBet,
-    doubleBet,
-    clearBet,
-    game,
-  } = useBlackjack()
+  const { startGame, betAmount, updateBetAmount, repeatBet, doubleBet, clearBet, game } =
+    useBlackjack()
 
   const handleStartGame = () => {
     startGame()
@@ -34,7 +27,8 @@ const BlackjackControls = () => {
           clear: clearBet,
           start: handleStartGame,
         }}
-        disabled={!disabled}>
+        disabled={!disabled}
+      >
         <BlackjackActions disabled={disabled} />
       </BettingBtns>
     </div>

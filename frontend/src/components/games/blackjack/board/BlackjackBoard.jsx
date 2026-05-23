@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react"
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import Hands from "../Hands"
 import Deck from "../Deck"
 import CardAnimationsLayer from "../CardAnimationsLayer"
@@ -6,27 +6,108 @@ import { useBlackjack } from "@/providers/BlackjackProvider"
 import { useLocale } from "@/providers/LocaleProvider"
 import "./BlackjackBoard.css"
 
+const isHiddenCard = (card) =>
+  card?.rank === "hidden" || card?.suit === "hidden"
+
 const BlackjackBoard = () => {
-  const { game, finishGame, dealQueue, resetAnimationState } = useBlackjack()
+  const { game, finishGame, dealQueue, completeQueuedAnimation } =
+    useBlackjack()
   const { dealer, player } = game || {}
   const { t } = useLocale()
 
   const deckRef = useRef(null)
-
   const cardRefs = useRef({})
+  const cardRectsRef = useRef({})
+  const finishedGameRef = useRef(null)
+  const [cardStateOverrides, setCardStateOverrides] = useState({})
+
+  const gameCards = useMemo(() => {
+    const cards = []
+
+    if (Array.isArray(player)) {
+      player.forEach((hand) => cards.push(...(hand?.hand || [])))
+    }
+
+    if (Array.isArray(dealer)) {
+      dealer.forEach((hand) => cards.push(...(hand?.hand || [])))
+    }
+
+    return cards
+  }, [dealer, player])
+
+  const cardStates = useMemo(() => {
+    const queuedDealIds = new Set(
+      dealQueue
+        .filter((event) => event.type === "DEAL_CARD")
+        .map((event) => event.card.id),
+    )
+
+    const queuedRevealIds = new Set(
+      dealQueue
+        .filter((event) => event.type === "REVEAL_CARD")
+        .map((event) => event.card.id),
+    )
+
+    return gameCards.reduce((acc, card) => {
+      if (queuedRevealIds.has(card.id) && cardStateOverrides[card.id] !== "faceUp") {
+        acc[card.id] = "faceDown"
+        return acc
+      }
+
+      if (cardStateOverrides[card.id]) {
+        acc[card.id] = cardStateOverrides[card.id]
+        return acc
+      }
+
+      if (queuedDealIds.has(card.id)) {
+        acc[card.id] = "pending"
+        return acc
+      }
+
+      if (isHiddenCard(card)) {
+        acc[card.id] = "faceDown"
+        return acc
+      }
+
+      acc[card.id] = "faceUp"
+      return acc
+    }, {})
+  }, [cardStateOverrides, dealQueue, gameCards])
 
   useEffect(() => {
     if (!game || Object.keys(game).length === 0) {
       cardRefs.current = {}
+      cardRectsRef.current = {}
+      finishedGameRef.current = null
     }
-    console.log("cards", cardRefs.current)
   }, [game])
 
   useEffect(() => {
-    if (game?.status === "finished") {
+    if (
+      game?.status === "finished" &&
+      dealQueue.length === 0 &&
+      finishedGameRef.current !== game.gameId
+    ) {
+      finishedGameRef.current = game.gameId
       finishGame(game)
     }
-  }, [game])
+  }, [dealQueue.length, finishGame, game])
+
+  const currentCardIds = useMemo(
+    () => new Set(gameCards.map((card) => card.id)),
+    [gameCards],
+  )
+
+  const updateCardState = useCallback((cardId, state) => {
+    setCardStateOverrides((prev) => ({
+      ...Object.fromEntries(
+        Object.entries(prev).filter(([id]) => currentCardIds.has(id)),
+      ),
+      [cardId]: state,
+    }))
+  }, [currentCardIds])
+
+  const finishedAndShown = game?.status === "finished" && dealQueue.length === 0
 
   return (
     <div className="w-full h-full grid grid-cols-[1fr_3fr_1fr] grid-rows-[repeat(4,1fr)] gap-4 bg-accent">
@@ -36,6 +117,8 @@ const BlackjackBoard = () => {
           hands={dealer}
           gameState={game?.status}
           cardRefs={cardRefs}
+          cardStates={cardStates}
+          canFadeOut={finishedAndShown}
         />
       </div>
 
@@ -45,6 +128,8 @@ const BlackjackBoard = () => {
           hands={player}
           gameState={game?.status}
           cardRefs={cardRefs}
+          cardStates={cardStates}
+          canFadeOut={finishedAndShown}
         />
       </div>
 
@@ -63,6 +148,10 @@ const BlackjackBoard = () => {
       <CardAnimationsLayer
         dealQueue={dealQueue}
         deckRef={deckRef}
+        cardRefs={cardRefs}
+        cardRectsRef={cardRectsRef}
+        onCardStateChange={updateCardState}
+        onEventComplete={completeQueuedAnimation}
         gameId={game?.gameId}
       />
     </div>
