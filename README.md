@@ -16,6 +16,12 @@ This repository contains the full application stack and the supporting infrastru
 - **Docker Compose** workflows for development and production
 - **pgAdmin** for database management
 
+## ✨ Features
+- **Roulette** with both `0` and `00` tables
+- **Blackjack** with interactive round flow
+- **Slots** in multiple variants, classic, `3x5`, and `5x5`
+- **Capyroad**, an arcade-style risk game
+
 ## 🛠️ Tech Stack
 | Area | Technologies |
 | --- | --- |

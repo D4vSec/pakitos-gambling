@@ -18,7 +18,13 @@ Este repositorio contiene la pila completa de la aplicación y la infraestructur
 - **Workflows de Docker Compose** para desarrollo y producción
 - **pgAdmin** para la gestión de la base de datos
 
-# 🛠️ Stack tecnológico
+## ✨ Features
+- **Ruleta** en sus variantes `0` y `00`
+- **Blackjack** con flujo de partida interactivo
+- **Slots** en varias configuraciones, clásica, `3x5` y `5x5`
+- **Capyroad**, un juego arcade de riesgo
+
+## 🛠️ Stack tecnológico
 | Área | Tecnologías |
 | --- | --- |
 | **Frontend** | ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB) ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white) ![GSAP](https://img.shields.io/badge/GSAP-88CE02?style=for-the-badge&logo=greensock&logoColor=white) |
