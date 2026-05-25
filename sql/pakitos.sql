@@ -135,3 +135,39 @@ CREATE TRIGGER update_sessions_modtime
     BEFORE UPDATE ON sessions
     FOR EACH ROW
     EXECUTE PROCEDURE update_modified_column();
+
+----- base bets
+INSERT INTO bets (id, label, ends_at)
+VALUES
+    (gen_random_uuid(), '¿Sale GTA 6 antes de que vuelva Cristo?', NOW() + INTERVAL '365 days'),
+    (gen_random_uuid(), '¿Half-Life 3 existe o fue un efecto Mandela?', NOW() + INTERVAL '730 days'),
+    (gen_random_uuid(), '¿George R.R. Martin termina los libros antes del colapso mundial?', NOW() + INTERVAL '500 days'),
+    (gen_random_uuid(), '¿Stardew Valley recibe otra update antes de que tengas pareja?', NOW() + INTERVAL '120 days'),
+    (gen_random_uuid(), '¿El Imperio Galáctico gestionaría mejor los impuestos que España?', NOW() + INTERVAL '90 days'),
+    (gen_random_uuid(), '¿Anakin se habría calmado con una Estrella Galicia fría?', NOW() + INTERVAL '45 days'),
+    (gen_random_uuid(), '¿Putin ragequittea antes que Riot arregle el cliente del LoL?', NOW() + INTERVAL '180 days'),
+    (gen_random_uuid(), '¿Europa sobrevive otro invierno a base de mantas y fe?', NOW() + INTERVAL '150 days'),
+    (gen_random_uuid(), '¿Steam vuelve a caerse en plenas rebajas?', NOW() + INTERVAL '20 days'),
+    (gen_random_uuid(), '¿Discord aguanta un viernes sin explotar?', NOW() + INTERVAL '15 days'),
+    (gen_random_uuid(), '¿EA saca un juego sin microtransacciones?', NOW() + INTERVAL '999 days'),
+    (gen_random_uuid(), '¿La tercera guerra mundial empieza por un meme?', NOW() + INTERVAL '365 days'),
+    (gen_random_uuid(), '¿El precio de la cerveza baja alguna vez?', NOW() + INTERVAL '600 days'),
+    (gen_random_uuid(), '¿Valve sabe contar hasta 3?', NOW() + INTERVAL '1000 days'),
+    (gen_random_uuid(), '¿Nintendo demanda a otro fan project esta semana?', NOW() + INTERVAL '7 days'),
+    (gen_random_uuid(), '¿Chewbacca aprobaría la piña en la pizza?', NOW() + INTERVAL '60 days'),
+    (gen_random_uuid(), '¿Un admin rompe producción un viernes a las 19:58?', NOW() + INTERVAL '14 days'),
+    (gen_random_uuid(), '¿Francia monta otra revolución por subir 2€ el pan?', NOW() + INTERVAL '200 days'),
+    (gen_random_uuid(), '¿ConcernedApe duerme alguna vez?', NOW() + INTERVAL '300 days'),
+    (gen_random_uuid(), '¿El próximo Papa será streamer de Twitch?', NOW() + INTERVAL '900 days');
+
+INSERT INTO bets_options (bet_id, label, odd)
+SELECT id, 'Sí, claramente', ROUND((1 + random() * 2)::numeric, 2)
+FROM bets;
+
+INSERT INTO bets_options (bet_id, label, odd)
+SELECT id, 'No, ni de coña', ROUND((1 + random() * 3)::numeric, 2)
+FROM bets;
+
+INSERT INTO bets_options (bet_id, label, odd)
+SELECT id, 'Depende del lore', ROUND((2 + random() * 4)::numeric, 2)
+FROM bets;
