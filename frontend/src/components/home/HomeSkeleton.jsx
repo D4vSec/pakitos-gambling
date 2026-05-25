@@ -8,17 +8,10 @@ import RandomGame from "./RandomGame"
 const HomeSkeleton = () => {
   return (
     <div className="w-full flex flex-col gap-10 md:gap-14">
-      {/* 🔥 HERO FEATURED */}
       <Carrousel />
 
-      {/* 💰 RECENT EARNINGS */}
-
-      {/* 🧩 CATEGORIES */}
-
-      {/* 🎮 MAIN GRID */}
       <ExploreGames />
 
-      {/* 🎲 CTA */}
       <RandomGame />
     </div>
   )
