@@ -72,7 +72,7 @@ const ExploreGames = () => {
           <div className="p-2 rounded-xl bg-primary">
             <ControllerSVG />
           </div>
-          <h3 className="text-3xl font-bold text-secondary">
+          <h3 className="text-2xl md:text-3xl font-bold text-secondary">
             {t("pages.home.exploreGames.title")}
           </h3>
         </div>

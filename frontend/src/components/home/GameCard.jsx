@@ -36,8 +36,8 @@ const GameCard = ({ game }) => {
         <Button>{t("pages.home.cards.playNow")}</Button>
       </div>
 
-      <div className="absolute bottom-4 left-4 z-30">
-        <p className="text-lg font-semibold text-white">
+      <div className="absolute bottom-4 left-4 right-4 z-30">
+        <p className="text-lg font-semibold text-white ">
           {t(`pages.home.cards.${game.game}.title`)}
         </p>
 
