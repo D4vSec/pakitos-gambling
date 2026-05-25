@@ -25,20 +25,20 @@
 # Checklist
 
 - [x] Notificaciones de inicio
-- [ ] Animacions BJ
-- [ ] Slots animaciones
-- [ ] Slots de varios tipos
+- [x] Animacions BJ
+- [x] Slots animaciones
+- [x] Slots de varios tipos
 - [ ] Animacion rota de las slots
-- [ ] Impedir tiradas durante animacion
+- [x] Impedir tiradas durante animacion
 - [x] Mejora de UI para usuarios
-- [ ] CapyRoad hace cosas
-- [ ] Dar cariño a la zona de juegos
-- [ ] Bug del split en front
-- [ ] Se pierde la partida al hacer f5 en el BJ
-- [ ] Se duplica la apuesta cuando split o double
-- [ ] En el split aunque el value sea 21 te deja seguir pidiendo cosas, creo que el bug es del front
-- [ ] Botones disabled
-- [ ] Bug al terminar y darle otra vez a jugar rapido
+- [x] CapyRoad hace cosas
+- [x] Dar cariño a la zona de juegos
+- [x] Bug del split en front
+- [x] Se pierde la partida al hacer f5 en el BJ
+- [x] Se duplica la apuesta cuando split o double
+- [x] En el split aunque el value sea 21 te deja seguir pidiendo cosas, creo que el bug es del front
+- [x] Botones disabled
+- [x] Bug al terminar y darle otra vez a jugar rapido
 
 # DONE
 
