@@ -13,7 +13,7 @@ const NavbarLinks = ({ className = "" }) => {
       key: "home",
       label: "navbar.home",
       Icon: HomeSVG,
-      link: "/home",
+      link: "/",
     },
     {
       key: "allGames",
@@ -27,12 +27,6 @@ const NavbarLinks = ({ className = "" }) => {
       Icon: CoinsSVG,
       link: "/bets",
     },
-    {
-      key: "favourites",
-      label: "navbar.favourites",
-      Icon: StarSVG,
-      link: "/",
-    },
   ]
 
   const isHorizontal = className.includes("menu-horizontal")
@@ -41,7 +35,9 @@ const NavbarLinks = ({ className = "" }) => {
     <ul className={`menu ${className}`}>
       {links.map(({ key, Icon, label, link }) => (
         <li key={key}>
-          <div className="flex items-center gap-1" onClick={() => navigate(link)}>
+          <div
+            className="flex items-center gap-1"
+            onClick={() => navigate(link)}>
             <Icon />
             <a className={`${isHorizontal ? "hidden" : ""} lg:block`}>
               {t(label)}
