@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import Navbar from "@/components/layout/navbar/Navbar"
 import Footer from "@/components/layout/Footer"
 import Router from "./router/Router"
@@ -13,10 +13,18 @@ import "./App.css"
 const App = () => {
   const { loading } = useLocale()
   const [showApp, setShowApp] = useState(false)
+  const revealTimeoutRef = useRef(null)
 
   useEffect(() => {
     if (!loading) {
-      setTimeout(() => setShowApp(true), 50)
+      revealTimeoutRef.current = setTimeout(() => setShowApp(true), 50)
+    }
+
+    return () => {
+      if (revealTimeoutRef.current) {
+        clearTimeout(revealTimeoutRef.current)
+        revealTimeoutRef.current = null
+      }
     }
   }, [loading])
 

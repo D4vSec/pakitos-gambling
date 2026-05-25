@@ -406,14 +406,12 @@ const BlackjackProvider = ({ children }) => {
   const double = async () => {
     if (!theresAmount()) return
     await play("double")
-    setBetAmount((prev) => formatMoney(prev * 2))
     updateBalance("withdrawal", formatMoney(baseBet))
   }
 
   const split = async () => {
     if (!theresAmount()) return
     await play("split")
-    setBetAmount((prev) => formatMoney(prev + baseBet))
     updateBalance("withdrawal", formatMoney(baseBet))
   }
 

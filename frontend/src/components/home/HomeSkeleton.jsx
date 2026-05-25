@@ -1,18 +1,23 @@
-import React from "react"
+import React, { Suspense, lazy } from "react"
 import Carrousel from "./Carrousel"
-import RecentEarnings from "./RecentEarnings"
-import Categories from "./Categories"
-import ExploreGames from "./ExploreGames"
-import RandomGame from "./RandomGame"
+
+const ExploreGames = lazy(() => import("./ExploreGames"))
+const RandomGame = lazy(() => import("./RandomGame"))
+
+const SectionFallback = () => <div className="min-h-56 rounded-3xl bg-base-200/60 animate-pulse" />
 
 const HomeSkeleton = () => {
   return (
     <div className="w-full flex flex-col gap-10 md:gap-14">
       <Carrousel />
 
-      <ExploreGames />
+      <Suspense fallback={<SectionFallback />}>
+        <ExploreGames />
+      </Suspense>
 
-      <RandomGame />
+      <Suspense fallback={<SectionFallback />}>
+        <RandomGame />
+      </Suspense>
     </div>
   )
 }

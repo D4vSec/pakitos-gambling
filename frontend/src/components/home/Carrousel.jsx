@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { useLocale } from "@/providers/LocaleProvider"
 import NavigateBtn from "../buttons/NavigateBtn"
 
@@ -61,10 +61,11 @@ const Carrousel = () => {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      handleNext()
+      setCurrentIndex((prev) => (prev === slides.length - 1 ? 0 : prev + 1))
     }, 5000)
+
     return () => clearInterval(timer)
-  }, [currentIndex])
+  }, [])
 
   const handleNext = () => {
     setCurrentIndex((prev) => (prev === slides.length - 1 ? 0 : prev + 1))
@@ -86,7 +87,10 @@ const Carrousel = () => {
           >
             <img
               src={slide.image}
-              alt={slide.title}
+              alt={t(`pages.home.cards.${slide.game}.title`)}
+              loading={index === 0 ? "eager" : "lazy"}
+              fetchPriority={index === 0 ? "high" : "auto"}
+              decoding="async"
               className="absolute inset-0 w-full h-full object-cover"
             />
 
@@ -113,27 +117,27 @@ const Carrousel = () => {
           onClick={handlePrev}
           className="absolute left-2 top-1/2 -translate-y-1/2 z-40 w-10 h-10 flex items-center justify-center rounded-full bg-white/5 backdrop-blur-sm text-white/50 border border-white/10 opacity-0 group-hover:opacity-100 transition-all hover:bg-white/10 hover:text-white active:scale-90"
         >
-          <span className="text-2xl -mt-1">‹</span>
+          <span className="text-2xl -mt-1">&lsaquo;</span>
         </button>
 
         <button
           onClick={handleNext}
           className="absolute right-2 top-1/2 -translate-y-1/2 z-40 w-10 h-10 flex items-center justify-center rounded-full bg-white/5 backdrop-blur-sm text-white/50 border border-white/10 opacity-0 group-hover:opacity-100 transition-all hover:bg-white/10 hover:text-white active:scale-90"
         >
-          <span className="text-2xl -mt-1">›</span>
+          <span className="text-2xl -mt-1">&rsaquo;</span>
         </button>
 
         <div className="absolute bottom-4 right-4 md:bottom-6 md:right-6 z-40 flex gap-2 items-center bg-black/30 backdrop-blur-sm p-2 rounded-full border border-white/5">
-          {slides.map((_, i) => (
+          {slides.map((slide) => (
             <button
-              key={i}
-              onClick={() => setCurrentIndex(i)}
+              key={slide.id}
+              onClick={() => setCurrentIndex(slide.id - 1)}
               className={`transition-all duration-300 rounded-full ${
-                currentIndex === i
+                currentIndex === slide.id - 1
                   ? "w-6 h-1.5 md:w-8 md:h-2 bg-primary shadow-[0_0_8px_rgba(var(--p),0.5)]"
                   : "w-1.5 h-1.5 md:w-2 md:h-2 bg-white/40 hover:bg-white/70"
               }`}
-              aria-label={`Go to slide ${i + 1}`}
+              aria-label={`Go to slide ${slide.id}`}
             />
           ))}
         </div>

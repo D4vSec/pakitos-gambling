@@ -10,11 +10,13 @@ const GameCard = ({ game }) => {
   return (
     <div
       onClick={() => navigate(game.route)}
-      className="group aspect-7/5 rounded-xl relative overflow-hidden border border-secondary/20 hover:scale-[102%] transition-transform duration-300"
+      className="group aspect-7/5 rounded-xl relative overflow-hidden border border-secondary/20 hover:scale-[101%] transition-transform duration-300"
     >
       <img
         src={game.img}
         alt={game.game}
+        loading="lazy"
+        decoding="async"
         className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
       />
 

@@ -11,6 +11,8 @@ const HeroSection = () => {
           <img
             src={herobg}
             alt="Casino Gaming"
+            fetchPriority="high"
+            decoding="async"
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-linear-to-r from-black/90 via-black/70 to-black/50" />

@@ -11,6 +11,18 @@ export default defineConfig({
             "@": path.resolve(__dirname, "./src"),
         },
     },
+    build: {
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    router: ["react-router-dom"],
+                    forms: ["react-hook-form", "@hookform/resolvers", "zod"],
+                    admin: ["@tanstack/react-table", "@uiw/react-json-view", "dayjs"],
+                    animations: ["gsap"],
+                },
+            },
+        },
+    },
     server: {
         host: true,
         port: 5173,

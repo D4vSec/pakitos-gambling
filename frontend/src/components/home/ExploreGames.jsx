@@ -80,12 +80,11 @@ const ExploreGames = () => {
           {t("pages.home.exploreGames.description")}
         </p>
         <div className="bg-primary rounded-lg h-0.5 my-4"></div>
-
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-        {games.map((game, i) => (
-          <GameCard key={i} game={game} />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {games.map((game) => (
+          <GameCard key={game.route} game={game} />
         ))}
       </div>
     </section>
