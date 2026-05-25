@@ -29,6 +29,10 @@ const startGame = async (req, res) => {
         const wallet = req.user.wallet
         const { amount } = req.body
 
+        if (amount <= 0 || isNaN(amount)) {
+            return res.status(400).json({ code: "INVALID_BET_AMOUNT" })
+        }
+
         if (amount > wallet) {
             return res.status(400).json({ code: "INSUFFICIENT_BALANCE" })
         }
@@ -183,4 +187,4 @@ const getGames = (req, res) => {
     }
 }
 
-export { startGame, jumpRoad, stand, destroyGame, getGames }
+export { startGame, jumpRoad, stand, destroyGame, getGame, getGames }
