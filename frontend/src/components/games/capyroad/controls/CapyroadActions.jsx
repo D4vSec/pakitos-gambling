@@ -2,18 +2,25 @@ import React from "react"
 import Button from "@/components/buttons/Button"
 import { useLocale } from "@/providers/LocaleProvider"
 
-const CapyroadActions = ({ disabled }) => {
+const CapyroadActions = ({
+  disabled,
+  canCashout = false,
+  onCross,
+  onCashout,
+}) => {
   const { t } = useLocale()
+
   const buttons = [
     {
-      label: "Cross",
-      onClick: () => console.log("cossing"),
+      label: "games.capyroad.actions.cross",
+      onClick: onCross,
       variant: "neutral",
     },
     {
-      label: "Cashout",
-      onClick: () => console.log("cashing out"),
+      label: "games.capyroad.actions.cashout",
+      onClick: onCashout,
       variant: "primary",
+      disabled: !canCashout,
     },
   ]
 
@@ -25,7 +32,7 @@ const CapyroadActions = ({ disabled }) => {
           variant={btn.variant}
           className="flex-1 min-w-fit"
           onClick={btn.onClick}
-          disabled={disabled}>
+          disabled={disabled || btn.disabled}>
           {t(btn.label)}
         </Button>
       ))}
