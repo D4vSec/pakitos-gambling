@@ -1,5 +1,6 @@
 import HomeSVG from "@/components/svg/pictures/HomeSVG"
 import CardsSVG from "@/components/svg/pictures/CardsSVG"
+import CoinsSVG from "@/components/svg/pictures/CoinsSVG"
 import StarSVG from "@/components/svg/pictures/StarSVG"
 import { useLocale } from "@/providers/LocaleProvider"
 import { useNavigate } from "react-router-dom"
@@ -21,6 +22,12 @@ const NavbarLinks = ({ className = "" }) => {
       link: "/home",
     },
     {
+      key: "bets",
+      label: "navbar.bets",
+      Icon: CoinsSVG,
+      link: "/bets",
+    },
+    {
       key: "favourites",
       label: "navbar.favourites",
       Icon: StarSVG,
@@ -30,23 +37,17 @@ const NavbarLinks = ({ className = "" }) => {
 
   const isHorizontal = className.includes("menu-horizontal")
 
-  const NavbarLink = ({ Icon, label, link = "/" }) => {
-    return (
-      <li>
-        <div className="flex items-center gap-1" onClick={() => navigate(link)}>
-          <Icon />
-          <a className={`${isHorizontal ? "hidden" : ""} lg:block`}>
-            {t(label)}
-          </a>
-        </div>
-      </li>
-    )
-  }
-
   return (
     <ul className={`menu ${className}`}>
       {links.map(({ key, Icon, label, link }) => (
-        <NavbarLink key={key} Icon={Icon} label={label} link={link} />
+        <li key={key}>
+          <div className="flex items-center gap-1" onClick={() => navigate(link)}>
+            <Icon />
+            <a className={`${isHorizontal ? "hidden" : ""} lg:block`}>
+              {t(label)}
+            </a>
+          </div>
+        </li>
       ))}
     </ul>
   )

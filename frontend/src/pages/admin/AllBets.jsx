@@ -1,13 +1,13 @@
 import React from "react"
 import { useNavigate } from "react-router-dom"
 import AdminPageHeader from "@/components/admin/components/AdminPageHeader"
-import UsersTable from "@/components/admin/tables/UsersTable"
+import BetsTable from "@/components/admin/tables/BetsTable"
 import Button from "@/components/buttons/Button"
 import GradientBg from "@/components/layout/GradientBg"
-import UserPlusSVG from "@/components/svg/users/UserPlusSVG"
+import CoinsSVG from "@/components/svg/pictures/CoinsSVG"
 import { useLocale } from "@/providers/LocaleProvider"
 
-const AllUsers = () => {
+const AllBets = () => {
   const navigate = useNavigate()
   const { t } = useLocale()
 
@@ -15,23 +15,23 @@ const AllUsers = () => {
     <GradientBg>
       <div className="flex flex-col gap-4">
         <AdminPageHeader
-          title={t("adminPanel.users.title")}
+          title={t("adminPanel.bets.title")}
           backLink="/home"
           actions={
             <Button
               type="button"
-              svg={<UserPlusSVG />}
+              svg={<CoinsSVG />}
               variant="success"
-              onClick={() => navigate("/admin/users/create")}>
-              {t("adminPanel.users.createNewUser")}
+              onClick={() => navigate("/admin/bets/create")}>
+              {t("adminPanel.bets.createNewBet")}
             </Button>
           }
         />
 
-        <UsersTable />
+        <BetsTable />
       </div>
     </GradientBg>
   )
 }
 
-export default AllUsers
+export default AllBets

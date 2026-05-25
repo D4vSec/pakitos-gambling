@@ -6,37 +6,49 @@ import { useLocale } from "./LocaleProvider"
 
 const AdminContext = createContext()
 
+const buildQueryParams = (options = {}) => {
+  const { page = 1, limit = 20, ...filters } = options
+  const queryParams = new URLSearchParams({
+    page: page.toString(),
+    limit: limit.toString(),
+  })
+
+  Object.keys(filters).forEach((key) => {
+    if (filters[key] !== undefined && filters[key] !== null && filters[key] !== "") {
+      queryParams.append(key, filters[key])
+    }
+  })
+
+  return queryParams
+}
+
 // TODO: Reducir peticiones a ser posible
 const AdminProvider = ({ children }) => {
   const [users, setUsers] = useState([])
-  const { get, put, destroy, loading } = useAPI()
+  const [bets, setBets] = useState([])
+  const { get, post, put, destroy, loading } = useAPI()
   const { getAccessToken, getRefreshToken, user } = useSession()
   const { addNotification } = useNotification()
   const { t } = useLocale()
 
+  const buildHeaders = useCallback(() => {
+    const accessToken = getAccessToken()
+    const refreshToken = getRefreshToken()
+
+    return {
+      ...(refreshToken ? { "x-refresh-token": refreshToken } : {}),
+      ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+    }
+  }, [getAccessToken, getRefreshToken])
+
   const getAllUsers = useCallback(
     async (options = {}) => {
       try {
-        const { page = 1, limit = 20, ...filters } = options
-
-        const queryParams = new URLSearchParams({
-          page: page.toString(),
-          limit: limit.toString(),
-        })
-
-        Object.keys(filters).forEach((key) => {
-          if (filters[key] !== undefined && filters[key] !== null && filters[key] !== "") {
-            queryParams.append(key, filters[key])
-          }
-        })
-
+        const queryParams = buildQueryParams(options)
         const url = `/api/v1/user?${queryParams.toString()}`
 
         const res = await get(url, {
-          headers: {
-            "x-refresh-token": getRefreshToken(),
-            Authorization: `Bearer ${getAccessToken()}`,
-          },
+          headers: buildHeaders(),
         })
 
         if (res.code) {
@@ -49,16 +61,13 @@ const AdminProvider = ({ children }) => {
         addNotification(t(`message.error.${error.message}`), "error")
       }
     },
-    [t, getAccessToken, getRefreshToken],
+    [addNotification, buildHeaders, buildQueryParams, get, t],
   )
 
   const getUserById = async (userId) => {
     try {
       const res = await get(`/api/v1/user/${userId}`, {
-        headers: {
-          "x-refresh-token": getRefreshToken(),
-          Authorization: `Bearer ${getAccessToken()}`,
-        },
+        headers: buildHeaders(),
       })
 
       if (res.code) {
@@ -73,15 +82,10 @@ const AdminProvider = ({ children }) => {
 
   const updateUser = async (userId, userData) => {
     try {
-      console.log("userData", userData)
       const res = await put(`/api/v1/user/${userId}`, {
-        headers: {
-          "x-refresh-token": getRefreshToken(),
-          Authorization: `Bearer ${getAccessToken()}`,
-        },
+        headers: buildHeaders(),
         body: userData,
       })
-      console.log("up", res)
 
       if (res.code !== "SUCCESS") {
         throw new Error(res.code || "Error al obtener usuarios")
@@ -98,12 +102,8 @@ const AdminProvider = ({ children }) => {
   const deleteUser = async (userId) => {
     try {
       const res = await destroy(`/api/v1/user/${userId}`, {
-        headers: {
-          "x-refresh-token": getRefreshToken(),
-          Authorization: `Bearer ${getAccessToken()}`,
-        },
+        headers: buildHeaders(),
       })
-      console.log("del", res)
 
       if (res.code !== "SUCCESS") {
         throw new Error(res.code || "Error al borrar usuario")
@@ -134,27 +134,11 @@ const AdminProvider = ({ children }) => {
   const getTransactionsById = useCallback(
     async (userId, options = {}) => {
       try {
-        const { page = 1, limit = 20, ...filters } = options
-
-        const queryParams = new URLSearchParams({
-          page: page.toString(),
-          limit: limit.toString(),
-        })
-
-        // Añadir filtros dinámicos, sorting, min/maxAmount, from/toDate
-        Object.keys(filters).forEach((key) => {
-          if (filters[key] !== undefined && filters[key] !== null && filters[key] !== "") {
-            queryParams.append(key, filters[key])
-          }
-        })
-
+        const queryParams = buildQueryParams(options)
         const url = `/api/v1/user/${userId}/transactions?${queryParams.toString()}`
 
-        let res = await get(url, {
-          headers: {
-            "x-refresh-token": getRefreshToken(),
-            Authorization: `Bearer ${getAccessToken()}`,
-          },
+        const res = await get(url, {
+          headers: buildHeaders(),
         })
 
         if (res.code) {
@@ -166,32 +150,16 @@ const AdminProvider = ({ children }) => {
         addNotification(t(`message.error.${error.message}`), "error")
       }
     },
-    [t, getAccessToken, getRefreshToken],
+    [addNotification, buildHeaders, get, t],
   )
 
   const getLogs = useCallback(
     async (options = {}) => {
       try {
-        const { page = 1, limit = 20, ...filters } = options
-
-        const queryParams = new URLSearchParams({
-          page: page.toString(),
-          limit: limit.toString(),
-        })
-
-        Object.keys(filters).forEach((key) => {
-          if (filters[key] !== undefined && filters[key] !== null && filters[key] !== "") {
-            queryParams.append(key, filters[key])
-          }
-        })
-
+        const queryParams = buildQueryParams(options)
         const url = `/api/v1/audit?${queryParams.toString()}`
-        console.log("url", url)
-        let res = await get(url, {
-          headers: {
-            "x-refresh-token": getRefreshToken(),
-            Authorization: `Bearer ${getAccessToken()}`,
-          },
+        const res = await get(url, {
+          headers: buildHeaders(),
         })
 
         if (res.code) {
@@ -203,12 +171,198 @@ const AdminProvider = ({ children }) => {
         addNotification(t(`message.error.${error.message}`), "error")
       }
     },
-    [t, getAccessToken, getRefreshToken],
+    [addNotification, buildHeaders, get, t],
+  )
+
+  const getAdminBets = useCallback(
+    async (options = {}) => {
+      try {
+        const queryParams = buildQueryParams(options)
+        const res = await get(`/api/v1/bets/admin?${queryParams.toString()}`, {
+          headers: buildHeaders(),
+        })
+
+        if (res.code) {
+          throw new Error(res.code || "Error al obtener apuestas")
+        }
+
+        setBets(res?.bets || [])
+        return res
+      } catch (error) {
+        addNotification(t(`message.error.${error.message}`), "error")
+        return null
+      }
+    },
+    [addNotification, buildHeaders, get, t],
+  )
+
+  const getAdminBet = useCallback(
+    async (betId) => {
+      try {
+        const res = await get(`/api/v1/bets/admin/${betId}`, {
+          headers: buildHeaders(),
+        })
+
+        if (res.code) {
+          throw new Error(res.code || "Error al obtener apuesta")
+        }
+
+        return res
+      } catch (error) {
+        addNotification(t(`message.error.${error.message}`), "error")
+        return null
+      }
+    },
+    [addNotification, buildHeaders, get, t],
+  )
+
+  const createBet = useCallback(
+    async (betData) => {
+      try {
+        const res = await post("/api/v1/bets/admin", {
+          headers: buildHeaders(),
+          body: betData,
+        })
+
+        if (res?.code) {
+          throw new Error(res.code || "Error al crear apuesta")
+        }
+
+        addNotification(t("message.success.BET_CREATED"), "success")
+        return res
+      } catch (error) {
+        addNotification(t(`message.error.${error.message}`), "error")
+        return null
+      }
+    },
+    [addNotification, buildHeaders, post, t],
+  )
+
+  const updateBet = useCallback(
+    async (betId, betData) => {
+      try {
+        const res = await put(`/api/v1/bets/${betId}`, {
+          headers: buildHeaders(),
+          body: betData,
+        })
+
+        if (res.code !== "SUCCESS") {
+          throw new Error(res.code || "Error al actualizar apuesta")
+        }
+
+        addNotification(t("message.success.BET_UPDATED"), "success")
+        return res
+      } catch (error) {
+        addNotification(t(`message.error.${error.message}`), "error", {
+          duration: 10000,
+        })
+        return null
+      }
+    },
+    [addNotification, buildHeaders, put, t],
+  )
+
+  const deleteBet = useCallback(
+    async (betId) => {
+      try {
+        const res = await destroy(`/api/v1/bets/${betId}`, {
+          headers: buildHeaders(),
+        })
+
+        if (res.code !== "SUCCESS") {
+          throw new Error(res.code || "Error al eliminar apuesta")
+        }
+
+        addNotification(t("message.success.BET_DELETED"), "success")
+        return true
+      } catch (error) {
+        addNotification(t(`message.error.${error.message}`), "error", {
+          duration: 10000,
+        })
+        return false
+      }
+    },
+    [addNotification, buildHeaders, destroy, t],
+  )
+
+  const closeBet = useCallback(
+    async (betId) => {
+      try {
+        const res = await post(`/api/v1/bets/admin/${betId}/close`, {
+          headers: buildHeaders(),
+        })
+
+        if (res.code !== "SUCCESS") {
+          throw new Error(res.code || "Error al cerrar apuesta")
+        }
+
+        addNotification(t("message.success.BET_CLOSED_BY_ADMIN"), "success")
+        return true
+      } catch (error) {
+        addNotification(t(`message.error.${error.message}`), "error")
+        return false
+      }
+    },
+    [addNotification, buildHeaders, post, t],
+  )
+
+  const getBetSettlementPreview = useCallback(
+    async (betId, winningOptionId) => {
+      try {
+        const res = await post(`/api/v1/bets/admin/${betId}/settlement-preview`, {
+          headers: buildHeaders(),
+          body: { winningOptionId },
+        })
+
+        if (res.code) {
+          throw new Error(res.code || "Error al obtener preview")
+        }
+
+        return res
+      } catch (error) {
+        addNotification(t(`message.error.${error.message}`), "error")
+        return null
+      }
+    },
+    [addNotification, buildHeaders, post, t],
+  )
+
+  const deleteBetModal = useCallback(
+    (betId, betLabel, onAfterSuccess) => {
+      addNotification(t("message.modal.deleteBet.title", { label: betLabel }), "modal", {
+        onAccept: async () => {
+          const deleted = await deleteBet(betId)
+          if (deleted) {
+            onAfterSuccess?.()
+          }
+        },
+        acceptLabel: t("message.modal.deleteBet.accept"),
+        cancelLabel: t("message.modal.deleteBet.cancel"),
+      })
+    },
+    [addNotification, deleteBet, t],
+  )
+
+  const closeBetModal = useCallback(
+    (betId, betLabel, onAfterSuccess) => {
+      addNotification(t("message.modal.closeBet.title", { label: betLabel }), "modal", {
+        onAccept: async () => {
+          const closed = await closeBet(betId)
+          if (closed) {
+            onAfterSuccess?.()
+          }
+        },
+        acceptLabel: t("message.modal.closeBet.accept"),
+        cancelLabel: t("message.modal.closeBet.cancel"),
+      })
+    },
+    [addNotification, closeBet, t],
   )
 
   // const createuser = async (data) => {}
 
   const value = {
+    bets,
     users,
     loading,
     getAllUsers,
@@ -218,6 +372,15 @@ const AdminProvider = ({ children }) => {
     deleteModal,
     getTransactionsById,
     getLogs,
+    getAdminBets,
+    getAdminBet,
+    createBet,
+    updateBet,
+    deleteBet,
+    closeBet,
+    getBetSettlementPreview,
+    deleteBetModal,
+    closeBetModal,
   }
 
   return <AdminContext value={value}>{children}</AdminContext>

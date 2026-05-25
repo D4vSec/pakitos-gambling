@@ -71,6 +71,11 @@
   },
 
   "adminPanel": {
+    "navigation": {
+      "users": "Usuarios",
+      "bets": "Apuestas",
+      "logs": "Registros"
+    },
     "users": {
       "title": "Todos los usuarios",
       "createNewUser": "Crear nuevo usuario",
@@ -84,7 +89,47 @@
       }
     },
 
+    "bets": {
+      "title": "Apuestas",
+      "createNewBet": "Crear apuesta",
+      "table": {
+        "name": "Mercado",
+        "label": "Mercado",
+        "status": "Estado",
+        "ends_at": "Cierre",
+        "created_at": "Creada",
+        "options": "Opciones",
+        "actions": "Acciones"
+      },
+      "detail": {
+        "summary": "Gestiona el mercado, revisa el pool y calcula el reparto proyectado antes de liquidar.",
+        "noBet": "No se ha encontrado esta apuesta.",
+        "refresh": "Refrescar",
+        "editBet": "Editar apuesta",
+        "closeBet": "Forzar cierre",
+        "deleteBet": "Eliminar apuesta",
+        "totalPool": "Pool total",
+        "poolDistribution": "Distribución del pool",
+        "poolHint": "Así está repartido actualmente el capital entre las opciones de esta apuesta.",
+        "option": "Opción",
+        "poolAmount": "Capital",
+        "odds": "Cuota",
+        "settlementPreview": "Preview de liquidación",
+        "previewHint": "Selecciona la opción ganadora para ver cuánto capital se repartiría con las cuotas actuales.",
+        "selectWinningOption": "Opción ganadora",
+        "generatePreview": "Generar preview",
+        "noPreview": "Selecciona una opción y genera el preview para ver el reparto proyectado.",
+        "winningOption": "Opción ganadora",
+        "totalWinningAmount": "Capital ganador",
+        "totalProjectedPayout": "Pago proyectado",
+        "userId": "Usuario",
+        "payout": "Pago",
+        "emptyWinners": "No hay usuarios ganadores para esta opción."
+      }
+    },
+
     "logs": {
+      "title": "Registros",
       "table": {
         "action": "Acción",
         "user_id": "ID de Usuario",
@@ -205,7 +250,9 @@
       "login": "Iniciar sesión",
       "register": "Registrarse",
       "createUser": "Crear usuario",
-      "updateUser": "Editar usuario"
+      "updateUser": "Editar usuario",
+      "createBet": "Crear apuesta",
+      "updateBet": "Editar apuesta"
     },
 
     "fields": {
@@ -263,6 +310,42 @@
           "user": "Usuario",
           "admin": "Administrador"
         }
+      },
+
+      "betLabel": {
+        "label": "Mercado",
+        "placeholder": "Real Madrid gana la Champions",
+        "minLength": "Mínimo 3 caracteres",
+        "maxLength": "Máximo 120 caracteres"
+      },
+
+      "endsAt": {
+        "label": "Fecha de cierre",
+        "placeholder": "Selecciona la fecha de cierre",
+        "required": "La fecha de cierre es obligatoria",
+        "invalid": "La fecha de cierre no es válida"
+      },
+
+      "betOptionLabel": {
+        "label": "Etiqueta de la opción",
+        "placeholder": "Sí / No / Candidato A",
+        "required": "La etiqueta de la opción es obligatoria"
+      },
+
+      "betOptionOdd": {
+        "label": "Cuota inicial",
+        "placeholder": "2.00",
+        "positive": "La cuota debe ser mayor que 0"
+      },
+
+      "betOptions": {
+        "label": "Opciones de la apuesta",
+        "hint": "Define al menos dos opciones para el mercado.",
+        "addOption": "Añadir opción",
+        "option": "Opción {{index}}",
+        "locked": "No puedes editar las opciones porque esta apuesta ya tiene actividad. Solo puedes cambiar el nombre o la fecha de cierre.",
+        "minItems": "Debes añadir al menos 2 opciones",
+        "maxItems": "No puedes añadir más de 20 opciones"
       }
     },
 
@@ -434,12 +517,57 @@
       "min": "La cantidad debe ser > 0.01",
       "max": "La cantidad debe ser < 99999999999.99",
       "title": "Añadir saldo a la cuenta"
+    },
+
+    "bets": {
+      "status": {
+        "open": "Abierta",
+        "closed": "Cerrada"
+      },
+      "filters": {
+        "search": "Buscar mercado",
+        "searchPlaceholder": "Real Madrid, Champions, elecciones...",
+        "status": "Estado",
+        "all": "Todos",
+        "apply": "Aplicar",
+        "reset": "Limpiar"
+      },
+      "list": {
+        "title": "Mercados para seguir cada historia",
+        "description": "Descubre apuestas abiertas y cerradas sobre temas de todo tipo, con una vista más limpia para comparar opciones y entrar al mercado de un vistazo.",
+        "emptyTitle": "No hay apuestas que coincidan con los filtros",
+        "emptyDescription": "Prueba con otro nombre o cambia el estado seleccionado.",
+        "marketCount": "{{count}} mercados"
+      },
+      "card": {
+        "market": "Mercado",
+        "endsAt": "Cierre",
+        "viewMarket": "Ver mercado",
+        "noOptions": "Todavía no hay opciones cargadas para esta apuesta."
+      },
+      "detail": {
+        "market": "Detalle del mercado",
+        "hint": "Selecciona una opción, introduce tu cantidad y coloca la apuesta desde esta misma vista.",
+        "selection": "Slip de apuesta",
+        "options": "Opciones",
+        "pickOption": "Selecciona una opción",
+        "selectedOption": "Opción seleccionada",
+        "odds": "Cuota",
+        "amountLabel": "Cantidad",
+        "amountPlaceholder": "Introduce la cantidad a apostar",
+        "placeBet": "Apostar ahora",
+        "refresh": "Refrescar mercado",
+        "closedMessage": "Esta apuesta ya está cerrada y no admite nuevas posiciones.",
+        "noMarket": "No se ha encontrado esta apuesta.",
+        "noOptions": "Este mercado todavía no tiene opciones disponibles."
+      }
     }
   },
 
   "navbar": {
     "home": "Inicio",
     "allGames": "Todos los juegos",
+    "bets": "Apuestas",
     "favourites": "Favoritos",
     "menu": "Menú",
     "login": "Iniciar sesión",
@@ -473,8 +601,16 @@
       "AUTH_USER_REGISTERED": "Nombre de usuario ya registrado",
       "INSUFFICIENT_BALANCE": "No tienes suficiente saldo para realizar esta apuesta",
       "INSUFFICIENT_FUNDS": "Fondos insuficientes para continuar jugando",
+      "BET_CLOSED": "La apuesta ya está cerrada",
       "GAME_NOT_FOUND": "Sesión de juego no encontrada",
       "INVALID_BET_AMOUNT": "Cantidad de apuesta inválida",
+      "INVALID_BET_DATA": "Los datos de la apuesta no son válidos",
+      "INVALID_QUERY_PARAMS": "Los filtros enviados no son válidos",
+      "INVALID_ENDS_AT": "La fecha de cierre no es válida",
+      "OPTION_NOT_FOUND": "La opción seleccionada no existe",
+      "BET_NOT_FOUND": "La apuesta no existe",
+      "BET_HAS_ACTIVITY": "No puedes modificar las opciones ni eliminar una apuesta que ya tiene apuestas asociadas",
+      "PAGE_EXCEDED": "La página solicitada no existe",
       "GAME_NOT_VALID": "Juego inválido",
       "SERVER_ERROR": "El servidor falló durante la solicitud",
       "Update_User": "Error al actualizar el perfil",
@@ -488,7 +624,8 @@
       "registered": "Tu cuenta ha sido creada, debes ir a la página de inicio de sesión",
       "userData": "Datos de usuario recibidos correctamente",
       "winningNumber": "Número ganador",
-      "uuidCopiedToClipboard": "UUID copiado al portapapeles"
+      "uuidCopiedToClipboard": "UUID copiado al portapapeles",
+      "NO_CHANGES": "No hay cambios para guardar"
     },
 
     "modal": {
@@ -509,6 +646,16 @@
         "accept": "Si, un jugador menos",
         "cancel": "No, perderemos un adicto",
         "title": "¿Seguro que quieres eliminar el usuario?"
+      },
+      "deleteBet": {
+        "accept": "Sí, elimínala",
+        "cancel": "No, todavía no",
+        "title": "¿Seguro que quieres eliminar la apuesta {{label}}?"
+      },
+      "closeBet": {
+        "accept": "Sí, cerrarla ya",
+        "cancel": "No, sigue abierta",
+        "title": "¿Seguro que quieres forzar el cierre de la apuesta {{label}}?"
       }
     },
 
@@ -516,6 +663,11 @@
       "AUTH_USER_LOGGED": "Inicio de sesión correcto",
       "AUTH_USER_REGISTERED": "Cuenta registrada correctamente",
       "BALANCE_ADDED_SUCCESSFULLY": "Saldo actualizado correctamente",
+      "BET_CREATED": "Apuesta creada correctamente",
+      "BET_UPDATED": "Apuesta actualizada correctamente",
+      "BET_DELETED": "Apuesta eliminada correctamente",
+      "BET_CLOSED_BY_ADMIN": "Apuesta cerrada correctamente",
+      "BET_PLACED": "Apuesta realizada correctamente",
       "LANGUAGE_CHANGED": "Idioma cambiado correctamente",
       "USER_UPDATED": "Perfil actualizado",
       "logout": "Sesión cerrada correctamente"

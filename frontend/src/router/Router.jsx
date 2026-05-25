@@ -20,6 +20,11 @@ import AdminLayout from "@/pages/admin/AdminLayout"
 import UserForm from "@/pages/admin/UserForm"
 import UserDetails from "@/pages/admin/UserDetails"
 import LogsPage from "@/pages/admin/LogsPage"
+import AllBets from "@/pages/admin/AllBets"
+import BetForm from "@/pages/admin/BetForm"
+import BetDetails from "@/pages/admin/BetDetails"
+import BetsPage from "@/pages/bets/BetsPage"
+import BetDetailsPage from "@/pages/bets/BetDetailsPage"
 
 const Router = () => {
   return (
@@ -65,10 +70,30 @@ const Router = () => {
         <Route path="users/:id" element={<UserDetails />} />
         <Route path="users/create" element={<UserForm />} />
         <Route path="users/edit/:id" element={<UserForm />} />
+        <Route path="bets" element={<AllBets />} />
+        <Route path="bets/:id" element={<BetDetails />} />
+        <Route path="bets/create" element={<BetForm />} />
+        <Route path="bets/edit/:id" element={<BetForm />} />
         <Route path="logs" element={<LogsPage />} />
       </Route>
 
       {/* Games */}
+      <Route
+        path="/bets"
+        element={
+          <ProtectedRoute>
+            <BetsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/bets/:betId"
+        element={
+          <ProtectedRoute>
+            <BetDetailsPage />
+          </ProtectedRoute>
+        }
+      />
       <Route
         path="/roulette0"
         element={

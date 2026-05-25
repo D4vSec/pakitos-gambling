@@ -71,6 +71,11 @@
   },
 
   "adminPanel": {
+    "navigation": {
+      "users": "Users",
+      "bets": "Bets",
+      "logs": "Logs"
+    },
     "users": {
       "title": "All users",
       "createNewUser": "Create new user",
@@ -84,7 +89,47 @@
       }
     },
 
+    "bets": {
+      "title": "Bets",
+      "createNewBet": "Create bet",
+      "table": {
+        "name": "Market",
+        "label": "Market",
+        "status": "Status",
+        "ends_at": "Closes at",
+        "created_at": "Created at",
+        "options": "Options",
+        "actions": "Actions"
+      },
+      "detail": {
+        "summary": "Manage the market, review the pool, and estimate the projected payout before settling it.",
+        "noBet": "This bet could not be found.",
+        "refresh": "Refresh",
+        "editBet": "Edit bet",
+        "closeBet": "Force close",
+        "deleteBet": "Delete bet",
+        "totalPool": "Total pool",
+        "poolDistribution": "Pool distribution",
+        "poolHint": "Current capital split across every option in this market.",
+        "option": "Option",
+        "poolAmount": "Amount",
+        "odds": "Odds",
+        "settlementPreview": "Settlement preview",
+        "previewHint": "Pick the winning option to preview the projected payout using the current odds.",
+        "selectWinningOption": "Winning option",
+        "generatePreview": "Generate preview",
+        "noPreview": "Pick an option and generate the preview to inspect the projected distribution.",
+        "winningOption": "Winning option",
+        "totalWinningAmount": "Winning capital",
+        "totalProjectedPayout": "Projected payout",
+        "userId": "User",
+        "payout": "Payout",
+        "emptyWinners": "There are no winners for this option."
+      }
+    },
+
     "logs": {
+      "title": "Logs",
       "table": {
         "action": "Action",
         "user_id": "User ID",
@@ -205,7 +250,9 @@
       "login": "Sign in",
       "register": "Sign up",
       "createUser": "Create user",
-      "updateUser": "Edit user"
+      "updateUser": "Edit user",
+      "createBet": "Create bet",
+      "updateBet": "Edit bet"
     },
 
     "fields": {
@@ -263,6 +310,42 @@
           "user": "User",
           "admin": "Admin"
         }
+      },
+
+      "betLabel": {
+        "label": "Market",
+        "placeholder": "Real Madrid wins the Champions League",
+        "minLength": "Minimum 3 characters",
+        "maxLength": "Maximum 120 characters"
+      },
+
+      "endsAt": {
+        "label": "Closing date",
+        "placeholder": "Select the closing date",
+        "required": "Closing date is required",
+        "invalid": "Closing date is invalid"
+      },
+
+      "betOptionLabel": {
+        "label": "Option label",
+        "placeholder": "Yes / No / Candidate A",
+        "required": "Option label is required"
+      },
+
+      "betOptionOdd": {
+        "label": "Starting odd",
+        "placeholder": "2.00",
+        "positive": "Odd must be greater than 0"
+      },
+
+      "betOptions": {
+        "label": "Bet options",
+        "hint": "Define at least two options for this market.",
+        "addOption": "Add option",
+        "option": "Option {{index}}",
+        "locked": "You cannot edit the options because this bet already has activity. You can still update the name or closing date.",
+        "minItems": "You must add at least 2 options",
+        "maxItems": "You cannot add more than 20 options"
       }
     },
 
@@ -433,12 +516,57 @@
       "min": "The amount must be > 0.01",
       "max": "The amount must be < 99999999999.99",
       "title": "Add balance to account"
+    },
+
+    "bets": {
+      "status": {
+        "open": "Open",
+        "closed": "Closed"
+      },
+      "filters": {
+        "search": "Search market",
+        "searchPlaceholder": "Real Madrid, Champions, elections...",
+        "status": "Status",
+        "all": "All",
+        "apply": "Apply",
+        "reset": "Clear"
+      },
+      "list": {
+        "title": "Markets worth watching",
+        "description": "Discover open and closed markets across all kinds of stories, with a cleaner view built to compare options and jump in at a glance.",
+        "emptyTitle": "No bets match the current filters",
+        "emptyDescription": "Try another name or change the selected status.",
+        "marketCount": "{{count}} markets"
+      },
+      "card": {
+        "market": "Market",
+        "endsAt": "Closing time",
+        "viewMarket": "View market",
+        "noOptions": "There are no options loaded for this market yet."
+      },
+      "detail": {
+        "market": "Market details",
+        "hint": "Pick an option, enter your amount and place the bet directly from this screen.",
+        "selection": "Bet slip",
+        "options": "Options",
+        "pickOption": "Select an option",
+        "selectedOption": "Selected option",
+        "odds": "Odds",
+        "amountLabel": "Amount",
+        "amountPlaceholder": "Enter your bet amount",
+        "placeBet": "Place bet",
+        "refresh": "Refresh market",
+        "closedMessage": "This market is already closed and no longer accepts new positions.",
+        "noMarket": "This bet could not be found.",
+        "noOptions": "This market has no available options yet."
+      }
     }
   },
 
   "navbar": {
     "home": "Home",
     "allGames": "All games",
+    "bets": "Bets",
     "favourites": "Favourites",
     "menu": "Menu",
     "login": "Sign in",
@@ -472,8 +600,16 @@
       "AUTH_USER_REGISTERED": "Username already registered",
       "INSUFFICIENT_BALANCE": "You don't have enough balance to place this bet",
       "INSUFFICIENT_FUNDS": "Insufficient funds to continue playing",
+      "BET_CLOSED": "This bet is already closed",
       "GAME_NOT_FOUND": "Game session not found",
       "INVALID_BET_AMOUNT": "Invalid bet amount setted",
+      "INVALID_BET_DATA": "Bet data is invalid",
+      "INVALID_QUERY_PARAMS": "The provided filters are invalid",
+      "INVALID_ENDS_AT": "Closing date is invalid",
+      "OPTION_NOT_FOUND": "The selected option does not exist",
+      "BET_NOT_FOUND": "Bet not found",
+      "BET_HAS_ACTIVITY": "You cannot delete or replace options for a bet that already has activity",
+      "PAGE_EXCEDED": "The requested page does not exist",
       "GAME_NOT_VALID": "Invalid game",
       "SERVER_ERROR": "The server failed during the request",
       "Update_User": "Error updating profile",
@@ -486,7 +622,8 @@
       "registered": "Your account is created, you need to go to the login page",
       "userData": "User data received correctly",
       "winningNumber": "Winning number",
-      "uuidCopiedToClipboard": "UUID copied to clipboard"
+      "uuidCopiedToClipboard": "UUID copied to clipboard",
+      "NO_CHANGES": "There are no changes to save"
     },
     "modal": {
       "default": {
@@ -506,12 +643,27 @@
         "accept": "Sure, 1 gambler less",
         "cancel": "No, I regret my decision",
         "title": "Sure wanna delete user?"
+      },
+      "deleteBet": {
+        "accept": "Yes, delete it",
+        "cancel": "No, keep it",
+        "title": "Are you sure you want to delete the bet {{label}}?"
+      },
+      "closeBet": {
+        "accept": "Yes, close it now",
+        "cancel": "No, keep it open",
+        "title": "Are you sure you want to force close the bet {{label}}?"
       }
     },
     "success": {
       "AUTH_USER_LOGGED": "Logged successfully",
       "AUTH_USER_REGISTERED": "Account registered successfully",
       "BALANCE_ADDED_SUCCESSFULLY": "Balance updated successfully",
+      "BET_CREATED": "Bet created successfully",
+      "BET_UPDATED": "Bet updated successfully",
+      "BET_DELETED": "Bet deleted successfully",
+      "BET_CLOSED_BY_ADMIN": "Bet closed successfully",
+      "BET_PLACED": "Bet placed successfully",
       "LANGUAGE_CHANGED": "Language changed successfully",
       "USER_UPDATED": "Profile updated",
       "logout": "Logout successfully"

@@ -28,6 +28,14 @@ export const USER_FILTER_CONFIG = {
   balance: { type: "text" },
 }
 
+export const BET_FILTER_CONFIG = {
+  name: { type: "text" },
+  status: {
+    type: "enum",
+    options: ["open", "closed"],
+  },
+}
+
 export const TRANSACTION_FILTER_CONFIG = {
   type: {
     type: "enum",

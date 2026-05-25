@@ -23,6 +23,7 @@ const Button = ({
   variant = "primary",
   className = "",
   size = "md",
+  type,
   onClick,
   svg,
   disabled = false,
@@ -32,6 +33,7 @@ const Button = ({
 
   return (
     <button
+      type={type}
       className={`btn md:btn-md ${safeVariant} ${safeSize} flex justify-center items-center ${className}`}
       onClick={onClick}
       disabled={disabled}

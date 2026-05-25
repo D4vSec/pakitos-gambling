@@ -71,6 +71,11 @@
   },
 
   "adminPanel": {
+    "navigation": {
+      "users": "Utilizatori",
+      "bets": "Pariuri",
+      "logs": "Loguri"
+    },
     "users": {
       "title": "Toți utilizatorii",
       "createNewUser": "Creează utilizator nou",
@@ -84,7 +89,47 @@
       }
     },
 
+    "bets": {
+      "title": "Pariuri",
+      "createNewBet": "Creează pariu",
+      "table": {
+        "name": "Piață",
+        "label": "Piață",
+        "status": "Status",
+        "ends_at": "Se închide la",
+        "created_at": "Creat la",
+        "options": "Opțiuni",
+        "actions": "Acțiuni"
+      },
+      "detail": {
+        "summary": "Gestionează piața, verifică pool-ul și estimează distribuția înainte de lichidare.",
+        "noBet": "Acest pariu nu a fost găsit.",
+        "refresh": "Reîncarcă",
+        "editBet": "Editează pariul",
+        "closeBet": "Forțează închiderea",
+        "deleteBet": "Șterge pariul",
+        "totalPool": "Pool total",
+        "poolDistribution": "Distribuția pool-ului",
+        "poolHint": "Așa este împărțit în acest moment capitalul între opțiunile pariului.",
+        "option": "Opțiune",
+        "poolAmount": "Capital",
+        "odds": "Cotă",
+        "settlementPreview": "Previzualizare lichidare",
+        "previewHint": "Selectează opțiunea câștigătoare pentru a vedea plata proiectată cu cotele actuale.",
+        "selectWinningOption": "Opțiune câștigătoare",
+        "generatePreview": "Generează previzualizarea",
+        "noPreview": "Selectează o opțiune și generează previzualizarea pentru a vedea distribuția proiectată.",
+        "winningOption": "Opțiune câștigătoare",
+        "totalWinningAmount": "Capital câștigător",
+        "totalProjectedPayout": "Plată proiectată",
+        "userId": "Utilizator",
+        "payout": "Plată",
+        "emptyWinners": "Nu există câștigători pentru această opțiune."
+      }
+    },
+
     "logs": {
+      "title": "Loguri",
       "table": {
         "action": "Acțiune",
         "user_id": "ID Utilizator",
@@ -205,7 +250,9 @@
       "login": "Autentificare",
       "register": "Înregistrare",
       "createUser": "Creează utilizator",
-      "updateUser": "Editează utilizator"
+      "updateUser": "Editează utilizator",
+      "createBet": "Creează pariu",
+      "updateBet": "Editează pariu"
     },
 
     "fields": {
@@ -263,6 +310,42 @@
           "user": "Utilizator",
           "admin": "Administrator"
         }
+      },
+
+      "betLabel": {
+        "label": "Piață",
+        "placeholder": "Real Madrid câștigă Liga Campionilor",
+        "minLength": "Minimum 3 caractere",
+        "maxLength": "Maximum 120 caractere"
+      },
+
+      "endsAt": {
+        "label": "Data închiderii",
+        "placeholder": "Selectează data închiderii",
+        "required": "Data închiderii este obligatorie",
+        "invalid": "Data închiderii nu este validă"
+      },
+
+      "betOptionLabel": {
+        "label": "Eticheta opțiunii",
+        "placeholder": "Da / Nu / Candidatul A",
+        "required": "Eticheta opțiunii este obligatorie"
+      },
+
+      "betOptionOdd": {
+        "label": "Cotă inițială",
+        "placeholder": "2.00",
+        "positive": "Cota trebuie să fie mai mare decât 0"
+      },
+
+      "betOptions": {
+        "label": "Opțiuni pariu",
+        "hint": "Definește cel puțin două opțiuni pentru această piață.",
+        "addOption": "Adaugă opțiune",
+        "option": "Opțiunea {{index}}",
+        "locked": "Nu poți edita opțiunile deoarece pariul are deja activitate. Poți modifica doar numele sau data închiderii.",
+        "minItems": "Trebuie să adaugi cel puțin 2 opțiuni",
+        "maxItems": "Nu poți adăuga mai mult de 20 de opțiuni"
       }
     },
 
@@ -434,12 +517,57 @@
       "min": "Suma trebuie să fie > 0.01",
       "max": "Suma trebuie să fie < 99999999999.99",
       "title": "Adaugă sold în cont"
+    },
+
+    "bets": {
+      "status": {
+        "open": "Deschis",
+        "closed": "Închis"
+      },
+      "filters": {
+        "search": "Caută piață",
+        "searchPlaceholder": "Real Madrid, Champions, alegeri...",
+        "status": "Stare",
+        "all": "Toate",
+        "apply": "Aplică",
+        "reset": "Curăță"
+      },
+      "list": {
+        "title": "Piețe care merită urmărite",
+        "description": "Descoperă piețe deschise și închise pe tot felul de subiecte, într-o interfață mai curată pentru a compara opțiunile și a intra rapid în piață.",
+        "emptyTitle": "Nu există pariuri pentru filtrele curente",
+        "emptyDescription": "Încearcă alt nume sau schimbă starea selectată.",
+        "marketCount": "{{count}} piețe"
+      },
+      "card": {
+        "market": "Piață",
+        "endsAt": "Închidere",
+        "viewMarket": "Vezi piața",
+        "noOptions": "Nu există încă opțiuni disponibile pentru această piață."
+      },
+      "detail": {
+        "market": "Detalii piață",
+        "hint": "Alege o opțiune, introdu suma și plasează pariul direct din acest ecran.",
+        "selection": "Slip de pariu",
+        "options": "Opțiuni",
+        "pickOption": "Selectează o opțiune",
+        "selectedOption": "Opțiune selectată",
+        "odds": "Cotă",
+        "amountLabel": "Sumă",
+        "amountPlaceholder": "Introdu suma pariului",
+        "placeBet": "Pariază acum",
+        "refresh": "Reîncarcă piața",
+        "closedMessage": "Această piață este închisă și nu mai acceptă poziții noi.",
+        "noMarket": "Acest pariu nu a fost găsit.",
+        "noOptions": "Această piață nu are încă opțiuni disponibile."
+      }
     }
   },
 
   "navbar": {
     "home": "Acasă",
     "allGames": "Toate jocurile",
+    "bets": "Pariuri",
     "favourites": "Favorite",
     "menu": "Meniu",
     "login": "Autentificare",
@@ -473,8 +601,16 @@
       "AUTH_USER_REGISTERED": "Utilizator deja înregistrat",
       "INSUFFICIENT_BALANCE": "Sold insuficient pentru pariu",
       "INSUFFICIENT_FUNDS": "Fonduri insuficiente",
+      "BET_CLOSED": "Pariul este deja închis",
       "GAME_NOT_FOUND": "Joc negăsit",
       "INVALID_BET_AMOUNT": "Sumă invalidă",
+      "INVALID_BET_DATA": "Datele pariului nu sunt valide",
+      "INVALID_QUERY_PARAMS": "Filtrele trimise nu sunt valide",
+      "INVALID_ENDS_AT": "Data închiderii nu este validă",
+      "OPTION_NOT_FOUND": "Opțiunea selectată nu există",
+      "BET_NOT_FOUND": "Pariul nu există",
+      "BET_HAS_ACTIVITY": "Nu poți șterge sau înlocui opțiunile unui pariu care are deja activitate",
+      "PAGE_EXCEDED": "Pagina solicitată nu există",
       "GAME_NOT_VALID": "Joc invalid",
       "SERVER_ERROR": "Eroare server",
       "Update_User": "Eroare la actualizare",
@@ -488,7 +624,8 @@
       "registered": "Cont creat, mergi la autentificare",
       "userData": "Datele utilizatorului au fost primite",
       "winningNumber": "Număr câștigător",
-      "uuidCopiedToClipboard": "UUID-ul a fost copiat în clipboard"
+      "uuidCopiedToClipboard": "UUID-ul a fost copiat în clipboard",
+      "NO_CHANGES": "Nu există modificări de salvat"
     },
 
     "modal": {
@@ -509,6 +646,16 @@
         "accept": "Sigur, 1 jucător mai puțin",
         "cancel": "Nu, regret decizia mea",
         "title": "Sigur vrei să ștergi utilizatorul?"
+      },
+      "deleteBet": {
+        "accept": "Da, șterge-l",
+        "cancel": "Nu, păstrează-l",
+        "title": "Sigur vrei să ștergi pariul {{label}}?"
+      },
+      "closeBet": {
+        "accept": "Da, închide-l acum",
+        "cancel": "Nu, lasă-l deschis",
+        "title": "Sigur vrei să forțezi închiderea pariului {{label}}?"
       }
     },
 
@@ -516,6 +663,11 @@
       "AUTH_USER_LOGGED": "Autentificare reușită",
       "AUTH_USER_REGISTERED": "Cont creat cu succes",
       "BALANCE_ADDED_SUCCESSFULLY": "Sold actualizat",
+      "BET_CREATED": "Pariul a fost creat cu succes",
+      "BET_UPDATED": "Pariul a fost actualizat cu succes",
+      "BET_DELETED": "Pariul a fost șters cu succes",
+      "BET_CLOSED_BY_ADMIN": "Pariul a fost închis cu succes",
+      "BET_PLACED": "Pariul a fost plasat cu succes",
       "LANGUAGE_CHANGED": "Limba schimbată",
       "USER_UPDATED": "Profil actualizat",
       "logout": "Deconectare reușită"
