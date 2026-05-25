@@ -1,5 +1,16 @@
 import express from "express"
-import { getBets, getBetInfo, deleteBet, updateBet, placeBet } from "#controllers/bets.controller"
+import {
+    closeBet,
+    createBet,
+    deleteBet,
+    getAdminBet,
+    getAdminBets,
+    getBets,
+    getBetInfo,
+    getSettlementPreview,
+    placeBet,
+    updateBet,
+} from "#controllers/bets.controller"
 import authMiddleware from "#middlewares/auth.middleware"
 import adminMiddleware from "#middlewares/admin.middleware"
 import { gameLimiter } from "#middlewares/ratelimit.middleware"
@@ -7,6 +18,11 @@ import { gameLimiter } from "#middlewares/ratelimit.middleware"
 const betsRoutes = express.Router()
 
 betsRoutes.get("/", authMiddleware, gameLimiter, getBets)
+betsRoutes.get("/admin", authMiddleware, adminMiddleware, gameLimiter, getAdminBets)
+betsRoutes.post("/admin", authMiddleware, adminMiddleware, gameLimiter, createBet)
+betsRoutes.get("/admin/:betId", authMiddleware, adminMiddleware, gameLimiter, getAdminBet)
+betsRoutes.post("/admin/:betId/close", authMiddleware, adminMiddleware, gameLimiter, closeBet)
+betsRoutes.post("/admin/:betId/settlement-preview", authMiddleware, adminMiddleware, gameLimiter, getSettlementPreview)
 betsRoutes.get("/:betId", authMiddleware, gameLimiter, getBetInfo)
 betsRoutes.delete("/:betId", authMiddleware, adminMiddleware, gameLimiter, deleteBet)
 betsRoutes.put("/:betId", authMiddleware, adminMiddleware, gameLimiter, updateBet)

@@ -1,4 +1,3 @@
-import db from "#config/db.config"
 import Bets from "#models/bets.model"
 import logger from "#utils/logger.utils"
 
@@ -52,7 +51,83 @@ const updateOddsForBet = async (betId) => {
     }
 }
 
+const getBets = async (page = 1, limit = 20, filters = {}) => Bets.findBets(page, limit, filters)
+const countBets = async (filters = {}) => Bets.countBets(filters)
+const hasBetActivity = async (betId) => Bets.hasBetActivity(betId)
+const createBet = async (payload) => Bets.createBetWithOptions(payload)
+const updateBet = async (betId, payload) => Bets.updateBet(betId, payload)
+const deleteBet = async (betId) => Bets.deleteBet(betId)
+const closeBet = async (betId) => Bets.closeBet(betId)
+
+const getAdminBet = async (betId) => {
+    const [bet, options, poolDistribution] = await Promise.all([
+        Bets.getBetById(betId),
+        Bets.getBetInfo(betId),
+        Bets.getPoolDistribution(betId),
+    ])
+
+    if (!bet) return null
+
+    const totalPool = poolDistribution.reduce(
+        (sum, option) => sum + Number(option.amount || 0),
+        0,
+    )
+
+    return {
+        bet,
+        options,
+        poolDistribution,
+        totalPool: Number(totalPool.toFixed(2)),
+    }
+}
+
+const getSettlementPreview = async (betId, winningOptionId) => {
+    const [bet, poolDistribution, settlement] = await Promise.all([
+        Bets.getBetById(betId),
+        Bets.getPoolDistribution(betId),
+        Bets.getSettlementPreview(betId, winningOptionId),
+    ])
+
+    if (!bet || !settlement) return null
+
+    const totalPool = poolDistribution.reduce(
+        (sum, option) => sum + Number(option.amount || 0),
+        0,
+    )
+    const totalWinningAmount = settlement.winners.reduce(
+        (sum, winner) => sum + Number(winner.amount || 0),
+        0,
+    )
+    const totalProjectedPayout = settlement.winners.reduce(
+        (sum, winner) => sum + Number(winner.payout || 0),
+        0,
+    )
+
+    return {
+        bet,
+        poolDistribution,
+        totalPool: Number(totalPool.toFixed(2)),
+        winningOption: settlement.winningOption,
+        totalWinningAmount: Number(totalWinningAmount.toFixed(2)),
+        totalProjectedPayout: Number(totalProjectedPayout.toFixed(2)),
+        winners: settlement.winners.map((winner) => ({
+            ...winner,
+            amount: Number(Number(winner.amount || 0).toFixed(2)),
+            payout: Number(Number(winner.payout || 0).toFixed(2)),
+        })),
+    }
+}
+
 export default {
     calculateOdds,
+    closeBet,
+    countBets,
+    createBet,
+    deleteBet,
+    getAdminBet,
+    getBets,
+    getSettlementPreview,
+    hasBetActivity,
+    updateBet,
     updateOddsForBet,
 }

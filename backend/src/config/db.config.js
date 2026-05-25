@@ -12,12 +12,15 @@ const pool = new Pool({
 const db = {
 	connect: async () => {
 		try {
-			await pool.connect()
+			const client = await pool.connect()
+			client.release()
 			logger.info("Database connected")
 		} catch (err) {
 			logger.fatal("DB connection error:", err)
+			throw err
 		}
 	},
+	getClient: () => pool.connect(),
 	query: (text, params) => pool.query(text, params),
 }
 
