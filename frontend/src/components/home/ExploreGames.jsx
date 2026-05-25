@@ -67,22 +67,29 @@ const ExploreGames = () => {
 
   return (
     <section className="w-full">
-      <div className="mb-5">
-        <div className="flex items-center gap-4">
-          <div className="p-2 rounded-xl bg-primary">
+      <div className="mb-5 sm:mb-6">
+        <div className="flex items-start gap-3 sm:items-center sm:gap-4">
+          <div className="rounded-xl bg-primary p-2 sm:p-2.5">
             <ControllerSVG />
           </div>
-          <h3 className="text-2xl md:text-3xl font-bold text-secondary">
-            {t("pages.home.exploreGames.title")}
-          </h3>
+          <div className="min-w-0">
+            <h3 className="text-xl font-bold text-secondary sm:text-2xl md:text-3xl">
+              {t("pages.home.exploreGames.title")}
+            </h3>
+
+            <p className="mt-1 text-sm leading-relaxed text-secondary/70 sm:hidden">
+              {t("pages.home.exploreGames.description")}
+            </p>
+          </div>
         </div>
-        <p className="mt-2 text-sm md:text-base text-secondary opacity-70 ">
+
+        <p className="mt-3 hidden max-w-2xl text-sm leading-relaxed text-secondary/70 sm:block md:text-base">
           {t("pages.home.exploreGames.description")}
         </p>
-        <div className="bg-primary rounded-lg h-0.5 my-4"></div>
+        <div className="my-4 h-0.5 rounded-lg bg-primary/80 sm:my-5"></div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 xl:grid-cols-3">
         {games.map((game) => (
           <GameCard key={game.route} game={game} />
         ))}

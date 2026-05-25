@@ -29,7 +29,7 @@ const HeroContent = () => {
           </Button>
 
           <Button
-            variant="accent"
+            variant="secondary"
             size="lg"
             className="btn-lg md:btn-xl"
             onClick={() => navigate("/home")}

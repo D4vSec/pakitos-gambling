@@ -1,9 +1,5 @@
 import React from "react"
 import { useLocale } from "@/providers/LocaleProvider"
-import ControllerSVG from "../svg/pictures/ControllerSVG"
-import GroupSVG from "../svg/users/GroupSVG"
-import TwentyFourHSVG from "../svg/pictures/TwentyFourHSVG"
-import DolarSVG from "../svg/pictures/DolarSVG"
 
 const Stats = () => {
   const { t } = useLocale()
@@ -22,7 +18,7 @@ const Stats = () => {
       label: t("pages.landingPage.stats.support"),
     },
     {
-      value: "$1M+",
+      value: "1M+",
       label: t("pages.landingPage.stats.prizes"),
     },
   ]
@@ -33,7 +29,7 @@ const Stats = () => {
         {stats.map((item, index) => (
           <div key={index} className="stat bg-base-100 place-items-center rounded-2xl">
             <div className="stat-value text-secondary">{item.value}</div>
-            <div className="stat-desc text-secondary">{item.label}</div>
+            <div className="stat-desc md:text-base text-secondary">{item.label}</div>
           </div>
         ))}
       </div>

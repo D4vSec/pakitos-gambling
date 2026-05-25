@@ -13,12 +13,24 @@ const RedirectBtn = ({
   to,
 }) => {
   const navigate = useNavigate()
+
+  const handleClick = () => {
+    if (to) {
+      navigate(to)
+      return
+    }
+
+    if (onClick) {
+      onClick()
+    }
+  }
+
   return (
     <Button
       variant={variant}
       className={className}
       size={size}
-      onClick={() => (to ? navigate(to) : onClick)}
+      onClick={handleClick}
       svg={svg}
       disabled={disabled}
     >

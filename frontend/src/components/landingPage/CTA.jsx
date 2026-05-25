@@ -18,7 +18,7 @@ const CTA = () => {
           <Button variant="primary" size="lg" onClick={() => navigate("/register")}>
             {t("pages.landingPage.cta.join")}
           </Button>
-          <Button variant="accent" size="lg" onClick={() => navigate("/home")}>
+          <Button variant="secondary" size="lg" onClick={() => navigate("/home")}>
             {t("pages.landingPage.cta.exploreGames")}
           </Button>
         </div>

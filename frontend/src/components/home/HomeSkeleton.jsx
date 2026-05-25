@@ -10,7 +10,7 @@ const HomeSkeleton = () => {
   return (
     <div className="w-full flex flex-col gap-10 md:gap-14">
       <Carrousel />
-
+      
       <Suspense fallback={<SectionFallback />}>
         <ExploreGames />
       </Suspense>

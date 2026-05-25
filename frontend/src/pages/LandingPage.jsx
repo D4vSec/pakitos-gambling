@@ -10,7 +10,7 @@ const SectionFallback = () => <div className="min-h-64 rounded-2xl bg-base-200/6
 
 const LandingPage = () => {
   return (
-    <div className="grid grid-rows-[auto] gap-18 mb-18">
+    <div className="grid grid-rows-[auto] gap-12 md:gap-18 mb-18">
       <HeroSection />
       <Suspense fallback={<SectionFallback />}>
         <Features />
