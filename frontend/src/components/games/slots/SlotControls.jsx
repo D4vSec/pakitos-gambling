@@ -6,6 +6,8 @@ import { useLocale } from "@/providers/LocaleProvider"
 import Button from "@/components/buttons/Button"
 import BitcoinSVG from "@/components/svg/pictures/BitcoinSVG"
 import { getAnimTotalMs, DIMS_BY_TYPE } from "./slotConstants"
+import HourGlassSVG from "@/components/svg/pictures/HourGlassSVG"
+import PlaySVG from "@/components/svg/actions/PlaySVG"
 
 const NOTIF_DURATION = 1000
 
@@ -14,8 +16,7 @@ const SLOT_TYPES = ["3x3", "3x5", "5x5"]
 const SlotControls = ({ type = "3x3", onTypeChange }) => {
   const dims = DIMS_BY_TYPE[type] ?? { rows: 3, cols: 3 }
   const NOTIF_DELAY_MS = getAnimTotalMs(dims.cols, dims.rows)
-  const { session, spins, loading, createSession, spin, endSession } =
-    useSlots()
+  const { session, spins, loading, createSession, spin, endSession } = useSlots()
   const { user, setUser } = useSession()
   const { addNotification } = useNotification()
   const { t } = useLocale()
@@ -118,23 +119,20 @@ const SlotControls = ({ type = "3x3", onTypeChange }) => {
 
   return (
     <div className="flex flex-col gap-5 w-full h-full p-4">
-      <h2 className="font-bold text-xl text-center">
-        {t(`games.slots.modes.${type}`)}
-      </h2>
+      <h2 className="font-bold text-xl text-center">{t(`games.slots.modes.${type}`)}</h2>
 
       {!isActive && (
         <>
           <div className="flex flex-col gap-1">
-            <p className="fieldset-legend text-md">
-              {t("games.slots.controls.selectType")}:
-            </p>
+            <p className="fieldset-legend text-md">{t("games.slots.controls.selectType")}:</p>
             <div className="flex gap-2">
               {SLOT_TYPES.map((mode) => (
                 <button
                   key={mode}
                   className={`btn btn-sm flex-1 ${type === mode ? "btn-primary" : "btn-ghost border border-base-content/20"}`}
                   onClick={() => onTypeChange?.(mode)}
-                  disabled={isBusy}>
+                  disabled={isBusy}
+                >
                   {mode}
                 </button>
               ))}
@@ -142,9 +140,7 @@ const SlotControls = ({ type = "3x3", onTypeChange }) => {
           </div>
 
           <div className="flex flex-col gap-1">
-            <p className="fieldset-legend text-md">
-              {t("games.betAmount.label")}:
-            </p>
+            <p className="fieldset-legend text-md">{t("games.betAmount.label")}:</p>
             <input
               type="number"
               placeholder={t("games.betAmount.placeholder")}
@@ -168,25 +164,24 @@ const SlotControls = ({ type = "3x3", onTypeChange }) => {
               variant="primary"
               className="flex-1 basis-0 min-w-fit"
               onClick={() => lastBet && setBetAmount(lastBet)}
-              disabled={isBusy || !lastBet}>
+              disabled={isBusy || !lastBet}
+            >
               {t("games.actions.repeatBet")}
             </Button>
             <Button
               variant="primary"
               className="flex-1 basis-0 min-w-fit"
-              onClick={() =>
-                setBetAmount((prev) =>
-                  String((parseFloat(prev || 0) * 2).toFixed(2)),
-                )
-              }
-              disabled={isBusy || !betAmount}>
+              onClick={() => setBetAmount((prev) => String((parseFloat(prev || 0) * 2).toFixed(2)))}
+              disabled={isBusy || !betAmount}
+            >
               {t("games.actions.doubleBet")}
             </Button>
             <Button
               variant="primary"
               className="w-full"
               onClick={() => setBetAmount("")}
-              disabled={isBusy}>
+              disabled={isBusy}
+            >
               {t("games.actions.clearBet")}
             </Button>
           </div>
@@ -195,8 +190,10 @@ const SlotControls = ({ type = "3x3", onTypeChange }) => {
             variant="secondary"
             className="w-full"
             onClick={handleStart}
-            disabled={isBusy || !betAmount}>
-            {isBusy ? "⏳" : `🎰 ${t("games.slots.controls.spin")}`}
+            disabled={isBusy || !betAmount}
+            svg={isBusy ? <HourGlassSVG /> : <PlaySVG />}
+          >
+            {!isBusy && t("games.slots.controls.spin")}
           </Button>
         </>
       )}
@@ -204,9 +201,7 @@ const SlotControls = ({ type = "3x3", onTypeChange }) => {
       {isActive && (
         <>
           <div className="flex flex-col gap-1">
-            <p className="fieldset-legend text-md opacity-70">
-              {t("games.betAmount.label")}:
-            </p>
+            <p className="fieldset-legend text-md opacity-70">{t("games.betAmount.label")}:</p>
             <div className="flex items-center gap-1 font-bold text-base">
               <span>{session.bet}</span>
               <BitcoinSVG />
@@ -217,23 +212,21 @@ const SlotControls = ({ type = "3x3", onTypeChange }) => {
             variant="secondary"
             className="w-full text-lg font-bold"
             onClick={handleSpin}
-            disabled={isBusy}>
-            {isBusy ? "⏳" : `🎰 ${t("games.slots.controls.spin")}`}
+            disabled={isBusy}
+            svg={isBusy ? <HourGlassSVG /> : <PlaySVG />}
+          >
+            {!isBusy && t("games.slots.controls.spin")}
           </Button>
 
           <div className="divider my-0" />
 
           <div className="flex flex-col gap-2 text-sm">
             <div className="flex justify-between">
-              <span className="opacity-70">
-                {t("games.slots.controls.spins")}:
-              </span>
+              <span className="opacity-70">{t("games.slots.controls.spins")}:</span>
               <span className="font-bold">{spins.length}</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="opacity-70">
-                {t("games.slots.controls.totalPayout")}:
-              </span>
+              <span className="opacity-70">{t("games.slots.controls.totalPayout")}:</span>
               <div className="flex items-center gap-1 font-bold">
                 <span>{totalPayout.toFixed(2)}</span>
                 <BitcoinSVG />
@@ -246,7 +239,8 @@ const SlotControls = ({ type = "3x3", onTypeChange }) => {
             size="sm"
             className="w-full mt-auto"
             onClick={handleEnd}
-            disabled={isBusy}>
+            disabled={isBusy}
+          >
             {t("games.slots.controls.endSession")}
           </Button>
         </>

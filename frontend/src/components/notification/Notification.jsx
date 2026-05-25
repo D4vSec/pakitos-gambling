@@ -21,7 +21,6 @@ const Notification = ({ notification }) => {
     error: <CircleXSVG />,
   }
 
-  // 🎬 entrada
   useEffect(() => {
     const t = setTimeout(() => setShow(true), 10)
     return () => clearTimeout(t)
@@ -43,7 +42,8 @@ const Notification = ({ notification }) => {
               ? "opacity-100 translate-y-0 scale-100"
               : "opacity-0 -translate-y-4 scale-95"
         }
-      `}>
+      `}
+    >
       {svg[notification.type]}
       <span>{notification.message}</span>
     </div>

@@ -90,7 +90,7 @@ const Profile = () => {
       <Title>{t("pages.profile.title")}</Title>
 
       <div className="w-full max-w-5xl flex flex-col gap-6">
-        {/* 🔵 PERFIL */}
+        {/* PERFIL */}
         <div className="card bg-base-100 shadow-xl">
           <div className="card-body">
             <h2 className="card-title text-xl">
@@ -98,9 +98,7 @@ const Profile = () => {
               {t("pages.profile.profileCard.title")}
             </h2>
 
-            <p className="text-base-content mb-6">
-              {t("pages.profile.profileCard.description")}
-            </p>
+            <p className="text-base-content mb-6">{t("pages.profile.profileCard.description")}</p>
 
             <div className="flex flex-col lg:flex-row gap-6">
               {/* Avatar */}
@@ -109,8 +107,7 @@ const Profile = () => {
                   <div className="w-30 rounded-full ring ring-primary ring-offset-2">
                     <img
                       src={
-                        user?.avatar_url ||
-                        "https://www.alkain.com/DS-Contenido/ImageNotFound.jpg"
+                        user?.avatar_url || "https://www.alkain.com/DS-Contenido/ImageNotFound.jpg"
                       }
                       alt="avatar"
                     />
@@ -120,7 +117,8 @@ const Profile = () => {
                 <Button
                   variant="primary"
                   className="btn-sm"
-                  onClick={() => console.log("editando foto...")}>
+                  onClick={() => console.log("editando foto...")}
+                >
                   {t("pages.profile.changePhoto")}
                 </Button>
               </div>
@@ -130,7 +128,8 @@ const Profile = () => {
                 <FormProvider {...profileMethods}>
                   <form
                     onSubmit={profileMethods.handleSubmit(handleProfileSubmit)}
-                    className="flex flex-col gap-4">
+                    className="flex flex-col gap-4"
+                  >
                     <FormField
                       name="username"
                       type="text"
@@ -159,7 +158,7 @@ const Profile = () => {
           </div>
         </div>
 
-        {/* 🟡 SEGURIDAD */}
+        {/* SEGURIDAD */}
         <div className="card bg-base-100 shadow-xl border border-warning/30">
           <div className="card-body">
             <h2 className="card-title text-xl">
@@ -167,14 +166,13 @@ const Profile = () => {
               {t("pages.profile.security.title")}
             </h2>
 
-            <p className="text-base-content mb-6">
-              {t("pages.profile.security.description")}
-            </p>
+            <p className="text-base-content mb-6">{t("pages.profile.security.description")}</p>
 
             <FormProvider {...passwordMethods}>
               <form
                 onSubmit={passwordMethods.handleSubmit(handlePasswordSubmit)}
-                className="flex flex-col gap-4">
+                className="flex flex-col gap-4"
+              >
                 <FormField
                   name="currentPassword"
                   type="password"
@@ -201,8 +199,7 @@ const Profile = () => {
                   label={t("forms.fields.password.confirm")}
                   rules={{
                     validate: (value) =>
-                      value === newPasswordValue ||
-                      t("forms.confirmPassword.match"),
+                      value === newPasswordValue || t("forms.confirmPassword.match"),
                   }}
                 />
 
@@ -214,7 +211,7 @@ const Profile = () => {
           </div>
         </div>
 
-        {/* 🔴 DANGER ZONE */}
+        {/* DANGER ZONE */}
         <div className="card bg-base-100 shadow-xl border border-error">
           <div className="card-body">
             <h2 className="card-title text-error text-xl">
@@ -222,14 +219,9 @@ const Profile = () => {
               {t("pages.profile.danger.title")}
             </h2>
 
-            <p className="text-sm opacity-70">
-              {t("pages.profile.danger.description")}
-            </p>
+            <p className="text-sm opacity-70">{t("pages.profile.danger.description")}</p>
 
-            <Button
-              variant="error"
-              className="mt-4"
-              onClick={handleDeleteAccount}>
+            <Button variant="error" className="mt-4" onClick={handleDeleteAccount}>
               {t("pages.profile.danger.deleteAccount")}
             </Button>
           </div>

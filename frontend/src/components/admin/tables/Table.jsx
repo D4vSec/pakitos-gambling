@@ -7,7 +7,7 @@ import {
   flexRender,
 } from "@tanstack/react-table"
 import { useLocale } from "@/providers/LocaleProvider"
-import CaretUpSVG from "@/components/svg/flags/CaretUpSVG"
+import CaretUpSVG from "@/components/svg/actions/CaretUpSVG"
 import CaretDownSVG from "@/components/svg/actions/CaretDownSVG"
 import PaginationBar from "./PaginationBar"
 

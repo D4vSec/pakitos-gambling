@@ -5,7 +5,6 @@ import { useRoulette } from "@/providers/RouletteProvider"
 import { ROULETTE_0_ORDER, ROULETTE_00_ORDER } from "../rouletteConsts"
 import gsap from "gsap"
 
-// TODO: Revisar img ruleta 00 y que cuadre / MEJORAR  animacion
 const RouletteWheel = ({ type = "Zero", debug }) => {
   const { rouletteRef, spinData } = useRoulette()
   const ballRef = useRef(null)
@@ -31,22 +30,12 @@ const RouletteWheel = ({ type = "Zero", debug }) => {
 
   useEffect(() => {
     if (!spinData || !ballRef.current) return
-
     gsap.killTweensOf(ballRef.current)
-
     const spins = 6
-
     const anglePerSlot = 360 / ORDER.length || 0
-
     const index = ORDER.indexOf(spinData.winningNumber) || 0
-
-    // const baseAngle = index * anglePerSlot + anglePerSlot / 2
-
     const targetAngle =
-      index * anglePerSlot +
-      anglePerSlot / 2 +
-      spinData.randomOffset +
-      config[type]?.VISUAL_OFFSET
+      index * anglePerSlot + anglePerSlot / 2 + spinData.randomOffset + config[type]?.VISUAL_OFFSET
 
     gsap.fromTo(
       ballRef.current,
@@ -72,7 +61,8 @@ const RouletteWheel = ({ type = "Zero", debug }) => {
         <div
           ref={ballRef}
           className="absolute w-full h-full"
-          style={{ transformOrigin: "50% 50%" }}>
+          style={{ transformOrigin: "50% 50%" }}
+        >
           <div
             className="absolute w-3 h-3 bg-white rounded-full shadow-md"
             style={{
@@ -87,8 +77,9 @@ const RouletteWheel = ({ type = "Zero", debug }) => {
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            transform: `translate(-5px, -6px)`, // 👈 ajuste fino visual
-          }}>
+            transform: `translate(-5px, -6px)`, 
+          }}
+        >
           {ORDER.map((num, i) => {
             const angle = i * ANGLE_STEP
 
@@ -106,7 +97,8 @@ const RouletteWheel = ({ type = "Zero", debug }) => {
           `,
                   fontSize: "9px",
                   color: "white",
-                }}>
+                }}
+              >
                 {num}
               </div>
             )
