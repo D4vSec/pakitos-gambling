@@ -32,6 +32,7 @@ const SlotGrid = ({
   rows = 3,
   cols = 3,
   machineType = "3x3",
+  theme = "starwars",
   paylines,
   isSpinning = false,
   hasWon = false,
@@ -60,6 +61,7 @@ const SlotGrid = ({
             colIndex={c}
             rows={rows}
             machineType={machineType}
+            theme={theme}
             symbols={Array.from({ length: rows }, (_, r) => grid?.[r]?.[c] ?? null)}
             isSpinning={isSpinning}
             stopDelay={getStopDelays(cols)[c] ?? c * 350}

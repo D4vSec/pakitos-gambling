@@ -27,39 +27,15 @@ import bar5x5Img from "@/assets/games/bar5x5.png"
 import seven5x5Img from "@/assets/games/seven5x5.png"
 
 const SYMBOLS = ["cherry", "lemon", "orange", "plum", "bell", "bar", "seven"]
-const DISPLAY_BY_TYPE = {
-  "3x3": {
-    cherry: cherry3x3Img,
-    lemon: lemon3x3Img,
-    orange: orange3x3Img,
-    plum: plum3x3Img,
-    bell: bell3x3Img,
-    bar: bar3x3Img,
-    seven: seven3x3Img,
-  },
-  "3x5": {
-    cherry: cherry3x5Img,
-    lemon: lemon3x5Img,
-    orange: orange3x5Img,
-    plum: plum3x5Img,
-    bell: bell3x5Img,
-    bar: bar3x5Img,
-    seven: seven3x5Img,
-  },
-  "5x5": {
-    cherry: cherry5x5Img,
-    lemon: lemon5x5Img,
-    orange: orange5x5Img,
-    plum: plum5x5Img,
-    bell: bell5x5Img,
-    bar: bar5x5Img,
-    seven: seven5x5Img,
-  },
+const DISPLAY_BY_THEME = {
+  "starwars":      { cherry: cherry3x3Img, lemon: lemon3x3Img, orange: orange3x3Img, plum: plum3x3Img, bell: bell3x3Img, bar: bar3x3Img, seven: seven3x3Img },
+  "stardewvalley": { cherry: cherry3x5Img, lemon: lemon3x5Img, orange: orange3x5Img, plum: plum3x5Img, bell: bell3x5Img, bar: bar3x5Img, seven: seven3x5Img },
+  "beerman":       { cherry: cherry5x5Img, lemon: lemon5x5Img, orange: orange5x5Img, plum: plum5x5Img, bell: bell5x5Img, bar: bar5x5Img, seven: seven5x5Img },
 }
-const PLACEHOLDER_BY_TYPE = {
-  "3x3": imagenInicio3x3Img,
-  "3x5": imagenInicio3x5Img,
-  "5x5": beermanImg,
+const PLACEHOLDER_BY_THEME = {
+  "starwars":      imagenInicio3x3Img,
+  "stardewvalley": imagenInicio3x5Img,
+  "beerman":       beermanImg,
 }
 const rand = () => SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)]
 
@@ -73,12 +49,13 @@ const SlotReel = ({
   rows = 3,
   colIndex = 0,
   machineType = "3x3",
+  theme = "starwars",
   isSpinning,
   stopDelay = 0,
   winningCells,
   onSettled,
 }) => {
-  const DISPLAY = DISPLAY_BY_TYPE[machineType] ?? DISPLAY_BY_TYPE["3x3"]
+  const DISPLAY = DISPLAY_BY_THEME[theme] ?? DISPLAY_BY_THEME["starwars"]
   const imgARefs = useRef([]) // primary img per row — used for spin, landing, idle
   const imgBRefs = useRef([]) // secondary img per row — only active during spin
   const cellRefs = useRef([])
@@ -283,9 +260,9 @@ const SlotReel = ({
               }
             `}
           >
-            {!sym && phase === "idle" && PLACEHOLDER_BY_TYPE[machineType] && (
+            {!sym && phase === "idle" && PLACEHOLDER_BY_THEME[theme] && (
               <img
-                src={PLACEHOLDER_BY_TYPE[machineType]}
+                src={PLACEHOLDER_BY_THEME[theme]}
                 alt=""
                 className="absolute inset-0 w-full h-full object-cover pointer-events-none"
                 onError={(e) => {
@@ -293,7 +270,7 @@ const SlotReel = ({
                 }}
               />
             )}
-            {!sym && phase === "idle" && !PLACEHOLDER_BY_TYPE[machineType] && (
+            {!sym && phase === "idle" && !PLACEHOLDER_BY_THEME[theme] && (
               <span className="absolute inset-0 flex items-center justify-center text-xl opacity-20 text-neutral-400 pointer-events-none">
                 ?
               </span>

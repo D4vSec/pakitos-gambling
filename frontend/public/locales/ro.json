@@ -220,6 +220,7 @@
       },
       "description": "Slot clasic. Potrivește simbolurile pe liniile de plată pentru a câștiga. Cu cât simbolul este mai rar, cu atât câștigul este mai mare!",
       "controls": {
+        "selectType": "Tipul mașinii",
         "startSession": "Începe jocul",
         "spin": "Învârte",
         "endSession": "Încheie sesiunea",

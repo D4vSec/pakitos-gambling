@@ -220,6 +220,7 @@
       },
       "description": "Tragamonedas clásica. Alinea símbolos en las líneas de pago para ganar. ¡Cuanto más raro sea el símbolo, mayor será el premio!",
       "controls": {
+        "selectType": "Tipo de máquina",
         "startSession": "Iniciar partida",
         "spin": "Girar",
         "endSession": "Finalizar partida",

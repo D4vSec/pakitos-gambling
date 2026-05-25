@@ -22,7 +22,7 @@ import bar5x5Img from "@/assets/games/bar5x5.png"
 import seven5x5Img from "@/assets/games/seven5x5.png"
 
 const PAYTABLE = {
-  "3x3": [
+  "starwars": [
     { symbol: "seven",  img: seven3x3Img,  payout: 100  },
     { symbol: "bar",    img: bar3x3Img,    payout: 30   },
     { symbol: "bell",   img: bell3x3Img,   payout: 10   },
@@ -31,7 +31,7 @@ const PAYTABLE = {
     { symbol: "lemon",  img: lemon3x3Img,  payout: 0.8  },
     { symbol: "cherry", img: cherry3x3Img, payout: 0.5  },
   ],
-  "3x5": [
+  "stardewvalley": [
     { symbol: "seven",  img: seven3x5Img,  payout: 100  },
     { symbol: "bar",    img: bar3x5Img,    payout: 30   },
     { symbol: "bell",   img: bell3x5Img,   payout: 10   },
@@ -40,7 +40,7 @@ const PAYTABLE = {
     { symbol: "lemon",  img: lemon3x5Img,  payout: 0.8  },
     { symbol: "cherry", img: cherry3x5Img, payout: 0.5  },
   ],
-  "5x5": [
+  "beerman": [
     { symbol: "seven",  img: seven5x5Img,  payout: 100  },
     { symbol: "bar",    img: bar5x5Img,    payout: 30   },
     { symbol: "bell",   img: bell5x5Img,   payout: 10   },
@@ -51,8 +51,8 @@ const PAYTABLE = {
   ],
 }
 
-const SlotPaytable = ({ machineType = "3x3" }) => {
-  const entries = PAYTABLE[machineType]
+const SlotPaytable = ({ theme = "starwars" }) => {
+  const entries = PAYTABLE[theme]
   if (!entries) return null
 
   return (

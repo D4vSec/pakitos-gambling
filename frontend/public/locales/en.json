@@ -220,6 +220,7 @@
       },
       "description": "Classic slot machine. Match symbols across paylines to win. The rarer the symbol, the higher the payout!",
       "controls": {
+        "selectType": "Machine type",
         "startSession": "Start game",
         "spin": "Spin",
         "endSession": "End session",

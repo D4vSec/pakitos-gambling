@@ -9,7 +9,9 @@ import { getAnimTotalMs, DIMS_BY_TYPE } from "./slotConstants"
 
 const NOTIF_DURATION = 1000
 
-const SlotControls = ({ type = "3x3" }) => {
+const SLOT_TYPES = ["3x3", "3x5", "5x5"]
+
+const SlotControls = ({ type = "3x3", onTypeChange }) => {
   const dims = DIMS_BY_TYPE[type] ?? { rows: 3, cols: 3 }
   const NOTIF_DELAY_MS = getAnimTotalMs(dims.cols, dims.rows)
   const { session, spins, loading, createSession, spin, endSession } =
@@ -122,6 +124,23 @@ const SlotControls = ({ type = "3x3" }) => {
 
       {!isActive && (
         <>
+          <div className="flex flex-col gap-1">
+            <p className="fieldset-legend text-md">
+              {t("games.slots.controls.selectType")}:
+            </p>
+            <div className="flex gap-2">
+              {SLOT_TYPES.map((mode) => (
+                <button
+                  key={mode}
+                  className={`btn btn-sm flex-1 ${type === mode ? "btn-primary" : "btn-ghost border border-base-content/20"}`}
+                  onClick={() => onTypeChange?.(mode)}
+                  disabled={isBusy}>
+                  {mode}
+                </button>
+              ))}
+            </div>
+          </div>
+
           <div className="flex flex-col gap-1">
             <p className="fieldset-legend text-md">
               {t("games.betAmount.label")}:

@@ -8,7 +8,7 @@ import BitcoinSVG from "@/components/svg/pictures/BitcoinSVG"
 import { DIMS_BY_TYPE } from "./slotConstants"
 import "./SlotMachine.css"
 
-const SlotMachine = ({ type = "3x3" }) => {
+const SlotMachine = ({ type = "3x3", theme = "starwars" }) => {
   const { session, spins, isSpinning } = useSlots()
   const { t } = useLocale()
 
@@ -43,7 +43,7 @@ const SlotMachine = ({ type = "3x3" }) => {
   return (
     <div className="flex flex-row items-stretch gap-3 w-full h-full p-3">
       {/* Left: paytable — fixed width, full height */}
-      <SlotPaytable machineType={type} />
+      <SlotPaytable theme={theme} />
 
       {/* Right: machine content */}
       <div className="flex flex-col items-center justify-center gap-2 flex-1 min-w-0 h-full">
@@ -90,6 +90,7 @@ const SlotMachine = ({ type = "3x3" }) => {
               rows={rows}
               cols={cols}
               machineType={type}
+              theme={theme}
               paylines={session?.paylines}
               isSpinning={isSpinning}
               hasWon={hasWon}
