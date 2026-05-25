@@ -229,7 +229,17 @@
     },
 
     "capyroad": {
-      "title": "Capyroad"
+      "title": "Capyroad",
+      "description": "Cruza carretera por carretera para aumentar el multiplicador. Cada salto aumenta el premio potencial, pero también el riesgo de choque. Planta cuando quieras asegurar la ganancia.",
+      "actions": {
+        "cross": "Cruzar",
+        "cashout": "Cobrar"
+      },
+      "board": {
+        "currentRoad": "Calle",
+        "payout": "Cobro",
+        "crashChance": "Riesgo"
+      }
     },
 
     "result": {
@@ -617,6 +627,7 @@
       "BET_HAS_ACTIVITY": "No puedes modificar las opciones ni eliminar una apuesta que ya tiene apuestas asociadas",
       "PAGE_EXCEDED": "La página solicitada no existe",
       "GAME_NOT_VALID": "Juego inválido",
+      "CANNOT_STAND_ON_FIRST_ROAD": "Debes cruzar al menos una calle antes de cobrar",
       "SERVER_ERROR": "El servidor falló durante la solicitud",
       "Update_User": "Error al actualizar el perfil",
       "bet0": "La apuesta no puede ser 0",

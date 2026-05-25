@@ -229,7 +229,17 @@
     },
 
     "capyroad": {
-      "title": "Capyroad"
+      "title": "Capyroad",
+      "description": "Traversează șosea după șosea pentru a crește multiplicatorul. Fiecare salt mărește câștigul posibil, dar și riscul de accident. Oprește-te când vrei să securizezi premiul.",
+      "actions": {
+        "cross": "Traversează",
+        "cashout": "Încasează"
+      },
+      "board": {
+        "currentRoad": "Șosea",
+        "payout": "Câștig",
+        "crashChance": "Risc"
+      }
     },
 
     "result": {
@@ -617,6 +627,7 @@
       "BET_HAS_ACTIVITY": "Nu poți șterge sau înlocui opțiunile unui pariu care are deja activitate",
       "PAGE_EXCEDED": "Pagina solicitată nu există",
       "GAME_NOT_VALID": "Joc invalid",
+      "CANNOT_STAND_ON_FIRST_ROAD": "Trebuie să traversezi cel puțin o șosea înainte să încasezi",
       "SERVER_ERROR": "Eroare server",
       "Update_User": "Eroare la actualizare",
       "bet0": "Pariul nu poate fi 0",

@@ -229,7 +229,17 @@
     },
 
     "capyroad": {
-      "title": "Capyroad"
+      "title": "Capyroad",
+      "description": "Cross one road at a time to raise your multiplier. Every jump increases the potential payout, but also the crash risk. Cash out whenever you want to secure the winnings.",
+      "actions": {
+        "cross": "Cross",
+        "cashout": "Cash out"
+      },
+      "board": {
+        "currentRoad": "Road",
+        "payout": "Payout",
+        "crashChance": "Risk"
+      }
     },
 
     "result": {
@@ -616,6 +626,7 @@
       "BET_HAS_ACTIVITY": "You cannot delete or replace options for a bet that already has activity",
       "PAGE_EXCEDED": "The requested page does not exist",
       "GAME_NOT_VALID": "Invalid game",
+      "CANNOT_STAND_ON_FIRST_ROAD": "You need to cross at least one road before cashing out",
       "SERVER_ERROR": "The server failed during the request",
       "Update_User": "Error updating profile",
       "bet0": "The bet can't be 0",
