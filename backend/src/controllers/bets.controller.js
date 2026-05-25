@@ -330,6 +330,8 @@ const placeBet = async (req, res) => {
     const userId = req.user.id
 
     try {
+        const numericAmount = Number(amount)
+
         // Validar si existe la opción
         const options = await Bets.getOptionsByOptionId(betOptionId)
         if (!options || options.length === 0) {
@@ -337,11 +339,18 @@ const placeBet = async (req, res) => {
         }
 
         const option = options.find((o) => o.id === betOptionId)
+        if (!option) {
+            return res.status(404).json({ code: "OPTION_NOT_FOUND" })
+        }
+
         const betId = option.bet_id
 
         const betInfo = await Bets.getBetById(betId)
+        if (!betInfo) {
+            return res.status(404).json({ code: "BET_NOT_FOUND" })
+        }
 
-        if (amount <= 0) {
+        if (!Number.isFinite(numericAmount) || numericAmount <= 0) {
             return res.status(400).json({ code: "INVALID_BET_AMOUNT" })
         }
 
@@ -350,18 +359,25 @@ const placeBet = async (req, res) => {
         }
 
         const balance = await User.getUserBalance(userId)
-        if (balance === null || balance < amount) {
+        if (balance === null || Number(balance) < numericAmount) {
             return res.status(400).json({ code: "INSUFFICIENT_FUNDS" })
         }
 
-        const newBalance = await User.updateUserBalance(userId, -amount, { type: "BET" })
+        const newBalance = await User.updateUserBalance(userId, -numericAmount, { type: "BET" })
         if (newBalance === null) {
             return res.status(400).json({ code: "INSUFFICIENT_FUNDS" })
         }
 
-        const userBet = await Bets.placeBet(userId, betOptionId, amount)
+        const userBet = await Bets.placeBet(userId, betOptionId, numericAmount)
 
-        await BetService.updateOddsForBet(betId)
+        try {
+            await BetService.updateOddsForBet(betId)
+        } catch (oddsError) {
+            logger.error({
+                message: `Bet ${userBet?.id ?? "unknown"} placed but odds update failed for bet ${betId}:`,
+                error: oddsError,
+            })
+        }
 
         const deviceInfo = Audit.getUserAgentRaw(req)
         Audit.createAudit({
@@ -370,7 +386,7 @@ const placeBet = async (req, res) => {
             details: {
                 betId,
                 betOptionId,
-                amount,
+                amount: numericAmount,
                 date: new Date().toISOString(),
             },
             ip_address: Audit.getClientIp(req),

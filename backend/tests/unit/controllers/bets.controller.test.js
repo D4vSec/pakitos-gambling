@@ -52,8 +52,12 @@ import {
 	getAdminBets,
 	getBets,
 	getSettlementPreview,
+	placeBet,
 } from '../../../src/controllers/bets.controller.js'
 import BetService from '#services/bets.service'
+import Bets from '#models/bets.model'
+import User from '#models/user.model'
+import logger from '#utils/logger.utils'
 
 const createResponse = () => ({
 	status: vi.fn().mockReturnThis(),
@@ -144,6 +148,90 @@ describe('bets.controller admin endpoints', () => {
 			limit: 10,
 			totalPages: 3,
 			bets: [{ id: 'bet-1' }],
+		})
+	})
+
+	describe('bets.controller placeBet', () => {
+		beforeEach(() => {
+			vi.clearAllMocks()
+		})
+
+		it('places a bet successfully', async () => {
+			const optionId = '22222222-2222-2222-2222-222222222222'
+			const betId = '11111111-1111-1111-1111-111111111111'
+			const userBet = { id: '33333333-3333-3333-3333-333333333333' }
+			const res = createResponse()
+
+			Bets.getOptionsByOptionId.mockResolvedValueOnce([
+				{ id: optionId, bet_id: betId },
+			])
+			Bets.getBetById.mockResolvedValueOnce({
+				id: betId,
+				ends_at: '2099-06-01T18:00:00.000Z',
+			})
+			User.getUserBalance.mockResolvedValueOnce(500)
+			User.updateUserBalance.mockResolvedValueOnce(400)
+			Bets.placeBet.mockResolvedValueOnce(userBet)
+			BetService.updateOddsForBet.mockResolvedValueOnce([])
+
+			await placeBet({
+				body: {
+					betOptionId: optionId,
+					amount: 100,
+				},
+				user: { id: '44444444-4444-4444-4444-444444444444' },
+				socket: { remoteAddress: '127.0.0.1' },
+			}, res)
+
+			expect(User.updateUserBalance).toHaveBeenCalledWith(
+				'44444444-4444-4444-4444-444444444444',
+				-100,
+				{ type: 'BET' },
+			)
+			expect(Bets.placeBet).toHaveBeenCalledWith(
+				'44444444-4444-4444-4444-444444444444',
+				optionId,
+				100,
+			)
+			expect(BetService.updateOddsForBet).toHaveBeenCalledWith(betId)
+			expect(res.status).toHaveBeenCalledWith(201)
+			expect(res.json).toHaveBeenCalledWith(userBet)
+		})
+
+		it('still returns 201 when odds recalculation fails after storing the bet', async () => {
+			const optionId = '22222222-2222-2222-2222-222222222222'
+			const betId = '11111111-1111-1111-1111-111111111111'
+			const userBet = { id: '33333333-3333-3333-3333-333333333333' }
+			const res = createResponse()
+
+			Bets.getOptionsByOptionId.mockResolvedValueOnce([
+				{ id: optionId, bet_id: betId },
+			])
+			Bets.getBetById.mockResolvedValueOnce({
+				id: betId,
+				ends_at: '2099-06-01T18:00:00.000Z',
+			})
+			User.getUserBalance.mockResolvedValueOnce(500)
+			User.updateUserBalance.mockResolvedValueOnce(400)
+			Bets.placeBet.mockResolvedValueOnce(userBet)
+			BetService.updateOddsForBet.mockRejectedValueOnce(new Error('ODDS_FAILED'))
+
+			await placeBet({
+				body: {
+					betOptionId: optionId,
+					amount: 100,
+				},
+				user: { id: '44444444-4444-4444-4444-444444444444' },
+				socket: { remoteAddress: '127.0.0.1' },
+			}, res)
+
+			expect(logger.error).toHaveBeenCalledWith(
+				expect.objectContaining({
+					message: expect.stringContaining('odds update failed'),
+				}),
+			)
+			expect(res.status).toHaveBeenCalledWith(201)
+			expect(res.json).toHaveBeenCalledWith(userBet)
 		})
 	})
 
