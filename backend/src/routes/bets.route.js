@@ -8,6 +8,7 @@ import {
     getBets,
     getBetInfo,
     getSettlementPreview,
+    settleBet,
     placeBet,
     updateBet,
 } from "#controllers/bets.controller"
@@ -23,6 +24,7 @@ betsRoutes.post("/admin", authMiddleware, adminMiddleware, gameLimiter, createBe
 betsRoutes.get("/admin/:betId", authMiddleware, adminMiddleware, gameLimiter, getAdminBet)
 betsRoutes.post("/admin/:betId/close", authMiddleware, adminMiddleware, gameLimiter, closeBet)
 betsRoutes.post("/admin/:betId/settlement-preview", authMiddleware, adminMiddleware, gameLimiter, getSettlementPreview)
+betsRoutes.post("/admin/:betId/settle", authMiddleware, adminMiddleware, gameLimiter, settleBet)
 betsRoutes.get("/:betId", authMiddleware, gameLimiter, getBetInfo)
 betsRoutes.delete("/:betId", authMiddleware, adminMiddleware, gameLimiter, deleteBet)
 betsRoutes.put("/:betId", authMiddleware, adminMiddleware, gameLimiter, updateBet)

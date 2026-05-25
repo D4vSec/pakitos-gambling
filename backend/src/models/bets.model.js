@@ -81,6 +81,52 @@ const buildBetSelectQuery = ({ where = "", orderBy = "ORDER BY bets.ends_at ASC"
     return { query, values }
 }
 
+const normalizeSettlementWinners = (winners = []) => winners.map((winner) => ({
+    ...winner,
+    amount: Number(Number(winner.amount || 0).toFixed(2)),
+    payout: Number(Number(winner.payout || 0).toFixed(2)),
+}))
+
+const buildSettlementSummary = ({ winningOption, winners = [], poolDistribution = [], settledAt = null, settledByUserId = null }) => {
+    const normalizedWinners = normalizeSettlementWinners(winners)
+    const totalPool = poolDistribution.reduce(
+        (sum, option) => sum + Number(option.amount || 0),
+        0,
+    )
+    const totalWinningAmount = normalizedWinners.reduce(
+        (sum, winner) => sum + Number(winner.amount || 0),
+        0,
+    )
+    const totalProjectedPayout = normalizedWinners.reduce(
+        (sum, winner) => sum + Number(winner.payout || 0),
+        0,
+    )
+
+    return {
+        winningOption,
+        totalPool: Number(totalPool.toFixed(2)),
+        totalWinningAmount: Number(totalWinningAmount.toFixed(2)),
+        totalProjectedPayout: Number(totalProjectedPayout.toFixed(2)),
+        winners: normalizedWinners,
+        settledAt,
+        settledByUserId,
+    }
+}
+
+const parseAuditDetails = (details) => {
+    if (!details) return null
+
+    if (typeof details === "string") {
+        try {
+            return JSON.parse(details)
+        } catch {
+            return null
+        }
+    }
+
+    return typeof details === "object" ? details : null
+}
+
 const insertBet = async (executor, bet) => {
     const { label, ends_at } = bet
     const result = await executor.query(
@@ -99,6 +145,80 @@ const insertBetOption = async (executor, betOption) => {
     )
 
     return result.rows[0]
+}
+
+const getPoolDistributionByExecutor = async (executor, bet_id) => {
+    const result = await executor.query(
+        `
+        SELECT bo.id, bo.label, COALESCE(SUM(ub.amount), 0) as amount, bo.odd
+        FROM bets_options bo
+        LEFT JOIN user_bets ub ON bo.id = ub.bet_option_id
+        WHERE bo.bet_id = $1
+        GROUP BY bo.id
+    `,
+        [bet_id],
+    )
+
+    return result.rows
+}
+
+const getSettlementPreviewByExecutor = async (executor, bet_id, winning_option_id) => {
+    const winningOptionResult = await executor.query(
+        "SELECT id, bet_id, label, odd FROM bets_options WHERE id = $1 AND bet_id = $2",
+        [winning_option_id, bet_id],
+    )
+
+    const winningOption = winningOptionResult.rows[0]
+    if (!winningOption) return null
+
+    const winnersResult = await executor.query(
+        `
+        SELECT
+            ub.user_id,
+            COALESCE(SUM(ub.amount), 0) AS amount,
+            COALESCE(SUM(ub.amount * bo.odd), 0) AS payout
+        FROM user_bets ub
+        INNER JOIN bets_options bo ON bo.id = ub.bet_option_id
+        WHERE bo.bet_id = $1 AND bo.id = $2
+        GROUP BY ub.user_id
+        ORDER BY payout DESC, ub.user_id ASC
+    `,
+        [bet_id, winning_option_id],
+    )
+
+    return {
+        winningOption,
+        winners: winnersResult.rows,
+    }
+}
+
+const getSettlementAuditByExecutor = async (executor, bet_id) => {
+    const result = await executor.query(
+        `
+        SELECT user_id, details, created_at
+        FROM audit_logs
+        WHERE action = 'BET_RESULT' AND details::jsonb ->> 'betId' = $1
+        ORDER BY created_at DESC
+        LIMIT 1
+    `,
+        [bet_id],
+    )
+
+    const row = result.rows[0]
+    if (!row) return null
+
+    const details = parseAuditDetails(row.details)
+    if (!details || details.type !== "BET_SETTLED") return null
+
+    return {
+        ...details,
+        winners: normalizeSettlementWinners(details.winners),
+        totalPool: Number(Number(details.totalPool || 0).toFixed(2)),
+        totalWinningAmount: Number(Number(details.totalWinningAmount || 0).toFixed(2)),
+        totalProjectedPayout: Number(Number(details.totalProjectedPayout || 0).toFixed(2)),
+        settledAt: details.settledAt ?? row.created_at,
+        settledByUserId: details.settledByAdminId ?? row.user_id,
+    }
 }
 
 const createBet = async (bet) => {
@@ -199,17 +319,7 @@ const getOptionsByOptionId = async (option_id) => {
 }
 
 const getPoolDistribution = async (bet_id) => {
-    const result = await db.query(
-        `
-        SELECT bo.id, bo.label, COALESCE(SUM(ub.amount), 0) as amount, bo.odd
-        FROM bets_options bo
-        LEFT JOIN user_bets ub ON bo.id = ub.bet_option_id
-        WHERE bo.bet_id = $1
-        GROUP BY bo.id
-    `,
-        [bet_id],
-    )
-    return result.rows
+    return getPoolDistributionByExecutor(db, bet_id)
 }
 
 const hasBetActivity = async (bet_id) => {
@@ -353,36 +463,124 @@ const getSettlementPreview = async (bet_id, winning_option_id) => {
         return null
     }
 
-    const winningOptionResult = await db.query(
-        "SELECT id, bet_id, label, odd FROM bets_options WHERE id = $1 AND bet_id = $2",
-        [winning_option_id, bet_id],
-    )
+    return getSettlementPreviewByExecutor(db, bet_id, winning_option_id)
+}
 
-    const winningOption = winningOptionResult.rows[0]
-    if (!winningOption) return null
+const getBetSettlement = async (bet_id) => {
+    if (!isValidUuid(String(bet_id))) return null
 
-    const winnersResult = await db.query(
-        `
-        SELECT
-            ub.user_id,
-            COALESCE(SUM(ub.amount), 0) AS amount,
-            COALESCE(SUM(ub.amount * bo.odd), 0) AS payout
-        FROM user_bets ub
-        INNER JOIN bets_options bo ON bo.id = ub.bet_option_id
-        WHERE bo.bet_id = $1 AND bo.id = $2
-        GROUP BY ub.user_id
-        ORDER BY payout DESC, ub.user_id ASC
-    `,
-        [bet_id, winning_option_id],
-    )
+    return getSettlementAuditByExecutor(db, bet_id)
+}
 
-    return {
-        winningOption,
-        winners: winnersResult.rows,
+const settleBet = async (bet_id, winning_option_id, metadata = {}) => {
+    if (!isValidUuid(String(bet_id))) return { code: "BET_NOT_FOUND" }
+    if (!isValidUuid(String(winning_option_id))) return { code: "OPTION_NOT_FOUND" }
+    if (!isValidUuid(String(metadata.adminUserId))) return { code: "INVALID_SETTLEMENT_ADMIN" }
+
+    const client = await db.getClient()
+
+    try {
+        await client.query("BEGIN")
+
+        const betResult = await client.query(
+            "SELECT *, CASE WHEN ends_at < CURRENT_TIMESTAMP THEN 'closed' ELSE 'open' END AS status FROM bets WHERE id = $1 FOR UPDATE",
+            [bet_id],
+        )
+        const bet = betResult.rows[0]
+        if (!bet) {
+            await client.query("ROLLBACK")
+            return { code: "BET_NOT_FOUND" }
+        }
+
+        const existingSettlement = await getSettlementAuditByExecutor(client, bet_id)
+        if (existingSettlement) {
+            await client.query("ROLLBACK")
+            return { code: "BET_ALREADY_SETTLED", settlement: existingSettlement }
+        }
+
+        const settlementPreview = await getSettlementPreviewByExecutor(client, bet_id, winning_option_id)
+        if (!settlementPreview) {
+            await client.query("ROLLBACK")
+            return { code: "OPTION_NOT_FOUND" }
+        }
+
+        const poolDistribution = await getPoolDistributionByExecutor(client, bet_id)
+        const settlementSummary = buildSettlementSummary({
+            winningOption: settlementPreview.winningOption,
+            winners: settlementPreview.winners,
+            poolDistribution,
+            settledByUserId: metadata.adminUserId,
+        })
+
+        for (const winner of settlementSummary.winners) {
+            if (winner.payout <= 0) continue
+
+            await client.query(
+                `
+                WITH upd AS (
+                    UPDATE users
+                    SET balance = balance + $1
+                    WHERE id = $2
+                    RETURNING balance
+                ), ins AS (
+                    INSERT INTO transactions (user_id, amount, type)
+                    SELECT $2, $1, 'WIN'::transaction_type
+                    WHERE EXISTS (SELECT 1 FROM upd)
+                    RETURNING id
+                )
+                SELECT balance FROM upd;
+            `,
+                [winner.payout, winner.user_id],
+            )
+        }
+
+        const closedBetResult = await client.query(
+            "UPDATE bets SET ends_at = CURRENT_TIMESTAMP WHERE id = $1 RETURNING *, CASE WHEN ends_at < CURRENT_TIMESTAMP THEN 'closed' ELSE 'open' END AS status",
+            [bet_id],
+        )
+        const settledAt = new Date().toISOString()
+        const closedBet = closedBetResult.rows[0] || { ...bet, ends_at: settledAt, status: "closed" }
+
+        await client.query(
+            "INSERT INTO audit_logs (user_id, action, details, ip_address, user_agent) VALUES ($1, $2, $3, $4, $5)",
+            [
+                metadata.adminUserId,
+                "BET_RESULT",
+                {
+                    type: "BET_SETTLED",
+                    betId: bet_id,
+                    winningOption: settlementSummary.winningOption,
+                    totalPool: settlementSummary.totalPool,
+                    totalWinningAmount: settlementSummary.totalWinningAmount,
+                    totalProjectedPayout: settlementSummary.totalProjectedPayout,
+                    winners: settlementSummary.winners,
+                    winnersCount: settlementSummary.winners.length,
+                    settledByAdminId: metadata.adminUserId,
+                    settledAt,
+                },
+                metadata.ipAddress ?? null,
+                metadata.userAgent ?? null,
+            ],
+        )
+
+        await client.query("COMMIT")
+
+        return {
+            bet: { ...closedBet, status: "closed" },
+            poolDistribution,
+            ...settlementSummary,
+            settledAt,
+        }
+    } catch (error) {
+        await client.query("ROLLBACK")
+        throw error
+    } finally {
+        client.release()
     }
 }
 
 export default {
+    buildSettlementSummary,
     closeBet,
     countBets,
     createBet,
@@ -392,12 +590,14 @@ export default {
     findBets,
     placeBet,
     getBets,
+    getBetById,
+    getBetSettlement,
     getBetInfo,
-    getSettlementPreview,
-    hasBetActivity,
-    updateOptionOdd,
-    updateBet,
     getPoolDistribution,
     getOptionsByOptionId,
-    getBetById,
+    getSettlementPreview,
+    hasBetActivity,
+    settleBet,
+    updateBet,
+    updateOptionOdd,
 }

@@ -87,6 +87,8 @@ const settlementPreviewSchema = z.object({
     winningOptionId: csvUuidSchema(),
 }).strict()
 
+const settlementResultSchema = settlementPreviewSchema
+
 const parseBetListQuery = (query = {}) => {
     const parsedQuery = betsListQuerySchema.safeParse(query)
     if (!parsedQuery.success) {
@@ -324,6 +326,39 @@ const getSettlementPreview = async (req, res) => {
     }
 }
 
+const settleBet = async (req, res) => {
+    const { betId } = req.params
+
+    try {
+        if (!isValidUuid(betId)) return res.status(404).json({ code: "BET_NOT_FOUND" })
+
+        const parsedBody = settlementResultSchema.safeParse(req.body || {})
+        if (!parsedBody.success) {
+            return res.status(400).json({ code: "INVALID_BET_DATA", errors: parsedBody.error.issues })
+        }
+
+        const deviceInfo = Audit.getUserAgentRaw(req)
+        const winningOptionId = parsedBody.data.winningOptionId[0]
+        const settlement = await BetService.settleBet(betId, winningOptionId, {
+            adminUserId: req.user.id,
+            ipAddress: Audit.getClientIp(req),
+            userAgent: deviceInfo ? JSON.stringify(deviceInfo.raw) : null,
+        })
+
+        if (!settlement) return res.status(404).json({ code: "BET_NOT_FOUND" })
+        if (settlement.code === "BET_NOT_FOUND") return res.status(404).json({ code: "BET_NOT_FOUND" })
+        if (settlement.code === "OPTION_NOT_FOUND") return res.status(404).json({ code: "OPTION_NOT_FOUND" })
+        if (settlement.code === "BET_ALREADY_SETTLED") {
+            return res.status(409).json({ code: "BET_ALREADY_SETTLED", settlement: settlement.settlement })
+        }
+
+        res.status(200).json(settlement)
+    } catch (error) {
+        logger.error({ message: `Error settling bet ${betId}:`, error })
+        res.status(500).json({ code: "SERVER_ERROR" })
+    }
+}
+
 const placeBet = async (req, res) => {
     const { betOptionId } = req.body
     const { amount } = req.body
@@ -409,6 +444,7 @@ export {
     getBets,
     getBetInfo,
     getSettlementPreview,
+    settleBet,
     placeBet,
     updateBet,
 }

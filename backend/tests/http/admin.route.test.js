@@ -11,6 +11,7 @@ const normalizeAdminPath = (path) =>
 		.replace('/v1/user/1', `/v1/user/${TARGET_USER_ID}`)
 		.replace('/v1/bets/admin/1/close', `/v1/bets/admin/${TARGET_USER_ID}/close`)
 		.replace('/v1/bets/admin/1/settlement-preview', `/v1/bets/admin/${TARGET_USER_ID}/settlement-preview`)
+		.replace('/v1/bets/admin/1/settle', `/v1/bets/admin/${TARGET_USER_ID}/settle`)
 		.replace('/v1/bets/admin/1', `/v1/bets/admin/${TARGET_USER_ID}`)
 		.replace('/v1/bets/1', `/v1/bets/${TARGET_USER_ID}`)
 
@@ -57,6 +58,7 @@ vi.mock('#services/bets.service', () => ({
 		getBets: vi.fn(),
 		getSettlementPreview: vi.fn(),
 		hasBetActivity: vi.fn(),
+		settleBet: vi.fn(),
 		updateBet: vi.fn(),
 		updateOddsForBet: vi.fn(),
 	},
@@ -100,6 +102,12 @@ const getRequestBody = ({ method, path }) => {
 	}
 
 	if (method === 'post' && path === '/v1/bets/admin/1/settlement-preview') {
+		return {
+			winningOptionId: TARGET_USER_ID,
+		}
+	}
+
+	if (method === 'post' && path === '/v1/bets/admin/1/settle') {
 		return {
 			winningOptionId: TARGET_USER_ID,
 		}
@@ -161,6 +169,16 @@ describe('admin routes', () => {
 			winners: [],
 		})
 		BetService.hasBetActivity.mockResolvedValue(false)
+		BetService.settleBet.mockResolvedValue({
+			bet: { id: TARGET_USER_ID, label: 'Bet', ends_at: '2026-06-01T18:00:00.000Z', status: 'closed' },
+			poolDistribution: [],
+			totalPool: 0,
+			winningOption: { id: TARGET_USER_ID, label: 'Barca', odd: 2.1 },
+			totalWinningAmount: 0,
+			totalProjectedPayout: 0,
+			winners: [],
+			settledAt: '2026-06-01T18:00:00.000Z',
+		})
 		BetService.updateBet.mockResolvedValue({ id: TARGET_USER_ID })
 
 		AuditService.countAuditLogs.mockResolvedValue(0)

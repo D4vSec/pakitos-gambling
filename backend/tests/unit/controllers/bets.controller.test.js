@@ -28,6 +28,7 @@ vi.mock('#services/bets.service', () => ({
 		getBets: vi.fn(),
 		getSettlementPreview: vi.fn(),
 		hasBetActivity: vi.fn(),
+		settleBet: vi.fn(),
 		updateBet: vi.fn(),
 		updateOddsForBet: vi.fn(),
 	},
@@ -53,6 +54,7 @@ import {
 	getBets,
 	getSettlementPreview,
 	placeBet,
+	settleBet,
 } from '../../../src/controllers/bets.controller.js'
 import BetService from '#services/bets.service'
 import Bets from '#models/bets.model'
@@ -285,6 +287,38 @@ describe('bets.controller admin endpoints', () => {
 		expect(BetService.getSettlementPreview).toHaveBeenCalledWith(
 			'11111111-1111-1111-1111-111111111111',
 			'22222222-2222-2222-2222-222222222222',
+		)
+		expect(res.status).toHaveBeenCalledWith(200)
+	})
+
+	it('settles a bet for admin', async () => {
+		BetService.settleBet.mockResolvedValueOnce({
+			bet: { id: '11111111-1111-1111-1111-111111111111', status: 'closed' },
+			poolDistribution: [],
+			totalPool: 100,
+			winningOption: { id: '22222222-2222-2222-2222-222222222222', label: 'Barca' },
+			totalWinningAmount: 50,
+			totalProjectedPayout: 110,
+			winners: [],
+			settledAt: '2026-06-01T18:00:00.000Z',
+		})
+		const res = createResponse()
+
+		await settleBet({
+			params: { betId: '11111111-1111-1111-1111-111111111111' },
+			body: { winningOptionId: '22222222-2222-2222-2222-222222222222' },
+			user: { id: '33333333-3333-3333-3333-333333333333' },
+			socket: { remoteAddress: '127.0.0.1' },
+		}, res)
+
+		expect(BetService.settleBet).toHaveBeenCalledWith(
+			'11111111-1111-1111-1111-111111111111',
+			'22222222-2222-2222-2222-222222222222',
+			{
+				adminUserId: '33333333-3333-3333-3333-333333333333',
+				ipAddress: '127.0.0.1',
+				userAgent: null,
+			},
 		)
 		expect(res.status).toHaveBeenCalledWith(200)
 	})

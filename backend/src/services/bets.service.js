@@ -58,12 +58,14 @@ const createBet = async (payload) => Bets.createBetWithOptions(payload)
 const updateBet = async (betId, payload) => Bets.updateBet(betId, payload)
 const deleteBet = async (betId) => Bets.deleteBet(betId)
 const closeBet = async (betId) => Bets.closeBet(betId)
+const settleBet = async (betId, winningOptionId, metadata = {}) => Bets.settleBet(betId, winningOptionId, metadata)
 
 const getAdminBet = async (betId) => {
-    const [bet, options, poolDistribution] = await Promise.all([
+    const [bet, options, poolDistribution, settlement] = await Promise.all([
         Bets.getBetById(betId),
         Bets.getBetInfo(betId),
         Bets.getPoolDistribution(betId),
+        Bets.getBetSettlement(betId),
     ])
 
     if (!bet) return null
@@ -78,6 +80,14 @@ const getAdminBet = async (betId) => {
         options,
         poolDistribution,
         totalPool: Number(totalPool.toFixed(2)),
+        settlement: settlement
+            ? {
+                bet,
+                poolDistribution,
+                totalPool: Number(totalPool.toFixed(2)),
+                ...settlement,
+            }
+            : null,
     }
 }
 
@@ -128,6 +138,7 @@ export default {
     getBets,
     getSettlementPreview,
     hasBetActivity,
+    settleBet,
     updateBet,
     updateOddsForBet,
 }
