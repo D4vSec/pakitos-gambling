@@ -21,7 +21,7 @@ const BetDetails = () => {
   const { id } = useParams()
   const navigate = useNavigate()
   const { t } = useLocale()
-  const { closeBetModal, deleteBetModal, getAdminBet, getBetSettlementPreview } = useAdmin()
+  const { closeBetModal, deleteBetModal, getAdminBet, getBetSettlementPreview, settleBetModal } = useAdmin()
   const [betData, setBetData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [preview, setPreview] = useState(null)
@@ -73,6 +73,9 @@ const BetDetails = () => {
   }
 
   const { bet, options, poolDistribution, totalPool } = betData
+  const settlement = betData.settlement
+  const selectedWinningOption = options?.find((option) => option.id === selectedWinningOptionId) || null
+  const isSettled = Boolean(settlement)
 
   return (
     <GradientBg>
@@ -95,7 +98,7 @@ const BetDetails = () => {
               type="button"
               variant="secondary"
               svg={<CloseSVG />}
-              disabled={bet.status === "closed"}
+              disabled={bet.status === "closed" || isSettled}
               onClick={() => closeBetModal(id, bet.label, loadBet)}>
               {t("adminPanel.bets.detail.closeBet")}
             </Button>
@@ -156,6 +159,37 @@ const BetDetails = () => {
               <p className="mt-2 text-lg font-semibold">{options?.length || 0}</p>
             </div>
           </div>
+
+          {isSettled ? (
+            <div className="mt-6 rounded-[1.75rem] border border-success/20 bg-success/10 p-5">
+              <div className="grid gap-4 md:grid-cols-3">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-base-content/50">
+                    {t("adminPanel.bets.detail.settledResult")}
+                  </p>
+                  <p className="mt-2 text-lg font-semibold">{settlement.winningOption?.label || "--"}</p>
+                </div>
+
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-base-content/50">
+                    {t("adminPanel.bets.detail.settledAt")}
+                  </p>
+                  <p className="mt-2 text-lg font-semibold">
+                    {settlement.settledAt ? formatBetDate(settlement.settledAt) : "--"}
+                  </p>
+                </div>
+
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-base-content/50">
+                    {t("adminPanel.bets.detail.totalProjectedPayout")}
+                  </p>
+                  <p className="mt-2 text-lg font-semibold">
+                    {formatBetAmount(settlement.totalProjectedPayout)}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ) : null}
         </section>
 
         <div className="grid gap-6 xl:grid-cols-[1.2fr_0.9fr]">
@@ -171,8 +205,12 @@ const BetDetails = () => {
           </section>
 
           <aside className="rounded-[2rem] border border-base-300 bg-base-100 p-6 shadow-xl">
-            <h2 className="text-2xl font-bold">{t("adminPanel.bets.detail.settlementPreview")}</h2>
-            <p className="mt-2 text-sm text-base-content/70">{t("adminPanel.bets.detail.previewHint")}</p>
+            <h2 className="text-2xl font-bold">
+              {isSettled ? t("adminPanel.bets.detail.settledResult") : t("adminPanel.bets.detail.settlementPreview")}
+            </h2>
+            <p className="mt-2 text-sm text-base-content/70">
+              {isSettled ? t("adminPanel.bets.detail.settledHint") : t("adminPanel.bets.detail.previewHint")}
+            </p>
 
             <div className="mt-6 flex flex-col gap-4">
               <label className="floating-label w-full">
@@ -180,6 +218,7 @@ const BetDetails = () => {
                 <select
                   className="select select-lg w-full"
                   value={selectedWinningOptionId}
+                  disabled={isSettled}
                   onChange={(event) => setSelectedWinningOptionId(event.target.value)}>
                   {options?.map((option) => (
                     <option key={option.id} value={option.id}>
@@ -192,7 +231,7 @@ const BetDetails = () => {
               <Button
                 type="button"
                 className="w-full"
-                disabled={!selectedWinningOptionId || previewLoading}
+                disabled={!selectedWinningOptionId || previewLoading || isSettled}
                 onClick={async () => {
                   setPreviewLoading(true)
                   const response = await getBetSettlementPreview(id, selectedWinningOptionId)
@@ -204,7 +243,26 @@ const BetDetails = () => {
                 {t("adminPanel.bets.detail.generatePreview")}
               </Button>
 
-              <BetSettlementPreview preview={preview} />
+              {!isSettled ? (
+                <Button
+                  type="button"
+                  variant="success"
+                  className="w-full"
+                  disabled={!selectedWinningOption}
+                  onClick={() =>
+                    settleBetModal(
+                      id,
+                      bet.label,
+                      selectedWinningOption.label,
+                      selectedWinningOption.id,
+                      loadBet,
+                    )
+                  }>
+                  {t("adminPanel.bets.detail.settleBet")}
+                </Button>
+              ) : null}
+
+              <BetSettlementPreview preview={isSettled ? settlement : preview} />
             </div>
           </aside>
         </div>

@@ -115,9 +115,13 @@
         "poolAmount": "Capital",
         "odds": "Cuota",
         "settlementPreview": "Preview de liquidación",
+        "settledResult": "Resultado liquidado",
+        "settledAt": "Liquidada el",
+        "settledHint": "Esta apuesta ya se ha liquidado y el reparto efectivo ya fue ejecutado.",
         "previewHint": "Selecciona la opción ganadora para ver cuánto capital se repartiría con las cuotas actuales.",
         "selectWinningOption": "Opción ganadora",
         "generatePreview": "Generar preview",
+        "settleBet": "Liquidar apuesta",
         "noPreview": "Selecciona una opción y genera el preview para ver el reparto proyectado.",
         "winningOption": "Opción ganadora",
         "totalWinningAmount": "Capital ganador",
@@ -609,6 +613,7 @@
       "INVALID_ENDS_AT": "La fecha de cierre no es válida",
       "OPTION_NOT_FOUND": "La opción seleccionada no existe",
       "BET_NOT_FOUND": "La apuesta no existe",
+      "BET_ALREADY_SETTLED": "La apuesta ya está liquidada",
       "BET_HAS_ACTIVITY": "No puedes modificar las opciones ni eliminar una apuesta que ya tiene apuestas asociadas",
       "PAGE_EXCEDED": "La página solicitada no existe",
       "GAME_NOT_VALID": "Juego inválido",
@@ -656,6 +661,11 @@
         "accept": "Sí, cerrarla ya",
         "cancel": "No, sigue abierta",
         "title": "¿Seguro que quieres forzar el cierre de la apuesta {{label}}?"
+      },
+      "settleBet": {
+        "accept": "Sí, liquidar ahora",
+        "cancel": "No, revisar antes",
+        "title": "¿Liquidar la apuesta {{label}} dando como ganadora a {{option}}?"
       }
     },
 
@@ -667,6 +677,7 @@
       "BET_UPDATED": "Apuesta actualizada correctamente",
       "BET_DELETED": "Apuesta eliminada correctamente",
       "BET_CLOSED_BY_ADMIN": "Apuesta cerrada correctamente",
+      "BET_SETTLED": "Apuesta liquidada correctamente",
       "BET_PLACED": "Apuesta realizada correctamente",
       "LANGUAGE_CHANGED": "Idioma cambiado correctamente",
       "USER_UPDATED": "Perfil actualizado",

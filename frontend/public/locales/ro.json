@@ -115,9 +115,13 @@
         "poolAmount": "Capital",
         "odds": "Cotă",
         "settlementPreview": "Previzualizare lichidare",
+        "settledResult": "Rezultat lichidat",
+        "settledAt": "Lichidat la",
+        "settledHint": "Acest pariu a fost deja lichidat, iar plata a fost executată.",
         "previewHint": "Selectează opțiunea câștigătoare pentru a vedea plata proiectată cu cotele actuale.",
         "selectWinningOption": "Opțiune câștigătoare",
         "generatePreview": "Generează previzualizarea",
+        "settleBet": "Lichidează pariul",
         "noPreview": "Selectează o opțiune și generează previzualizarea pentru a vedea distribuția proiectată.",
         "winningOption": "Opțiune câștigătoare",
         "totalWinningAmount": "Capital câștigător",
@@ -609,6 +613,7 @@
       "INVALID_ENDS_AT": "Data închiderii nu este validă",
       "OPTION_NOT_FOUND": "Opțiunea selectată nu există",
       "BET_NOT_FOUND": "Pariul nu există",
+      "BET_ALREADY_SETTLED": "Pariul a fost deja lichidat",
       "BET_HAS_ACTIVITY": "Nu poți șterge sau înlocui opțiunile unui pariu care are deja activitate",
       "PAGE_EXCEDED": "Pagina solicitată nu există",
       "GAME_NOT_VALID": "Joc invalid",
@@ -656,6 +661,11 @@
         "accept": "Da, închide-l acum",
         "cancel": "Nu, lasă-l deschis",
         "title": "Sigur vrei să forțezi închiderea pariului {{label}}?"
+      },
+      "settleBet": {
+        "accept": "Da, lichidează acum",
+        "cancel": "Nu, verific mai întâi",
+        "title": "Lichidezi pariul {{label}} cu {{option}} ca opțiune câștigătoare?"
       }
     },
 
@@ -667,6 +677,7 @@
       "BET_UPDATED": "Pariul a fost actualizat cu succes",
       "BET_DELETED": "Pariul a fost șters cu succes",
       "BET_CLOSED_BY_ADMIN": "Pariul a fost închis cu succes",
+      "BET_SETTLED": "Pariul a fost lichidat cu succes",
       "BET_PLACED": "Pariul a fost plasat cu succes",
       "LANGUAGE_CHANGED": "Limba schimbată",
       "USER_UPDATED": "Profil actualizat",

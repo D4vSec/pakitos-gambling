@@ -115,9 +115,13 @@
         "poolAmount": "Amount",
         "odds": "Odds",
         "settlementPreview": "Settlement preview",
+        "settledResult": "Settled result",
+        "settledAt": "Settled at",
+        "settledHint": "This bet has already been settled and the payout was already executed.",
         "previewHint": "Pick the winning option to preview the projected payout using the current odds.",
         "selectWinningOption": "Winning option",
         "generatePreview": "Generate preview",
+        "settleBet": "Settle bet",
         "noPreview": "Pick an option and generate the preview to inspect the projected distribution.",
         "winningOption": "Winning option",
         "totalWinningAmount": "Winning capital",
@@ -608,6 +612,7 @@
       "INVALID_ENDS_AT": "Closing date is invalid",
       "OPTION_NOT_FOUND": "The selected option does not exist",
       "BET_NOT_FOUND": "Bet not found",
+      "BET_ALREADY_SETTLED": "This bet has already been settled",
       "BET_HAS_ACTIVITY": "You cannot delete or replace options for a bet that already has activity",
       "PAGE_EXCEDED": "The requested page does not exist",
       "GAME_NOT_VALID": "Invalid game",
@@ -653,6 +658,11 @@
         "accept": "Yes, close it now",
         "cancel": "No, keep it open",
         "title": "Are you sure you want to force close the bet {{label}}?"
+      },
+      "settleBet": {
+        "accept": "Yes, settle now",
+        "cancel": "No, review first",
+        "title": "Settle bet {{label}} with {{option}} as the winner?"
       }
     },
     "success": {
@@ -663,6 +673,7 @@
       "BET_UPDATED": "Bet updated successfully",
       "BET_DELETED": "Bet deleted successfully",
       "BET_CLOSED_BY_ADMIN": "Bet closed successfully",
+      "BET_SETTLED": "Bet settled successfully",
       "BET_PLACED": "Bet placed successfully",
       "LANGUAGE_CHANGED": "Language changed successfully",
       "USER_UPDATED": "Profile updated",

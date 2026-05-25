@@ -327,6 +327,28 @@ const AdminProvider = ({ children }) => {
     [addNotification, buildHeaders, post, t],
   )
 
+  const settleBet = useCallback(
+    async (betId, winningOptionId) => {
+      try {
+        const res = await post(`/api/v1/bets/admin/${betId}/settle`, {
+          headers: buildHeaders(),
+          body: { winningOptionId },
+        })
+
+        if (res.code) {
+          throw new Error(res.code || "Error al liquidar apuesta")
+        }
+
+        addNotification(t("message.success.BET_SETTLED"), "success")
+        return res
+      } catch (error) {
+        addNotification(t(`message.error.${error.message}`), "error")
+        return null
+      }
+    },
+    [addNotification, buildHeaders, post, t],
+  )
+
   const deleteBetModal = useCallback(
     (betId, betLabel, onAfterSuccess) => {
       addNotification(t("message.modal.deleteBet.title", { label: betLabel }), "modal", {
@@ -359,6 +381,29 @@ const AdminProvider = ({ children }) => {
     [addNotification, closeBet, t],
   )
 
+  const settleBetModal = useCallback(
+    (betId, betLabel, winningOptionLabel, winningOptionId, onAfterSuccess) => {
+      addNotification(
+        t("message.modal.settleBet.title", {
+          label: betLabel,
+          option: winningOptionLabel,
+        }),
+        "modal",
+        {
+          onAccept: async () => {
+            const settlement = await settleBet(betId, winningOptionId)
+            if (settlement) {
+              onAfterSuccess?.(settlement)
+            }
+          },
+          acceptLabel: t("message.modal.settleBet.accept"),
+          cancelLabel: t("message.modal.settleBet.cancel"),
+        },
+      )
+    },
+    [addNotification, settleBet, t],
+  )
+
   // const createuser = async (data) => {}
 
   const value = {
@@ -379,8 +424,10 @@ const AdminProvider = ({ children }) => {
     deleteBet,
     closeBet,
     getBetSettlementPreview,
+    settleBet,
     deleteBetModal,
     closeBetModal,
+    settleBetModal,
   }
 
   return <AdminContext value={value}>{children}</AdminContext>
