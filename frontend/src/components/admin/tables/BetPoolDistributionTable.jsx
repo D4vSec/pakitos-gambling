@@ -18,7 +18,7 @@ const BetPoolDistributionTable = ({ poolDistribution = [] }) => {
         <tbody>
           {poolDistribution.length > 0 ? (
             poolDistribution.map((option) => (
-              <tr key={option.id}>
+              <tr key={option.id} className="text-sm md:text-md">
                 <td>{option.label}</td>
                 <td>{formatBetAmount(option.amount)}</td>
                 <td>x{normalizeBetOdd(option.odd)}</td>

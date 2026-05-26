@@ -8,12 +8,16 @@ const AdminPageHeader = ({ title, backLink = "/home", actions }) => {
 
   return (
     <div className="flex flex-col gap-4">
-      <Title>{title}</Title>
       <AdminSectionNav />
+      <Title>{title}</Title>
 
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <GoBackBtn link={backLink} />
-        {hasActions ? <div className="flex flex-wrap justify-end gap-2">{actions}</div> : <div />}
+        {hasActions ? (
+          <div className="flex flex-wrap justify-end gap-2">{actions}</div>
+        ) : (
+          <div />
+        )}
       </div>
     </div>
   )

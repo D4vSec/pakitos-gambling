@@ -3,18 +3,30 @@ import Button from "@/components/buttons/Button"
 import TrashXSVG from "@/components/svg/actions/TrashXSVG"
 import { useLocale } from "@/providers/LocaleProvider"
 
-const BetOptionsFieldArray = ({ append, disabled, errors, fields, register, remove }) => {
+const BetOptionsFieldArray = ({
+  append,
+  disabled,
+  errors,
+  fields,
+  register,
+  remove,
+}) => {
   const { t } = useLocale()
-  const hasRootError = !Array.isArray(errors?.options) && typeof errors?.options?.message === "string"
+  const hasRootError =
+    !Array.isArray(errors?.options) &&
+    typeof errors?.options?.message === "string"
 
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <div>
-          <h2 className="text-xl font-bold">{t("forms.fields.betOptions.label")}</h2>
-          <p className="text-sm text-base-content/70">{t("forms.fields.betOptions.hint")}</p>
+          <h2 className="text-xl font-bold">
+            {t("forms.fields.betOptions.label")}
+          </h2>
+          <p className="text-sm text-base-content/70">
+            {t("forms.fields.betOptions.hint")}
+          </p>
         </div>
-
         <Button
           type="button"
           variant="secondary"
@@ -30,7 +42,9 @@ const BetOptionsFieldArray = ({ append, disabled, errors, fields, register, remo
         </div>
       )}
 
-      {hasRootError && <p className="text-sm text-error">{t(errors.options.message)}</p>}
+      {hasRootError && (
+        <p className="text-sm text-error">{t(errors.options.message)}</p>
+      )}
 
       <div className="grid gap-4">
         {fields.map((field, index) => {
@@ -40,12 +54,11 @@ const BetOptionsFieldArray = ({ append, disabled, errors, fields, register, remo
           return (
             <div
               key={field.id}
-              className="rounded-2xl border border-base-300 bg-base-100 p-4 shadow-sm">
-              <div className="mb-4 flex items-center justify-between gap-3">
+              className="rounded-xl border border-secondary/50 bg-base-100 px-4 py-2 shadow-sm">
+              <div className="mb-3 flex items-center justify-between gap-2">
                 <h3 className="font-semibold">
                   {t("forms.fields.betOptions.option", { index: index + 1 })}
                 </h3>
-
                 <Button
                   type="button"
                   variant="ghost"
@@ -61,13 +74,17 @@ const BetOptionsFieldArray = ({ append, disabled, errors, fields, register, remo
                   <label className="floating-label w-full">
                     <span>{t("forms.fields.betOptionLabel.label")}</span>
                     <input
-                      className={`input input-lg w-full ${labelError ? "input-error" : ""}`}
+                      className={`input input-lg w-full ${labelError ? "input-error" : ""} border-secondary/10`}
                       placeholder={t("forms.fields.betOptionLabel.placeholder")}
                       disabled={disabled}
                       {...register(`options.${index}.label`)}
                     />
                   </label>
-                  {labelError && <p className="ml-1 mt-1 text-sm text-error">{t(labelError)}</p>}
+                  {labelError && (
+                    <p className="ml-1 mt-1 text-sm text-error">
+                      {t(labelError)}
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -77,13 +94,17 @@ const BetOptionsFieldArray = ({ append, disabled, errors, fields, register, remo
                       type="number"
                       min="0.01"
                       step="0.01"
-                      className={`input input-lg w-full ${oddError ? "input-error" : ""}`}
+                      className={`input input-lg w-full ${oddError ? "input-error" : ""} border-secondary/10`}
                       placeholder={t("forms.fields.betOptionOdd.placeholder")}
                       disabled={disabled}
                       {...register(`options.${index}.odd`)}
                     />
                   </label>
-                  {oddError && <p className="ml-1 mt-1 text-sm text-error">{t(oddError)}</p>}
+                  {oddError && (
+                    <p className="ml-1 mt-1 text-sm text-error">
+                      {t(oddError)}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import BetStatusBadge from "@/components/badges/BetStatusBadge"
 import Button from "@/components/buttons/Button"
@@ -16,6 +16,7 @@ import ReloadSVG from "@/components/svg/pictures/ReloadSVG"
 import { useAdmin } from "@/providers/AdminProvider"
 import { useLocale } from "@/providers/LocaleProvider"
 import { formatBetAmount, formatBetDate } from "@/utils/betsUtils"
+import Subtitle from "@/components/layout/fonts/Subtitle"
 
 const BetDetails = () => {
   const { id } = useParams()
@@ -33,10 +34,15 @@ const BetDetails = () => {
   const [preview, setPreview] = useState(null)
   const [previewLoading, setPreviewLoading] = useState(false)
   const [selectedWinningOptionId, setSelectedWinningOptionId] = useState("")
+  const getAdminBetRef = useRef(getAdminBet)
+
+  useEffect(() => {
+    getAdminBetRef.current = getAdminBet
+  }, [getAdminBet])
 
   const loadBet = useCallback(async () => {
     setLoading(true)
-    const response = await getAdminBet(id)
+    const response = await getAdminBetRef.current(id)
 
     if (response) {
       setBetData(response)
@@ -56,50 +62,62 @@ const BetDetails = () => {
 
     setPreview(null)
     setLoading(false)
-  }, [getAdminBet, id])
+  }, [id])
 
   useEffect(() => {
     loadBet()
-  }, [loadBet])
+  }, [id, loadBet])
 
-  if (loading) {
-    return <Loading />
-  }
-
-  if (!betData) {
-    return (
-      <GradientBg>
-        <div className="flex w-full max-w-6xl flex-col gap-4">
-          <GoBackBtn link="/admin/bets" />
-          <AdminSectionNav />
-
-          <section className="rounded-[2rem] border border-dashed border-base-300 bg-base-100 p-8 text-center shadow-xl">
-            <Title className="m-0 text-4xl">
-              {t("adminPanel.bets.detail.noBet")}
-            </Title>
-          </section>
-        </div>
-      </GradientBg>
-    )
-  }
-
-  const { bet, options, poolDistribution, totalPool } = betData
-  const settlement = betData.settlement
+  const { bet, options, poolDistribution, totalPool } = betData ?? {}
+  const settlement = betData?.settlement
   const selectedWinningOption =
     options?.find((option) => option.id === selectedWinningOptionId) || null
   const isSettled = Boolean(settlement)
+  const infoCards = [
+    {
+      label: t("adminPanel.bets.table.status"),
+      value: t(`pages.bets.status.${bet?.status}`),
+    },
+    {
+      label: t("adminPanel.bets.table.ends_at"),
+      value: formatBetDate(bet?.ends_at),
+    },
+    {
+      label: t("adminPanel.bets.detail.totalPool"),
+      value: formatBetAmount(totalPool),
+    },
+    {
+      label: t("adminPanel.bets.table.options"),
+      value: options?.length || 0,
+    },
+  ]
 
-  return (
+  return loading ? (
+    <Loading />
+  ) : !bet ? (
+    <GradientBg>
+      <div className="flex w-full max-w-6xl flex-col gap-6">
+        <AdminSectionNav />
+        <GoBackBtn link="/admin/bets" />
+        <section className="rounded-2xl border border-dashed border-base-300 bg-base-100 p-8 text-center shadow-xl">
+          <Title className="m-0 text-3xl sm:text-4xl">
+            {t("adminPanel.bets.detail.noBet")}
+          </Title>
+        </section>
+      </div>
+    </GradientBg>
+  ) : (
     <GradientBg>
       <div className="flex w-full max-w-7xl flex-col gap-6">
+        <AdminSectionNav />
         <div className="flex flex-wrap items-center justify-between gap-3">
           <GoBackBtn link="/admin/bets" />
-
-          <div className="flex flex-wrap gap-2">
+          <div className="w-full md:w-auto grid gap-2 grid-cols-2 md:grid-cols-4">
             <Button
               type="button"
               variant="secondary"
               svg={<ReloadSVG />}
+              className="flex-1"
               onClick={() => loadBet()}>
               {t("adminPanel.bets.detail.refresh")}
             </Button>
@@ -107,6 +125,7 @@ const BetDetails = () => {
               type="button"
               variant="warning"
               svg={<EditSVG />}
+              className="flex-1"
               onClick={() => navigate(`/admin/bets/edit/${id}`)}>
               {t("adminPanel.bets.detail.editBet")}
             </Button>
@@ -114,6 +133,7 @@ const BetDetails = () => {
               type="button"
               variant="secondary"
               svg={<CloseSVG />}
+              className="flex-2"
               disabled={bet.status === "closed" || isSettled}
               onClick={() => closeBetModal(id, bet.label, loadBet)}>
               {t("adminPanel.bets.detail.closeBet")}
@@ -132,63 +152,35 @@ const BetDetails = () => {
           </div>
         </div>
 
-        <AdminSectionNav />
-
-        <section className="overflow-hidden rounded-[2rem] border border-base-300 bg-base-100 p-6 shadow-2xl shadow-primary/5 md:p-8">
-          <div className="mb-6 flex items-start justify-between gap-4 flex-wrap">
-            <div className="min-w-0">
-              <Title className="m-0 text-left text-4xl md:text-5xl">
+        <section className="overflow-hidden rounded-2xl border border-base-300 bg-base-100 p-6 shadow-2xl shadow-primary/5 md:p-8">
+          <div className="flex flex-col gap-2 md:gap-3">
+            <div className="flex flex-col gap-4 md:gap-5">
+              <BetStatusBadge status={bet.status} />
+              <Subtitle className="m-0 text-left text-4xl md:text-5xl">
                 {bet.label}
-              </Title>
-              <p className="mt-3 max-w-3xl text-sm text-base-content/70 md:text-base">
-                {t("adminPanel.bets.detail.summary")}
-              </p>
+              </Subtitle>
             </div>
-
-            <BetStatusBadge status={bet.status} />
+            <p className="max-w-3xl text-sm text-base-content/70 md:text-base">
+              {t("adminPanel.bets.detail.summary")}
+            </p>
           </div>
 
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            <div className="rounded-2xl border border-base-300 bg-base-200/70 p-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-base-content/50">
-                {t("adminPanel.bets.table.status")}
-              </p>
-              <p className="mt-2 text-lg font-semibold">
-                {t(`pages.bets.status.${bet.status}`)}
-              </p>
-            </div>
-
-            <div className="rounded-2xl border border-base-300 bg-base-200/70 p-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-base-content/50">
-                {t("adminPanel.bets.table.ends_at")}
-              </p>
-              <p className="mt-2 text-lg font-semibold">
-                {formatBetDate(bet.ends_at)}
-              </p>
-            </div>
-
-            <div className="rounded-2xl border border-base-300 bg-base-200/70 p-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-base-content/50">
-                {t("adminPanel.bets.detail.totalPool")}
-              </p>
-              <p className="mt-2 text-lg font-semibold">
-                {formatBetAmount(totalPool)}
-              </p>
-            </div>
-
-            <div className="rounded-2xl border border-base-300 bg-base-200/70 p-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-base-content/50">
-                {t("adminPanel.bets.table.options")}
-              </p>
-              <p className="mt-2 text-lg font-semibold">
-                {options?.length || 0}
-              </p>
-            </div>
+          <div className="mt-4 grid gap-4 sm:grid-cols-1 lg:grid-cols-4">
+            {infoCards.map((item) => (
+              <div
+                key={item.label}
+                className="rounded-2xl border border-base-300 bg-base-300/70 p-3 md:p-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-base-content/75">
+                  {item.label}
+                </p>
+                <p className="mt-2 text-lg font-semibold">{item.value}</p>
+              </div>
+            ))}
           </div>
 
           {isSettled ? (
-            <div className="mt-6 rounded-[1.75rem] border border-success/20 bg-success/10 p-5">
-              <div className="grid gap-4 md:grid-cols-3">
+            <div className="mt-6 rounded-2xl border border-success/20 bg-success/10 p-5">
+              <div className="grid gap-4 sm:grid-cols-1 lg:grid-cols-3">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.16em] text-base-content/50">
                     {t("adminPanel.bets.detail.settledResult")}
@@ -222,8 +214,8 @@ const BetDetails = () => {
           ) : null}
         </section>
 
-        <div className="grid gap-6 xl:grid-cols-[1.2fr_0.9fr]">
-          <section className="rounded-[2rem] border border-base-300 bg-base-100 p-6 shadow-xl">
+        <div className="grid gap-6 xl:grid-cols-[1.6fr_0.9fr]">
+          <section className="rounded-2xl border border-base-300 bg-base-100 p-6 shadow-xl">
             <div className="mb-4">
               <h2 className="text-2xl font-bold">
                 {t("adminPanel.bets.detail.poolDistribution")}
@@ -236,7 +228,7 @@ const BetDetails = () => {
             <BetPoolDistributionTable poolDistribution={poolDistribution} />
           </section>
 
-          <aside className="rounded-[2rem] border border-base-300 bg-base-100 p-6 shadow-xl">
+          <aside className="rounded-2xl border border-base-300 bg-base-100 p-6 shadow-xl">
             <h2 className="text-2xl font-bold">
               {isSettled
                 ? t("adminPanel.bets.detail.settledResult")

@@ -28,7 +28,7 @@ const DynamicSearch = ({ config, onAddFilter, translationPath }) => {
         </span>
       </label>
 
-      <div className="flex flex-col sm:flex-row gap-2 items-stretch w-full">
+      <div className="flex flex-col sm:flex-row  items-stretch w-full">
         <select
           className="select select-bordered select-md bg-base-100 w-full sm:w-44 md:w-48 sm:shrink-0"
           value={localField}
@@ -73,7 +73,7 @@ const DynamicSearch = ({ config, onAddFilter, translationPath }) => {
 
         <button
           type="submit"
-          className="btn btn-primary btn-md w-full sm:w-auto sm:self-stretch sm:shrink-0 px-4"
+          className="btn btn-primary btn-md w-full sm:w-auto sm:self-stretch sm:shrink-0 "
           disabled={!localValue}>
           <SearchSVG className="w-4 h-4" />
         </button>

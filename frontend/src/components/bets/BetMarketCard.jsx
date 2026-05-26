@@ -17,13 +17,12 @@ const BetMarketCard = ({ bet }) => {
       <div className="absolute inset-0 bg-linear-to-br from-primary/10 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
       <div className="relative flex flex-col items-start justify-between gap-3">
-        <h2 className="min-w-0 flex-1 wrap-break-words pr-2 text-lg font-bold leading-tight text-base-content xl:text-xl">
-          {bet.label}
-        </h2>
-
         <div className="shrink-0 pt-0.5">
           <BetStatusBadge status={bet.status} />
         </div>
+        <h2 className="min-w-0 flex-1 wrap-break-words pr-2 text-lg sm:text-xl font-bold leading-tight text-base-content ">
+          {bet.label}
+        </h2>
       </div>
 
       <div className="relative rounded-xl border border-base-300 bg-base-200/70 p-3">

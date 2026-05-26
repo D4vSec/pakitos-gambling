@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext } from "react"
+import React, { createContext, useCallback, useContext, useMemo, useState } from "react"
 import { useLocation } from "react-router-dom"
 import { useEffect } from "react"
 
@@ -12,7 +12,23 @@ const NotificationProvider = ({ children }) => {
 
   const location = useLocation()
 
-  const addNotification = (message, type = "info", options = {}) => {
+  const removeNotification = useCallback((id, scope = "games") => {
+    setNotifications((prev) => ({
+      ...prev,
+      [scope]: prev[scope].map((n) =>
+        n.id === id ? { ...n, leaving: true } : n,
+      ),
+    }))
+
+    setTimeout(() => {
+      setNotifications((prev) => ({
+        ...prev,
+        [scope]: prev[scope].filter((n) => n.id !== id),
+      }))
+    }, 500)
+  }, [])
+
+  const addNotification = useCallback((message, type = "info", options = {}) => {
     const id = crypto.randomUUID()
     const duration = options.duration || 5000
     const scope = options.scope || "global"
@@ -38,23 +54,7 @@ const NotificationProvider = ({ children }) => {
         removeNotification(id, scope)
       }, duration)
     }
-  }
-
-  const removeNotification = (id, scope = "games") => {
-    setNotifications((prev) => ({
-      ...prev,
-      [scope]: prev[scope].map((n) =>
-        n.id === id ? { ...n, leaving: true } : n,
-      ),
-    }))
-
-    setTimeout(() => {
-      setNotifications((prev) => ({
-        ...prev,
-        [scope]: prev[scope].filter((n) => n.id !== id),
-      }))
-    }, 500)
-  }
+  }, [removeNotification])
 
   const gameRoutes = [
     "/roulette0",
@@ -79,11 +79,14 @@ const NotificationProvider = ({ children }) => {
     }
   }, [location.pathname])
 
-  const value = {
-    notifications,
-    addNotification,
-    removeNotification,
-  }
+  const value = useMemo(
+    () => ({
+      notifications,
+      addNotification,
+      removeNotification,
+    }),
+    [notifications, addNotification, removeNotification],
+  )
 
   return (
     <NotificationContext.Provider value={value}>

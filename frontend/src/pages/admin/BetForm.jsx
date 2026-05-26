@@ -119,21 +119,6 @@ const BetForm = () => {
     return <Loading />
   }
 
-  if (notFound) {
-    return (
-      <GradientBg>
-        <div className="flex w-full max-w-5xl flex-col gap-4">
-          <GoBackBtn link="/admin/bets" />
-          <AdminSectionNav />
-
-          <section className="rounded-[2rem] border border-dashed border-base-300 bg-base-100 p-8 text-center shadow-xl">
-            <Title className="m-0 text-4xl">{t("adminPanel.bets.detail.noBet")}</Title>
-          </section>
-        </div>
-      </GradientBg>
-    )
-  }
-
   const onSubmit = async (data) => {
     setSubmitting(true)
 
@@ -165,7 +150,10 @@ const BetForm = () => {
       payload.ends_at = data.ends_at
     }
 
-    if (!optionsLocked && !areBetOptionsEqual(normalizedOptions, initialBet?.options || [])) {
+    if (
+      !optionsLocked &&
+      !areBetOptionsEqual(normalizedOptions, initialBet?.options || [])
+    ) {
       payload.options = normalizedOptions
     }
 
@@ -184,17 +172,33 @@ const BetForm = () => {
     setSubmitting(false)
   }
 
-  return (
+  return loading ? (
+    <Loading />
+  ) : notFound ? (
+    <GradientBg>
+      <div className="flex w-full max-w-5xl flex-col gap-4">
+        <GoBackBtn link="/admin/bets" />
+        <AdminSectionNav />
+        <section className="rounded-2xl border border-dashed border-base-300 bg-base-100 p-8 text-center shadow-xl">
+          <Title>{t("adminPanel.bets.detail.noBet")}</Title>
+        </section>
+      </div>
+    </GradientBg>
+  ) : (
     <GradientBg>
       <div className="flex w-full max-w-5xl flex-col gap-6">
-        <GoBackBtn link={isEdit ? `/admin/bets/${id}` : "/admin/bets"} />
         <AdminSectionNav />
-
-        <Title>{t(isEdit ? "forms.page.updateBet" : "forms.page.createBet")}</Title>
-
-        <div className="rounded-[2rem] border border-base-300 bg-base-100 p-6 shadow-xl md:p-8">
+        <div>
+          <GoBackBtn link={isEdit ? `/admin/bets/${id}` : "/admin/bets"} />
+        </div>
+        <Title>
+          {t(isEdit ? "forms.page.updateBet" : "forms.page.createBet")}
+        </Title>
+        <div className="rounded-2xl border border-base-300 bg-base-100 p-6 shadow-xl md:p-8">
           <FormProvider {...methods}>
-            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="flex flex-col gap-6">
               <div className="grid gap-4 md:grid-cols-2">
                 <FormField
                   name="label"
@@ -209,7 +213,6 @@ const BetForm = () => {
                   placeholder={t("forms.fields.endsAt.placeholder")}
                 />
               </div>
-
               <BetOptionsFieldArray
                 append={append}
                 disabled={optionsLocked}
@@ -218,16 +221,17 @@ const BetForm = () => {
                 register={register}
                 remove={remove}
               />
-
-              <div className="flex flex-wrap gap-3 justify-end">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 ">
+                <Button type="submit" variant="success" disabled={submitting}>
+                  {t(isEdit ? "forms.buttons.update" : "forms.buttons.create")}
+                </Button>
                 <Button
                   type="button"
                   variant="secondary"
-                  onClick={() => navigate(isEdit ? `/admin/bets/${id}` : "/admin/bets")}>
+                  onClick={() =>
+                    navigate(isEdit ? `/admin/bets/${id}` : "/admin/bets")
+                  }>
                   {t("forms.buttons.goBack")}
-                </Button>
-                <Button type="submit" variant="success" disabled={submitting}>
-                  {t(isEdit ? "forms.buttons.update" : "forms.buttons.create")}
                 </Button>
               </div>
             </form>
