@@ -92,10 +92,10 @@ const getUserBetSelections = async (user_id, betIds = []) => {
         SELECT
             ub.id,
             ub.amount,
+            ub.odd,
             ub.bet_option_id,
             bo.bet_id,
-            bo.label AS option_label,
-            bo.odd
+            bo.label AS option_label
         FROM user_bets ub
         INNER JOIN bets_options bo ON bo.id = ub.bet_option_id
         WHERE ub.user_id = $1 AND bo.bet_id = ANY($2::uuid[])
@@ -201,7 +201,7 @@ const getSettlementPreviewByExecutor = async (executor, bet_id, winning_option_i
         SELECT
             ub.user_id,
             COALESCE(SUM(ub.amount), 0) AS amount,
-            COALESCE(SUM(ub.amount * bo.odd), 0) AS payout
+            COALESCE(SUM(ub.amount * ub.odd), 0) AS payout
         FROM user_bets ub
         INNER JOIN bets_options bo ON bo.id = ub.bet_option_id
         WHERE bo.bet_id = $1 AND bo.id = $2
@@ -254,10 +254,10 @@ const createBetOption = async (betOption) => {
     return insertBetOption(db, betOption)
 }
 
-const placeBet = async (user_id, bet_option_id, amount, executor = db) => {
+const placeBet = async (user_id, bet_option_id, amount, odd, executor = db) => {
     const result = await executor.query(
-        "INSERT INTO user_bets (user_id, bet_option_id, amount) VALUES ($1, $2, $3) RETURNING *",
-        [user_id, bet_option_id, amount],
+        "INSERT INTO user_bets (user_id, bet_option_id, amount, odd) VALUES ($1, $2, $3, $4) RETURNING *",
+        [user_id, bet_option_id, amount, odd],
     )
     return result.rows[0]
 }
@@ -351,7 +351,7 @@ const placeBetForUser = async (user_id, bet_id, bet_option_id, amount) => {
             return rollbackWith({ code: "INSUFFICIENT_FUNDS" })
         }
 
-        const placedBet = await placeBet(user_id, bet_option_id, numericAmount, client)
+        const placedBet = await placeBet(user_id, bet_option_id, numericAmount, Number(option.odd), client)
 
         await client.query("COMMIT")
 
@@ -360,7 +360,6 @@ const placeBetForUser = async (user_id, bet_id, bet_option_id, amount) => {
             bet_id,
             bet_label: bet.label,
             option_label: option.label,
-            odd: option.odd,
             balance: updatedBalance,
         }
     } catch (error) {
@@ -435,6 +434,30 @@ const updateOptionOdd = async (option_id, new_odd) => {
         new_odd,
         option_id,
     ])
+}
+
+const updateOptionOdds = async (updates = []) => {
+    if (!Array.isArray(updates) || updates.length === 0) return
+
+    const client = await db.getClient()
+
+    try {
+        await client.query("BEGIN")
+
+        for (const update of updates) {
+            await client.query("UPDATE bets_options SET odd = $1 WHERE id = $2", [
+                update.odd,
+                update.id,
+            ])
+        }
+
+        await client.query("COMMIT")
+    } catch (error) {
+        await client.query("ROLLBACK")
+        throw error
+    } finally {
+        client.release()
+    }
 }
 
 const getOptionsByOptionId = async (option_id) => {
@@ -736,4 +759,5 @@ export default {
     settleBet,
     updateBet,
     updateOptionOdd,
+    updateOptionOdds,
 }

@@ -74,7 +74,7 @@ CREATE TABLE bets_options (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     bet_id UUID NOT NULL,
     label VARCHAR(255) NOT NULL,
-    odd DECIMAL(10, 2) NOT NULL DEFAULT 2.00 CHECK (odd >= 1.00),
+    odd DECIMAL(10, 2) NOT NULL DEFAULT 2.00 CHECK (odd >= 1.01),
     FOREIGN KEY (bet_id) REFERENCES bets(id) ON DELETE CASCADE
 );
 
@@ -83,6 +83,7 @@ CREATE TABLE user_bets (
     user_id UUID NOT NULL,
     bet_option_id UUID NOT NULL,
     amount DECIMAL(10, 2) NOT NULL CHECK (amount > 0),
+    odd DECIMAL(10, 2) NOT NULL CHECK (odd >= 1.01),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,

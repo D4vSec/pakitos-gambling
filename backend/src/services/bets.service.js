@@ -1,6 +1,18 @@
 import Bets from "#models/bets.model"
 import logger from "#utils/logger.utils"
 
+const MIN_BET_ODD = 1.01
+
+const getSafeCurrentOdd = (odd) => {
+    const numericOdd = Number(odd)
+
+    if (!Number.isFinite(numericOdd) || numericOdd < MIN_BET_ODD || numericOdd >= 95) {
+        return 2.0
+    }
+
+    return numericOdd
+}
+
 const calculateOdds = (poolDistribution) => {
     const totalPool = poolDistribution.reduce(
         (sum, item) => sum + Number(item.amount),
@@ -16,16 +28,17 @@ const calculateOdds = (poolDistribution) => {
 
     return poolDistribution.map((item) => {
         const amount = Number(item.amount)
-        const percentage = amount / totalPool
+        const currentOdd = getSafeCurrentOdd(item.odd)
 
-        let odd
-        if (percentage === 0) {
-            odd = 100.0
-        } else {
-            odd = 1 / percentage
+        if (amount <= 0) {
+            return {
+                ...item,
+                odd: currentOdd,
+            }
         }
 
-        odd *= 0.95
+        const percentage = amount / totalPool
+        const odd = Math.max(MIN_BET_ODD, (1 / percentage) * 0.95)
 
         return {
             ...item,
@@ -39,10 +52,7 @@ const updateOddsForBet = async (betId) => {
         const poolDistribution = await Bets.getPoolDistribution(betId)
 
         const newOdds = calculateOdds(poolDistribution)
-
-        for (const option of newOdds) {
-            await Bets.updateOptionOdd(option.id, option.odd)
-        }
+        await Bets.updateOptionOdds(newOdds)
 
         return newOdds
     } catch (error) {

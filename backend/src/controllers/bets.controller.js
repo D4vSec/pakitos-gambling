@@ -42,7 +42,7 @@ const betsListQuerySchema = createListQuerySchema({
 
 const betOptionSchema = z.object({
     label: z.string().trim().min(1).max(120),
-    odd: z.preprocess((value) => toOptionalNumber(value), z.number().positive()),
+    odd: z.preprocess((value) => toOptionalNumber(value), z.number().min(1.01)),
 })
 
 const createBetSchema = z.object({

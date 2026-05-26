@@ -40,10 +40,10 @@ describe('bets model', () => {
 			rows: [{
 				id: 'user-bet-1',
 				amount: '100',
+				odd: '1.8',
 				bet_option_id: 'opt-1',
 				bet_id: '11111111-1111-1111-1111-111111111111',
 				option_label: 'Madrid',
-				odd: '1.8',
 			}],
 		})
 
@@ -52,24 +52,24 @@ describe('bets model', () => {
 				'22222222-2222-2222-2222-222222222222',
 				['11111111-1111-1111-1111-111111111111'],
 			),
-		).resolves.toEqual([{
-			id: 'user-bet-1',
-			amount: '100',
-			bet_option_id: 'opt-1',
-			bet_id: '11111111-1111-1111-1111-111111111111',
-			option_label: 'Madrid',
-			odd: '1.8',
-		}])
+			).resolves.toEqual([{
+				id: 'user-bet-1',
+				amount: '100',
+				odd: '1.8',
+				bet_option_id: 'opt-1',
+				bet_id: '11111111-1111-1111-1111-111111111111',
+				option_label: 'Madrid',
+			}])
 
 		expect(db.query).toHaveBeenCalledWith(
 			`
         SELECT
             ub.id,
             ub.amount,
+            ub.odd,
             ub.bet_option_id,
             bo.bet_id,
-            bo.label AS option_label,
-            bo.odd
+            bo.label AS option_label
         FROM user_bets ub
         INNER JOIN bets_options bo ON bo.id = ub.bet_option_id
         WHERE ub.user_id = $1 AND bo.bet_id = ANY($2::uuid[])
@@ -147,7 +147,7 @@ describe('bets model', () => {
 				.mockResolvedValueOnce({ rows: [{ id: 'opt-1', bet_id: 'bet-1', label: 'Madrid', odd: 1.8 }] })
 				.mockResolvedValueOnce({ rows: [] })
 				.mockResolvedValueOnce({ rows: [{ balance: 400 }] })
-				.mockResolvedValueOnce({ rows: [{ id: 'user-bet-1', user_id: 'user-1', bet_option_id: 'opt-1', amount: 100 }] })
+				.mockResolvedValueOnce({ rows: [{ id: 'user-bet-1', user_id: 'user-1', bet_option_id: 'opt-1', amount: 100, odd: 1.8 }] })
 				.mockResolvedValueOnce(undefined),
 			release: vi.fn(),
 		}
@@ -165,15 +165,95 @@ describe('bets model', () => {
 			user_id: 'user-1',
 			bet_option_id: 'opt-1',
 			amount: 100,
+			odd: 1.8,
 			bet_id: '22222222-2222-2222-2222-222222222222',
 			bet_label: 'Final',
 			option_label: 'Madrid',
-			odd: 1.8,
 			balance: 400,
 		})
 
 		expect(client.query).toHaveBeenCalledWith('BEGIN')
+		expect(client.query).toHaveBeenCalledWith(
+			'INSERT INTO user_bets (user_id, bet_option_id, amount, odd) VALUES ($1, $2, $3, $4) RETURNING *',
+			['11111111-1111-1111-1111-111111111111', '33333333-3333-3333-3333-333333333333', 100, 1.8],
+		)
 		expect(client.query).toHaveBeenCalledWith('COMMIT')
+		expect(client.release).toHaveBeenCalled()
+	})
+
+	it('uses the stored user bet odd when building the settlement preview payouts', async () => {
+		db.query
+			.mockResolvedValueOnce({ rows: [{ id: 'opt-1', bet_id: 'bet-1', label: 'Madrid', odd: 1.2 }] })
+			.mockResolvedValueOnce({
+				rows: [{
+					user_id: 'user-1',
+					amount: '100',
+					payout: '180',
+				}],
+			})
+
+		await expect(
+			betsModel.getSettlementPreview(
+				'11111111-1111-1111-1111-111111111111',
+				'22222222-2222-2222-2222-222222222222',
+			),
+		).resolves.toEqual({
+			winningOption: { id: 'opt-1', bet_id: 'bet-1', label: 'Madrid', odd: 1.2 },
+			winners: [{
+				user_id: 'user-1',
+				amount: '100',
+				payout: '180',
+			}],
+		})
+
+		expect(db.query).toHaveBeenNthCalledWith(
+			2,
+			`
+        SELECT
+            ub.user_id,
+            COALESCE(SUM(ub.amount), 0) AS amount,
+            COALESCE(SUM(ub.amount * ub.odd), 0) AS payout
+        FROM user_bets ub
+        INNER JOIN bets_options bo ON bo.id = ub.bet_option_id
+        WHERE bo.bet_id = $1 AND bo.id = $2
+        GROUP BY ub.user_id
+        ORDER BY payout DESC, ub.user_id ASC
+    `,
+			['11111111-1111-1111-1111-111111111111', '22222222-2222-2222-2222-222222222222'],
+		)
+	})
+
+	it('updates option odds in a single transaction', async () => {
+		const client = {
+			query: vi
+				.fn()
+				.mockResolvedValueOnce(undefined)
+				.mockResolvedValueOnce(undefined)
+				.mockResolvedValueOnce(undefined)
+				.mockResolvedValueOnce(undefined),
+			release: vi.fn(),
+		}
+		db.getClient.mockResolvedValueOnce(client)
+
+		await expect(
+			betsModel.updateOptionOdds([
+				{ id: 'opt-1', odd: 1.19 },
+				{ id: 'opt-2', odd: 4.75 },
+			]),
+		).resolves.toBeUndefined()
+
+		expect(client.query).toHaveBeenNthCalledWith(1, 'BEGIN')
+		expect(client.query).toHaveBeenNthCalledWith(
+			2,
+			'UPDATE bets_options SET odd = $1 WHERE id = $2',
+			[1.19, 'opt-1'],
+		)
+		expect(client.query).toHaveBeenNthCalledWith(
+			3,
+			'UPDATE bets_options SET odd = $1 WHERE id = $2',
+			[4.75, 'opt-2'],
+		)
+		expect(client.query).toHaveBeenNthCalledWith(4, 'COMMIT')
 		expect(client.release).toHaveBeenCalled()
 	})
 

@@ -158,6 +158,7 @@ describe('bets.controller admin endpoints', () => {
 				id: '33333333-3333-3333-3333-333333333333',
 				bet_id: betId,
 				option_label: 'Madrid',
+				odd: 1.8,
 			}
 			const res = createResponse()
 
@@ -185,13 +186,14 @@ describe('bets.controller admin endpoints', () => {
 			expect(res.json).toHaveBeenCalledWith(userBet)
 		})
 
-		it('still returns 201 when odds recalculation fails after storing the bet', async () => {
+		it('still returns the stored user bet odd when odds recalculation fails after storing the bet', async () => {
 			const optionId = '22222222-2222-2222-2222-222222222222'
 			const betId = '11111111-1111-1111-1111-111111111111'
 			const userBet = {
 				id: '33333333-3333-3333-3333-333333333333',
 				bet_id: betId,
 				option_label: 'Madrid',
+				odd: 2.75,
 			}
 			const res = createResponse()
 
