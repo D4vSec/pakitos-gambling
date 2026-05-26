@@ -1,5 +1,5 @@
 import React, { useMemo } from "react"
-import BetStatusBadge from "@/components/bets/BetStatusBadge"
+import BetStatusBadge from "@/components/badges/BetStatusBadge"
 import useTable from "@/hooks/useTable"
 import { useAdmin } from "@/providers/AdminProvider"
 import { useLocale } from "@/providers/LocaleProvider"
@@ -14,6 +14,7 @@ const BetsTable = () => {
 
   const initialFilters = useMemo(
     () => ({
+      status: "",
       filters: [],
     }),
     [],

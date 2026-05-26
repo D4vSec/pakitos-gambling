@@ -27,8 +27,8 @@ const UsersFilterBar = ({ filters, onChange }) => {
 
   return (
     <div className="flex flex-col gap-3 bg-base-200 p-3 md:p-4 rounded-xl border border-base-300">
-      <div className="flex flex-col lg:flex-row gap-4 items-stretch lg:items-end">
-        <div className="flex-2">
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-4 items-stretch xl:items-end">
+        <div className="xl:col-span-6 min-w-0">
           <DynamicSearch
             config={USER_FILTER_CONFIG}
             onAddFilter={handleAddFilter}
@@ -36,23 +36,25 @@ const UsersFilterBar = ({ filters, onChange }) => {
           />
         </div>
 
-        <div className="flex-1">
-          <NumericRangeInput
-            name="Balance"
-            minValue={filters.minBalance}
-            maxValue={filters.maxBalance}
-            onChange={onChange}
-            translationPath="adminPanel.users.table"
+        <div className="xl:col-span-6 min-w-0 flex flex-col sm:flex-row gap-3 sm:items-end">
+          <div className="flex-1 min-w-0">
+            <NumericRangeInput
+              name="Balance"
+              minValue={filters.minBalance}
+              maxValue={filters.maxBalance}
+              onChange={onChange}
+              translationPath="adminPanel.users.table"
+            />
+          </div>
+
+          <Button
+            svg={<CloseSVG />}
+            variant="ghost"
+            size="sm"
+            className="hover:text-error h-10 w-full min-h-10 p-1 sm:h-8 sm:w-8 sm:min-h-8 sm:shrink-0"
+            onClick={() => onChange({ filters: [], minBalance: "", maxBalance: "" })}
           />
         </div>
-
-        <Button
-          svg={<CloseSVG />}
-          variant="ghost"
-          size="sm"
-          className="hover:text-error h-8 w-8 min-h-8 p-1"
-          onClick={() => onChange({ filters: [], minBalance: "", maxBalance: "" })}
-        />
       </div>
 
       {(filters.filters?.length > 0 || filters.minBalance || filters.maxBalance) && (

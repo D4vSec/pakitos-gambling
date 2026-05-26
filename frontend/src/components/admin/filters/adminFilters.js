@@ -30,10 +30,6 @@ export const USER_FILTER_CONFIG = {
 
 export const BET_FILTER_CONFIG = {
   name: { type: "text" },
-  status: {
-    type: "enum",
-    options: ["open", "closed"],
-  },
 }
 
 export const TRANSACTION_FILTER_CONFIG = {

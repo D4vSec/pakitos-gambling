@@ -50,7 +50,7 @@ const PaginationBar = ({ table }) => {
           {t("ui.tables.paginationBar.rowsPerPage")}
         </span>
         <select
-          className="select select-sm select-bordered"
+          className="select select-md select-bordered"
           value={pageSize}
           onChange={(e) => {
             const size = Number(e.target.value)

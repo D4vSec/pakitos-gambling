@@ -26,11 +26,13 @@ const BetOptionPill = ({
       } ${disabled ? "cursor-not-allowed opacity-60" : "cursor-pointer"}`}>
       <div className="flex items-center justify-between gap-3">
         <div className="min-w-0">
-          <p className="truncate text-sm font-semibold md:text-base">{label}</p>
-          <p className="text-xs text-base-content/60">{t("pages.bets.detail.odds")}</p>
+          <p className="truncate text-sm sm:text-md font-semibold">{label}</p>
+          <p className="text-xs sm:text-sm text-base-content/60">
+            {t("pages.bets.detail.odds")}
+          </p>
         </div>
 
-        <div className="rounded-xl bg-base-100 px-3 py-2 text-sm font-bold text-primary">
+        <div className="rounded-xl bg-base-100 px-3 py-2 text-md sm:text-lg font-bold text-secondary">
           x{normalizeBetOdd(odd)}
         </div>
       </div>

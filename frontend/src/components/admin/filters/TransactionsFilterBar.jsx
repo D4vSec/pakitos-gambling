@@ -41,8 +41,8 @@ const TransactionsFilterBar = ({ filters, onChange }) => {
 
   return (
     <div className="flex flex-col gap-3 bg-base-200 p-3 md:p-4 rounded-xl border border-base-300">
-      <div className="flex flex-col xl:flex-row gap-4 items-stretch xl:items-end">
-        <div className="flex-2">
+      <div className="grid grid-cols-1 2xl:grid-cols-12 gap-4 items-stretch 2xl:items-end">
+        <div className="2xl:col-span-4 min-w-0">
           <DynamicSearch
             config={TRANSACTION_FILTER_CONFIG}
             onAddFilter={handleAddFilter}
@@ -50,7 +50,7 @@ const TransactionsFilterBar = ({ filters, onChange }) => {
           />
         </div>
 
-        <div className="flex-1">
+        <div className="2xl:col-span-3 min-w-0">
           <NumericRangeInput
             name="Amount"
             minValue={filters.minAmount}
@@ -60,7 +60,7 @@ const TransactionsFilterBar = ({ filters, onChange }) => {
           />
         </div>
 
-        <div className="flex-1">
+        <div className="2xl:col-span-4 min-w-0">
           <DateRangeInput fromDate={filters.fromDate} toDate={filters.toDate} onChange={onChange} />
         </div>
 
@@ -68,7 +68,7 @@ const TransactionsFilterBar = ({ filters, onChange }) => {
           svg={<CloseSVG />}
           variant="ghost"
           size="sm"
-          className="hover:text-error h-8 w-8 min-h-8 p-1"
+          className="hover:text-error h-10 w-full min-h-10 p-1 sm:h-8 sm:w-8 sm:min-h-8 2xl:self-end"
           onClick={resetAll}
         />
       </div>
