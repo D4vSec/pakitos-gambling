@@ -30,7 +30,8 @@ const Badge = ({
 
   return (
     <div
-      className={`badge ${safeVariant} ${safeSize} ${className} flex items-center gap-1 rounded-lg`}>
+      className={`badge ${safeVariant} ${safeSize} ${className} flex items-center gap-1 rounded-lg font-semibold uppercase tracking-[0.14em]">
+`}>
       {svg && <div className="scale-[0.8]">{svg}</div>}
       {children}
     </div>
