@@ -26,8 +26,8 @@ const FormField = ({
   const inputType = isPasswordField && showPassword ? "text" : type
 
   const baseClass = `w-full ${
-    as === "input" ? "input input-lg" : ""
-  } ${as === "textarea" ? "textarea textarea-md" : ""} ${
+    as === "input" ? "input input-md md:input-lg" : ""
+  } ${as === "textarea" ? "textarea textarea-md md:textarea-lg" : ""} ${
     as === "select" ? "select select-lg" : ""
   } ${error ? "input-error" : ""}`
 
@@ -87,7 +87,7 @@ const FormField = ({
         <label className="label cursor-pointer gap-3">
           <input
             type="checkbox"
-            className="checkbox checkbox-lg"
+            className="checkbox checkbox-md md:checkbox-lg"
             {...register(name)}
             {...rest}
           />

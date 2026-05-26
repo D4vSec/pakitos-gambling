@@ -14,7 +14,7 @@ const toDateTimeLocalValue = (date) => {
 
 const getBetStatusVariant = (status) => {
   if (status === "open") return "success"
-  if (status === "closed") return "neutral"
+  if (status === "closed") return "error"
 
   return "secondary"
 }
@@ -36,7 +36,10 @@ const formatBetAmount = (amount) => {
 }
 
 const sortBetOptions = (options = []) =>
-  [...options].sort((firstOption, secondOption) => Number(secondOption.odd) - Number(firstOption.odd))
+  [...options].sort(
+    (firstOption, secondOption) =>
+      Number(secondOption.odd) - Number(firstOption.odd),
+  )
 
 export {
   formatBetAmount,

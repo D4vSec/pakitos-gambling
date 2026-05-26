@@ -1,76 +1,71 @@
 @import "tailwindcss";
 @plugin "daisyui" {
-    themes: mytheme;
-    root: ":root";
-    include:;
-    exclude:;
-    prefix:;
-    logs: true;
+  themes: mytheme;
+  root: ":root";
+  include:;
+  exclude:;
+  prefix:;
+  logs: true;
 }
 
 @plugin "daisyui/theme" {
-    name: "mytheme";
-    default: true;
-    prefersdark: true;
-    color-scheme: "dark";
+  name: "mytheme";
+  default: true;
+  prefersdark: true;
+  color-scheme: "dark";
 
-    --color-base-100: oklch(14% 0.01 20);
-    --color-base-200: oklch(18% 0.01 20);
-    --color-base-300: oklch(24% 0.015 20);
-    --color-base-content: oklch(96% 0.01 95);
+  --color-base-100: oklch(14% 0.01 20);
+  --color-base-200: oklch(18% 0.01 20);
+  --color-base-300: oklch(24% 0.015 20);
+  --color-base-content: oklch(96% 0.01 95);
 
-    --color-primary: oklch(52% 0.19 20);
-    --color-primary-content: oklch(96% 0.01 95);
+  --color-primary: oklch(52% 0.19 20);
+  --color-primary-content: oklch(96% 0.01 95);
 
-    --color-secondary: oklch(92% 0.02 95);
-    --color-secondary-content: oklch(18% 0.01 20);
+  --color-secondary: oklch(92% 0.02 95);
+  --color-secondary-content: oklch(18% 0.01 20);
 
-    --color-accent: oklch(0.2221 0 0);
-    --color-accent-content: oklch(52% 0.19 20);
+  --color-accent: oklch(0.2221 0 0);
+  --color-accent-content: oklch(52% 0.19 20);
 
-    --color-neutral: oklch(16% 0.01 20);
-    --color-neutral-content: oklch(96% 0.01 95);
+  --color-neutral: oklch(16% 0.01 20);
+  --color-neutral-content: oklch(96% 0.01 95);
 
-    --color-info: oklch(72% 0.17 240);
-    --color-info-content: oklch(25% 0.05 240);
+  --color-info: oklch(72% 0.17 240);
+  --color-info-content: oklch(25% 0.05 240);
 
-    --color-success: oklch(75% 0.18 150);
-    --color-success-content: oklch(24% 0.05 150);
+  --color-success: oklch(75% 0.18 150);
+  --color-success-content: oklch(24% 0.05 150);
 
-    --color-warning: oklch(82% 0.19 85);
-    --color-warning-content: oklch(28% 0.07 70);
+  --color-warning: oklch(82% 0.19 85);
+  --color-warning-content: oklch(28% 0.07 70);
 
-    --color-error: oklch(70% 0.23 25);
-    --color-error-content: oklch(28% 0.09 25);
+  --color-error: oklch(70% 0.23 25);
+  --color-error-content: oklch(28% 0.09 25);
 
-    --radius-selector: 1rem;
-    --radius-field: 0.5rem;
-    --radius-box: 1rem;
-    --size-selector: 0.25rem;
-    --size-field: 0.25rem;
-    --border: 1.5px;
-    --depth: 0;
-    --noise: 1;
+  --radius-selector: 1rem;
+  --radius-field: 0.5rem;
+  --radius-box: 1rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1.5px;
+  --depth: 0;
+  --noise: 1;
 }
 
 :root {
-    font-family:
-        "Trebuchet MS",
-        "Segoe UI",
-        "Avenir Next",
-        Arial,
-        sans-serif;
+  font-family: "Trebuchet MS", "Segoe UI", "Avenir Next", Arial, sans-serif;
 }
 
 body {
-    min-height: 100vh;
-    background:
-        radial-gradient(circle at top, rgba(255, 82, 82, 0.14), transparent 28%),
-        linear-gradient(180deg, rgba(255, 255, 255, 0.01), rgba(255, 255, 255, 0)),
-        oklch(24% 0.015 20);
-    color: oklch(96% 0.01 95);
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top, rgba(255, 82, 82, 0.14), transparent 28%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.01), rgba(255, 255, 255, 0)),
+    oklch(24% 0.015 20);
+  color: oklch(96% 0.01 95);
 }
 
 #root {
-    min-height: 100vh;
+  min-height: 100vh;
 }
