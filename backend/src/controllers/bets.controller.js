@@ -1,6 +1,5 @@
 import * as z from "zod"
 import Bets from "#models/bets.model"
-import User from "#models/user.model"
 import BetService from "#services/bets.service"
 import Audit from "#services/audit.service"
 import {
@@ -360,28 +359,14 @@ const settleBet = async (req, res) => {
 }
 
 const placeBet = async (req, res) => {
+    const { betId } = req.params
     const { betOptionId } = req.body
     const { amount } = req.body
     const userId = req.user.id
 
     try {
         const numericAmount = Number(amount)
-
-        // Validar si existe la opción
-        const options = await Bets.getOptionsByOptionId(betOptionId)
-        if (!options || options.length === 0) {
-            return res.status(404).json({ code: "OPTION_NOT_FOUND" })
-        }
-
-        const option = options.find((o) => o.id === betOptionId)
-        if (!option) {
-            return res.status(404).json({ code: "OPTION_NOT_FOUND" })
-        }
-
-        const betId = option.bet_id
-
-        const betInfo = await Bets.getBetById(betId)
-        if (!betInfo) {
+        if (!isValidUuid(betId)) {
             return res.status(404).json({ code: "BET_NOT_FOUND" })
         }
 
@@ -389,21 +374,28 @@ const placeBet = async (req, res) => {
             return res.status(400).json({ code: "INVALID_BET_AMOUNT" })
         }
 
-        if (new Date(betInfo.ends_at) < new Date()) {
+        const userBet = await BetService.placeBet(userId, betId, betOptionId, numericAmount)
+        if (userBet.code === "BET_NOT_FOUND") {
+            return res.status(404).json({ code: "BET_NOT_FOUND" })
+        }
+        if (userBet.code === "USER_NOT_FOUND") {
+            return res.status(404).json({ code: "USER_NOT_FOUND" })
+        }
+        if (userBet.code === "OPTION_NOT_FOUND") {
+            return res.status(404).json({ code: "OPTION_NOT_FOUND" })
+        }
+        if (userBet.code === "INVALID_BET_AMOUNT") {
+            return res.status(400).json({ code: "INVALID_BET_AMOUNT" })
+        }
+        if (userBet.code === "BET_CLOSED") {
             return res.status(400).json({ code: "BET_CLOSED" })
         }
-
-        const balance = await User.getUserBalance(userId)
-        if (balance === null || Number(balance) < numericAmount) {
+        if (userBet.code === "INSUFFICIENT_FUNDS") {
             return res.status(400).json({ code: "INSUFFICIENT_FUNDS" })
         }
-
-        const newBalance = await User.updateUserBalance(userId, -numericAmount, { type: "BET" })
-        if (newBalance === null) {
-            return res.status(400).json({ code: "INSUFFICIENT_FUNDS" })
+        if (userBet.code === "BET_ALREADY_PLACED_ON_MARKET") {
+            return res.status(409).json(userBet)
         }
-
-        const userBet = await Bets.placeBet(userId, betOptionId, numericAmount)
 
         try {
             await BetService.updateOddsForBet(betId)
@@ -421,6 +413,7 @@ const placeBet = async (req, res) => {
             details: {
                 betId,
                 betOptionId,
+                optionLabel: userBet.option_label,
                 amount: numericAmount,
                 date: new Date().toISOString(),
             },

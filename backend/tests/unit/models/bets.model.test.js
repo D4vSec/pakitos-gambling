@@ -93,4 +93,77 @@ describe('bets model', () => {
 		expect(client.query).toHaveBeenCalledWith('COMMIT')
 		expect(client.release).toHaveBeenCalled()
 	})
+
+	it('places a bet once per market and returns the selected option label', async () => {
+		const client = {
+			query: vi
+				.fn()
+				.mockResolvedValueOnce(undefined)
+				.mockResolvedValueOnce({ rows: [{ balance: 500 }] })
+				.mockResolvedValueOnce({ rows: [{ id: 'bet-1', label: 'Final', ends_at: '2099-06-01T18:00:00.000Z' }] })
+				.mockResolvedValueOnce({ rows: [{ id: 'opt-1', bet_id: 'bet-1', label: 'Madrid', odd: 1.8 }] })
+				.mockResolvedValueOnce({ rows: [] })
+				.mockResolvedValueOnce({ rows: [{ balance: 400 }] })
+				.mockResolvedValueOnce({ rows: [{ id: 'user-bet-1', user_id: 'user-1', bet_option_id: 'opt-1', amount: 100 }] })
+				.mockResolvedValueOnce(undefined),
+			release: vi.fn(),
+		}
+		db.getClient.mockResolvedValueOnce(client)
+
+		await expect(
+			betsModel.placeBetForUser(
+				'11111111-1111-1111-1111-111111111111',
+				'22222222-2222-2222-2222-222222222222',
+				'33333333-3333-3333-3333-333333333333',
+				100,
+			),
+		).resolves.toEqual({
+			id: 'user-bet-1',
+			user_id: 'user-1',
+			bet_option_id: 'opt-1',
+			amount: 100,
+			bet_id: '22222222-2222-2222-2222-222222222222',
+			bet_label: 'Final',
+			option_label: 'Madrid',
+			odd: 1.8,
+			balance: 400,
+		})
+
+		expect(client.query).toHaveBeenCalledWith('BEGIN')
+		expect(client.query).toHaveBeenCalledWith('COMMIT')
+		expect(client.release).toHaveBeenCalled()
+	})
+
+	it('rolls back when the user already bet on the same market', async () => {
+		const client = {
+			query: vi
+				.fn()
+				.mockResolvedValueOnce(undefined)
+				.mockResolvedValueOnce({ rows: [{ balance: 500 }] })
+				.mockResolvedValueOnce({ rows: [{ id: 'bet-1', label: 'Final', ends_at: '2099-06-01T18:00:00.000Z' }] })
+				.mockResolvedValueOnce({ rows: [{ id: 'opt-1', bet_id: 'bet-1', label: 'Madrid', odd: 1.8 }] })
+				.mockResolvedValueOnce({ rows: [{ id: 'user-bet-1', bet_option_id: 'opt-1', option_label: 'Madrid' }] })
+				.mockResolvedValueOnce(undefined),
+			release: vi.fn(),
+		}
+		db.getClient.mockResolvedValueOnce(client)
+
+		await expect(
+			betsModel.placeBetForUser(
+				'11111111-1111-1111-1111-111111111111',
+				'22222222-2222-2222-2222-222222222222',
+				'33333333-3333-3333-3333-333333333333',
+				100,
+			),
+		).resolves.toEqual({
+			code: 'BET_ALREADY_PLACED_ON_MARKET',
+			existingBetId: 'user-bet-1',
+			existingBetOptionId: 'opt-1',
+			existingOptionLabel: 'Madrid',
+		})
+
+		expect(client.query).toHaveBeenCalledWith('ROLLBACK')
+		expect(client.query).not.toHaveBeenCalledWith('COMMIT')
+		expect(client.release).toHaveBeenCalled()
+	})
 })

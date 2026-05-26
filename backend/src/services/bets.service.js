@@ -55,6 +55,7 @@ const getBets = async (page = 1, limit = 20, filters = {}) => Bets.findBets(page
 const countBets = async (filters = {}) => Bets.countBets(filters)
 const hasBetActivity = async (betId) => Bets.hasBetActivity(betId)
 const createBet = async (payload) => Bets.createBetWithOptions(payload)
+const placeBet = async (userId, betId, betOptionId, amount) => Bets.placeBetForUser(userId, betId, betOptionId, amount)
 const updateBet = async (betId, payload) => Bets.updateBet(betId, payload)
 const deleteBet = async (betId) => Bets.deleteBet(betId)
 const closeBet = async (betId) => Bets.closeBet(betId)
@@ -138,6 +139,7 @@ export default {
     getBets,
     getSettlementPreview,
     hasBetActivity,
+    placeBet,
     settleBet,
     updateBet,
     updateOddsForBet,
