@@ -11,7 +11,7 @@ const Notifications = () => {
   if (global.length === 0) return null
 
   return (
-    <div className="pointer-events-none fixed top-5 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-9999 w-screen h-screen">
+    <div className="pointer-events-none fixed left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-9999 w-screen h-dvh">
       {global.map((notification) => {
         switch (notification?.type) {
           case "modal":
