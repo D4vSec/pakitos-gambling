@@ -9,8 +9,20 @@ import { formatBetDate, sortBetOptions } from "@/utils/betsUtils"
 const BetMarketCard = ({ bet }) => {
   const navigate = useNavigate()
   const { t } = useLocale()
-
   const previewOptions = sortBetOptions(bet.options || []).slice(0, 2)
+  const userBet = bet.userBet || null
+  const hasUserBet = Boolean(bet.hasUserBet && userBet)
+
+  const displayOptions = previewOptions.map((option) => {
+    if (!hasUserBet || option.id !== userBet.betOptionId) {
+      return option
+    }
+
+    return {
+      ...option,
+      odd: userBet.odd,
+    }
+  })
 
   return (
     <article className="group relative flex h-full flex-col gap-3 overflow-hidden rounded-2xl border border-base-300 bg-base-100 p-4 shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-primary/10">
@@ -35,8 +47,15 @@ const BetMarketCard = ({ bet }) => {
       </div>
 
       <div className="relative flex flex-1 flex-col gap-1.5">
-        {previewOptions.length > 0 ? (
-          previewOptions.map((option) => (
+        {hasUserBet && (
+          <div className="rounded-xl border border-info/30 bg-info/10 p-3 text-sm text-info">
+            <span className="font-semibold">{t("pages.bets.detail.selectedOption")}:</span>{" "}
+            {userBet.optionLabel} x{userBet.odd}
+          </div>
+        )}
+
+        {displayOptions.length > 0 ? (
+          displayOptions.map((option) => (
             <BetOptionPill
               key={option.id}
               label={option.label}

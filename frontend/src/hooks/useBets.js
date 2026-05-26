@@ -85,16 +85,18 @@ const useBets = () => {
         })
 
         if (response?.code) {
-          throw new Error(response.code)
+          const error = new Error(response.code)
+          error.details = response
+          throw error
         }
 
         updateBalance("withdrawal", payload.amount)
         addNotification(t("message.success.BET_PLACED"), "success")
 
-        return response
+        return { success: true, data: response, error: null }
       } catch (error) {
         notifyError(error)
-        return null
+        return { success: false, data: null, error }
       }
     },
     [addNotification, buildHeaders, notifyError, post, t, updateBalance],
