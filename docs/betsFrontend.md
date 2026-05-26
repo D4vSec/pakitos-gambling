@@ -6,11 +6,82 @@ La restriccion **ya esta implementada en backend**: un usuario **no puede aposta
 
 Si el usuario ya hizo una apuesta en ese mercado, el backend responde `409` con el codigo `BET_ALREADY_PLACED_ON_MARKET`.
 
+Ademas, al obtener el listado de mercados autenticado, backend devuelve si el usuario ya tiene apuesta en cada mercado para mejorar la UX.
+
 Implementacion backend:
 
 - `backend/src/controllers/bets.controller.js`
 - `backend/src/models/bets.model.js`
 - `backend/src/services/bets.service.js`
+
+---
+
+## Endpoint para listar mercados
+
+`GET /api/v1/bets`
+
+### Auth headers
+
+```http
+Authorization: Bearer <accessToken>
+x-refresh-token: <refreshToken>
+```
+
+### Respuesta OK
+
+### `200 OK`
+
+```json
+[
+  {
+    "id": "11111111-1111-1111-1111-111111111111",
+    "label": "Champions League Winner",
+    "ends_at": "2026-06-01T18:00:00.000Z",
+    "status": "open",
+    "options": [
+      {
+        "id": "22222222-2222-2222-2222-222222222222",
+        "label": "Madrid",
+        "odd": 1.8
+      },
+      {
+        "id": "33333333-3333-3333-3333-333333333333",
+        "label": "Barca",
+        "odd": 2.1
+      }
+    ],
+    "hasUserBet": true,
+    "userBet": {
+      "id": "44444444-4444-4444-4444-444444444444",
+      "betOptionId": "22222222-2222-2222-2222-222222222222",
+      "optionLabel": "Madrid",
+      "amount": 100,
+      "odd": 1.8
+    }
+  }
+]
+```
+
+### Campos de UX por mercado
+
+| Campo | Tipo | Descripcion |
+| --- | --- | --- |
+| `hasUserBet` | `boolean` | Indica si el usuario autenticado ya tiene una apuesta en ese mercado |
+| `userBet` | `object \| null` | Datos de la apuesta del usuario en ese mercado |
+| `userBet.id` | `uuid` | Id de la apuesta ya realizada |
+| `userBet.betOptionId` | `uuid` | Opcion elegida por el usuario |
+| `userBet.optionLabel` | `string` | Label de la opcion elegida |
+| `userBet.amount` | `number` | Importe apostado en ese mercado |
+| `userBet.odd` | `number` | Cuota de la opcion elegida |
+
+### Cuando el usuario no tiene apuesta en ese mercado
+
+```json
+{
+  "hasUserBet": false,
+  "userBet": null
+}
+```
 
 ---
 
@@ -134,7 +205,8 @@ El usuario **ya tiene una apuesta en ese mismo mercado**.
 
 ## Reglas para frontend
 
-1. No intentes permitir una segunda apuesta sobre el mismo `betId` si ya existe una previa del usuario.
-2. Si llega `409 BET_ALREADY_PLACED_ON_MARKET`, muestra mensaje de mercado ya apostado y, si quieres, ensena `existingOptionLabel`.
-3. Tras un `201`, usa `option_label` para mostrar claramente a que opcion ha apostado el usuario.
-4. El frontend debe considerar `400`, `404`, `409` y `500` como respuestas esperadas del endpoint.
+1. Usa `hasUserBet` y `userBet` de `GET /api/v1/bets` para pintar en la UI si el usuario ya ha apostado en cada mercado.
+2. No intentes permitir una segunda apuesta sobre el mismo `betId` si ya existe una previa del usuario.
+3. Si llega `409 BET_ALREADY_PLACED_ON_MARKET`, muestra mensaje de mercado ya apostado y, si quieres, ensena `existingOptionLabel`.
+4. Tras un `201`, usa `option_label` para mostrar claramente a que opcion ha apostado el usuario.
+5. El frontend debe considerar `400`, `404`, `409` y `500` como respuestas esperadas del endpoint.
