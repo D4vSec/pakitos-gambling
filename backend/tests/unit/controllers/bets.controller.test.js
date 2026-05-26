@@ -16,6 +16,7 @@ vi.mock('#services/bets.service', () => ({
 		deleteBet: vi.fn(),
 		getAdminBet: vi.fn(),
 		getBets: vi.fn(),
+		getBetsForUser: vi.fn(),
 		getSettlementPreview: vi.fn(),
 		hasBetActivity: vi.fn(),
 		placeBet: vi.fn(),
@@ -63,10 +64,11 @@ describe('bets.controller getBets', () => {
 
 	it('returns the filtered bets list', async () => {
 		const bets = [{ id: 'bet-1', label: 'Champions League', status: 'open', options: [] }]
-		BetService.getBets.mockResolvedValueOnce(bets)
+		BetService.getBetsForUser.mockResolvedValueOnce(bets)
 		const res = createResponse()
 
 		await getBets({
+			user: { id: '11111111-1111-1111-1111-111111111111' },
 			query: {
 				name: 'Champions',
 				status: 'open',
@@ -77,7 +79,7 @@ describe('bets.controller getBets', () => {
 			},
 		}, res)
 
-		expect(BetService.getBets).toHaveBeenCalledWith(1, 20, {
+		expect(BetService.getBetsForUser).toHaveBeenCalledWith('11111111-1111-1111-1111-111111111111', 1, 20, {
 			name: ['Champions'],
 			status: ['open'],
 			sortBy: 'endsAt',
@@ -91,12 +93,12 @@ describe('bets.controller getBets', () => {
 
 	it('returns the first 20 bets by default when no filters are provided', async () => {
 		const bets = [{ id: 'bet-1' }]
-		BetService.getBets.mockResolvedValueOnce(bets)
+		BetService.getBetsForUser.mockResolvedValueOnce(bets)
 		const res = createResponse()
 
-		await getBets({ query: {} }, res)
+		await getBets({ user: { id: '11111111-1111-1111-1111-111111111111' }, query: {} }, res)
 
-		expect(BetService.getBets).toHaveBeenCalledWith(1, 20, {})
+		expect(BetService.getBetsForUser).toHaveBeenCalledWith('11111111-1111-1111-1111-111111111111', 1, 20, {})
 		expect(res.json).toHaveBeenCalledWith(bets)
 	})
 
@@ -104,12 +106,13 @@ describe('bets.controller getBets', () => {
 		const res = createResponse()
 
 		await getBets({
+			user: { id: '11111111-1111-1111-1111-111111111111' },
 			query: {
 				status: 'finished',
 			},
 		}, res)
 
-		expect(BetService.getBets).not.toHaveBeenCalled()
+		expect(BetService.getBetsForUser).not.toHaveBeenCalled()
 		expect(res.status).toHaveBeenCalledWith(400)
 		expect(res.json.mock.calls[0][0].errors).toBeDefined()
 	})

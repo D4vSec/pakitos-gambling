@@ -139,7 +139,7 @@ const getBets = async (req, res) => {
             return res.status(400).json({ errors: parsedQuery.error })
         }
 
-        const bets = await BetService.getBets(parsedQuery.page, parsedQuery.limit, parsedQuery.filters)
+        const bets = await BetService.getBetsForUser(req.user.id, parsedQuery.page, parsedQuery.limit, parsedQuery.filters)
         res.status(200).json(bets)
     } catch (error) {
         logger.error({ message: "Error loading bets:", error })

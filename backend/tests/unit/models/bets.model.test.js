@@ -35,6 +35,49 @@ describe('bets model', () => {
 		)
 	})
 
+	it('loads the user bet selections for the listed markets', async () => {
+		db.query.mockResolvedValueOnce({
+			rows: [{
+				id: 'user-bet-1',
+				amount: '100',
+				bet_option_id: 'opt-1',
+				bet_id: '11111111-1111-1111-1111-111111111111',
+				option_label: 'Madrid',
+				odd: '1.8',
+			}],
+		})
+
+		await expect(
+			betsModel.getUserBetSelections(
+				'22222222-2222-2222-2222-222222222222',
+				['11111111-1111-1111-1111-111111111111'],
+			),
+		).resolves.toEqual([{
+			id: 'user-bet-1',
+			amount: '100',
+			bet_option_id: 'opt-1',
+			bet_id: '11111111-1111-1111-1111-111111111111',
+			option_label: 'Madrid',
+			odd: '1.8',
+		}])
+
+		expect(db.query).toHaveBeenCalledWith(
+			`
+        SELECT
+            ub.id,
+            ub.amount,
+            ub.bet_option_id,
+            bo.bet_id,
+            bo.label AS option_label,
+            bo.odd
+        FROM user_bets ub
+        INNER JOIN bets_options bo ON bo.id = ub.bet_option_id
+        WHERE ub.user_id = $1 AND bo.bet_id = ANY($2::uuid[])
+    `,
+			['22222222-2222-2222-2222-222222222222', ['11111111-1111-1111-1111-111111111111']],
+		)
+	})
+
 	it('returns no bets for invalid status filters without touching typed comparisons', async () => {
 		db.query.mockResolvedValueOnce({ rows: [] })
 

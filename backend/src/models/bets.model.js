@@ -81,6 +81,31 @@ const buildBetSelectQuery = ({ where = "", orderBy = "ORDER BY bets.ends_at ASC"
     return { query, values }
 }
 
+const getUserBetSelections = async (user_id, betIds = []) => {
+    if (!isValidUuid(String(user_id))) return []
+
+    const validBetIds = [...new Set(betIds.filter((betId) => isValidUuid(String(betId))))]
+    if (validBetIds.length === 0) return []
+
+    const result = await db.query(
+        `
+        SELECT
+            ub.id,
+            ub.amount,
+            ub.bet_option_id,
+            bo.bet_id,
+            bo.label AS option_label,
+            bo.odd
+        FROM user_bets ub
+        INNER JOIN bets_options bo ON bo.id = ub.bet_option_id
+        WHERE ub.user_id = $1 AND bo.bet_id = ANY($2::uuid[])
+    `,
+        [user_id, validBetIds],
+    )
+
+    return result.rows
+}
+
 const normalizeSettlementWinners = (winners = []) => winners.map((winner) => ({
     ...winner,
     amount: Number(Number(winner.amount || 0).toFixed(2)),
@@ -697,6 +722,7 @@ export default {
     createBetWithOptions,
     deleteBet,
     findBets,
+    getUserBetSelections,
     placeBet,
     placeBetForUser,
     getBets,
