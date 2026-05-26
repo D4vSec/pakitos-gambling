@@ -81,6 +81,31 @@ const buildBetSelectQuery = ({ where = "", orderBy = "ORDER BY bets.ends_at ASC"
     return { query, values }
 }
 
+const getUserBetSelections = async (user_id, betIds = []) => {
+    if (!isValidUuid(String(user_id))) return []
+
+    const validBetIds = [...new Set(betIds.filter((betId) => isValidUuid(String(betId))))]
+    if (validBetIds.length === 0) return []
+
+    const result = await db.query(
+        `
+        SELECT
+            ub.id,
+            ub.amount,
+            ub.bet_option_id,
+            bo.bet_id,
+            bo.label AS option_label,
+            bo.odd
+        FROM user_bets ub
+        INNER JOIN bets_options bo ON bo.id = ub.bet_option_id
+        WHERE ub.user_id = $1 AND bo.bet_id = ANY($2::uuid[])
+    `,
+        [user_id, validBetIds],
+    )
+
+    return result.rows
+}
+
 const normalizeSettlementWinners = (winners = []) => winners.map((winner) => ({
     ...winner,
     amount: Number(Number(winner.amount || 0).toFixed(2)),
@@ -229,12 +254,121 @@ const createBetOption = async (betOption) => {
     return insertBetOption(db, betOption)
 }
 
-const placeBet = async (user_id, bet_option_id, amount) => {
-    const result = await db.query(
+const placeBet = async (user_id, bet_option_id, amount, executor = db) => {
+    const result = await executor.query(
         "INSERT INTO user_bets (user_id, bet_option_id, amount) VALUES ($1, $2, $3) RETURNING *",
         [user_id, bet_option_id, amount],
     )
     return result.rows[0]
+}
+
+const placeBetForUser = async (user_id, bet_id, bet_option_id, amount) => {
+    if (!isValidUuid(String(user_id)) || !isValidUuid(String(bet_id)) || !isValidUuid(String(bet_option_id))) {
+        return { code: "OPTION_NOT_FOUND" }
+    }
+
+    const numericAmount = Number(amount)
+    if (!Number.isFinite(numericAmount) || numericAmount <= 0) {
+        return { code: "INVALID_BET_AMOUNT" }
+    }
+
+    const client = await db.getClient()
+
+    const rollbackWith = async (payload) => {
+        await client.query("ROLLBACK")
+        return payload
+    }
+
+    try {
+        await client.query("BEGIN")
+
+        const userResult = await client.query(
+            "SELECT balance FROM users WHERE id = $1 FOR UPDATE",
+            [user_id],
+        )
+        const user = userResult.rows[0]
+        if (!user) return rollbackWith({ code: "USER_NOT_FOUND" })
+
+        const betResult = await client.query(
+            "SELECT id, label, ends_at FROM bets WHERE id = $1 FOR UPDATE",
+            [bet_id],
+        )
+        const bet = betResult.rows[0]
+        if (!bet) return rollbackWith({ code: "BET_NOT_FOUND" })
+
+        if (new Date(bet.ends_at) < new Date()) {
+            return rollbackWith({ code: "BET_CLOSED" })
+        }
+
+        const optionResult = await client.query(
+            "SELECT id, bet_id, label, odd FROM bets_options WHERE id = $1 AND bet_id = $2 FOR UPDATE",
+            [bet_option_id, bet_id],
+        )
+        const option = optionResult.rows[0]
+        if (!option) return rollbackWith({ code: "OPTION_NOT_FOUND" })
+
+        const existingBetResult = await client.query(
+            `
+            SELECT ub.id, ub.bet_option_id, bo.label AS option_label
+            FROM user_bets ub
+            INNER JOIN bets_options bo ON bo.id = ub.bet_option_id
+            WHERE ub.user_id = $1 AND bo.bet_id = $2
+            LIMIT 1
+        `,
+            [user_id, bet_id],
+        )
+        const existingBet = existingBetResult.rows[0]
+        if (existingBet) {
+            return rollbackWith({
+                code: "BET_ALREADY_PLACED_ON_MARKET",
+                existingBetId: existingBet.id,
+                existingBetOptionId: existingBet.bet_option_id,
+                existingOptionLabel: existingBet.option_label,
+            })
+        }
+
+        if (Number(user.balance) < numericAmount) {
+            return rollbackWith({ code: "INSUFFICIENT_FUNDS" })
+        }
+
+        const balanceResult = await client.query(
+            `WITH upd AS (
+                UPDATE users
+                SET balance = balance - $1
+                WHERE id = $2 AND balance >= $1
+                RETURNING balance
+            ), ins AS (
+                INSERT INTO transactions (user_id, amount, type)
+                SELECT $2, $1, 'BET'::transaction_type
+                WHERE EXISTS (SELECT 1 FROM upd)
+                RETURNING id
+            )
+            SELECT balance FROM upd`,
+            [numericAmount, user_id],
+        )
+        const updatedBalance = balanceResult.rows[0]?.balance
+        if (updatedBalance === undefined) {
+            return rollbackWith({ code: "INSUFFICIENT_FUNDS" })
+        }
+
+        const placedBet = await placeBet(user_id, bet_option_id, numericAmount, client)
+
+        await client.query("COMMIT")
+
+        return {
+            ...placedBet,
+            bet_id,
+            bet_label: bet.label,
+            option_label: option.label,
+            odd: option.odd,
+            balance: updatedBalance,
+        }
+    } catch (error) {
+        await client.query("ROLLBACK")
+        throw error
+    } finally {
+        client.release()
+    }
 }
 
 const countBets = async (filters = {}) => {
@@ -588,7 +722,9 @@ export default {
     createBetWithOptions,
     deleteBet,
     findBets,
+    getUserBetSelections,
     placeBet,
+    placeBetForUser,
     getBets,
     getBetById,
     getBetSettlement,

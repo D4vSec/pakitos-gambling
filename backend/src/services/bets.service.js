@@ -52,9 +52,42 @@ const updateOddsForBet = async (betId) => {
 }
 
 const getBets = async (page = 1, limit = 20, filters = {}) => Bets.findBets(page, limit, filters)
+const getBetsForUser = async (userId, page = 1, limit = 20, filters = {}) => {
+    const bets = await Bets.findBets(page, limit, filters)
+    if (!Array.isArray(bets) || bets.length === 0) return []
+
+    const userSelections = await Bets.getUserBetSelections(
+        userId,
+        bets.map((bet) => bet.id),
+    )
+
+    const userSelectionsByBetId = new Map(
+        userSelections.map((selection) => [
+            selection.bet_id,
+            {
+                id: selection.id,
+                betOptionId: selection.bet_option_id,
+                optionLabel: selection.option_label,
+                amount: Number(selection.amount),
+                odd: Number(selection.odd),
+            },
+        ]),
+    )
+
+    return bets.map((bet) => {
+        const userBet = userSelectionsByBetId.get(bet.id) ?? null
+
+        return {
+            ...bet,
+            hasUserBet: userBet !== null,
+            userBet,
+        }
+    })
+}
 const countBets = async (filters = {}) => Bets.countBets(filters)
 const hasBetActivity = async (betId) => Bets.hasBetActivity(betId)
 const createBet = async (payload) => Bets.createBetWithOptions(payload)
+const placeBet = async (userId, betId, betOptionId, amount) => Bets.placeBetForUser(userId, betId, betOptionId, amount)
 const updateBet = async (betId, payload) => Bets.updateBet(betId, payload)
 const deleteBet = async (betId) => Bets.deleteBet(betId)
 const closeBet = async (betId) => Bets.closeBet(betId)
@@ -136,8 +169,10 @@ export default {
     deleteBet,
     getAdminBet,
     getBets,
+    getBetsForUser,
     getSettlementPreview,
     hasBetActivity,
+    placeBet,
     settleBet,
     updateBet,
     updateOddsForBet,
