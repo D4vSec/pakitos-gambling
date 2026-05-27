@@ -1,7 +1,10 @@
 import React from "react"
 import Badge from "@/components/badges/Badge"
+import { useLocale } from "@/providers/LocaleProvider"
 
 const TransactionBadgeSelector = ({ type }) => {
+  const { t } = useLocale()
+
   const types = {
     DEPOSIT: "bg-green-700 text-white",
     WITHDRAWAL: "bg-red-500 text-white",
@@ -14,7 +17,7 @@ const TransactionBadgeSelector = ({ type }) => {
 
   return (
     <Badge variant="ghost" className={`${types[type]} whitespace-nowrap`}>
-      {type.split("_").join(" ")}
+      {t(`adminPanel.userDetails.transactions.table.badges.${type}`)}
     </Badge>
   )
 }

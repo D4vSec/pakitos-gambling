@@ -140,7 +140,15 @@
         "details": "Details",
         "created_at": "Date",
         "ip_address": "IP Address",
-        "user_agent": "Browser / System"
+        "user_agent": "Browser / System",
+        "badges": {
+          "USER_REGISTER": "USER REGISTER",
+          "BET_PLACED": "BET PLACED",
+          "BET_RESULT": "BET RESULT",
+          "BALANCE_UPDATED": "BALANCE UPDATED",
+          "ADMIN_ACTION": "ADMIN ACTION",
+          "GAME_RESULT": "GAME RESULT"
+        }
       }
     },
 
@@ -158,7 +166,16 @@
         "table": {
           "type": "Type",
           "amount": "Amount",
-          "date": "Date"
+          "date": "Date",
+          "badges": {
+            "DEPOSIT": "DEPOSIT",
+            "WITHDRAWAL": "WITHDRAWAL",
+            "BET": "BET",
+            "WIN": "WIN",
+            "LOSE": "LOSE",
+            "BONUS": "BONUS",
+            "REFUND": "REFUND"
+          }
         }
       }
     }

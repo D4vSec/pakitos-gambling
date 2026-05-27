@@ -140,7 +140,15 @@
         "details": "Detalles",
         "created_at": "Fecha",
         "ip_address": "Dirección IP",
-        "user_agent": "Navegador / Sistema"
+        "user_agent": "Navegador / Sistema",
+        "badges": {
+          "USER_REGISTER": "REGISTRO DE USUARIO",
+          "BET_PLACED": "APUESTA REALIZADA",
+          "BET_RESULT": "RESULTADO DE APUESTA",
+          "BALANCE_UPDATED": "SALDO ACTUALIZADO",
+          "ADMIN_ACTION": "ACCIÓN DE ADMIN",
+          "GAME_RESULT": "RESULTADO DE JUEGO"
+        }
       }
     },
 
@@ -158,7 +166,16 @@
         "table": {
           "type": "Tipo",
           "amount": "Cantidad",
-          "date": "Fecha"
+          "date": "Fecha",
+          "badges": {
+            "DEPOSIT": "DEPÓSITO",
+            "WITHDRAWAL": "RETIRO",
+            "BET": "APUESTA",
+            "WIN": "GANANCIA",
+            "LOSE": "PÉRDIDA",
+            "BONUS": "BONUS",
+            "REFUND": "REEMBOLSO"
+          }
         }
       }
     }

@@ -140,7 +140,15 @@
         "details": "Detalii",
         "created_at": "Dată",
         "ip_address": "Adresă IP",
-        "user_agent": "Browser / Sistem"
+        "user_agent": "Browser / Sistem",
+        "badges": {
+          "USER_REGISTER": "ÎNREGISTRARE UTILIZATOR",
+          "BET_PLACED": "PARIU PLASAT",
+          "BET_RESULT": "REZULTAT PARIU",
+          "BALANCE_UPDATED": "SOLD ACTUALIZAT",
+          "ADMIN_ACTION": "ACȚIUNE ADMIN",
+          "GAME_RESULT": "REZULTAT JOC"
+        }
       }
     },
 
@@ -158,7 +166,16 @@
         "table": {
           "type": "Tip",
           "amount": "Sumă",
-          "date": "Dată"
+          "date": "Dată",
+          "badges": {
+            "DEPOSIT": "DEPUNERE",
+            "WITHDRAWAL": "RETRAGERE",
+            "BET": "PARIU",
+            "WIN": "CÂȘTIG",
+            "LOSE": "PIERDERE",
+            "BONUS": "BONUS",
+            "REFUND": "RAMBURSARE"
+          }
         }
       }
     }

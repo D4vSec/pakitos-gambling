@@ -1,7 +1,10 @@
 import React from "react"
 import Badge from "@/components/badges/Badge"
+import { useLocale } from "@/providers/LocaleProvider"
 
 const AuditBadgeSelector = ({ type }) => {
+  const { t } = useLocale()
+
   const types = {
     USER_REGISTER: "bg-green-500 text-white",
     BET_PLACED: "bg-amber-500 text-black",
@@ -13,7 +16,7 @@ const AuditBadgeSelector = ({ type }) => {
 
   return (
     <Badge variant="ghost" className={`${types[type]} whitespace-nowrap`}>
-      {type.split("_").join(" ")}
+      {t(`adminPanel.logs.table.badges.${type}`)}
     </Badge>
   )
 }
