@@ -1,10 +1,13 @@
 import jwt from "jsonwebtoken"
 import jwtConfig from "#config/jwt.config"
 import User from "#models/user.model"
-import Session from "#models/session.model"
-import { generateTokens } from "#controllers/auth.controller"
+import {
+	generateAccessToken,
+	revokeRefreshSession,
+	validateRefreshSession,
+} from "#services/auth.service"
 
-const { secret, refreshSecret } = jwtConfig
+const { secret } = jwtConfig
 
 const authMiddleware = async (req, res, next) => {
 	const authHeader = req.headers.authorization
@@ -18,7 +21,13 @@ const authMiddleware = async (req, res, next) => {
 
 	try {
 		const decoded = jwt.verify(accessToken, secret)
+		if (decoded?.id && decoded?.role) {
+			req.user = { id: decoded.id, role: decoded.role }
+			return next()
+		}
+
 		const user = await User.findUserById(decoded.id)
+
 		if (!user) {
 			return res.status(401).json({ code: "AUTH_INVALID_TOKEN" })
 		}
@@ -32,29 +41,22 @@ const authMiddleware = async (req, res, next) => {
 			}
 
 			try {
-				const decodedRefresh = jwt.verify(refreshToken, refreshSecret)
-				const sessions = await Session.getActiveSessionsByUserId(decodedRefresh.id)
+				const result = await validateRefreshSession(refreshToken)
 
-				const validSession = await Session.verifyTokenMatch(sessions, refreshToken)
-
-				if (!validSession || new Date(validSession.expires_at) < new Date()) {
-					return res.status(401).json({
-						code: "AUTH_INVALID_SESSION",
-					})
+				if (result.code) {
+					return res.status(401).json({ code: result.code })
 				}
 
-				await Session.revokeSession(validSession.id)
-				const user = await User.findUserById(decodedRefresh.id)
-				const tokens = generateTokens(user)
-
-				await Session.createSession(user.id, tokens.refreshToken, req.useragent ? JSON.stringify({ browser: req.useragent.browser, version: req.useragent.version, os: req.useragent.os, platform: req.useragent.platform, isMobile: req.useragent.isMobile, isTablet: req.useragent.isTablet, isDesktop: req.useragent.isDesktop }) : null)
-
-				req.user = { id: user.id, role: user.role }
-				res.setHeader("x-access-token", tokens.accessToken)
-				res.setHeader("x-refresh-token", tokens.refreshToken)
+				req.user = { id: result.user.id, role: result.user.role }
+				res.setHeader("x-access-token", generateAccessToken(result.user))
+				res.setHeader("x-refresh-token", refreshToken)
 
 				return next()
 			} catch (refreshErr) {
+				if (refreshErr.name === "TokenExpiredError") {
+					await revokeRefreshSession(refreshToken)
+				}
+
 				return res.status(401).json({ code: "AUTH_SESSION_EXPIRED" })
 			}
 		}

@@ -10,6 +10,33 @@ const isMethodValid = (method) =>
     method.toUpperCase(),
   )
 
+const TOKENS_STORAGE_KEY = "tokens"
+
+const getStoredTokens = () => {
+  const tokens = localStorage.getItem(TOKENS_STORAGE_KEY)
+  return tokens ? JSON.parse(tokens) : {}
+}
+
+const syncTokensFromHeaders = (response) => {
+  const accessToken = response.headers.get("x-access-token")
+  const refreshToken = response.headers.get("x-refresh-token")
+
+  if (!accessToken && !refreshToken) {
+    return
+  }
+
+  const tokens = getStoredTokens()
+
+  localStorage.setItem(
+    TOKENS_STORAGE_KEY,
+    JSON.stringify({
+      ...tokens,
+      ...(accessToken ? { accessToken } : {}),
+      ...(refreshToken ? { refreshToken } : {}),
+    }),
+  )
+}
+
 const useAPI = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
@@ -35,6 +62,8 @@ const useAPI = () => {
           body: options.body ? JSON.stringify(options.body) : undefined,
         }),
       })
+
+      syncTokensFromHeaders(response)
 
       // if (!response.ok) throw new Error(response.status)
       if (response.status === 204) {
