@@ -3,8 +3,10 @@ import {
     getFilterGroups,
     getSortClause,
     isValidUuid,
+    normalizeDate,
     normalizeList,
     pushContainsClause,
+    pushInClause,
 } from "#utils/admin-query.utils"
 
 const BET_STATUSES = Object.freeze(["open", "closed"])
@@ -16,6 +18,9 @@ const BET_SELECTABLE_COLUMNS = Object.freeze({
     ends_at: "bets.ends_at",
     createdAt: "bets.created_at",
     created_at: "bets.created_at",
+    optionsCount: "COUNT(bets_options.id)",
+    options_count: "COUNT(bets_options.id)",
+    options: "COUNT(bets_options.id)",
 })
 
 const applyBetFilter = (field, rawValues, clauses, values) => {
@@ -40,6 +45,16 @@ const applyBetFilter = (field, rawValues, clauses, values) => {
             clauses.push(`(${statusClauses.join(" OR ")})`)
             return false
         }
+        case "optionsCount":
+        case "options_count":
+        case "options":
+            pushInClause(
+                clauses,
+                values,
+                "(SELECT COUNT(*) FROM bets_options WHERE bets_options.bet_id = bets.id)",
+                normalizedValues.map((value) => Number(value)),
+            )
+            return false
         default:
             return false
     }
@@ -53,9 +68,36 @@ const buildBetFilters = (rawFilters = {}) => {
     if (rawFilters.name) impossible = applyBetFilter("name", rawFilters.name, clauses, values) || impossible
     if (rawFilters.label) impossible = applyBetFilter("label", rawFilters.label, clauses, values) || impossible
     if (rawFilters.status) impossible = applyBetFilter("status", rawFilters.status, clauses, values) || impossible
+    if (rawFilters.optionsCount) impossible = applyBetFilter("optionsCount", rawFilters.optionsCount, clauses, values) || impossible
+    if (rawFilters.options_count) impossible = applyBetFilter("options_count", rawFilters.options_count, clauses, values) || impossible
+    if (rawFilters.options) impossible = applyBetFilter("options", rawFilters.options, clauses, values) || impossible
 
     for (const filter of getFilterGroups(rawFilters)) {
         impossible = applyBetFilter(filter.field, filter.values, clauses, values) || impossible
+    }
+
+    const fromEndsAt = normalizeDate(rawFilters.fromEndsAt, "start")
+    if (fromEndsAt) {
+        values.push(fromEndsAt)
+        clauses.push(`bets.ends_at >= $${values.length}`)
+    }
+
+    const toEndsAt = normalizeDate(rawFilters.toEndsAt, "end")
+    if (toEndsAt) {
+        values.push(toEndsAt)
+        clauses.push(`bets.ends_at <= $${values.length}`)
+    }
+
+    const fromCreatedAt = normalizeDate(rawFilters.fromCreatedAt, "start")
+    if (fromCreatedAt) {
+        values.push(fromCreatedAt)
+        clauses.push(`bets.created_at >= $${values.length}`)
+    }
+
+    const toCreatedAt = normalizeDate(rawFilters.toCreatedAt, "end")
+    if (toCreatedAt) {
+        values.push(toCreatedAt)
+        clauses.push(`bets.created_at <= $${values.length}`)
     }
 
     if (impossible) return { where: "WHERE 1 = 0", values: [] }

@@ -6,6 +6,7 @@ import {
     createListQuerySchema,
     createStructuredFiltersSchema,
     csvEnumSchema,
+    csvNumberSchema,
     csvTextSchema,
     csvUuidSchema,
     toOptionalNumber,
@@ -15,20 +16,30 @@ import { isValidUuid } from "#utils/admin-query.utils"
 import logger from "#utils/logger.utils"
 
 const SORT_ORDERS = Object.freeze(["asc", "desc", "none"])
-const BET_FILTER_FIELDS = Object.freeze(["name", "label", "status"])
-const BET_SORT_FIELDS = Object.freeze(["name", "label", "status", "endsAt", "ends_at", "createdAt", "created_at"])
+const BET_FILTER_FIELDS = Object.freeze(["name", "label", "status", "optionsCount", "options_count", "options"])
+const BET_SORT_FIELDS = Object.freeze(["name", "label", "status", "endsAt", "ends_at", "createdAt", "created_at", "optionsCount", "options_count", "options"])
 const BET_STATUSES = Object.freeze(["open", "closed"])
 
 const betFilterValueSchemas = Object.freeze({
     name: csvTextSchema(),
     label: csvTextSchema(),
     status: csvEnumSchema(BET_STATUSES),
+    optionsCount: csvNumberSchema(),
+    options_count: csvNumberSchema(),
+    options: csvNumberSchema(),
 })
 
 const betsListQuerySchema = createListQuerySchema({
     name: betFilterValueSchemas.name.optional(),
     label: betFilterValueSchemas.label.optional(),
     status: betFilterValueSchemas.status.optional(),
+    optionsCount: betFilterValueSchemas.optionsCount.optional(),
+    options_count: betFilterValueSchemas.options_count.optional(),
+    options: betFilterValueSchemas.options.optional(),
+    fromEndsAt: z.string().refine(validateDateInput, { message: "INVALID_FROM_ENDS_AT" }).optional(),
+    toEndsAt: z.string().refine(validateDateInput, { message: "INVALID_TO_ENDS_AT" }).optional(),
+    fromCreatedAt: z.string().refine(validateDateInput, { message: "INVALID_FROM_CREATED_AT" }).optional(),
+    toCreatedAt: z.string().refine(validateDateInput, { message: "INVALID_TO_CREATED_AT" }).optional(),
     sortBy: z.enum(BET_SORT_FIELDS).optional(),
     sortOrder: z.enum(SORT_ORDERS).optional(),
     filterField: z.enum(BET_FILTER_FIELDS).optional(),
@@ -103,6 +114,25 @@ const parseBetListQuery = (query = {}) => {
         if (!parseSingleFilter?.success) {
             return { error: parseSingleFilter?.error?.issues ?? [{ message: "INVALID_FILTER_VALUE" }] }
         }
+    }
+
+    const dateRanges = [
+        [parsedQuery.data.fromEndsAt, parsedQuery.data.toEndsAt],
+        [parsedQuery.data.fromCreatedAt, parsedQuery.data.toCreatedAt],
+    ]
+    const hasInvalidDateRange = dateRanges.some(([fromDateValue, toDateValue]) => {
+        if (!fromDateValue || !toDateValue) return false
+
+        const fromDate = new Date(fromDateValue)
+        const toDate = new Date(toDateValue)
+
+        return !Number.isNaN(fromDate.getTime())
+            && !Number.isNaN(toDate.getTime())
+            && fromDate > toDate
+    })
+
+    if (hasInvalidDateRange) {
+        return { error: [{ message: "INVALID_DATE_RANGE" }] }
     }
 
     const filters = { ...parsedQuery.data }

@@ -146,6 +146,24 @@ describe('bets.controller admin endpoints', () => {
 		})
 	})
 
+	it('rejects invalid admin bet date ranges', async () => {
+		const res = createResponse()
+
+		await getAdminBets({
+			query: {
+				fromEndsAt: '2026-06-10',
+				toEndsAt: '2026-06-01',
+			},
+		}, res)
+
+		expect(BetService.countBets).not.toHaveBeenCalled()
+		expect(res.status).toHaveBeenCalledWith(400)
+		expect(res.json).toHaveBeenCalledWith({
+			code: 'INVALID_QUERY_PARAMS',
+			errors: [{ message: 'INVALID_DATE_RANGE' }],
+		})
+	})
+
 	describe('bets.controller placeBet', () => {
 		beforeEach(() => {
 			vi.clearAllMocks()

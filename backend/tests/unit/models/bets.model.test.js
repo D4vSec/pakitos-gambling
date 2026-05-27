@@ -35,6 +35,66 @@ describe('bets model', () => {
 		)
 	})
 
+	it('supports filtering bets by closing and created date ranges', async () => {
+		db.query.mockResolvedValueOnce({ rows: [{ id: 'bet-1', label: 'Final', status: 'open' }] })
+
+		await expect(
+			betsModel.findBets(1, 20, {
+				fromEndsAt: '2026-06-01',
+				toEndsAt: '2026-06-30',
+				fromCreatedAt: '2026-05-01',
+				toCreatedAt: '2026-05-31',
+				sortBy: 'createdAt',
+				sortOrder: 'desc',
+			}),
+		).resolves.toEqual([{ id: 'bet-1', label: 'Final', status: 'open' }])
+
+		expect(db.query).toHaveBeenCalledWith(
+			"SELECT bets.*, CASE WHEN bets.ends_at < CURRENT_TIMESTAMP THEN 'closed' ELSE 'open' END AS status, COALESCE(json_agg(json_build_object('id', bets_options.id, 'label', bets_options.label, 'odd', bets_options.odd) ORDER BY bets_options.id) FILTER (WHERE bets_options.id IS NOT NULL), '[]'::json) AS options FROM bets LEFT JOIN bets_options ON bets.id = bets_options.bet_id WHERE bets.ends_at >= $1 AND bets.ends_at <= $2 AND bets.created_at >= $3 AND bets.created_at <= $4 GROUP BY bets.id ORDER BY bets.created_at DESC LIMIT $5 OFFSET $6",
+			[
+				'2026-06-01T00:00:00.000Z',
+				'2026-06-30T23:59:59.999Z',
+				'2026-05-01T00:00:00.000Z',
+				'2026-05-31T23:59:59.999Z',
+				20,
+				0,
+			],
+		)
+	})
+
+	it('supports filtering bets by options count', async () => {
+		db.query.mockResolvedValueOnce({ rows: [{ id: 'bet-1', label: 'Final', status: 'open' }] })
+
+		await expect(
+			betsModel.findBets(1, 20, {
+				optionsCount: [2],
+				sortBy: 'endsAt',
+				sortOrder: 'asc',
+			}),
+		).resolves.toEqual([{ id: 'bet-1', label: 'Final', status: 'open' }])
+
+		expect(db.query).toHaveBeenCalledWith(
+			"SELECT bets.*, CASE WHEN bets.ends_at < CURRENT_TIMESTAMP THEN 'closed' ELSE 'open' END AS status, COALESCE(json_agg(json_build_object('id', bets_options.id, 'label', bets_options.label, 'odd', bets_options.odd) ORDER BY bets_options.id) FILTER (WHERE bets_options.id IS NOT NULL), '[]'::json) AS options FROM bets LEFT JOIN bets_options ON bets.id = bets_options.bet_id WHERE (SELECT COUNT(*) FROM bets_options WHERE bets_options.bet_id = bets.id) = $1 GROUP BY bets.id ORDER BY bets.ends_at ASC LIMIT $2 OFFSET $3",
+			[2, 20, 0],
+		)
+	})
+
+	it('supports sorting bets by options count', async () => {
+		db.query.mockResolvedValueOnce({ rows: [{ id: 'bet-1', label: 'Final', status: 'open' }] })
+
+		await expect(
+			betsModel.findBets(1, 20, {
+				sortBy: 'optionsCount',
+				sortOrder: 'desc',
+			}),
+		).resolves.toEqual([{ id: 'bet-1', label: 'Final', status: 'open' }])
+
+		expect(db.query).toHaveBeenCalledWith(
+			"SELECT bets.*, CASE WHEN bets.ends_at < CURRENT_TIMESTAMP THEN 'closed' ELSE 'open' END AS status, COALESCE(json_agg(json_build_object('id', bets_options.id, 'label', bets_options.label, 'odd', bets_options.odd) ORDER BY bets_options.id) FILTER (WHERE bets_options.id IS NOT NULL), '[]'::json) AS options FROM bets LEFT JOIN bets_options ON bets.id = bets_options.bet_id  GROUP BY bets.id ORDER BY COUNT(bets_options.id) DESC LIMIT $1 OFFSET $2",
+			[20, 0],
+		)
+	})
+
 	it('loads the user bet selections for the listed markets', async () => {
 		db.query.mockResolvedValueOnce({
 			rows: [{
