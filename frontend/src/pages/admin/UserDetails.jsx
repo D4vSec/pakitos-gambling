@@ -34,7 +34,7 @@ const UserDetails = () => {
   }, [getUserById, id])
 
   return loading ? (
-    <Loading />
+    <Loading clear />
   ) : (
     <div className="flex flex-col gap-6 w-full">
       <div>
