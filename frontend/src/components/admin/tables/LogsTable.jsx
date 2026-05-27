@@ -34,6 +34,7 @@ const LogsTable = () => {
 
   const {
     data,
+    isLoading,
     pagination,
     setPagination,
     sorting,
@@ -85,6 +86,7 @@ const LogsTable = () => {
         data={data?.logs || []}
         columns={columns}
         pageCount={data?.totalPages || 0}
+        isLoading={isLoading}
         pagination={pagination}
         setPagination={setPagination}
         sorting={sorting}

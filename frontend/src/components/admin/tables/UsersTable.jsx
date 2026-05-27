@@ -31,6 +31,7 @@ const UsersTable = () => {
 
   const {
     data,
+    isLoading,
     pagination,
     setPagination,
     sorting,
@@ -79,6 +80,7 @@ const UsersTable = () => {
         data={data?.users || []}
         columns={columns}
         pageCount={data?.totalPages || 0}
+        isLoading={isLoading}
         pagination={pagination}
         setPagination={setPagination}
         sorting={sorting}

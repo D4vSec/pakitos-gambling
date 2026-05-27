@@ -49,6 +49,7 @@ const UserTransactions = () => {
 
   const {
     data,
+    isLoading,
     pagination,
     setPagination,
     sorting,
@@ -89,6 +90,7 @@ const UserTransactions = () => {
         data={data?.transactions || []}
         columns={columns}
         pageCount={data?.totalPages || 0}
+        isLoading={isLoading}
         pagination={pagination}
         setPagination={setPagination}
         sorting={sorting}

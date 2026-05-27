@@ -13,6 +13,8 @@ const Table = ({
   data = [],
   columns = [],
   pageCount = 0,
+  isLoading = false,
+  striped = true,
   pagination,
   setPagination,
   sorting,
@@ -39,7 +41,8 @@ const Table = ({
   return (
     <div className="w-full min-w-0 max-w-full rounded-lg bg-base-200 p-4">
       <div className="w-full min-w-0 max-w-full overflow-x-auto">
-        <table className="table table-sm sm:table-md table-zebra">
+        <table
+          className={`table table-sm sm:table-md ${striped ? "table-zebra" : ""}`}>
           <thead>
             {table.getHeaderGroups().map((hg) => (
               <tr key={hg.id}>
@@ -60,7 +63,13 @@ const Table = ({
           </thead>
 
           <tbody>
-            {table.getRowModel().rows.length === 0 ? (
+            {isLoading ? (
+              <tr>
+                <td colSpan={columnCount} className="py-6 text-center">
+                  {t("message.info.loading")}
+                </td>
+              </tr>
+            ) : table.getRowModel().rows.length === 0 ? (
               <tr>
                 <td colSpan={columnCount} className="py-6 text-center">
                   {t("ui.tables.noData")}
@@ -68,7 +77,7 @@ const Table = ({
               </tr>
             ) : (
               table.getRowModel().rows.map((row) => (
-                <tr key={row.id}>
+                <tr key={row.id} className={striped ? "odd:bg-base-100 even:bg-base-200/50" : ""}>
                   {row.getVisibleCells().map((cell) => (
                     <td key={cell.id} className="whitespace-nowrap">
                       {flexRender(

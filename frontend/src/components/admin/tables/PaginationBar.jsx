@@ -13,7 +13,7 @@ const PaginationBar = ({ table }) => {
 
   const { pageIndex, pageSize } = state.pagination
   const totalPages = table.getPageCount()
-  const navButtonClass = "btn btn-sm btn-ghost sm:btn-outline"
+  const navButtonClass = "btn btn-sm btn-secondary btn-outline"
   const iconOnlyButtonClass = "px-2 sm:px-3"
 
   const paginationButtons = [
