@@ -93,14 +93,14 @@ const UserForm = () => {
         placeholder: t("forms.fields.role.placeholder"),
         as: "select",
         options: [
-          { label: "User", value: "user" },
-          { label: "Admin", value: "admin" },
+          { label: t("forms.fields.role.options.user"), value: "user" },
+          { label: t("forms.fields.role.options.admin"), value: "admin" },
         ],
       },
     ]
 
     return [...baseFields, ...passwordFields, ...rest]
-  }, [isEdit])
+  }, [isEdit, t])
 
   const fetchUser = async () => {
     if (!isEdit) {

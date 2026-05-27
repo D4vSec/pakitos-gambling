@@ -28,6 +28,11 @@ const UsersFilterBar = ({ filters, onChange }) => {
     onChange(nextFilters)
   }
 
+  const getFilterValueLabel = (field, value) => {
+    const optionLabelPrefix = USER_FILTER_CONFIG[field]?.optionLabelPrefix
+    return optionLabelPrefix ? t(`${optionLabelPrefix}.${value}`) : value
+  }
+
   const handleSubmit = () => {
     let nextAppliedFilters = [...appliedFilters]
 
@@ -120,7 +125,8 @@ const UsersFilterBar = ({ filters, onChange }) => {
             <FilterPill
               key={i}
               label={t(`adminPanel.users.table.${f.field}`) || f.field}
-              value={f.values.join(", ")}
+              value={f.values.map((value) => getFilterValueLabel(f.field, value)).join(", ")}
+              isEnum={USER_FILTER_CONFIG[f.field]?.type === "enum"}
               onRemove={() =>
                 removeAppliedFilter({
                   filters: appliedFilters.filter((_, idx) => idx !== i),

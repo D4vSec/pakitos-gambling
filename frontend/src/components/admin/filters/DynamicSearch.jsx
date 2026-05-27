@@ -46,7 +46,8 @@ const DynamicSearch = ({
   }
   const getOptionLabel = (option) => {
     const optionLabelPrefix = selectedConfig?.optionLabelPrefix
-    return optionLabelPrefix ? t(`${optionLabelPrefix}.${option}`) : option
+    const label = optionLabelPrefix ? t(`${optionLabelPrefix}.${option}`) : option
+    return typeof label === "string" ? label.toUpperCase() : label
   }
 
   return (
@@ -77,7 +78,7 @@ const DynamicSearch = ({
 
             {selectedConfig?.type === "enum" ? (
               <select
-                className="select select-bordered select-md bg-base-100 w-full"
+                className="select select-bordered select-md bg-base-100 w-full uppercase"
                 value={selectedValue}
                 onChange={(e) => onValueChange?.(e.target.value)}
                 disabled={!selectedField}>

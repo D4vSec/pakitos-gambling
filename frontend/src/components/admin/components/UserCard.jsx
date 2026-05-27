@@ -1,5 +1,6 @@
 import React from "react"
 import { useLocale } from "@/providers/LocaleProvider"
+import BitcoinSVG from "@/components/svg/pictures/BitcoinSVG"
 
 const UserCard = ({ user }) => {
   const { t } = useLocale()
@@ -12,34 +13,26 @@ const UserCard = ({ user }) => {
               {t("adminPanel.userDetails.detailsCard.title")}
             </h2>
             <p className="wrap-break-word text-sm sm:text-base">
-              <strong>
-                {`${t("adminPanel.userDetails.detailsCard.username")}: `}
-              </strong>
+              <strong>{`${t("adminPanel.userDetails.detailsCard.username")}: `}</strong>
               {user.username}
             </p>
             <p className="wrap-break-word text-sm sm:text-base">
-              <strong>
-                {`${t("adminPanel.userDetails.detailsCard.email")}: `}
-              </strong>{" "}
-              {user.email}
+              <strong>{`${t("adminPanel.userDetails.detailsCard.email")}: `}</strong> {user.email}
             </p>
             <p className="wrap-break-word text-sm capitalize sm:text-base">
-              <strong>
-                {`${t("adminPanel.userDetails.detailsCard.role")}: `}
-              </strong>{" "}
-              {user.role}
+              <strong>{`${t("adminPanel.userDetails.detailsCard.role")}: `}</strong> {user.role}
             </p>
-            <p className="wrap-break-word text-sm sm:text-base">
-              <strong>
-                {`${t("adminPanel.userDetails.detailsCard.balance")}: `}
+            <p className="wrap-break-word text-sm sm:text-base flex gap-1">
+              <strong >
+                {`${t("adminPanel.userDetails.detailsCard.balance")}: `} 
               </strong>
-              {user.balance}
+              <span className="flex gap-1">
+                {user.balance} <BitcoinSVG />
+              </span>
             </p>
           </>
         ) : (
-          <h3 className="text-center text-lg">
-            {t("adminPanel.userDetails.detailsCard.noUser")}
-          </h3>
+          <h3 className="text-center text-lg">{t("adminPanel.userDetails.detailsCard.noUser")}</h3>
         )}
       </div>
     </div>

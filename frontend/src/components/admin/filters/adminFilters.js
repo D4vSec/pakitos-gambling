@@ -11,6 +11,7 @@ export const AUDIT_FILTER_CONFIG = {
       "GAME_RESULT",
       "USER_REGISTER",
     ],
+    optionLabelPrefix: "adminPanel.logs.table.badges",
   },
   user_id: { type: "uuid" },
   details: { type: "text" },
@@ -24,6 +25,7 @@ export const USER_FILTER_CONFIG = {
   role: {
     type: "enum",
     options: ["admin", "user"],
+    optionLabelPrefix: "forms.fields.role.options",
   },
   balance: { type: "text" },
 }
@@ -62,6 +64,7 @@ export const TRANSACTION_FILTER_CONFIG = {
   type: {
     type: "enum",
     options: ["BET", "BONUS", "DEPOSIT", "REFUND", "WIN", "WITHDRAWAL"],
+    optionLabelPrefix: "adminPanel.userDetails.transactions.table.badges",
   },
   amount: {
     type: "text",

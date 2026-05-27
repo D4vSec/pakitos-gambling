@@ -168,6 +168,7 @@ const AdminBetsFilterBar = ({ filters, onChange }) => {
                       .join(", ")
                   : filter.values.join(", ")
               }
+              isEnum={ADMIN_BET_FILTER_CONFIG[filter.field]?.type === "enum"}
               onRemove={() =>
                 removeAppliedFilter({
                   filters: appliedFilters.filter(

@@ -22,8 +22,8 @@
       "new": "NEW",
       "popular": "POPULAR",
       "teachers": "TEACHERS COLAB",
-      "user": "User",
-      "admin": "Admin"
+      "user": "USER",
+      "admin": "ADMIN"
     },
 
     "tooltip": {
@@ -552,8 +552,8 @@
 
     "bets": {
       "status": {
-        "open": "Open",
-        "closed": "Closed"
+        "open": "OPEN",
+        "closed": "CLOSED"
       },
       "filters": {
         "search": "Search market",

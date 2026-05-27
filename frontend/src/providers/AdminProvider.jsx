@@ -64,21 +64,24 @@ const AdminProvider = ({ children }) => {
     [addNotification, buildHeaders, buildQueryParams, get, t],
   )
 
-  const getUserById = async (userId) => {
-    try {
-      const res = await get(`/api/v1/user/${userId}`, {
-        headers: buildHeaders(),
-      })
+  const getUserById = useCallback(
+    async (userId) => {
+      try {
+        const res = await get(`/api/v1/user/${userId}`, {
+          headers: buildHeaders(),
+        })
 
-      if (res.code) {
-        throw new Error(res.code || "Error al obtener usuarios")
+        if (res.code) {
+          throw new Error(res.code || "Error al obtener usuarios")
+        }
+
+        return res
+      } catch (error) {
+        addNotification(t(`message.error.${error.message}`), "error")
       }
-
-      return res
-    } catch (error) {
-      addNotification(t(`message.error.${error.message}`), "error")
-    }
-  }
+    },
+    [addNotification, buildHeaders, get, t],
+  )
 
   const updateUser = async (userId, userData) => {
     try {

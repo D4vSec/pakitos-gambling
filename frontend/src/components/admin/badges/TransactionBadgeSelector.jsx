@@ -9,7 +9,7 @@ const TransactionBadgeSelector = ({ type }) => {
     DEPOSIT: "bg-green-700 text-white",
     WITHDRAWAL: "bg-red-500 text-white",
     BET: "bg-amber-500 text-black",
-    WIN: "bg-emerald-500 text-white",
+    WIN: "bg-emerald-500 text-black",
     LOSE: "bg-rose-600 text-white",
     BONUS: "bg-purple-500 text-white",
     REFUND: "bg-cyan-500 text-black",

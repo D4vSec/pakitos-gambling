@@ -6,7 +6,7 @@ const AuditBadgeSelector = ({ type }) => {
   const { t } = useLocale()
 
   const types = {
-    USER_REGISTER: "bg-green-500 text-white",
+    USER_REGISTER: "bg-green-500 text-black",
     BET_PLACED: "bg-amber-500 text-black",
     BET_RESULT: "bg-blue-500 text-white",
     BALANCE_UPDATED: "bg-cyan-500 text-black",

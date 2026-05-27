@@ -30,6 +30,11 @@ const LogsFilterBar = ({ filters, onChange }) => {
     onChange(nextFilters)
   }
 
+  const getFilterValueLabel = (field, value) => {
+    const optionLabelPrefix = AUDIT_FILTER_CONFIG[field]?.optionLabelPrefix
+    return optionLabelPrefix ? t(`${optionLabelPrefix}.${value}`) : value
+  }
+
   const handleSubmit = () => {
     let nextAppliedFilters = [...appliedFilters]
 
@@ -114,7 +119,8 @@ const LogsFilterBar = ({ filters, onChange }) => {
             <FilterPill
               key={i}
               label={t(`adminPanel.logs.table.${f.field}`) || f.field}
-              value={f.values.join(", ")}
+              value={f.values.map((value) => getFilterValueLabel(f.field, value)).join(", ")}
+              isEnum={AUDIT_FILTER_CONFIG[f.field]?.type === "enum"}
               onRemove={() =>
                 removeAppliedFilter({
                   filters: appliedFilters.filter((_, idx) => idx !== i),

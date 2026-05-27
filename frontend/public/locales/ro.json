@@ -22,8 +22,8 @@
       "new": "NOU",
       "popular": "POPULAR",
       "teachers": "COLABORARE PROFESORI",
-      "user": "Utilizator",
-      "admin": "Admin"
+      "user": "UTILIZATOR",
+      "admin": "ADMIN"
     },
 
     "tooltip": {
@@ -553,8 +553,8 @@
 
     "bets": {
       "status": {
-        "open": "Deschis",
-        "closed": "Închis"
+        "open": "DESCHIS",
+        "closed": "ÎNCHIS"
       },
       "filters": {
         "search": "Caută piață",

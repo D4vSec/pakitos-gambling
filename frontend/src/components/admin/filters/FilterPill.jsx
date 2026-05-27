@@ -1,8 +1,10 @@
 import CloseSVG from "@/components/svg/actions/CloseSVG"
 import { useLocale } from "@/providers/LocaleProvider"
 
-const FilterPill = ({ label, value, onRemove }) => {
+const FilterPill = ({ label, value, onRemove, isEnum = false }) => {
   const { t } = useLocale()
+  const displayValue =
+    isEnum && typeof value === "string" ? value.toUpperCase() : value
 
   return (
     <div className="badge badge-primary h-auto py-1.5 px-2 md:px-3 gap-2 shadow-sm transition-all animate-in fade-in zoom-in duration-200 max-w-full flex items-center">
@@ -11,7 +13,7 @@ const FilterPill = ({ label, value, onRemove }) => {
           {label}:
         </span>
         <span className="text-xs md:text-sm font-medium truncate max-w-30 md:max-w-62.5">
-          {value}
+          {displayValue}
         </span>
       </div>
 

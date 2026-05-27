@@ -82,6 +82,7 @@ const BetsFilterBar = ({ filters, onChange }) => {
             <FilterPill
               label={t("pages.bets.filters.status")}
               value={t(`pages.bets.status.${filters.status}`)}
+              isEnum
               onRemove={() => removeAppliedFilter({ status: "" })}
             />
           )}

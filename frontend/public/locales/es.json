@@ -22,8 +22,8 @@
       "new": "NUEVO",
       "popular": "POPULAR",
       "teachers": "COLAB PROFESORES",
-      "user": "Usuario",
-      "admin": "Administrador"
+      "user": "USUARIO",
+      "admin": "ADMINISTADOR"
     },
 
     "tooltip": {
@@ -142,12 +142,12 @@
         "ip_address": "Dirección IP",
         "user_agent": "Navegador / Sistema",
         "badges": {
-          "USER_REGISTER": "REGISTRO DE USUARIO",
+          "USER_REGISTER": "REGISTRO USUARIO",
           "BET_PLACED": "APUESTA REALIZADA",
-          "BET_RESULT": "RESULTADO DE APUESTA",
+          "BET_RESULT": "RESULTADO APUESTA",
           "BALANCE_UPDATED": "SALDO ACTUALIZADO",
-          "ADMIN_ACTION": "ACCIÓN DE ADMIN",
-          "GAME_RESULT": "RESULTADO DE JUEGO"
+          "ADMIN_ACTION": "ACCIÓN ADMIN",
+          "GAME_RESULT": "RESULTADO JUEGO"
         }
       }
     },
@@ -553,8 +553,8 @@
 
     "bets": {
       "status": {
-        "open": "Abierta",
-        "closed": "Cerrada"
+        "open": "ABIERTA",
+        "closed": "CERRADA"
       },
       "filters": {
         "search": "Buscar mercado",
