@@ -7,7 +7,11 @@ import Loading from "@/components/Loading"
 import GradientBg from "@/components/layout/GradientBg"
 import useBets from "@/hooks/useBets"
 import { useLocale } from "@/providers/LocaleProvider"
-import { formatBetAmount, formatBetDate, normalizeBetOdd } from "@/utils/betsUtils"
+import {
+  formatBetAmount,
+  formatBetDate,
+  normalizeBetOdd,
+} from "@/utils/betsUtils"
 import { useLocation, useParams } from "react-router-dom"
 import Subtitle from "@/components/layout/fonts/Subtitle"
 import { useNotification } from "@/providers/NotificationProvider"
@@ -21,7 +25,9 @@ const sortOptionsForDetails = (options = []) =>
 
     if (labelCompare !== 0) return labelCompare
 
-    return String(firstOption?.id || "").localeCompare(String(secondOption?.id || ""))
+    return String(firstOption?.id || "").localeCompare(
+      String(secondOption?.id || ""),
+    )
   })
 
 const BetDetailsPage = () => {
@@ -32,7 +38,9 @@ const BetDetailsPage = () => {
   const { getBets, getBetOptions, placeBet } = useBets()
   const initialBetRef = useRef(location.state?.bet || null)
   const [bet, setBet] = useState(location.state?.bet || null)
-  const [options, setOptions] = useState(sortOptionsForDetails(location.state?.bet?.options || []))
+  const [options, setOptions] = useState(
+    sortOptionsForDetails(location.state?.bet?.options || []),
+  )
   const [selectedOptionId, setSelectedOptionId] = useState(
     location.state?.bet?.options?.[0]?.id || "",
   )
@@ -45,9 +53,14 @@ const BetDetailsPage = () => {
       if (showLoading) setLoading(true)
 
       try {
-        const [markets, marketOptions] = await Promise.all([getBets(), getBetOptions(betId)])
+        const [markets, marketOptions] = await Promise.all([
+          getBets(),
+          getBetOptions(betId),
+        ])
         const currentBet =
-          markets.find((market) => market.id === betId) || initialBetRef.current || null
+          markets.find((market) => market.id === betId) ||
+          initialBetRef.current ||
+          null
         const nextOptions = sortOptionsForDetails(
           marketOptions.length > 0 ? marketOptions : currentBet?.options || [],
         )
@@ -58,12 +71,17 @@ const BetDetailsPage = () => {
           if (
             currentBet?.hasUserBet &&
             currentBet?.userBet?.betOptionId &&
-            nextOptions.some((option) => option.id === currentBet.userBet.betOptionId)
+            nextOptions.some(
+              (option) => option.id === currentBet.userBet.betOptionId,
+            )
           ) {
             return currentBet.userBet.betOptionId
           }
 
-          if (currentOptionId && nextOptions.some((option) => option.id === currentOptionId)) {
+          if (
+            currentOptionId &&
+            nextOptions.some((option) => option.id === currentOptionId)
+          ) {
             return currentOptionId
           }
 
@@ -94,15 +112,21 @@ const BetDetailsPage = () => {
   const isClosed = bet?.status === "closed"
   const hasUserBet = Boolean(bet?.hasUserBet)
   const userBet = bet?.userBet || null
-  const selectedOption = options.find((option) => option.id === selectedOptionId) || null
+  const selectedOption =
+    options.find((option) => option.id === selectedOptionId) || null
   const displayedOptions = options.map((option) => ({
     ...option,
-    odd: hasUserBet && option.id === userBet?.betOptionId ? userBet.odd : option.odd,
+    odd:
+      hasUserBet && option.id === userBet?.betOptionId
+        ? userBet.odd
+        : option.odd,
   }))
   const activeOptionLabel = hasUserBet
     ? userBet?.optionLabel || selectedOption?.label
     : selectedOption?.label
-  const activeOdd = hasUserBet ? Number(userBet?.odd) : Number(selectedOption?.odd)
+  const activeOdd = hasUserBet
+    ? Number(userBet?.odd)
+    : Number(selectedOption?.odd)
   const numericAmount = Number(amount)
   const summaryAmount = hasUserBet
     ? Number(userBet?.amount)
@@ -110,7 +134,9 @@ const BetDetailsPage = () => {
       ? numericAmount
       : 0
   const possibleOutcome =
-    Number.isFinite(summaryAmount) && Number.isFinite(activeOdd) ? summaryAmount * activeOdd : 0
+    Number.isFinite(summaryAmount) && Number.isFinite(activeOdd)
+      ? summaryAmount * activeOdd
+      : 0
   const isSubmitDisabled =
     isClosed ||
     hasUserBet ||
@@ -148,7 +174,10 @@ const BetDetailsPage = () => {
       amount: numericAmount,
     })
 
-    if (!result.success && result.error?.message === "BET_ALREADY_PLACED_ON_MARKET") {
+    if (
+      !result.success &&
+      result.error?.message === "BET_ALREADY_PLACED_ON_MARKET"
+    ) {
       const existingOptionLabel = result.error?.details?.existingOptionLabel
 
       if (existingOptionLabel) {
@@ -185,7 +214,9 @@ const BetDetailsPage = () => {
       <div className="flex w-full max-w-7xl min-w-0 flex-col gap-6 overflow-x-hidden">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <GoBackBtn link="/bets" />
-          <Button variant="secondary" onClick={() => loadBet({ showLoading: true })}>
+          <Button
+            variant="secondary"
+            onClick={() => loadBet({ showLoading: true })}>
             {t("pages.bets.detail.refresh")}
           </Button>
         </div>
@@ -195,7 +226,7 @@ const BetDetailsPage = () => {
           <div className="flex min-w-0 flex-col gap-2 md:gap-3">
             <div className="flex min-w-0 flex-col gap-4 md:gap-5">
               <BetStatusBadge status={bet.status} />
-              <Subtitle className="min-w-0 wrap-break-words text-left text-3xl md:text-5xl">
+              <Subtitle className="min-w-0 wrap-wrap-break-word text-left text-3xl md:text-5xl">
                 {bet.label}
               </Subtitle>
             </div>
@@ -208,15 +239,13 @@ const BetDetailsPage = () => {
             {infoCards.map((item) => (
               <div
                 key={item.label}
-                className="min-w-0 rounded-2xl border border-base-300 bg-base-300/70 p-3 md:p-4"
-              >
+                className="min-w-0 rounded-2xl border border-base-300 bg-base-300/70 p-3 md:p-4">
                 <p className="text-xs font-semibold uppercase tracking-[0.16em] text-base-content/75">
                   {item.label}
                 </p>
 
                 <p
-                  className={`mt-2 wrap-break-words text-lg font-semibold ${item.className || ""}`}
-                >
+                  className={`mt-2 wrap-wrap-break-word text-lg font-semibold ${item.className || ""}`}>
                   {item.value}
                 </p>
               </div>
@@ -228,7 +257,9 @@ const BetDetailsPage = () => {
         <div className="grid min-w-0 gap-6 xl:grid-cols-[minmax(0,1.6fr)_minmax(0,0.9fr)]">
           <section className="min-w-0 rounded-2xl border border-base-300 bg-base-100 p-5 shadow-xl md:p-6">
             <div className="mb-4">
-              <h2 className="text-2xl font-bold">{t("pages.bets.detail.options")}</h2>
+              <h2 className="text-2xl font-bold">
+                {t("pages.bets.detail.options")}
+              </h2>
               <p className="mt-2 text-sm text-base-content/70">
                 {hasUserBet
                   ? t("pages.bets.detail.alreadyPlacedMessage")
@@ -258,8 +289,12 @@ const BetDetailsPage = () => {
 
           {/* BET NOW*/}
           <aside className="min-w-0 rounded-2xl border border-base-300 bg-base-200 p-5 shadow-xl md:p-6">
-            <h2 className="text-2xl font-bold">{t("pages.bets.detail.placeBet")}</h2>
-            <p className="mt-2 text-sm text-base-content/70">{t("pages.bets.detail.selection")}</p>
+            <h2 className="text-2xl font-bold">
+              {t("pages.bets.detail.placeBet")}
+            </h2>
+            <p className="mt-2 text-sm text-base-content/70">
+              {t("pages.bets.detail.selection")}
+            </p>
 
             <div className="mt-6 flex flex-col gap-4">
               <div className="flex min-w-0 items-start justify-between gap-3 rounded-2xl border border-base-300 bg-base-200/70 p-4">
@@ -267,7 +302,7 @@ const BetDetailsPage = () => {
                   <p className="text-xs font-semibold uppercase tracking-[0.16em] text-base-content/50">
                     {t("pages.bets.detail.selectedOption")}
                   </p>
-                  <p className="mt-2 wrap-break-words text-lg font-semibold">
+                  <p className="mt-2 wrap-wrap-break-word text-lg font-semibold">
                     {activeOptionLabel || t("pages.bets.detail.pickOption")}
                   </p>
                 </div>
@@ -303,7 +338,8 @@ const BetDetailsPage = () => {
                     {t("pages.bets.detail.totalAmountBet")}
                   </span>
                   <p className="flex shrink-0 items-center gap-1 font-semibold">
-                    {formatBetAmount(summaryAmount)} <BitcoinSVG className="w-2 h-2" />
+                    {formatBetAmount(summaryAmount)}{" "}
+                    <BitcoinSVG className="w-2 h-2" />
                   </p>
                 </div>
                 <div className="mt-2 flex flex-wrap items-center justify-between gap-3 text-sm">
@@ -311,7 +347,8 @@ const BetDetailsPage = () => {
                     {t("pages.bets.detail.possibleOutcome")}
                   </span>
                   <p className="flex shrink-0 items-center gap-1 font-semibold text-success">
-                    {formatBetAmount(possibleOutcome)} <BitcoinSVG className="w-2 h-2" />
+                    {formatBetAmount(possibleOutcome)}{" "}
+                    <BitcoinSVG className="w-2 h-2" />
                   </p>
                 </div>
               </div>
@@ -331,8 +368,7 @@ const BetDetailsPage = () => {
                   variant={isClosed ? "secondary" : "primary"}
                   className="w-full"
                   disabled={isSubmitDisabled}
-                  onClick={() => onBet()}
-                >
+                  onClick={() => onBet()}>
                   {t("pages.bets.detail.placeBet")}
                 </Button>
               )}

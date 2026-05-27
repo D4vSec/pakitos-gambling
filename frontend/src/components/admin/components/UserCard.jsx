@@ -4,32 +4,32 @@ import { useLocale } from "@/providers/LocaleProvider"
 const UserCard = ({ user }) => {
   const { t } = useLocale()
   return (
-    <div className="card bg-base-100 shadow-sm w-full">
-      <div className="card-body">
+    <div className="card w-full bg-base-100 shadow-sm lg:h-fit">
+      <div className="card-body gap-3 p-5 sm:p-6">
         {user ? (
           <>
-            <h2 className="card-title">
+            <h2 className="card-title text-xl sm:text-2xl">
               {t("adminPanel.userDetails.detailsCard.title")}
             </h2>
-            <p>
+            <p className="wrap-break-word text-sm sm:text-base">
               <strong>
                 {`${t("adminPanel.userDetails.detailsCard.username")}: `}
               </strong>
               {user.username}
             </p>
-            <p>
+            <p className="wrap-break-word text-sm sm:text-base">
               <strong>
                 {`${t("adminPanel.userDetails.detailsCard.email")}: `}
               </strong>{" "}
               {user.email}
             </p>
-            <p>
+            <p className="wrap-break-word text-sm capitalize sm:text-base">
               <strong>
                 {`${t("adminPanel.userDetails.detailsCard.role")}: `}
               </strong>{" "}
               {user.role}
             </p>
-            <p>
+            <p className="wrap-break-word text-sm sm:text-base">
               <strong>
                 {`${t("adminPanel.userDetails.detailsCard.balance")}: `}
               </strong>

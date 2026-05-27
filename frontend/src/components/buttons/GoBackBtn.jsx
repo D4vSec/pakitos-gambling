@@ -1,7 +1,7 @@
 import React from "react"
 import { useLocale } from "@/providers/LocaleProvider"
 import { useNavigate } from "react-router-dom"
-import ChevronLeft from "../svg/actions/ChevronLeft"
+import ChevronLeftSVG from "../svg/actions/ChevronLeftSVG"
 import Button from "./Button"
 
 const GoBackBtn = ({ link }) => {
@@ -10,7 +10,7 @@ const GoBackBtn = ({ link }) => {
   return (
     <Button
       variant="neutral"
-      svg={<ChevronLeft />}
+      svg={<ChevronLeftSVG />}
       onClick={() => navigate(link || -1)}>
       {t("forms.buttons.goBack")}
     </Button>

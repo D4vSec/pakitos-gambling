@@ -13,33 +13,43 @@ const UserDetails = () => {
   const [loading, setLoading] = useState(true)
   const { getUserById } = useAdmin()
   const { id } = useParams()
-
-  const loadUser = async () => {
-    setLoading(true)
-    const res = await getUserById(id)
-    setUser(res)
-    setLoading(false)
-  }
+  const { t } = useLocale()
 
   useEffect(() => {
-    loadUser()
-  }, [id])
+    let isActive = true
+
+    const fetchUser = async () => {
+      const res = await getUserById(id)
+
+      if (!isActive) return
+
+      setUser(res)
+      setLoading(false)
+    }
+
+    fetchUser()
+
+    return () => {
+      isActive = false
+    }
+  }, [getUserById, id])
 
   return loading ? (
     <Loading />
   ) : (
     <GradientBg>
-      <div className="flex flex-col gap-6 w-8/10">
+      <div className="flex flex-col gap-6 w-full">
         <div>
           <GoBackBtn />
         </div>
-        <div className="grid gap-6 grid-cols-1 md:grid-cols-2 md:grid-rows-[auto_1fr] w-full">
-          <UserCard user={user} />
-          <div className="bg-accent rounded-lg flex items-center justify-center text-white">
-            Future chart
+        <div className="flex flex-col gap-6  lg:grid lg:grid-cols-[minmax(280px,360px)_minmax(0,1fr)] lg:items-start">
+          <div className="w-full lg:max-w-sm">
+            <UserCard user={user} />
           </div>
-          <div className="md:col-span-2">
-            <h2 className="text-2xl font-bold mb-2">Transactions</h2>
+          <div className="min-w-0 w-full">
+            <h2 className="mb-3 text-2xl font-bold">
+              {t("adminPanel.userDetails.transactions.title")}
+            </h2>
             <UserTransactions />
           </div>
         </div>

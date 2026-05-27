@@ -15,7 +15,8 @@ const UserTransactions = () => {
   const { t } = useLocale()
 
   const isValidUUID = (id) => {
-    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+    const uuidRegex =
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
     return uuidRegex.test(id)
   }
 
@@ -46,8 +47,15 @@ const UserTransactions = () => {
 
   const initialSorting = useMemo(() => [{ id: "created_at", desc: true }], [])
 
-  const { data, pagination, setPagination, sorting, setSorting, filters, handleFilterChange } =
-    useTable(fetchWithId, initialFilters, initialSorting)
+  const {
+    data,
+    pagination,
+    setPagination,
+    sorting,
+    setSorting,
+    filters,
+    handleFilterChange,
+  } = useTable(fetchWithId, initialFilters, initialSorting)
 
   const columns = useMemo(
     () => [

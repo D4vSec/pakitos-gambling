@@ -28,9 +28,9 @@ const DynamicSearch = ({ config, onAddFilter, translationPath }) => {
         </span>
       </label>
 
-      <div className="flex flex-col sm:flex-row  items-stretch w-full">
+      <div className="grid grid-cols-2 items-stretch gap-2 w-full sm:flex sm:flex-row">
         <select
-          className="select select-bordered select-md bg-base-100 w-full sm:w-44 md:w-48 sm:shrink-0"
+          className="select select-bordered select-md bg-base-100 flex-1 sm:w-44 md:w-48 sm:shrink-0"
           value={localField}
           onChange={(e) => {
             setLocalField(e.target.value)
@@ -49,7 +49,7 @@ const DynamicSearch = ({ config, onAddFilter, translationPath }) => {
 
         {selectedConfig?.type === "enum" ? (
           <select
-            className="select select-bordered select-md bg-base-100 w-full min-w-0 sm:flex-1"
+            className="select select-bordered select-md bg-base-100 w-full min-w-0 flex-2"
             value={localValue}
             onChange={(e) => setLocalValue(e.target.value)}
             disabled={!localField}>
@@ -63,7 +63,7 @@ const DynamicSearch = ({ config, onAddFilter, translationPath }) => {
           </select>
         ) : (
           <input
-            className="input input-bordered input-md bg-base-100 w-full min-w-0 sm:flex-1"
+            className="input input-bordered input-md bg-base-100 w-full min-w-0 flex-2"
             placeholder={localField ? t("ui.tables.filters.pressEnter") : "---"}
             value={localValue}
             onChange={(e) => setLocalValue(e.target.value)}
@@ -73,7 +73,7 @@ const DynamicSearch = ({ config, onAddFilter, translationPath }) => {
 
         <button
           type="submit"
-          className="btn btn-primary btn-md w-full sm:w-auto sm:self-stretch sm:shrink-0 "
+          className="btn btn-primary btn-md col-span-2 w-full sm:w-auto sm:self-stretch sm:shrink-0"
           disabled={!localValue}>
           <SearchSVG className="w-4 h-4" />
         </button>

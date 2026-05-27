@@ -19,22 +19,22 @@ const NumericRangeInput = ({
         </span>
       </label>
 
-      <div className="flex flex-col sm:flex-row bg-base-100 rounded-lg border border-base-300 shadow-sm sm:h-8 overflow-hidden">
+      <div className="flex items-stretch w-full gap-1">
         <input
           type="number"
           placeholder={t("ui.tables.filters.min")}
-          className="input input-ghost input-md focus:bg-transparent h-10 sm:h-full w-full px-3 sm:px-2 outline-none border-none text-xs min-w-0"
+          className="input input-bordered input-md bg-base-100 w-full min-w-0"
           value={minValue || ""}
           onChange={(e) => onChange({ [`min${name}`]: e.target.value })}
         />
-        <span className="hidden sm:flex opacity-20 font-light shrink-0 items-center">
+        <span className="flex opacity-50 font-light shrink-0 items-center">
           |
         </span>
         <div className="sm:hidden h-px bg-base-300/60 mx-2" />
         <input
           type="number"
           placeholder={t("ui.tables.filters.max")}
-          className="input input-ghost input-md focus:bg-transparent h-10 sm:h-full w-full px-3 sm:px-2 outline-none border-none text-xs min-w-0"
+          className="input input-bordered input-md bg-base-100 w-full min-w-0"
           value={maxValue || ""}
           onChange={(e) => onChange({ [`max${name}`]: e.target.value })}
         />

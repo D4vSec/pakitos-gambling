@@ -26,7 +26,9 @@ const BetOptionPill = ({
       } ${disabled ? "cursor-not-allowed opacity-60" : "cursor-pointer"}`}>
       <div className="flex min-w-0 items-center justify-between gap-3">
         <div className="min-w-0 flex-1">
-          <p className="break-words text-sm font-semibold sm:text-md">{label}</p>
+          <p className="wrap-break-word text-sm font-semibold sm:text-md">
+            {label}
+          </p>
           <p className="text-xs sm:text-sm text-base-content/60">
             {t("pages.bets.detail.odds")}
           </p>

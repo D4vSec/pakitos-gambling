@@ -41,8 +41,8 @@ const TransactionsFilterBar = ({ filters, onChange }) => {
 
   return (
     <div className="flex flex-col gap-3 bg-base-200 p-3 md:p-4 rounded-xl border border-base-300">
-      <div className="grid grid-cols-1 2xl:grid-cols-12 gap-4 items-stretch 2xl:items-end">
-        <div className="2xl:col-span-4 min-w-0">
+      <div className="grid grid-cols-1 gap-4 2xl:grid-cols-[minmax(0,1.45fr)_minmax(220px,1fr)_minmax(250px,1.1fr)_auto] 2xl:items-end">
+        <div className="min-w-0">
           <DynamicSearch
             config={TRANSACTION_FILTER_CONFIG}
             onAddFilter={handleAddFilter}
@@ -50,27 +50,31 @@ const TransactionsFilterBar = ({ filters, onChange }) => {
           />
         </div>
 
-        <div className="2xl:col-span-3 min-w-0">
-          <NumericRangeInput
-            name="Amount"
-            minValue={filters.minAmount}
-            maxValue={filters.maxAmount}
-            onChange={onChange}
-            translationPath="adminPanel.userDetails.transactions.table"
-          />
-        </div>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-[minmax(240px,1.1fr)_minmax(210px,1fr)_auto] md:items-end 2xl:contents">
+          <div className="min-w-0">
+            <DateRangeInput fromDate={filters.fromDate} toDate={filters.toDate} onChange={onChange} />
+          </div>
 
-        <div className="2xl:col-span-4 min-w-0">
-          <DateRangeInput fromDate={filters.fromDate} toDate={filters.toDate} onChange={onChange} />
-        </div>
+          <div className="grid grid-cols-[minmax(0,1fr)_auto] gap-3 items-end md:contents">
+            <div className="min-w-0">
+              <NumericRangeInput
+                name="Amount"
+                minValue={filters.minAmount}
+                maxValue={filters.maxAmount}
+                onChange={onChange}
+                translationPath="adminPanel.userDetails.transactions.table"
+              />
+            </div>
 
-        <Button
-          svg={<CloseSVG />}
-          variant="ghost"
-          size="sm"
-          className="hover:text-error h-10 w-full min-h-10 p-1 sm:h-8 sm:w-8 sm:min-h-8 2xl:self-end"
-          onClick={resetAll}
-        />
+            <Button
+              svg={<CloseSVG />}
+              variant="ghost"
+              size="sm"
+              className="hover:text-error h-10 w-10 min-h-10 shrink-0 justify-self-end p-1 md:mb-0"
+              onClick={resetAll}
+            />
+          </div>
+        </div>
       </div>
 
       {/* Pills de visualización */}

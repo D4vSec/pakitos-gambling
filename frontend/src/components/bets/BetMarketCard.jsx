@@ -32,7 +32,7 @@ const BetMarketCard = ({ bet }) => {
         <div className="shrink-0 pt-0.5">
           <BetStatusBadge status={bet.status} />
         </div>
-        <h2 className="min-w-0 flex-1 wrap-break-words pr-2 text-lg sm:text-xl font-bold leading-tight text-base-content ">
+        <h2 className="min-w-0 flex-1 wrap-wrap-break-word pr-2 text-lg sm:text-xl font-bold leading-tight text-base-content ">
           {bet.label}
         </h2>
       </div>
@@ -49,7 +49,9 @@ const BetMarketCard = ({ bet }) => {
       <div className="relative flex flex-1 flex-col gap-1.5">
         {hasUserBet && (
           <div className="rounded-xl border border-info/30 bg-info/10 p-3 text-sm text-info">
-            <span className="font-semibold">{t("pages.bets.detail.selectedOption")}:</span>{" "}
+            <span className="font-semibold">
+              {t("pages.bets.detail.selectedOption")}:
+            </span>{" "}
             {userBet.optionLabel} x{userBet.odd}
           </div>
         )}
