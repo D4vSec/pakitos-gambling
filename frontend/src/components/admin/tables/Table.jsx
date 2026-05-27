@@ -39,7 +39,7 @@ const Table = ({
   return (
     <div className="w-full min-w-0 max-w-full rounded-lg bg-base-200 p-4">
       <div className="w-full min-w-0 max-w-full overflow-x-auto">
-        <table className="table table-sm md:table-md table-zebra">
+        <table className="table table-sm sm:table-md table-zebra">
           <thead>
             {table.getHeaderGroups().map((hg) => (
               <tr key={hg.id}>

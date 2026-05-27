@@ -4,7 +4,7 @@ import useTable from "@/hooks/useTable"
 import { useAdmin } from "@/providers/AdminProvider"
 import { useLocale } from "@/providers/LocaleProvider"
 import { fullDateFormatter } from "@/utils/adminUtils"
-import BetsFilterBar from "../filters/BetsFilterBar"
+import AdminBetsFilterBar from "../filters/AdminBetsFilterBar"
 import BetActions from "../renderers/BetActions"
 import Table from "./Table"
 
@@ -14,8 +14,11 @@ const BetsTable = () => {
 
   const initialFilters = useMemo(
     () => ({
-      status: "",
       filters: [],
+      fromEndsAt: "",
+      toEndsAt: "",
+      fromCreatedAt: "",
+      toCreatedAt: "",
     }),
     [],
   )
@@ -55,9 +58,9 @@ const BetsTable = () => {
       },
       {
         id: "optionsCount",
+        accessorFn: (row) => row.options?.length || 0,
         header: t("adminPanel.bets.table.options"),
-        cell: ({ row }) => row.original.options?.length || 0,
-        enableSorting: false,
+        cell: (info) => info.getValue(),
       },
       {
         id: "actions",
@@ -78,7 +81,7 @@ const BetsTable = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      <BetsFilterBar filters={filters} onChange={handleFilterChange} />
+      <AdminBetsFilterBar filters={filters} onChange={handleFilterChange} />
       <Table
         data={data?.bets || []}
         columns={columns}

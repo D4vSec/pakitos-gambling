@@ -16,6 +16,7 @@ const FilterPill = ({ label, value, onRemove }) => {
       </div>
 
       <button
+        type="button"
         onClick={onRemove}
         className="shrink-0 p-0.5 hover:scale-125 transition-transform bg-primary-focus/20 rounded-full"
         title={t("ui.buttons.close")}

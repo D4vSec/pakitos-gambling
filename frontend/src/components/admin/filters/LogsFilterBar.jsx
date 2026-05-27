@@ -1,87 +1,125 @@
-import React from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { AUDIT_FILTER_CONFIG } from "./adminFilters"
 import { useLocale } from "@/providers/LocaleProvider"
 import { formatDateDisplay } from "@/utils/utils"
 import FilterPill from "./FilterPill"
 import DateRangeInput from "./DateRangeInput"
 import DynamicSearch from "./DynamicSearch"
-import Button from "@/components/buttons/Button"
-import CloseSVG from "@/components/svg/actions/CloseSVG"
 
 // TODO: Añadir el filtro win/lose del payout
 const LogsFilterBar = ({ filters, onChange }) => {
   const { t } = useLocale()
+  const [draftFilters, setDraftFilters] = useState(filters)
+  const [selectedField, setSelectedField] = useState(
+    Object.keys(AUDIT_FILTER_CONFIG)[0] || "",
+  )
+  const [selectedValue, setSelectedValue] = useState("")
 
-  const handleAddFilter = (field, value) => {
-    const currentFilters = filters.filters || []
-    const existingIndex = currentFilters.findIndex((f) => f.field === field)
+  useEffect(() => {
+    setDraftFilters(filters)
+  }, [filters])
 
-    let updatedFilters = [...currentFilters]
-    if (existingIndex > -1) {
-      if (!updatedFilters[existingIndex].values.includes(value)) {
-        updatedFilters[existingIndex].values.push(value)
-      }
-    } else {
-      updatedFilters.push({ field, values: [value] })
-    }
-    onChange({ filters: updatedFilters })
+  const appliedFilters = useMemo(
+    () => (Array.isArray(filters.filters) ? filters.filters : []),
+    [filters.filters],
+  )
+
+  const removeAppliedFilter = (nextPartialFilters) => {
+    const nextFilters = { ...filters, ...nextPartialFilters }
+    setDraftFilters(nextFilters)
+    onChange(nextFilters)
   }
 
-  const removeFilter = (index) => {
-    onChange({ filters: filters.filters.filter((_, i) => i !== index) })
+  const handleSubmit = () => {
+    let nextAppliedFilters = [...appliedFilters]
+
+    if (selectedField && selectedValue) {
+      const existingIndex = nextAppliedFilters.findIndex(
+        (filter) => filter.field === selectedField,
+      )
+
+      if (existingIndex > -1) {
+        if (!nextAppliedFilters[existingIndex].values.includes(selectedValue)) {
+          nextAppliedFilters[existingIndex].values.push(selectedValue)
+        }
+      } else {
+        nextAppliedFilters.push({ field: selectedField, values: [selectedValue] })
+      }
+    }
+
+    const nextFilters = { ...draftFilters, filters: nextAppliedFilters }
+    setDraftFilters(nextFilters)
+    setSelectedValue("")
+    onChange(nextFilters)
+  }
+
+  const handleReset = () => {
+    const nextFilters = {
+      ...draftFilters,
+      filters: [],
+      fromDate: "",
+      toDate: "",
+    }
+    setDraftFilters(nextFilters)
+    setSelectedValue("")
+    onChange(nextFilters)
   }
 
   return (
     <div className="flex flex-col gap-3 bg-base-200 p-3 md:p-4 rounded-xl border border-base-300">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch lg:items-end">
-        <div className="lg:col-span-8 min-w-0">
-          <DynamicSearch
-            config={AUDIT_FILTER_CONFIG}
-            onAddFilter={handleAddFilter}
-            translationPath="adminPanel.logs.table"
-          />
-        </div>
+      <DynamicSearch
+        config={AUDIT_FILTER_CONFIG}
+        selectedField={selectedField}
+        selectedValue={selectedValue}
+        onFieldChange={(value) => {
+          setSelectedField(value)
+          setSelectedValue("")
+        }}
+        onValueChange={setSelectedValue}
+        onSubmit={handleSubmit}
+        onReset={handleReset}
+        translationPath="adminPanel.logs.table">
+        <DateRangeInput
+          fromDate={draftFilters.fromDate}
+          toDate={draftFilters.toDate}
+          onChange={(value) =>
+            setDraftFilters((prev) => ({ ...prev, ...value }))
+          }
+        />
+      </DynamicSearch>
 
-        <div className="lg:col-span-4 min-w-0 flex items-end gap-3">
-          <div className="flex-1 min-w-0">
-            <DateRangeInput
-              fromDate={filters.fromDate}
-              toDate={filters.toDate}
-              onChange={onChange}
-            />
-          </div>
-          <Button
-            svg={<CloseSVG />}
-            variant="ghost"
-            size="sm"
-            className="hover:text-error h-10 w-10 min-h-10 shrink-0 p-1 sm:h-8 sm:w-8 sm:min-h-8"
-            onClick={() => onChange({ filters: [], fromDate: "", toDate: "" })}
-          />
-        </div>
-      </div>
-
-      {(filters.filters?.length > 0 || filters.fromDate || filters.toDate) && (
+      {(appliedFilters.length > 0 ||
+        filters.fromDate ||
+        filters.toDate) && (
         <div className="flex flex-wrap gap-2 mt-2 p-2 md:p-3 bg-base-300/30 rounded-lg border border-base-300/50">
           {filters.fromDate && (
             <FilterPill
               label={t("ui.tables.filters.from")}
               value={formatDateDisplay(filters.fromDate)}
-              onRemove={() => onChange({ fromDate: "" })}
+              onRemove={() =>
+                removeAppliedFilter({ fromDate: "" })
+              }
             />
           )}
           {filters.toDate && (
             <FilterPill
               label={t("ui.tables.filters.to")}
               value={formatDateDisplay(filters.toDate)}
-              onRemove={() => onChange({ toDate: "" })}
+              onRemove={() =>
+                removeAppliedFilter({ toDate: "" })
+              }
             />
           )}
-          {filters.filters?.map((f, i) => (
+          {appliedFilters.map((f, i) => (
             <FilterPill
               key={i}
               label={t(`adminPanel.logs.table.${f.field}`) || f.field}
               value={f.values.join(", ")}
-              onRemove={() => removeFilter(i)}
+              onRemove={() =>
+                removeAppliedFilter({
+                  filters: appliedFilters.filter((_, idx) => idx !== i),
+                })
+              }
             />
           ))}
         </div>

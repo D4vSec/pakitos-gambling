@@ -1,65 +1,100 @@
-import React from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { USER_FILTER_CONFIG } from "./adminFilters"
 import { useLocale } from "@/providers/LocaleProvider"
 import FilterPill from "./FilterPill"
 import DynamicSearch from "./DynamicSearch"
 import NumericRangeInput from "./NumericRangeInput"
-import Button from "@/components/buttons/Button"
-import CloseSVG from "@/components/svg/actions/CloseSVG"
 
 const UsersFilterBar = ({ filters, onChange }) => {
   const { t } = useLocale()
+  const [draftFilters, setDraftFilters] = useState(filters)
+  const [selectedField, setSelectedField] = useState(
+    Object.keys(USER_FILTER_CONFIG)[0] || "",
+  )
+  const [selectedValue, setSelectedValue] = useState("")
 
-  const handleAddFilter = (field, value) => {
-    const currentFilters = filters.filters || []
-    let updatedFilters = [...currentFilters]
-    const existingIndex = updatedFilters.findIndex((f) => f.field === field)
+  useEffect(() => {
+    setDraftFilters(filters)
+  }, [filters])
 
-    if (existingIndex > -1) {
-      if (!updatedFilters[existingIndex].values.includes(value)) {
-        updatedFilters[existingIndex].values.push(value)
+  const appliedFilters = useMemo(
+    () => (Array.isArray(filters.filters) ? filters.filters : []),
+    [filters.filters],
+  )
+
+  const removeAppliedFilter = (nextPartialFilters) => {
+    const nextFilters = { ...filters, ...nextPartialFilters }
+    setDraftFilters(nextFilters)
+    onChange(nextFilters)
+  }
+
+  const handleSubmit = () => {
+    let nextAppliedFilters = [...appliedFilters]
+
+    if (selectedField && selectedValue) {
+      const existingIndex = nextAppliedFilters.findIndex(
+        (filter) => filter.field === selectedField,
+      )
+
+      if (existingIndex > -1) {
+        if (!nextAppliedFilters[existingIndex].values.includes(selectedValue)) {
+          nextAppliedFilters[existingIndex].values.push(selectedValue)
+        }
+      } else {
+        nextAppliedFilters.push({ field: selectedField, values: [selectedValue] })
       }
-    } else {
-      updatedFilters.push({ field, values: [value] })
     }
-    onChange({ filters: updatedFilters })
+
+    const nextFilters = {
+      ...draftFilters,
+      filters: nextAppliedFilters,
+    }
+
+    setDraftFilters(nextFilters)
+    setSelectedValue("")
+    onChange(nextFilters)
+  }
+
+  const handleReset = () => {
+    const nextFilters = {
+      ...draftFilters,
+      filters: [],
+      minBalance: "",
+      maxBalance: "",
+    }
+    setDraftFilters(nextFilters)
+    setSelectedValue("")
+    onChange(nextFilters)
+  }
+
+  const handleDraftChange = (value) => {
+    setDraftFilters((prev) => ({ ...prev, ...value }))
   }
 
   return (
     <div className="flex flex-col gap-3 bg-base-200 p-3 md:p-4 rounded-xl border border-base-300">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch lg:items-end">
-        <div className="lg:col-span-8 min-w-0">
-          <DynamicSearch
-            config={USER_FILTER_CONFIG}
-            onAddFilter={handleAddFilter}
-            translationPath="adminPanel.users.table"
-          />
-        </div>
+      <DynamicSearch
+        config={USER_FILTER_CONFIG}
+        selectedField={selectedField}
+        selectedValue={selectedValue}
+        onFieldChange={(value) => {
+          setSelectedField(value)
+          setSelectedValue("")
+        }}
+        onValueChange={setSelectedValue}
+        onSubmit={handleSubmit}
+        onReset={handleReset}
+        translationPath="adminPanel.users.table">
+        <NumericRangeInput
+          name="Balance"
+          minValue={draftFilters.minBalance}
+          maxValue={draftFilters.maxBalance}
+          onChange={handleDraftChange}
+          translationPath="adminPanel.users.table"
+        />
+      </DynamicSearch>
 
-        <div className="lg:col-span-4 min-w-0 flex items-end gap-3">
-          <div className="flex-1 min-w-0">
-            <NumericRangeInput
-              name="Balance"
-              minValue={filters.minBalance}
-              maxValue={filters.maxBalance}
-              onChange={onChange}
-              translationPath="adminPanel.users.table"
-            />
-          </div>
-
-          <Button
-            svg={<CloseSVG />}
-            variant="ghost"
-            size="sm"
-            className="hover:text-error h-10 w-10 min-h-10 shrink-0 p-1 sm:h-8 sm:w-8 sm:min-h-8"
-            onClick={() =>
-              onChange({ filters: [], minBalance: "", maxBalance: "" })
-            }
-          />
-        </div>
-      </div>
-
-      {(filters.filters?.length > 0 ||
+      {(appliedFilters.length > 0 ||
         filters.minBalance ||
         filters.maxBalance) && (
         <div className="flex flex-wrap gap-2 mt-2 p-2 bg-base-300/30 rounded-lg border border-base-300/50">
@@ -67,25 +102,30 @@ const UsersFilterBar = ({ filters, onChange }) => {
             <FilterPill
               label={t("ui.tables.filters.minBalance")}
               value={filters.minBalance}
-              onRemove={() => onChange({ minBalance: "" })}
+              onRemove={() =>
+                removeAppliedFilter({ minBalance: "" })
+              }
             />
           )}
           {filters.maxBalance && (
             <FilterPill
               label={t("ui.tables.filters.maxBalance")}
               value={filters.maxBalance}
-              onRemove={() => onChange({ maxBalance: "" })}
+              onRemove={() =>
+                removeAppliedFilter({ maxBalance: "" })
+              }
             />
           )}
-          {filters.filters?.map((f, i) => (
+          {appliedFilters.map((f, i) => (
             <FilterPill
               key={i}
               label={t(`adminPanel.users.table.${f.field}`) || f.field}
               value={f.values.join(", ")}
-              onRemove={() => {
-                const newFilters = filters.filters.filter((_, idx) => idx !== i)
-                onChange({ filters: newFilters })
-              }}
+              onRemove={() =>
+                removeAppliedFilter({
+                  filters: appliedFilters.filter((_, idx) => idx !== i),
+                })
+              }
             />
           ))}
         </div>

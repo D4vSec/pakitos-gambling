@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react"
 import BetMarketCard from "@/components/bets/BetMarketCard"
-import BetsFilterBar from "@/components/admin/filters/BetsFilterBar"
+import BetsFilterBar from "@/components/bets/BetsFilterBar"
 import GoBackBtn from "@/components/buttons/GoBackBtn"
 import GradientBg from "@/components/layout/GradientBg"
 import CoinsSVG from "@/components/svg/pictures/CoinsSVG"
@@ -18,20 +18,17 @@ const BetsPage = () => {
   const [isRefreshing, setIsRefreshing] = useState(false)
   const hasLoadedRef = useRef(false)
   const [filters, setFilters] = useState({
+    name: "",
     status: "",
-    filters: [],
   })
 
-  const appliedFilters = useMemo(() => {
-    const nameFilter = filters.filters?.find(
-      (filter) => filter.field === "name",
-    )
-
-    return {
-      name: nameFilter?.values?.at(-1) || "",
+  const appliedFilters = useMemo(
+    () => ({
+      name: filters.name || "",
       status: filters.status || "",
-    }
-  }, [filters])
+    }),
+    [filters],
+  )
 
   useEffect(() => {
     let isActive = true

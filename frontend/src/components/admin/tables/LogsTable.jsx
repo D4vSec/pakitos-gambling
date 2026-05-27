@@ -25,7 +25,7 @@ const LogsTable = () => {
       columns: "",
       filterField: "",
       filterValue: "",
-      filters: "",
+      filters: [],
     }),
     [],
   )

@@ -17,58 +17,71 @@ const PaginationBar = ({ table }) => {
   const mobileIconClass = "h-4 w-4"
   const iconOnlyButtonClass = "px-2 sm:px-3"
 
+  const paginationButtons = [
+    {
+      key: "first",
+      label: t("ui.tables.paginationBar.first"),
+      icon: <ChevronPipeLeftSVG />,
+      onClick: () => table.setPageIndex(0),
+      disabled: !table.getCanPreviousPage(),
+    },
+    {
+      key: "prev",
+      label: t("ui.tables.paginationBar.prev"),
+      icon: <ChevronLeftSVG />,
+      onClick: () => table.previousPage(),
+      disabled: !table.getCanPreviousPage(),
+      iconClass: mobileIconClass,
+    },
+    {
+      key: "next",
+      label: t("ui.tables.paginationBar.next"),
+      icon: <ChevronRightSVG />,
+      onClick: () => table.nextPage(),
+      disabled: !table.getCanNextPage(),
+      iconClass: mobileIconClass,
+    },
+    {
+      key: "last",
+      label: t("ui.tables.paginationBar.last"),
+      icon: <ChevronPipeRightSVG />,
+      onClick: () => table.setPageIndex(totalPages - 1),
+      disabled: !table.getCanNextPage(),
+    },
+  ]
+
   return (
-    <div className="mt-4 flex flex-col gap-3 md:flex-row w-full items-center lg:justify-between">
+    <div className="mt-4 flex flex-col gap-3 md:flex-row w-full items-center md:justify-between">
       <div className="flex flex-wrap items-center gap-2">
-        <button
-          className={`${navButtonClass} ${iconOnlyButtonClass}`}
-          onClick={() => table.setPageIndex(0)}
-          disabled={!table.getCanPreviousPage()}>
-          <span className="hidden sm:inline">
-            {t("ui.tables.paginationBar.first")}
-          </span>
-          <span className="sm:hidden">
-            <ChevronPipeLeftSVG />
-          </span>
-        </button>
-        <button
-          className={`${navButtonClass} ${iconOnlyButtonClass}`}
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}>
-          <span className="hidden sm:inline">
-            {t("ui.tables.paginationBar.prev")}
-          </span>
-          <span className={`sm:hidden ${mobileIconClass}`}>
-            <ChevronLeftSVG />
-          </span>
-        </button>
+        {paginationButtons.slice(0, 2).map((button) => (
+          <button
+            key={button.key}
+            className={`${navButtonClass} ${iconOnlyButtonClass}`}
+            onClick={button.onClick}
+            disabled={button.disabled}>
+            <span className="hidden sm:inline">{button.label}</span>
+            <span className={`sm:hidden ${button.iconClass ?? ""}`}>
+              {button.icon}
+            </span>
+          </button>
+        ))}
 
         <span className="min-w-18 text-center text-sm font-medium sm:min-w-22">
           {pageIndex + 1} / {totalPages || 1}
         </span>
 
-        <button
-          className={`${navButtonClass} ${iconOnlyButtonClass}`}
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}>
-          <span className="hidden sm:inline">
-            {t("ui.tables.paginationBar.next")}
-          </span>
-          <span className={`sm:hidden ${mobileIconClass}`}>
-            <ChevronRightSVG />
-          </span>
-        </button>
-        <button
-          className={`${navButtonClass} ${iconOnlyButtonClass}`}
-          onClick={() => table.setPageIndex(totalPages - 1)}
-          disabled={!table.getCanNextPage()}>
-          <span className="hidden sm:inline">
-            {t("ui.tables.paginationBar.last")}
-          </span>
-          <span className="sm:hidden">
-            <ChevronPipeRightSVG />
-          </span>
-        </button>
+        {paginationButtons.slice(2).map((button) => (
+          <button
+            key={button.key}
+            className={`${navButtonClass} ${iconOnlyButtonClass}`}
+            onClick={button.onClick}
+            disabled={button.disabled}>
+            <span className="hidden sm:inline">{button.label}</span>
+            <span className={`sm:hidden ${button.iconClass ?? ""}`}>
+              {button.icon}
+            </span>
+          </button>
+        ))}
       </div>
 
       <div className="flex flex-wrap items-center justify-between gap-2 sm:justify-start">

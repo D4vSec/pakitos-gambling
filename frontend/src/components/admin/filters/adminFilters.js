@@ -28,8 +28,34 @@ export const USER_FILTER_CONFIG = {
   balance: { type: "text" },
 }
 
-export const BET_FILTER_CONFIG = {
-  name: { type: "text" },
+export const PUBLIC_BET_FILTER_CONFIG = {
+  name: {
+    type: "text",
+    labelKey: "adminPanel.bets.table.name",
+  },
+  status: {
+    type: "enum",
+    options: ["open", "closed"],
+    labelKey: "pages.bets.filters.status",
+    optionLabelPrefix: "pages.bets.status",
+  },
+}
+
+export const ADMIN_BET_FILTER_CONFIG = {
+  label: {
+    type: "text",
+    labelKey: "adminPanel.bets.table.label",
+  },
+  status: {
+    type: "enum",
+    options: ["open", "closed"],
+    labelKey: "adminPanel.bets.table.status",
+    optionLabelPrefix: "pages.bets.status",
+  },
+  optionsCount: {
+    type: "text",
+    labelKey: "adminPanel.bets.table.options",
+  },
 }
 
 export const TRANSACTION_FILTER_CONFIG = {
