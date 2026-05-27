@@ -120,9 +120,12 @@ const SessionProvider = ({ children }) => {
 
   const getUserData = async () => {
     try {
+      const accessToken = getAccessToken()
+      const refreshToken = getRefreshToken()
       const response = await get("/api/v1/user/me", {
         headers: {
-          Authorization: `Bearer ${getAccessToken()}`,
+          ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+          ...(refreshToken ? { "x-refresh-token": refreshToken } : {}),
         },
       })
 
