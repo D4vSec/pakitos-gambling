@@ -14,7 +14,6 @@ const PaginationBar = ({ table }) => {
   const { pageIndex, pageSize } = state.pagination
   const totalPages = table.getPageCount()
   const navButtonClass = "btn btn-sm btn-ghost sm:btn-outline"
-  const mobileIconClass = "h-4 w-4"
   const iconOnlyButtonClass = "px-2 sm:px-3"
 
   const paginationButtons = [
@@ -31,7 +30,6 @@ const PaginationBar = ({ table }) => {
       icon: <ChevronLeftSVG />,
       onClick: () => table.previousPage(),
       disabled: !table.getCanPreviousPage(),
-      iconClass: mobileIconClass,
     },
     {
       key: "next",
@@ -39,7 +37,6 @@ const PaginationBar = ({ table }) => {
       icon: <ChevronRightSVG />,
       onClick: () => table.nextPage(),
       disabled: !table.getCanNextPage(),
-      iconClass: mobileIconClass,
     },
     {
       key: "last",
