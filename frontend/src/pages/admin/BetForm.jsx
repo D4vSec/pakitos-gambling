@@ -173,58 +173,62 @@ const BetForm = () => {
   return loading ? (
     <Loading />
   ) : notFound ? (
-    <div className="flex w-full max-w-5xl flex-col gap-4">
-      <GoBackBtn link="/admin/bets" />
-      <section className="rounded-2xl border border-dashed border-base-300 bg-base-100 p-8 text-center shadow-xl">
-        <Title>{t("adminPanel.bets.detail.noBet")}</Title>
-      </section>
+    <div className="flex flex-1 items-center justify-center">
+      <div className="flex w-full max-w-5xl flex-col gap-4">
+        <GoBackBtn link="/admin/bets" />
+        <section className="rounded-2xl border border-dashed border-base-300 bg-base-100 p-8 text-center shadow-xl">
+          <Title>{t("adminPanel.bets.detail.noBet")}</Title>
+        </section>
+      </div>
     </div>
   ) : (
-    <div className="flex w-full max-w-5xl flex-col gap-6">
-      <div>
-        <GoBackBtn link={isEdit ? `/admin/bets/${id}` : "/admin/bets"} />
-      </div>
-      <Title>{t(isEdit ? "forms.page.updateBet" : "forms.page.createBet")}</Title>
-      <div className="rounded-2xl border border-base-300 bg-base-100 p-6 shadow-xl md:p-8">
-        <FormProvider {...methods}>
-          <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
-            <div className="grid gap-4 md:grid-cols-2">
-              <FormField
-                name="label"
-                type="text"
-                label={t("forms.fields.betLabel.label")}
-                placeholder={t("forms.fields.betLabel.placeholder")}
+    <div className="flex flex-1 items-center justify-center">
+      <div className="flex w-full max-w-5xl flex-col gap-6">
+        <div>
+          <GoBackBtn link={isEdit ? `/admin/bets/${id}` : "/admin/bets"} />
+        </div>
+        <Title>{t(isEdit ? "forms.page.updateBet" : "forms.page.createBet")}</Title>
+        <div className="rounded-2xl border border-base-300 bg-base-100 p-6 shadow-xl md:p-8">
+          <FormProvider {...methods}>
+            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
+              <div className="grid gap-4 md:grid-cols-2">
+                <FormField
+                  name="label"
+                  type="text"
+                  label={t("forms.fields.betLabel.label")}
+                  placeholder={t("forms.fields.betLabel.placeholder")}
+                />
+                <FormField
+                  name="ends_at"
+                  type="datetime-local"
+                  label={t("forms.fields.endsAt.label")}
+                  placeholder={t("forms.fields.endsAt.placeholder")}
+                />
+              </div>
+              <BetOptionsFieldArray
+                append={append}
+                disabled={optionsLocked}
+                errors={errors}
+                fields={fields}
+                register={register}
+                remove={remove}
               />
-              <FormField
-                name="ends_at"
-                type="datetime-local"
-                label={t("forms.fields.endsAt.label")}
-                placeholder={t("forms.fields.endsAt.placeholder")}
-              />
-            </div>
-            <BetOptionsFieldArray
-              append={append}
-              disabled={optionsLocked}
-              errors={errors}
-              fields={fields}
-              register={register}
-              remove={remove}
-            />
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <Button type="submit" variant="success" disabled={submitting}>
-                {t(isEdit ? "forms.buttons.update" : "forms.buttons.create")}
-              </Button>
-              <Button
-                type="button"
-                variant="secondary"
-                onClick={() =>
-                  navigate(isEdit ? `/admin/bets/${id}` : "/admin/bets")
-                }>
-                {t("forms.buttons.goBack")}
-              </Button>
-            </div>
-          </form>
-        </FormProvider>
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <Button type="submit" variant="success" disabled={submitting}>
+                  {t(isEdit ? "forms.buttons.update" : "forms.buttons.create")}
+                </Button>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  onClick={() =>
+                    navigate(isEdit ? `/admin/bets/${id}` : "/admin/bets")
+                  }>
+                  {t("forms.buttons.goBack")}
+                </Button>
+              </div>
+            </form>
+          </FormProvider>
+        </div>
       </div>
     </div>
   )

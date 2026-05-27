@@ -25,16 +25,20 @@ const ProtectedRoute = ({ children, requireAdmin }) => {
     <Loading />
   ) : requireLogged && !isLogged ? (
     <GradientBg>
-      <Title>{t("message.error.noLogin")}</Title>
-      <ReturnBtn title={"ui.buttons.goLogin"} route={"/login"} />
+      <div className="flex flex-col gap-2 justify-center items-center">
+        <Title>{t("message.error.noLogin")}</Title>
+        <ReturnBtn title={"ui.buttons.goLogin"} route={"/login"} />
+      </div>
     </GradientBg>
   ) : requireAdmin && user.role !== "admin" ? (
     <GradientBg>
-      <Title>{t("message.error.noAdmin")}</Title>
-      <ReturnBtn
-        title={"ui.buttons.returnHome"}
-        route={isLogged ? "/home" : "/"}
-      />
+      <div className="flex flex-col gap-2 justify-center items-center">
+        <Title>{t("message.error.noAdmin")}</Title>
+        <ReturnBtn
+          title={"ui.buttons.returnHome"}
+          route={isLogged ? "/home" : "/"}
+        />
+      </div>
     </GradientBg>
   ) : (
     children
