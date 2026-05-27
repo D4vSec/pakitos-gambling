@@ -29,8 +29,15 @@ const UsersTable = () => {
 
   const initialSorting = useMemo(() => [{ id: "username", desc: false }], [])
 
-  const { data, pagination, setPagination, sorting, setSorting, filters, handleFilterChange } =
-    useTable(getAllUsers, initialFilters, initialSorting)
+  const {
+    data,
+    pagination,
+    setPagination,
+    sorting,
+    setSorting,
+    filters,
+    handleFilterChange,
+  } = useTable(getAllUsers, initialFilters, initialSorting)
 
   const columns = useMemo(
     () => [
@@ -66,7 +73,7 @@ const UsersTable = () => {
   )
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex w-full min-w-0 flex-col gap-4">
       <UsersFilterBar filters={filters} onChange={handleFilterChange} />
       <Table
         data={data?.users || []}

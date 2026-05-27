@@ -6,7 +6,6 @@ import { useLocale } from "@/providers/LocaleProvider"
 import FormField from "@/components/forms/FormField"
 import Title from "@/components/layout/fonts/Title"
 import Button from "@/components/buttons/Button"
-import GradientBg from "@/components/layout/GradientBg"
 import { useAdmin } from "@/providers/AdminProvider"
 import { userSchema } from "@/schemas/userSchemas"
 import { useSession } from "@/providers/SessionProvider"
@@ -169,7 +168,7 @@ const UserForm = () => {
   return loading ? (
     <Loading />
   ) : (
-    <GradientBg>
+    <div className="flex flex-col gap-6">
       <Title>
         {t(isEdit ? "forms.page.updateUser" : "forms.page.createUser")}
       </Title>
@@ -202,7 +201,7 @@ const UserForm = () => {
           </Button>
         </div>
       </div>
-    </GradientBg>
+    </div>
   )
 }
 

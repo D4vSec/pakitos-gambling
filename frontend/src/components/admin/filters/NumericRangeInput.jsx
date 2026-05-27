@@ -27,10 +27,7 @@ const NumericRangeInput = ({
           value={minValue || ""}
           onChange={(e) => onChange({ [`min${name}`]: e.target.value })}
         />
-        <span className="flex opacity-50 font-light shrink-0 items-center">
-          |
-        </span>
-        <div className="sm:hidden h-px bg-base-300/60 mx-2" />
+        <span className="flex opacity-50 font-light items-center">|</span>
         <input
           type="number"
           placeholder={t("ui.tables.filters.max")}

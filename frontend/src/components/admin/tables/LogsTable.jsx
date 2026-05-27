@@ -79,7 +79,7 @@ const LogsTable = () => {
   )
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex w-full min-w-0 flex-col gap-4">
       <LogsFilterBar filters={filters} onChange={handleFilterChange} />
       <Table
         data={data?.logs || []}

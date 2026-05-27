@@ -33,8 +33,8 @@ const LogsFilterBar = ({ filters, onChange }) => {
 
   return (
     <div className="flex flex-col gap-3 bg-base-200 p-3 md:p-4 rounded-xl border border-base-300">
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-4 items-stretch xl:items-end">
-        <div className="xl:col-span-7 min-w-0">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch lg:items-end">
+        <div className="lg:col-span-8 min-w-0">
           <DynamicSearch
             config={AUDIT_FILTER_CONFIG}
             onAddFilter={handleAddFilter}
@@ -42,21 +42,22 @@ const LogsFilterBar = ({ filters, onChange }) => {
           />
         </div>
 
-        <div className="xl:col-span-4 min-w-0">
-          <DateRangeInput
-            fromDate={filters.fromDate}
-            toDate={filters.toDate}
-            onChange={onChange}
+        <div className="lg:col-span-4 min-w-0 flex items-end gap-3">
+          <div className="flex-1 min-w-0">
+            <DateRangeInput
+              fromDate={filters.fromDate}
+              toDate={filters.toDate}
+              onChange={onChange}
+            />
+          </div>
+          <Button
+            svg={<CloseSVG />}
+            variant="ghost"
+            size="sm"
+            className="hover:text-error h-10 w-10 min-h-10 shrink-0 p-1 sm:h-8 sm:w-8 sm:min-h-8"
+            onClick={() => onChange({ filters: [], fromDate: "", toDate: "" })}
           />
         </div>
-
-        <Button
-          svg={<CloseSVG />}
-          variant="ghost"
-          size="sm"
-          className="hover:text-error p-1 h-10 min-h-10 w-full sm:h-8 sm:w-8 sm:min-h-8 xl:self-end"
-          onClick={() => onChange({ filters: [], fromDate: "", toDate: "" })}
-        />
       </div>
 
       {(filters.filters?.length > 0 || filters.fromDate || filters.toDate) && (

@@ -37,9 +37,9 @@ const Table = ({
   })
 
   return (
-    <div className="rounded-lg bg-base-200 py-2 sm:px-4">
-      <div className="overflow-x-auto">
-        <table className="table table-sm md:table-md table-zebra min-w-full">
+    <div className="w-full min-w-0 max-w-full rounded-lg bg-base-200 p-4">
+      <div className="w-full min-w-0 max-w-full overflow-x-auto">
+        <table className="table table-sm md:table-md table-zebra">
           <thead>
             {table.getHeaderGroups().map((hg) => (
               <tr key={hg.id}>
