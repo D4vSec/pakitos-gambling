@@ -4,6 +4,7 @@ vi.mock('jsonwebtoken', () => ({
 	default: {
 		sign: vi.fn(),
 		verify: vi.fn(),
+		decode: vi.fn(),
 	},
 }))
 
@@ -278,7 +279,7 @@ describe('auth.controller', () => {
 	})
 
 	it('login creates a session and returns tokens', async () => {
-		User.findUserByEmail.mockResolvedValueOnce({ id: 7, password: 'hashed' })
+		User.findUserByEmail.mockResolvedValueOnce({ id: 7, password: 'hashed', role: 'user' })
 		User.verifyPassword.mockResolvedValueOnce(true)
 		const res = createResponse()
 
@@ -300,7 +301,7 @@ describe('auth.controller', () => {
 	})
 
 	it('login saves device info when useragent provided', async () => {
-		User.findUserByEmail.mockResolvedValueOnce({ id: 7, password: 'hashed' })
+		User.findUserByEmail.mockResolvedValueOnce({ id: 7, password: 'hashed', role: 'user' })
 		User.verifyPassword.mockResolvedValueOnce(true)
 		const res = createResponse()
 
@@ -378,66 +379,40 @@ describe('auth.controller', () => {
 		expect(res.json).toHaveBeenCalledWith({ code: 'AUTH_INVALID_SESSION' })
 	})
 
-	it('refresh rotates the session and returns new tokens', async () => {
+	it('refresh returns a new access token and keeps the same refresh token', async () => {
 		jwt.verify.mockReturnValueOnce({ id: 7 })
 		Session.getActiveSessionsByUserId.mockResolvedValueOnce([{ id: 3 }])
 		Session.verifyTokenMatch.mockResolvedValueOnce({
 			id: 3,
 			expires_at: '2999-12-31T23:59:59.000Z',
 		})
-		User.findUserById.mockResolvedValueOnce({ id: 7 })
+		User.findUserById.mockResolvedValueOnce({ id: 7, role: 'user' })
+		const res = createResponse()
+
+		await refresh({ body: { refreshToken: 'persisted-refresh-token' } }, res)
+
+		expect(Session.revokeSession).not.toHaveBeenCalled()
+		expect(Session.createSession).not.toHaveBeenCalled()
+		expect(res.json).toHaveBeenCalledWith({
+			accessToken: 'access-token',
+			refreshToken: 'persisted-refresh-token',
+		})
+	})
+
+	it('refresh revokes the session when the stored session has expired', async () => {
+		jwt.verify.mockReturnValueOnce({ id: 7 })
+		Session.getActiveSessionsByUserId.mockResolvedValueOnce([{ id: 3 }])
+		Session.verifyTokenMatch.mockResolvedValueOnce({
+			id: 3,
+			expires_at: '2000-01-01T00:00:00.000Z',
+		})
 		const res = createResponse()
 
 		await refresh({ body: { refreshToken: 'refresh-token' } }, res)
 
 		expect(Session.revokeSession).toHaveBeenCalledWith(3)
-		expect(Session.createSession).toHaveBeenCalledWith(7, 'refresh-token', null)
-		expect(res.json).toHaveBeenCalledWith({
-			accessToken: 'access-token',
-			refreshToken: 'refresh-token',
-		})
-	})
-
-	it('refresh saves device info when useragent provided', async () => {
-		jwt.verify.mockReturnValueOnce({ id: 7 })
-		Session.getActiveSessionsByUserId.mockResolvedValueOnce([{ id: 3 }])
-		Session.verifyTokenMatch.mockResolvedValueOnce({
-			id: 3,
-			expires_at: '2999-12-31T23:59:59.000Z',
-		})
-		User.findUserById.mockResolvedValueOnce({ id: 7 })
-		const res = createResponse()
-
-		const req = {
-			body: { refreshToken: 'refresh-token' },
-			useragent: {
-				browser: 'Firefox',
-				version: '100.0',
-				os: 'Linux',
-				platform: 'x86_64',
-				isMobile: false,
-				isTablet: false,
-				isDesktop: true,
-			},
-		}
-
-		await refresh(req, res)
-
-		expect(Session.revokeSession).toHaveBeenCalledWith(3)
-		const expectedDevice = JSON.stringify({
-			browser: 'Firefox',
-			version: '100.0',
-			os: 'Linux',
-			platform: 'x86_64',
-			isMobile: false,
-			isTablet: false,
-			isDesktop: true,
-		})
-		expect(Session.createSession).toHaveBeenCalledWith(7, 'refresh-token', expectedDevice)
-		expect(res.json).toHaveBeenCalledWith({
-			accessToken: 'access-token',
-			refreshToken: 'refresh-token',
-		})
+		expect(res.status).toHaveBeenCalledWith(401)
+		expect(res.json).toHaveBeenCalledWith({ code: 'AUTH_SESSION_EXPIRED' })
 	})
 
 	it('refresh returns 401 when token verification fails', async () => {
@@ -448,6 +423,24 @@ describe('auth.controller', () => {
 
 		await refresh({ body: { refreshToken: 'refresh-token' } }, res)
 
+		expect(res.status).toHaveBeenCalledWith(401)
+		expect(res.json).toHaveBeenCalledWith({
+			code: 'AUTH_INVALID_REFRESH_TOKEN',
+		})
+	})
+
+	it('refresh revokes the matching session when the jwt refresh token has expired', async () => {
+		jwt.verify.mockImplementationOnce(() => {
+			throw Object.assign(new Error('jwt expired'), { name: 'TokenExpiredError' })
+		})
+		jwt.decode.mockReturnValueOnce({ id: 7 })
+		Session.getActiveSessionsByUserId.mockResolvedValueOnce([{ id: 3 }])
+		Session.verifyTokenMatch.mockResolvedValueOnce({ id: 3 })
+		const res = createResponse()
+
+		await refresh({ body: { refreshToken: 'refresh-token' } }, res)
+
+		expect(Session.revokeSession).toHaveBeenCalledWith(3)
 		expect(res.status).toHaveBeenCalledWith(401)
 		expect(res.json).toHaveBeenCalledWith({
 			code: 'AUTH_INVALID_REFRESH_TOKEN',

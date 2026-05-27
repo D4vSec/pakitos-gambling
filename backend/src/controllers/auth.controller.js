@@ -1,20 +1,15 @@
-import jwt from "jsonwebtoken"
 import * as z from "zod"
 
-import jwtConfig from "#config/jwt.config"
 import User from "#models/user.model"
 import Session from "#models/session.model"
 import Audit from "#services/audit.service"
+import {
+	generateAccessToken,
+	generateTokens,
+	revokeRefreshSession,
+	validateRefreshSession,
+} from "#services/auth.service"
 import logger from "#utils/logger.utils"
-
-const { secret, refreshSecret, accessExpiresIn, refreshExpiresIn } = jwtConfig
-
-const generateTokens = (user) => {
-	const payload = { id: user.id }
-	const accessToken = jwt.sign(payload, secret, { expiresIn: accessExpiresIn })
-	const refreshToken = jwt.sign(payload, refreshSecret, { expiresIn: refreshExpiresIn })
-	return { accessToken, refreshToken }
-}
 
 const register = async (req, res) => {
 	if (!req.body) return res.status(400).json({ code: "AUTH_NO_DATA_PROVIDED" })
@@ -115,27 +110,25 @@ const refresh = async (req, res) => {
 	if (!refreshToken) return res.status(401).json({ code: "AUTH_NO_TOKEN_PROVIDED" })
 
 	try {
-		const decoded = jwt.verify(refreshToken, refreshSecret)
-		const sessions = await Session.getActiveSessionsByUserId(decoded.id)
-		const validSession = await Session.verifyTokenMatch(sessions, refreshToken)
+		const result = await validateRefreshSession(refreshToken)
 
-		if (!validSession || new Date(validSession.expires_at) < new Date()) {
-			return res.status(401).json({ code: "AUTH_INVALID_SESSION" })
+		if (result.code) {
+			return res.status(401).json({ code: result.code })
 		}
 
-		await Session.revokeSession(validSession.id)
-		const user = await User.findUserById(decoded.id)
-		const tokens = generateTokens(user)
-		const deviceInfo = Audit.getUserAgentRaw(req)
-
-		await Session.createSession(user.id, tokens.refreshToken, deviceInfo ? JSON.stringify(deviceInfo.raw) : null)
-
-		res.json(tokens)
+		res.json({
+			accessToken: generateAccessToken(result.user),
+			refreshToken,
+		})
 	} catch (err) {
+		if (err.name === "TokenExpiredError") {
+			await revokeRefreshSession(refreshToken)
+		}
+
 		res.status(401).json({
 			code: "AUTH_INVALID_REFRESH_TOKEN",
 		})
 	}
 }
 
-export { register, login, refresh, generateTokens }
+export { register, login, refresh, generateAccessToken, generateTokens }

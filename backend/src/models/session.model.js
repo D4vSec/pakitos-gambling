@@ -1,9 +1,40 @@
 import db from "#config/db.config"
+import jwtConfig from "#config/jwt.config"
 import { hashPassword, comparePassword } from "#utils/password.utils"
+
+const { refreshExpiresIn } = jwtConfig
+
+const parseExpiresInToMs = (expiresIn) => {
+	if (typeof expiresIn === "number") {
+		return expiresIn
+	}
+
+	if (typeof expiresIn !== "string") {
+		throw new TypeError("Invalid refresh token expiration format")
+	}
+
+	const match = expiresIn.trim().match(/^(\d+)([smhd])$/i)
+
+	if (!match) {
+		throw new Error(`Unsupported refresh token expiration: ${expiresIn}`)
+	}
+
+	const [, rawValue, rawUnit] = match
+	const value = Number(rawValue)
+	const unit = rawUnit.toLowerCase()
+	const unitsInMs = {
+		s: 1000,
+		m: 60 * 1000,
+		h: 60 * 60 * 1000,
+		d: 24 * 60 * 60 * 1000,
+	}
+
+	return value * unitsInMs[unit]
+}
 
 const createSession = async (userId, refreshToken, deviceInfo = null) => {
 	const refreshHash = await hashPassword(refreshToken)
-	const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+	const expiresAt = new Date(Date.now() + parseExpiresInToMs(refreshExpiresIn))
 	if (deviceInfo === null || deviceInfo === undefined) {
 		await db.query(
 			"INSERT INTO sessions (user_id, refresh_token_hash, expires_at) VALUES ($1, $2, $3)",
