@@ -40,7 +40,7 @@ const UserDetails = () => {
       <div>
         <GoBackBtn />
       </div>
-      <div className="flex flex-col gap-6  lg:grid lg:grid-cols-[minmax(280px,360px)_minmax(0,1fr)] lg:items-start">
+      <div className="flex flex-col gap-6 lg:grid lg:grid-cols-[minmax(280px,360px)_minmax(0,1fr)] lg:items-start">
         <div className="w-full lg:max-w-sm">
           <UserCard user={user} />
         </div>

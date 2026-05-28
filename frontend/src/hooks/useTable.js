@@ -1,8 +1,9 @@
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, useRef } from "react"
 
 const useTable = (fetchFn, initialFilters = {}, initialSorting = []) => {
   const [data, setData] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
+  const fetchFnRef = useRef(fetchFn)
 
   const [pagination, setPagination] = useState({
     pageIndex: 0,
@@ -12,6 +13,10 @@ const useTable = (fetchFn, initialFilters = {}, initialSorting = []) => {
   const [sorting, setSorting] = useState(initialSorting)
 
   const [filters, setFilters] = useState(initialFilters)
+
+  useEffect(() => {
+    fetchFnRef.current = fetchFn
+  }, [fetchFn])
 
   const loadData = useCallback(async () => {
     setIsLoading(true)
@@ -39,11 +44,11 @@ const useTable = (fetchFn, initialFilters = {}, initialSorting = []) => {
       delete params.filterValue
     }
 
-    const res = await fetchFn(params)
+    const res = await fetchFnRef.current(params)
     if (res) setData(res)
 
     setIsLoading(false)
-  }, [fetchFn, pagination.pageIndex, pagination.pageSize, sorting, filters])
+  }, [pagination.pageIndex, pagination.pageSize, sorting, filters])
 
   useEffect(() => {
     loadData()

@@ -1,13 +1,11 @@
 import React from "react"
-import { useNavigate } from "react-router-dom"
 import AdminPageHeader from "@/components/admin/components/AdminPageHeader"
 import UsersTable from "@/components/admin/tables/UsersTable"
-import Button from "@/components/buttons/Button"
+import NavigationBtn from "@/components/buttons/NavigationBtn"
 import UserPlusSVG from "@/components/svg/users/UserPlusSVG"
 import { useLocale } from "@/providers/LocaleProvider"
 
 const AllUsers = () => {
-  const navigate = useNavigate()
   const { t } = useLocale()
 
   return (
@@ -16,13 +14,13 @@ const AllUsers = () => {
         title={t("adminPanel.users.title")}
         backLink="/home"
         actions={
-          <Button
+          <NavigationBtn
             type="button"
             svg={<UserPlusSVG />}
             variant="success"
-            onClick={() => navigate("/admin/users/create")}>
+            to="/admin/users/create">
             {t("adminPanel.users.createNewUser")}
-          </Button>
+          </NavigationBtn>
         }
       />
       <UsersTable />

@@ -42,10 +42,10 @@ const Table = ({
     <div className="w-full min-w-0 max-w-full rounded-lg bg-base-200 p-4">
       <div className="w-full min-w-0 max-w-full overflow-x-auto">
         <table
-          className={`table table-sm sm:table-md ${striped ? "table-zebra" : ""}`}>
+          className="table table-sm sm:table-md rounded-md">
           <thead>
             {table.getHeaderGroups().map((hg) => (
-              <tr key={hg.id}>
+              <tr key={hg.id} className="bg-base-100">
                 {hg.headers.map((h) => (
                   <th
                     key={h.id}
@@ -77,7 +77,13 @@ const Table = ({
               </tr>
             ) : (
               table.getRowModel().rows.map((row) => (
-                <tr key={row.id} className={striped ? "odd:bg-base-100 even:bg-base-200/50" : ""}>
+                <tr
+                  key={row.id}
+                  className={
+                    striped
+                      ? "odd:bg-neutral hover:bg-base-300 transition-colors"
+                      : "hover:bg-base-300 transition-colors"
+                  }>
                   {row.getVisibleCells().map((cell) => (
                     <td key={cell.id} className="whitespace-nowrap">
                       {flexRender(

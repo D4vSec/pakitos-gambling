@@ -3,6 +3,7 @@ import { useFormContext } from "react-hook-form"
 import { useLocale } from "@/providers/LocaleProvider"
 import EyeSVG from "@/components/svg/actions/EyeSVG"
 import EyeOffSVG from "@/components/svg/actions/EyeOffSVG"
+import Button from "@/components/buttons/Button"
 
 const FormField = ({
   name,
@@ -28,7 +29,7 @@ const FormField = ({
   const baseClass = `w-full ${
     as === "input" ? "input input-md md:input-lg" : ""
   } ${as === "textarea" ? "textarea textarea-md md:textarea-lg" : ""} ${
-    as === "select" ? "select select-lg" : ""
+    as === "select" ? "select select-md md:select:lg" : ""
   } ${error ? "input-error" : ""}`
 
   const commonProps = {
@@ -71,13 +72,14 @@ const FormField = ({
           <span>{label}</span>
           {renderField()}
           {isPasswordField && (
-            <button
+            <Button
               type="button"
+              unstyled
               className="absolute right-4 top-1/2 -translate-y-1/2 z-10 text-base-content/50 hover:text-base-content transition-colors"
               onClick={() => setShowPassword(!showPassword)}
               tabIndex="-1">
               {showPassword ? <EyeOffSVG /> : <EyeSVG />}
-            </button>
+            </Button>
           )}
         </label>
       )}

@@ -1,11 +1,9 @@
 import React from "react"
-import Button from "@/components/buttons/Button"
+import NavigationBtn from "@/components/buttons/NavigationBtn"
 import { useLocale } from "@/providers/LocaleProvider"
-import { useNavigate } from "react-router-dom"
 
 const CTA = () => {
   const { t } = useLocale()
-  const navigate = useNavigate()
   return (
     <section className="relative overflow-hidden px-4 md:px-6 lg:px-10">
       <div className="bg-linear-to-r from-primary/20 to-primary/10 border border-primary/30 p-8 md:p-12 text-center rounded-xl">
@@ -15,12 +13,12 @@ const CTA = () => {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button variant="primary" size="lg" onClick={() => navigate("/register")}>
+          <NavigationBtn variant="primary" size="lg" to="/register">
             {t("pages.landingPage.cta.join")}
-          </Button>
-          <Button variant="secondary" size="lg" onClick={() => navigate("/home")}>
+          </NavigationBtn>
+          <NavigationBtn variant="accent" size="lg" to="/home">
             {t("pages.landingPage.cta.exploreGames")}
-          </Button>
+          </NavigationBtn>
         </div>
       </div>
     </section>

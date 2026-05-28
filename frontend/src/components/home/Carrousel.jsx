@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { useLocale } from "@/providers/LocaleProvider"
-import NavigateBtn from "../buttons/NavigateBtn"
+import NavigationBtn from "../buttons/NavigationBtn"
+import Button from "../buttons/Button"
 
 import BlackjackImg from "@/assets/home/carrousel/blackjackBanner.jpg"
 import Roulette00Img from "@/assets/home/carrousel/roulette00Banner.webp"
@@ -107,30 +108,36 @@ const Carrousel = () => {
               </p>
 
               <div className="pt-1">
-                <NavigateBtn to={slide.route}>{t("pages.home.cards.playNow")}</NavigateBtn>
+                <NavigationBtn to={slide.route}>{t("pages.home.cards.playNow")}</NavigationBtn>
               </div>
             </div>
           </div>
         ))}
 
-        <button
+        <Button
+          type="button"
+          unstyled
           onClick={handlePrev}
-          className="absolute left-2 top-1/2 -translate-y-1/2 z-40 w-10 h-10 flex items-center justify-center rounded-full bg-white/5 backdrop-blur-sm text-white/50 border border-white/10 opacity-0 group-hover:opacity-100 transition-all hover:bg-white/10 hover:text-white active:scale-90"
+          className="absolute left-2 top-1/2 -translate-y-1/2 z-40 flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/50 opacity-0 backdrop-blur-sm transition-all hover:bg-white/10 hover:text-white active:scale-90 group-hover:opacity-100"
         >
           <span className="text-2xl -mt-1">&lsaquo;</span>
-        </button>
+        </Button>
 
-        <button
+        <Button
+          type="button"
+          unstyled
           onClick={handleNext}
-          className="absolute right-2 top-1/2 -translate-y-1/2 z-40 w-10 h-10 flex items-center justify-center rounded-full bg-white/5 backdrop-blur-sm text-white/50 border border-white/10 opacity-0 group-hover:opacity-100 transition-all hover:bg-white/10 hover:text-white active:scale-90"
+          className="absolute right-2 top-1/2 -translate-y-1/2 z-40 flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/50 opacity-0 backdrop-blur-sm transition-all hover:bg-white/10 hover:text-white active:scale-90 group-hover:opacity-100"
         >
           <span className="text-2xl -mt-1">&rsaquo;</span>
-        </button>
+        </Button>
 
         <div className="absolute bottom-4 right-4 md:bottom-6 md:right-6 z-40 flex gap-2 items-center bg-black/30 backdrop-blur-sm p-2 rounded-full border border-white/5">
           {slides.map((slide) => (
-            <button
+            <Button
               key={slide.id}
+              type="button"
+              unstyled
               onClick={() => setCurrentIndex(slide.id - 1)}
               className={`transition-all duration-300 rounded-full ${
                 currentIndex === slide.id - 1

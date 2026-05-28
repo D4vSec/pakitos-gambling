@@ -6,6 +6,7 @@ import { useLocale } from "@/providers/LocaleProvider"
 import FormField from "@/components/forms/FormField"
 import Title from "@/components/layout/fonts/Title"
 import Button from "@/components/buttons/Button"
+import NavigationBtn from "@/components/buttons/NavigationBtn"
 import { useAdmin } from "@/providers/AdminProvider"
 import { userSchema } from "@/schemas/userSchemas"
 import { useSession } from "@/providers/SessionProvider"
@@ -197,9 +198,9 @@ const UserForm = () => {
                 </div>
               </form>
             </FormProvider>
-            <Button variant="secondary" onClick={() => navigate("/admin/users")}>
+            <NavigationBtn variant="secondary" to="/admin/users">
               {t("forms.buttons.goBack")}
-            </Button>
+            </NavigationBtn>
           </div>
         </div>
       </div>

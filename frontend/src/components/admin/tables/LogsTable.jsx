@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react"
+import React, { memo, useMemo } from "react"
 import useTable from "@/hooks/useTable"
 import { useAdmin } from "@/providers/AdminProvider"
 import { useLocale } from "@/providers/LocaleProvider"
@@ -96,4 +96,4 @@ const LogsTable = () => {
   )
 }
 
-export default LogsTable
+export default memo(LogsTable)

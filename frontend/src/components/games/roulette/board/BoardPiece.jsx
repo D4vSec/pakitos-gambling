@@ -1,6 +1,7 @@
 import React from "react"
 import { useRoulette } from "@/providers/RouletteProvider"
 import { useLocale } from "@/providers/LocaleProvider"
+import Button from "@/components/buttons/Button"
 
 const BoardPiece = ({ item, children }) => {
   const { type } = useRoulette()
@@ -24,7 +25,9 @@ const BoardPiece = ({ item, children }) => {
   }
 
   return (
-    <button
+    <Button
+      type="button"
+      unstyled
       className={`${gridClass} ${bgColor} ${textColor} font-bold flex justify-center items-center border border-gray-700 rounded relative`}
       data-info={JSON.stringify(item)}>
       {["red", "black", "odd", "even"].includes(item.text)
@@ -35,7 +38,7 @@ const BoardPiece = ({ item, children }) => {
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         {children}
       </div>
-    </button>
+    </Button>
   )
 }
 

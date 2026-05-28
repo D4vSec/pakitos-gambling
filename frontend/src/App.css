@@ -13,17 +13,17 @@
   default: true;
   prefersdark: true;
   color-scheme: "dark";
-  --color-base-100: oklch(0 0 0);
-  --color-base-200: oklch(0.209 0 0);
-  --color-base-300: oklch(0.2393 0 0);
+  --color-base-100: oklch(0.1448 0 89.88);
+  --color-base-200: oklch(0.2046 0 0);
+  --color-base-300: oklch(0.2972 0 89.88);
   --color-base-content: oklch(97.807% 0.029 256.847);
   --color-primary: oklch(52% 0.19 20);
   --color-primary-content: oklch(96% 0.01 95);
   --color-secondary: oklch(0.9482 0.0122 96.43);
   --color-secondary-content: oklch(21% 0.006 285.885);
   --color-accent: oklch(0.6521 0.1322 81.57);
-  --color-accent-content: oklch(98% 0 0);
-  --color-neutral: oklch(0.1973 0.0087 240.37);
+  --color-accent-content: oklch(0.89% 0 0);
+  --color-neutral: oklch(0.2603 0 89.88);
   --color-neutral-content: oklch(96% 0.001 286.375);
   --color-info: oklch(71% 0.143 215.221);
   --color-info-content: oklch(29% 0.066 243.157);
@@ -51,8 +51,7 @@ body {
   min-height: 100vh;
   background:
     radial-gradient(circle at top, rgba(255, 82, 82, 0.14), transparent 28%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.01), rgba(255, 255, 255, 0)),
-    oklch(24% 0.015 20);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.01), rgba(255, 255, 255, 0)), oklch(24% 0.015 20);
   color: oklch(96% 0.01 95);
 }
 

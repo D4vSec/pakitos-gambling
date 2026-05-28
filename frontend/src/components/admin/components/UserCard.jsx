@@ -5,7 +5,7 @@ import BitcoinSVG from "@/components/svg/pictures/BitcoinSVG"
 const UserCard = ({ user }) => {
   const { t } = useLocale()
   return (
-    <div className="card w-full bg-base-100 shadow-sm lg:h-fit">
+    <div className="card w-full bg-base-200 shadow-sm lg:h-fit">
       <div className="card-body gap-3 p-5 sm:p-6">
         {user ? (
           <>

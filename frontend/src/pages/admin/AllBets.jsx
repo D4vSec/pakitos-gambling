@@ -1,13 +1,11 @@
 import React from "react"
-import { useNavigate } from "react-router-dom"
 import AdminPageHeader from "@/components/admin/components/AdminPageHeader"
 import BetsTable from "@/components/admin/tables/BetsTable"
-import Button from "@/components/buttons/Button"
+import NavigationBtn from "@/components/buttons/NavigationBtn"
 import CoinsSVG from "@/components/svg/pictures/CoinsSVG"
 import { useLocale } from "@/providers/LocaleProvider"
 
 const AllBets = () => {
-  const navigate = useNavigate()
   const { t } = useLocale()
 
   return (
@@ -16,13 +14,13 @@ const AllBets = () => {
         title={t("adminPanel.bets.title")}
         backLink="/home"
         actions={
-          <Button
+          <NavigationBtn
             type="button"
             svg={<CoinsSVG />}
             variant="success"
-            onClick={() => navigate("/admin/bets/create")}>
+            to="/admin/bets/create">
             {t("adminPanel.bets.createNewBet")}
-          </Button>
+          </NavigationBtn>
         }
       />
 

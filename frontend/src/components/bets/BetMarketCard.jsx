@@ -1,13 +1,11 @@
 import React from "react"
-import Button from "@/components/buttons/Button"
+import NavigationBtn from "@/components/buttons/NavigationBtn"
 import { useLocale } from "@/providers/LocaleProvider"
-import { useNavigate } from "react-router-dom"
 import BetOptionPill from "./BetOptionPill"
 import BetStatusBadge from "../badges/BetStatusBadge"
 import { formatBetDate, sortBetOptions } from "@/utils/betsUtils"
 
 const BetMarketCard = ({ bet }) => {
-  const navigate = useNavigate()
   const { t } = useLocale()
   const previewOptions = sortBetOptions(bet.options || []).slice(0, 2)
   const userBet = bet.userBet || null
@@ -73,13 +71,14 @@ const BetMarketCard = ({ bet }) => {
         )}
       </div>
 
-      <Button
+      <NavigationBtn
         className="relative mt-1 w-full"
         variant={bet.status === "open" ? "primary" : "secondary"}
         size="md"
-        onClick={() => navigate(`/bets/${bet.id}`, { state: { bet } })}>
+        to={`/bets/${bet.id}`}
+        state={{ bet }}>
         {t("pages.bets.card.viewMarket")}
-      </Button>
+      </NavigationBtn>
     </article>
   )
 }

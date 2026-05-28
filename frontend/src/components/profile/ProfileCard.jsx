@@ -26,7 +26,7 @@ const ProfileCard = () => {
   })
 
   const [isEditing, setIsEditing] = useState(false)
-  const { reset, handleSubmit, watch } = methods
+  const { reset, handleSubmit } = methods
 
   useEffect(() => {
     reset({
@@ -35,7 +35,7 @@ const ProfileCard = () => {
       password: "",
       confirmPassword: "",
     })
-  }, [user])
+  }, [reset, user])
 
   const onSubmit = async (data) => {
     if (data.password && data.password !== data.confirmPassword) {
@@ -142,9 +142,10 @@ const ProfileCard = () => {
                       {t("forms.buttons.update")}
                     </Button>
 
-                    <button
+                    <Button
                       type="button"
-                      className="btn btn-ghost flex-1"
+                      variant="ghost"
+                      className="flex-1"
                       onClick={() => {
                         reset({
                           username: user?.username || "",
@@ -155,7 +156,7 @@ const ProfileCard = () => {
                         setIsEditing(false)
                       }}>
                       {t("forms.buttons.cancel")}
-                    </button>
+                    </Button>
                   </div>
                 </form>
               </FormProvider>

@@ -32,9 +32,8 @@ const Notification = ({ notification }) => {
         alert alert-horizontal
         ${typeClasses[notification.type] || ""}
         shadow-lg max-w-md
-
         transition-all duration-300 ease-out
-
+        mt-4
         ${
           notification.leaving
             ? "opacity-0 -translate-y-4 scale-95"

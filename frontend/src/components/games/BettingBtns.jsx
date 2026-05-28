@@ -36,7 +36,7 @@ const BettingBtns = ({ children, actions, disabled }) => {
       </div>
       {children}
       <Button
-        variant="secondary"
+        variant="accent"
         className="min-w-fit w-full"
         onClick={start}
         disabled={disabled}>

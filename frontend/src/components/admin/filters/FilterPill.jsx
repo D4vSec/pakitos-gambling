@@ -1,5 +1,6 @@
 import CloseSVG from "@/components/svg/actions/CloseSVG"
 import { useLocale } from "@/providers/LocaleProvider"
+import Button from "@/components/buttons/Button"
 
 const FilterPill = ({ label, value, onRemove, isEnum = false }) => {
   const { t } = useLocale()
@@ -17,14 +18,14 @@ const FilterPill = ({ label, value, onRemove, isEnum = false }) => {
         </span>
       </div>
 
-      <button
+      <Button
         type="button"
         onClick={onRemove}
+        unstyled
         className="shrink-0 p-0.5 hover:scale-125 transition-transform bg-primary-focus/20 rounded-full"
-        title={t("ui.buttons.close")}
-      >
+        title={t("ui.buttons.close")}>
         <CloseSVG className="w-3 h-3 md:w-3.5 md:h-3.5" />
-      </button>
+      </Button>
     </div>
   )
 }

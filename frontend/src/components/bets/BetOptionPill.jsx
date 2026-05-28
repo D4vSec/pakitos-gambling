@@ -1,6 +1,7 @@
 import React from "react"
 import { useLocale } from "@/providers/LocaleProvider"
 import { normalizeBetOdd } from "@/utils/betsUtils"
+import Button from "@/components/buttons/Button"
 
 const BetOptionPill = ({
   label,
@@ -13,10 +14,11 @@ const BetOptionPill = ({
   const { t } = useLocale()
 
   return (
-    <button
+    <Button
       type="button"
       onClick={onClick}
       disabled={disabled}
+      unstyled
       className={`w-full min-w-0 rounded-2xl border text-left transition-all duration-200 ${
         compact ? "p-3" : "p-4"
       } ${
@@ -38,7 +40,7 @@ const BetOptionPill = ({
           x{normalizeBetOdd(odd)}
         </div>
       </div>
-    </button>
+    </Button>
   )
 }
 

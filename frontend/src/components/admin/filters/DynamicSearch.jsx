@@ -2,6 +2,8 @@ import React from "react"
 import { useLocale } from "@/providers/LocaleProvider"
 import SearchSVG from "@/components/svg/actions/SearchSVG"
 import CloseSVG from "@/components/svg/actions/CloseSVG"
+import Button from "@/components/buttons/Button"
+import TrashXSVG from "@/components/svg/actions/TrashXSVG"
 
 const DynamicSearch = ({
   config,
@@ -64,7 +66,8 @@ const DynamicSearch = ({
             <select
               className="select select-bordered select-md bg-base-100 w-full"
               value={selectedField}
-              onChange={(e) => onFieldChange?.(e.target.value)}>
+              onChange={(e) => onFieldChange?.(e.target.value)}
+            >
               {Object.keys(config).length > 1 && (
                 <option value="">{t("ui.tables.filters.searchBy")}</option>
               )}
@@ -81,7 +84,8 @@ const DynamicSearch = ({
                 className="select select-bordered select-md bg-base-100 w-full uppercase"
                 value={selectedValue}
                 onChange={(e) => onValueChange?.(e.target.value)}
-                disabled={!selectedField}>
+                disabled={!selectedField}
+              >
                 <option value="">{t("ui.tables.filters.select")}</option>
 
                 {selectedConfig.options.map((opt) => (
@@ -93,9 +97,7 @@ const DynamicSearch = ({
             ) : (
               <input
                 className="input input-bordered input-md bg-base-100 w-full min-w-0"
-                placeholder={
-                  selectedField ? t("ui.tables.filters.pressEnter") : "---"
-                }
+                placeholder={selectedField ? t("ui.tables.filters.pressEnter") : "---"}
                 value={selectedValue}
                 onChange={(e) => onValueChange?.(e.target.value)}
                 disabled={!selectedField}
@@ -107,23 +109,27 @@ const DynamicSearch = ({
         {childCount > 0 && <div className={childrenClassName}>{children}</div>}
 
         <div className="grid grid-cols-2 gap-2 xl:flex xl:justify-end">
-          <button
+          <Button
             type="submit"
-            className="btn btn-secondary btn-md h-10 min-h-10 w-full xl:w-12 xl:min-w-10">
+            variant="secondary"
+            className="h-10 min-h-10 w-full xl:w-12 xl:min-w-10"
+          >
             <span>
               <SearchSVG />
             </span>
-          </button>
+          </Button>
 
           {onReset && showResetButton && (
-            <button
+            <Button
               type="button"
-              className="btn btn-primary btn-md  h-10 min-h-10 w-full xl:w-12 xl:min-w-10"
-              onClick={onReset}>
+              variant="primary"
+              className="h-10 min-h-10 w-full xl:w-12 xl:min-w-10"
+              onClick={onReset}
+            >
               <span>
-                <CloseSVG />
+                <TrashXSVG />
               </span>
-            </button>
+            </Button>
           )}
         </div>
       </div>

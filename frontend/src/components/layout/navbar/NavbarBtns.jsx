@@ -1,7 +1,6 @@
 import React from "react"
-import Button from "@/components/buttons/Button"
+import NavigationBtn from "@/components/buttons/NavigationBtn"
 import { useLocale } from "@/providers/LocaleProvider"
-import { useNavigate } from "react-router-dom"
 import { useSession } from "@/providers/SessionProvider"
 import UserDropdown from "./UserDropdown"
 import UserBalance from "./UserBalance"
@@ -9,7 +8,6 @@ import LangDropdown from "./LangDropdown"
 
 const NavbarBtns = ({ className = "", vertical = false }) => {
   const { t } = useLocale()
-  const navigate = useNavigate()
   const { isLogged } = useSession()
 
   const buttons = [
@@ -37,13 +35,13 @@ const NavbarBtns = ({ className = "", vertical = false }) => {
           <UserBalance />
         ) : (
           buttons.map(({ key, variant, label, path }) => (
-            <Button
+            <NavigationBtn
               key={key}
               variant={variant}
-              onClick={() => navigate(path)}
+              to={path}
               className={vertical ? "w-full" : ""}>
               {t(label)}
-            </Button>
+            </NavigationBtn>
           ))
         )}
       </div>

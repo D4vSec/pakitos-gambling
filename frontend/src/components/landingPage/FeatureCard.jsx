@@ -9,7 +9,7 @@ const FeatureCard = ({ title, description, icon, className = "" }) => {
         border border-border
         bg-background
         transition-all duration-300
-        hover:border-primary
+        hover:border-accent
         hover:shadow-lg hover:shadow-primary/10
         ${className}
       `}>
@@ -17,12 +17,12 @@ const FeatureCard = ({ title, description, icon, className = "" }) => {
       <div
         className="
           absolute opacity-45
-          scale-750
+          scale-850
           top-16 left-[90%]
           rotate-12
           transition-colors duration-300
           text-muted-foreground
-          group-hover:text-primary
+          group-hover:text-accent
           pointer-events-none
         ">
         {icon}

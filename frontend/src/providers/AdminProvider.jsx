@@ -1,4 +1,10 @@
-import React, { createContext, useCallback, useContext, useState } from "react"
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from "react"
 import useAPI from "@/hooks/useAPI"
 import { useSession } from "./SessionProvider"
 import { useNotification } from "./NotificationProvider"
@@ -409,29 +415,54 @@ const AdminProvider = ({ children }) => {
 
   // const createuser = async (data) => {}
 
-  const value = {
-    bets,
-    users,
-    loading,
-    getAllUsers,
-    getUserById,
-    updateUser,
-    deleteUser,
-    deleteModal,
-    getTransactionsById,
-    getLogs,
-    getAdminBets,
-    getAdminBet,
-    createBet,
-    updateBet,
-    deleteBet,
-    closeBet,
-    getBetSettlementPreview,
-    settleBet,
-    deleteBetModal,
-    closeBetModal,
-    settleBetModal,
-  }
+  const value = useMemo(
+    () => ({
+      bets,
+      users,
+      loading,
+      getAllUsers,
+      getUserById,
+      updateUser,
+      deleteUser,
+      deleteModal,
+      getTransactionsById,
+      getLogs,
+      getAdminBets,
+      getAdminBet,
+      createBet,
+      updateBet,
+      deleteBet,
+      closeBet,
+      getBetSettlementPreview,
+      settleBet,
+      deleteBetModal,
+      closeBetModal,
+      settleBetModal,
+    }),
+    [
+      bets,
+      users,
+      loading,
+      getAllUsers,
+      getUserById,
+      updateUser,
+      deleteUser,
+      deleteModal,
+      getTransactionsById,
+      getLogs,
+      getAdminBets,
+      getAdminBet,
+      createBet,
+      updateBet,
+      deleteBet,
+      closeBet,
+      getBetSettlementPreview,
+      settleBet,
+      deleteBetModal,
+      closeBetModal,
+      settleBetModal,
+    ],
+  )
 
   return <AdminContext value={value}>{children}</AdminContext>
 }

@@ -1,25 +1,15 @@
-import React, { useEffect } from "react"
+import React from "react"
 import Title from "./layout/fonts/Title"
 import GradientBg from "./layout/GradientBg"
-import Button from "./buttons/Button"
+import NavigationBtn from "./buttons/NavigationBtn"
 import { useLocale } from "../providers/LocaleProvider"
 import { useSession } from "../providers/SessionProvider"
-import { useNavigate } from "react-router-dom"
 import Loading from "./Loading"
 
 const ProtectedRoute = ({ children, requireAdmin }) => {
   const { t } = useLocale()
   const { isLogged, loading, user } = useSession()
-  const navigate = useNavigate()
   const requireLogged = true
-
-  const ReturnBtn = ({ title, route }) => {
-    return (
-      <Button variant="primary" size="lg" onClick={() => navigate(route)}>
-        {t(title)}
-      </Button>
-    )
-  }
 
   return loading ? (
     <Loading />
@@ -27,17 +17,21 @@ const ProtectedRoute = ({ children, requireAdmin }) => {
     <GradientBg>
       <div className="flex flex-col gap-2 justify-center items-center">
         <Title>{t("message.error.noLogin")}</Title>
-        <ReturnBtn title={"ui.buttons.goLogin"} route={"/login"} />
+        <NavigationBtn variant="primary" size="lg" to="/login">
+          {t("ui.buttons.goLogin")}
+        </NavigationBtn>
       </div>
     </GradientBg>
   ) : requireAdmin && user.role !== "admin" ? (
     <GradientBg>
       <div className="flex flex-col gap-2 justify-center items-center">
         <Title>{t("message.error.noAdmin")}</Title>
-        <ReturnBtn
-          title={"ui.buttons.returnHome"}
-          route={isLogged ? "/home" : "/"}
-        />
+        <NavigationBtn
+          variant="primary"
+          size="lg"
+          to={isLogged ? "/home" : "/"}>
+          {t("ui.buttons.returnHome")}
+        </NavigationBtn>
       </div>
     </GradientBg>
   ) : (

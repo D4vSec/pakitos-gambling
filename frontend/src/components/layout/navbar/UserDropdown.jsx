@@ -29,7 +29,7 @@ const UserDropdown = ({ vertical = false }) => {
       key: "adminPanel",
       label: "navbar.userPill.adminPanel",
       href: "/admin/users",
-      className: `${user.role !== "admin" && "hidden"} text-warning`,
+      className: `${user.role !== "admin" ? "hidden" : ""} text-warning`,
     },
     {
       key: "logout",
@@ -46,13 +46,15 @@ const UserDropdown = ({ vertical = false }) => {
 
   return (
     <div
-      className={`dropdown ${vertical ? "w-full" : "dropdown-end"} ${noUser && "dropdown-close pointer-events-none"}`}>
+      className={`dropdown ${vertical ? "w-full" : "dropdown-end"} ${noUser && "dropdown-close pointer-events-none"}`}
+    >
       <div
         tabIndex={0}
         role="button"
         className={`flex gap-2 items-center btn rounded-selector ${
           vertical ? "w-full justify-center" : "hover:bg-base-300"
-        }`}>
+        }`}
+      >
         <UserSVG />
         <p>{user?.username || t("navbar.userPill.guest")}</p>
       </div>
@@ -67,7 +69,8 @@ const UserDropdown = ({ vertical = false }) => {
       ) : (
         <ul
           tabIndex={0}
-          className="dropdown-content menu bg-base-100 rounded-box mt-2 p-2 shadow w-52 z-10">
+          className="dropdown-content menu bg-base-100 rounded-box mt-2 p-2 shadow w-52 z-10"
+        >
           {userDropdownLinks.map(({ key, label, className, href, onClick }) => (
             <li key={key} className={className} onClick={onClick}>
               <Link to={href}>{t(label)}</Link>

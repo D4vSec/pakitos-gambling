@@ -8,8 +8,6 @@ import { useLocale } from "./providers/LocaleProvider"
 import Loading from "./components/Loading"
 import "./App.css"
 
-// TODO: Añadir carga de páginas lazy
-// TODo: Añadir loading mientras que se inicia y cierra sesión
 const App = () => {
   const { loading } = useLocale()
   const [showApp, setShowApp] = useState(false)
@@ -45,7 +43,7 @@ const App = () => {
             <div
               id="app"
               data-theme="mytheme"
-              className="bg-base-300 min-h-dvh grid grid-rows-[auto_1fr_auto]">
+              className="bg-base-200 min-h-dvh grid grid-rows-[auto_1fr_auto]">
               <Notifications />
               <Navbar />
               <Router />

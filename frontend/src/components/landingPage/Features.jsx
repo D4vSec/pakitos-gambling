@@ -34,9 +34,7 @@ const Features = () => {
           <FeatureCard
             key={key}
             title={t(`pages.landingPage.features.items.${key}.title`)}
-            description={t(
-              `pages.landingPage.features.items.${key}.description`,
-            )}
+            description={t(`pages.landingPage.features.items.${key}.description`)}
             icon={icon}
           />
         ))}

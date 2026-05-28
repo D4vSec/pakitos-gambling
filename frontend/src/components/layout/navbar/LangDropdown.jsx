@@ -4,6 +4,7 @@ import { useNotification } from "@/providers/NotificationProvider"
 import SpanishFlagSVG from "@/components/svg/flags/SpanishFlagSVG"
 import UKFlagSVG from "@/components/svg/flags/UKFlagSVG"
 import RomainanFlagSVG from "@/components/svg/flags/RomainanFlagSVG"
+import Button from "@/components/buttons/Button"
 
 const LangDropdown = ({ vertical = false }) => {
   const { t, loadLocale, lang } = useLocale()
@@ -39,13 +40,15 @@ const LangDropdown = ({ vertical = false }) => {
         }`}>
         {languages.map(({ key, label, svg }) => (
           <li key={key} onClick={() => handleChangeLanguage(key)}>
-            <button
+            <Button
+              type="button"
+              unstyled
               className={`${key === lang ? "font-bold text-primary" : ""}`}>
               <span className="flex items-center gap-2">
                 {svg}
                 {label}
               </span>
-            </button>
+            </Button>
           </li>
         ))}
       </ul>

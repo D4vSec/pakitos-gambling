@@ -1,5 +1,6 @@
 import React from "react"
 import { useLocale } from "@/providers/LocaleProvider"
+import Button from "@/components/buttons/Button"
 
 const ExternalBet = React.memo(({ item, children, onHover }) => {
   const { t } = useLocale()
@@ -7,7 +8,9 @@ const ExternalBet = React.memo(({ item, children, onHover }) => {
   if (!item) return null
 
   return (
-    <button
+    <Button
+      type="button"
+      unstyled
       className={`${item.classes} text-white font-bold aspect-square md:aspect-auto w-full h-full flex justify-center items-center border border-gray-700 rounded relative transition-colors duration-200 ease-in-out`}
       data-info={JSON.stringify(item)}
       onMouseEnter={() => onHover(item.bet)}
@@ -21,7 +24,7 @@ const ExternalBet = React.memo(({ item, children, onHover }) => {
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         {children}
       </div>
-    </button>
+    </Button>
   )
 })
 

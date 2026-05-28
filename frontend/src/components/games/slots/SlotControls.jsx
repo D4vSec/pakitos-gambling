@@ -127,14 +127,16 @@ const SlotControls = ({ type = "3x3", onTypeChange }) => {
             <p className="fieldset-legend text-md">{t("games.slots.controls.selectType")}:</p>
             <div className="flex gap-2">
               {SLOT_TYPES.map((mode) => (
-                <button
+                <Button
                   key={mode}
-                  className={`btn btn-sm flex-1 ${type === mode ? "btn-primary" : "btn-ghost border border-base-content/20"}`}
+                  type="button"
+                  variant={type === mode ? "primary" : "ghost"}
+                  size="sm"
+                  className={`flex-1 ${type === mode ? "" : "border border-base-content/20"}`}
                   onClick={() => onTypeChange?.(mode)}
-                  disabled={isBusy}
-                >
+                  disabled={isBusy}>
                   {mode}
-                </button>
+                </Button>
               ))}
             </div>
           </div>

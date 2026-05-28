@@ -4,6 +4,7 @@ import ChevronLeftSVG from "@/components/svg/actions/ChevronLeftSVG"
 import ChevronPipeLeftSVG from "@/components/svg/actions/ChevronPipeLeftSVG"
 import ChevronRightSVG from "@/components/svg/actions/ChevronRightSVG"
 import ChevronPipeRightSVG from "@/components/svg/actions/ChevronPipeRightSVG"
+import Button from "@/components/buttons/Button"
 
 const PaginationBar = ({ table }) => {
   const { t } = useLocale()
@@ -13,7 +14,6 @@ const PaginationBar = ({ table }) => {
 
   const { pageIndex, pageSize } = state.pagination
   const totalPages = table.getPageCount()
-  const navButtonClass = "btn btn-sm btn-secondary btn-outline"
   const iconOnlyButtonClass = "px-2 sm:px-3"
 
   const paginationButtons = [
@@ -51,16 +51,18 @@ const PaginationBar = ({ table }) => {
     <div className="mt-4 flex flex-col gap-3 md:flex-row w-full items-center md:justify-between">
       <div className="flex flex-wrap items-center gap-2">
         {paginationButtons.slice(0, 2).map((button) => (
-          <button
+          <Button
             key={button.key}
-            className={`${navButtonClass} ${iconOnlyButtonClass}`}
+            type="button"
+            variant="secondary"
+            size="sm"
+            className={`btn-outline ${iconOnlyButtonClass}`}
             onClick={button.onClick}
-            disabled={button.disabled}>
+            disabled={button.disabled}
+          >
             <span className="hidden sm:inline">{button.label}</span>
-            <span className={`sm:hidden ${button.iconClass ?? ""}`}>
-              {button.icon}
-            </span>
-          </button>
+            <span className={`sm:hidden ${button.iconClass ?? ""}`}>{button.icon}</span>
+          </Button>
         ))}
 
         <span className="min-w-18 text-center text-sm font-medium sm:min-w-22">
@@ -68,16 +70,18 @@ const PaginationBar = ({ table }) => {
         </span>
 
         {paginationButtons.slice(2).map((button) => (
-          <button
+          <Button
             key={button.key}
-            className={`${navButtonClass} ${iconOnlyButtonClass}`}
+            type="button"
+            variant="secondary"
+            size="sm"
+            className={`btn-outline ${iconOnlyButtonClass}`}
             onClick={button.onClick}
-            disabled={button.disabled}>
+            disabled={button.disabled}
+          >
             <span className="hidden sm:inline">{button.label}</span>
-            <span className={`sm:hidden ${button.iconClass ?? ""}`}>
-              {button.icon}
-            </span>
-          </button>
+            <span className={`sm:hidden ${button.iconClass ?? ""}`}>{button.icon}</span>
+          </Button>
         ))}
       </div>
 
@@ -91,7 +95,8 @@ const PaginationBar = ({ table }) => {
           onChange={(e) => {
             const size = Number(e.target.value)
             table.setPageSize(size)
-          }}>
+          }}
+        >
           {[1, 5, 10, 20, 50, 100].map((size) => (
             <option key={size} value={size}>
               {size}

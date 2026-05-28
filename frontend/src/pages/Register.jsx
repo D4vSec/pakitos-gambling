@@ -83,7 +83,7 @@ const Register = () => {
                 ))}
 
                 <div className="form-control mt-2">
-                  <Button className="w-full">
+                  <Button variant="accent" size="lg" className="w-full">
                     {t("forms.buttons.register")}
                   </Button>
                 </div>

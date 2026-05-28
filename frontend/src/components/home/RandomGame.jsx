@@ -24,7 +24,7 @@ const RandomGame = () => {
   }
   return (
     <section className="w-full">
-      <div className="group relative h-auto sm:h-32 md:h-36 rounded-3xl overflow-hidden border border-base-300 bg-base-200 px-6 py-4 sm:py-0 flex flex-col sm:flex-row items-center  justify-between gap-4 hover:scale-[101%] hover:border-primary/40 transition-all duration-300">
+      <div className="group relative h-auto sm:h-32 md:h-36 rounded-3xl overflow-hidden border border-primary bg-base-200 px-6 py-4 sm:py-0 flex flex-col sm:flex-row items-center  justify-between gap-4 hover:scale-[101%]  transition-all duration-300">
         <div className="absolute -top-10 -left-10 w-48 h-48 bg-primary/25 rounded-full blur-3xl" />
         <div className="absolute -bottom-10 right-0 w-48 h-48 bg-primary/15 rounded-full blur-3xl" />
         <div className="absolute top-6 right-32 w-2 h-2 rounded-full bg-primary/60" />

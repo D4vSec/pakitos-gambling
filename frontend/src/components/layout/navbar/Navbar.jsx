@@ -2,15 +2,14 @@ import React, { useEffect, useRef } from "react"
 import CherrySVG from "@/components/svg/pictures/CherrySVG"
 import MenuSVG from "@/components/svg/pictures/MenuSVG"
 import CloseSVG from "@/components/svg/actions/CloseSVG"
-import Button from "@/components/buttons/Button"
+import NavigationBtn from "@/components/buttons/NavigationBtn"
 import NavbarLinks from "./NavbarLinks"
 import NavbarBtns from "./NavbarBtns"
 import { useLocale } from "@/providers/LocaleProvider"
-import { useLocation, useNavigate } from "react-router-dom"
+import { useLocation } from "react-router-dom"
 
 const Navbar = () => {
   const { t } = useLocale()
-  const navigate = useNavigate()
   const location = useLocation()
   const drawerRef = useRef(null)
 
@@ -40,13 +39,13 @@ const Navbar = () => {
               <div className="w-fit bg-primary rounded-xl p-2">
                 <CherrySVG />
               </div>
-              <Button
+              <NavigationBtn
                 variant="ghost"
                 size="lg"
                 className="text-xl"
-                onClick={() => navigate("/")}>
+                to="/">
                 Pakito`s Gambling
-              </Button>
+              </NavigationBtn>
             </div>
 
             <label

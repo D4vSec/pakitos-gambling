@@ -1,11 +1,9 @@
 import React from "react"
-import Button from "@/components/buttons/Button"
+import NavigationBtn from "@/components/buttons/NavigationBtn"
 import { useLocale } from "@/providers/LocaleProvider"
-import { useNavigate } from "react-router-dom"
 
 const HeroContent = () => {
   const { t } = useLocale()
-  const navigate = useNavigate()
 
   return (
     <div className="px-6 md:px-12 w-full">
@@ -19,23 +17,21 @@ const HeroContent = () => {
         </p>
 
         <div className="flex flex-col md:flex-row gap-4">
-          <Button
+          <NavigationBtn
             variant="primary"
             size="lg"
             className="btn-lg md:btn-xl"
-            onClick={() => navigate("/register")}
-          >
+            to="/register">
             {t("pages.landingPage.hero.join")}
-          </Button>
+          </NavigationBtn>
 
-          <Button
+          <NavigationBtn
             variant="secondary"
             size="lg"
             className="btn-lg md:btn-xl"
-            onClick={() => navigate("/home")}
-          >
+            to="/home">
             {t("pages.landingPage.hero.seeGames")}
-          </Button>
+          </NavigationBtn>
         </div>
       </div>
     </div>
