@@ -25,10 +25,8 @@ vi.mock('#utils/logger.utils', () => ({
 	},
 }))
 
-vi.mock('crypto', () => ({
-	default: {
-		randomUUID: vi.fn(() => 'roulette-game-id'),
-	},
+vi.mock('#utils/rng.utils', () => ({
+	randomUUID: vi.fn(() => 'roulette-game-id'),
 }))
 
 import spinRoulette from '../../../src/controllers/roulette.controller.js'

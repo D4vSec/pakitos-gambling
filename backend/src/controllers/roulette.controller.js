@@ -1,8 +1,8 @@
 import createRoulette from "#services/roulette.service"
 import User from "#models/user.model"
-import crypto from "crypto"
 import Audit from "#services/audit.service"
 import logger from "#utils/logger.utils"
+import { randomUUID } from "#utils/rng.utils"
 
 const spinRoulette = async (req, res) => {
     const { rouletteType, bets } = req.body
@@ -109,7 +109,7 @@ const spinRoulette = async (req, res) => {
         })
 
         res.json({
-            gameId: crypto.randomUUID(),
+            gameId: randomUUID(),
             game: "roulette",
             rouletteType,
             status: "finished",

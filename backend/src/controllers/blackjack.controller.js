@@ -1,7 +1,7 @@
 import createBlackJack from "#services/blackjack.service"
 import User from "#models/user.model"
 import logger from "#utils/logger.utils"
-import { error } from "node:console"
+import { randomUUID } from "#utils/rng.utils"
 
 const games = new Map()
 
@@ -57,7 +57,7 @@ export const startGame = async (req, res) => {
     }
 
     const blackJack = createBlackJack()
-    const gameId = crypto.randomUUID()
+    const gameId = randomUUID()
 
     try {
         await User.updateUserBalance(id, -amount, { type: "BET" })

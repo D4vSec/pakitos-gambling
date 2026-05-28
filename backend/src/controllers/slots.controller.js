@@ -1,8 +1,8 @@
 import createSlots from "#services/slots.service"
 import User from "#models/user.model"
 import { MACHINE_TYPES } from "#config/slots.config"
-import crypto from "crypto"
 import logger from "#utils/logger.utils"
+import { randomUUID } from "#utils/rng.utils"
 
 const activeGames = new Map()
 
@@ -40,7 +40,7 @@ const createSlot = async (req, res) => {
 		}
 
 		const game = createSlots(type)
-		const gameId = crypto.randomUUID()
+		const gameId = randomUUID()
 
 		activeGames.set(gameId, {
 			userId,
