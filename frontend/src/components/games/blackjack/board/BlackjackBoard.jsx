@@ -49,7 +49,10 @@ const BlackjackBoard = () => {
     )
 
     return gameCards.reduce((acc, card) => {
-      if (queuedRevealIds.has(card.id) && cardStateOverrides[card.id] !== "faceUp") {
+      if (
+        queuedRevealIds.has(card.id) &&
+        cardStateOverrides[card.id] !== "faceUp"
+      ) {
         acc[card.id] = "faceDown"
         return acc
       }
@@ -98,19 +101,22 @@ const BlackjackBoard = () => {
     [gameCards],
   )
 
-  const updateCardState = useCallback((cardId, state) => {
-    setCardStateOverrides((prev) => ({
-      ...Object.fromEntries(
-        Object.entries(prev).filter(([id]) => currentCardIds.has(id)),
-      ),
-      [cardId]: state,
-    }))
-  }, [currentCardIds])
+  const updateCardState = useCallback(
+    (cardId, state) => {
+      setCardStateOverrides((prev) => ({
+        ...Object.fromEntries(
+          Object.entries(prev).filter(([id]) => currentCardIds.has(id)),
+        ),
+        [cardId]: state,
+      }))
+    },
+    [currentCardIds],
+  )
 
   const finishedAndShown = game?.status === "finished" && dealQueue.length === 0
 
   return (
-    <div className="w-full h-full grid grid-cols-[1fr_3fr_1fr] grid-rows-[repeat(4,1fr)] gap-4 bg-accent">
+    <div className="w-full h-full grid grid-cols-[1fr_3fr_1fr] grid-rows-[repeat(4,1fr)] gap-4 bg-base-200">
       <div className="dealer flex justify-center items-center">
         <Hands
           player={"dealer"}
