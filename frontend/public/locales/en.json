@@ -3,7 +3,6 @@
     "name": "Pakito's Gambling",
     "copyright": "All rights reserved by the mafia at the back"
   },
-
   "ui": {
     "buttons": {
       "returnHome": "Return to home",
@@ -15,7 +14,6 @@
       "cancel": "Cancel",
       "close": "Close"
     },
-
     "badges": {
       "creatorsFav": "CREATORS FAV",
       "hot": "HOT",
@@ -25,12 +23,10 @@
       "user": "USER",
       "admin": "ADMIN"
     },
-
     "tooltip": {
       "copyToClipboard": "Copy to clipboard",
       "viewDetails": "View details"
     },
-
     "tables": {
       "noData": "No data found",
       "searchBar": {
@@ -69,7 +65,6 @@
       }
     }
   },
-
   "adminPanel": {
     "navigation": {
       "users": "Users",
@@ -88,7 +83,6 @@
         "actions": "Actions"
       }
     },
-
     "bets": {
       "title": "Bets",
       "createNewBet": "Create bet",
@@ -131,7 +125,6 @@
         "emptyWinners": "There are no winners for this option."
       }
     },
-
     "logs": {
       "title": "Logs",
       "table": {
@@ -151,7 +144,6 @@
         }
       }
     },
-
     "userDetails": {
       "detailsCard": {
         "title": "User Details",
@@ -180,20 +172,17 @@
       }
     }
   },
-
   "games": {
     "betAmount": {
       "label": "Bet amount",
       "placeholder": "Enter bet amount"
     },
-
     "actions": {
       "bet": "Bet",
       "clearBet": "Clear bet",
       "doubleBet": "Double bet",
       "repeatBet": "Repeat bet"
     },
-
     "blackjack": {
       "title": "Blackjack",
       "bkPays": "Blackjack pays 3 to 2",
@@ -204,7 +193,6 @@
         "stand": "Stand"
       }
     },
-
     "roulette": {
       "title": "Roulette",
       "types": {
@@ -227,7 +215,6 @@
         "chipValue": "Chip value"
       }
     },
-
     "slots": {
       "title": "Slots",
       "modes": {
@@ -245,7 +232,6 @@
         "totalPayout": "Total payout"
       }
     },
-
     "capyroad": {
       "title": "Capyroad",
       "description": "Cross one road at a time to raise your multiplier. Every jump increases the potential payout, but also the crash risk. Cash out whenever you want to secure the winnings.",
@@ -259,14 +245,12 @@
         "crashChance": "Risk"
       }
     },
-
     "result": {
       "lose": "You lose :/",
       "tie": "Tie",
       "win": "You win!!!"
     }
   },
-
   "forms": {
     "buttons": {
       "cancel": "Cancel",
@@ -277,7 +261,6 @@
       "update": "Update",
       "changePassword": "Change password"
     },
-
     "page": {
       "login": "Sign in",
       "register": "Sign up",
@@ -286,7 +269,6 @@
       "createBet": "Create bet",
       "updateBet": "Edit bet"
     },
-
     "fields": {
       "email": {
         "label": "Email",
@@ -294,7 +276,6 @@
         "required": "Email is required",
         "pattern": "Invalid email format"
       },
-
       "username": {
         "label": "Username",
         "placeholder": "Username",
@@ -302,7 +283,6 @@
         "minLength": "Minimum 3 characters",
         "maxLength": "Maximum 25 characters"
       },
-
       "password": {
         "label": "Password",
         "placeholder": "Password",
@@ -313,27 +293,23 @@
         "minLength": "Minimum 8 characters",
         "pattern": "Password must include uppercase, lowercase and number or special character"
       },
-
       "confirmPassword": {
         "label": "Confirm password",
         "placeholder": "Confirm password",
         "required": "Confirm password is required",
         "match": "Passwords do not match"
       },
-
       "updatePassword": {
         "label": "Update Password",
         "placeholder": "Enter password to update it (optional)",
         "required": "Confirm password is required",
         "match": "Passwords do not match"
       },
-
       "balance": {
         "label": "Balance",
         "placeholder": "0.00",
         "required": "Balance is required"
       },
-
       "role": {
         "label": "Role",
         "placeholder": "Select a role",
@@ -343,33 +319,28 @@
           "admin": "Admin"
         }
       },
-
       "betLabel": {
         "label": "Market",
         "placeholder": "Real Madrid wins the Champions League",
         "minLength": "Minimum 3 characters",
         "maxLength": "Maximum 120 characters"
       },
-
       "endsAt": {
         "label": "Closing date",
         "placeholder": "Select the closing date",
         "required": "Closing date is required",
         "invalid": "Closing date is invalid"
       },
-
       "betOptionLabel": {
         "label": "Option label",
         "placeholder": "Yes / No / Candidate A",
         "required": "Option label is required"
       },
-
       "betOptionOdd": {
         "label": "Starting odd",
         "placeholder": "2.00",
         "positive": "Odd must be greater than 0"
       },
-
       "betOptions": {
         "label": "Bet options",
         "hint": "Define at least two options for this market.",
@@ -380,7 +351,6 @@
         "maxItems": "You cannot add more than 20 options"
       }
     },
-
     "schema": {
       "required": "This field is required",
       "email": "Invalid email format",
@@ -393,7 +363,6 @@
       "needNumberOrSpecial": "Must include at least one number or special character"
     }
   },
-
   "pages": {
     "home": {
       "exploreGames": {
@@ -410,12 +379,10 @@
           "title": "Blackjack",
           "description": "Classic blackjack game."
         },
-
         "capyroad": {
           "title": "Capyroad",
           "description": "Why did the capybara cross the road? Who knows..."
         },
-
         "roulette": {
           "title": "Roulette",
           "classic": {
@@ -427,7 +394,6 @@
             "description": "American roulette game."
           }
         },
-
         "slots": {
           "title": "Slots",
           "beer": {
@@ -443,11 +409,9 @@
             "description": "Stardew Valley themed slot game."
           }
         },
-
         "playNow": "Play now"
       }
     },
-
     "landingPage": {
       "hero": {
         "title": "Welcome to Pakito's Gambling",
@@ -455,14 +419,12 @@
         "join": "Join",
         "seeGames": "View games"
       },
-
       "cta": {
         "title": "Ready to start your adventure?",
         "text": "Join thousands of players enjoying the best online casino experience. Get your 200% welcome bonus today.",
         "exploreGames": "Explore games",
         "join": "Join now"
       },
-
       "features": {
         "title": "Why choose Pakito's Gambling?",
         "text": "We offer a premium casino experience with top features and full commitment to player satisfaction.",
@@ -493,7 +455,6 @@
           }
         }
       },
-
       "imagesGrid": {
         "title": "Play anywhere",
         "text": "Access your games from any device.",
@@ -512,7 +473,6 @@
           }
         }
       },
-
       "stats": {
         "games": "Games",
         "players": "Players",
@@ -527,19 +487,16 @@
         "description": "Update your personal information"
       },
       "changePhoto": "Change photo",
-
       "security": {
         "title": "Security",
         "description": "Manage your account security"
       },
-
       "danger": {
         "title": "Danger zone",
         "description": "This action is irreversible. All your data will be deleted.",
         "deleteAccount": "Delete account"
       }
     },
-
     "addBalance": {
       "button": "Add balance",
       "label": "Amount",
@@ -549,7 +506,6 @@
       "max": "The amount must be < 99999999999.99",
       "title": "Add balance to account"
     },
-
     "bets": {
       "status": {
         "open": "OPEN",
@@ -603,7 +559,6 @@
       }
     }
   },
-
   "navbar": {
     "home": "Home",
     "allGames": "All games",
@@ -621,7 +576,6 @@
       "logout": "Logout"
     }
   },
-
   "message": {
     "error": {
       "401": "Unauthorized",
@@ -702,6 +656,11 @@
         "accept": "Yes, settle now",
         "cancel": "No, review first",
         "title": "Settle bet {{label}} with {{option}} as the winner?"
+      },
+      "deleteAccount": {
+        "title": "Sure wanna leave gambling club :(?",
+        "accept": "Sadly, yes",
+        "cancel": "Nah, let's keep gambling"
       }
     },
     "success": {

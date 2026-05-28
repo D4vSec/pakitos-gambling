@@ -13,7 +13,8 @@ import ShieldSVG from "@/components/svg/pictures/ShieldSVG"
 import AlertTriangleSVG from "@/components/svg/actions/AlertTriangleSVG"
 
 const Profile = () => {
-  const { user, updateProfile, logout, getAccessToken, getRefreshToken } = useSession()
+  const { user, updateProfile, logout, getAccessToken, getRefreshToken } =
+    useSession()
   const { addNotification } = useNotification()
   const { t } = useLocale()
   const { destroy } = useAPI()
@@ -71,7 +72,6 @@ const Profile = () => {
   }
 
   const handleDeleteAccount = async () => {
-    if (!window.confirm(t("pages.profile.danger.confirm"))) return
     try {
       await destroy("/api/v1/user/me", {
         headers: {
@@ -84,6 +84,13 @@ const Profile = () => {
       addNotification(t("message.error.UNKNOWN_ERROR"), "error")
     }
   }
+
+  const confirmDeleteAccount = () =>
+    addNotification(t("message.modal.deleteAccount.title"), "modal", {
+      onAccept: handleDeleteAccount,
+      acceptLabel: t("message.modal.deleteAccount.accept"),
+      cancelLabel: t("message.modal.deleteAccount.cancel"),
+    })
 
   return (
     <GradientBg>
@@ -99,38 +106,19 @@ const Profile = () => {
                 {t("pages.profile.profileCard.title")}
               </h2>
 
-              <p className="text-base-content mb-6">{t("pages.profile.profileCard.description")}</p>
+              <p className="text-base-content mb-6">
+                {t("pages.profile.profileCard.description")}
+              </p>
 
               <div className="flex flex-col lg:flex-row gap-6">
-                {/* Avatar */}
-                <div className="flex flex-col items-center gap-4">
-                  <div className="avatar">
-                    <div className="w-30 rounded-full ring ring-primary ring-offset-2">
-                      <img
-                        src={
-                          user?.avatar_url || "https://www.alkain.com/DS-Contenido/ImageNotFound.jpg"
-                        }
-                        alt="avatar"
-                      />
-                    </div>
-                  </div>
-
-                  <Button
-                    variant="primary"
-                    className="btn-sm"
-                    onClick={() => console.log("editando foto...")}
-                  >
-                    {t("pages.profile.changePhoto")}
-                  </Button>
-                </div>
-
                 {/* Form */}
                 <div className="flex-1">
                   <FormProvider {...profileMethods}>
                     <form
-                      onSubmit={profileMethods.handleSubmit(handleProfileSubmit)}
-                      className="flex flex-col gap-4"
-                    >
+                      onSubmit={profileMethods.handleSubmit(
+                        handleProfileSubmit,
+                      )}
+                      className="flex flex-col gap-4">
                       <FormField
                         name="username"
                         type="text"
@@ -149,7 +137,10 @@ const Profile = () => {
                         }}
                       />
 
-                      <Button variant="primary" className="mt-2" disabled={profileLoading}>
+                      <Button
+                        variant="primary"
+                        className="mt-2"
+                        disabled={profileLoading}>
                         {profileLoading ? "..." : t("forms.buttons.update")}
                       </Button>
                     </form>
@@ -167,13 +158,14 @@ const Profile = () => {
                 {t("pages.profile.security.title")}
               </h2>
 
-              <p className="text-base-content mb-6">{t("pages.profile.security.description")}</p>
+              <p className="text-base-content mb-6">
+                {t("pages.profile.security.description")}
+              </p>
 
               <FormProvider {...passwordMethods}>
                 <form
                   onSubmit={passwordMethods.handleSubmit(handlePasswordSubmit)}
-                  className="flex flex-col gap-4"
-                >
+                  className="flex flex-col gap-4">
                   <FormField
                     name="currentPassword"
                     type="password"
@@ -200,12 +192,18 @@ const Profile = () => {
                     label={t("forms.fields.password.confirm")}
                     rules={{
                       validate: (value) =>
-                        value === newPasswordValue || t("forms.confirmPassword.match"),
+                        value === newPasswordValue ||
+                        t("forms.confirmPassword.match"),
                     }}
                   />
 
-                  <Button variant="secondary" className="mt-2" disabled={passwordLoading}>
-                    {passwordLoading ? "..." : t("forms.buttons.changePassword")}
+                  <Button
+                    variant="secondary"
+                    className="mt-2"
+                    disabled={passwordLoading}>
+                    {passwordLoading
+                      ? "..."
+                      : t("forms.buttons.changePassword")}
                   </Button>
                 </form>
               </FormProvider>
@@ -220,9 +218,14 @@ const Profile = () => {
                 {t("pages.profile.danger.title")}
               </h2>
 
-              <p className="text-sm opacity-70">{t("pages.profile.danger.description")}</p>
+              <p className="text-sm opacity-70">
+                {t("pages.profile.danger.description")}
+              </p>
 
-              <Button variant="error" className="mt-4" onClick={handleDeleteAccount}>
+              <Button
+                variant="error"
+                className="mt-4"
+                onClick={confirmDeleteAccount}>
                 {t("pages.profile.danger.deleteAccount")}
               </Button>
             </div>

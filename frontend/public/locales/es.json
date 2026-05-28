@@ -3,7 +3,6 @@
     "name": "Pakito's Gambling",
     "copyright": "Todos los derechos reservados por la mafia de atrás"
   },
-
   "ui": {
     "buttons": {
       "returnHome": "Volver al inicio",
@@ -15,7 +14,6 @@
       "cancel": "Cancelar",
       "close": "Cerrar"
     },
-
     "badges": {
       "creatorsFav": "FAVORITO CREADORES",
       "hot": "CALIENTE",
@@ -25,12 +23,10 @@
       "user": "USUARIO",
       "admin": "ADMINISTADOR"
     },
-
     "tooltip": {
       "copyToClipboard": "Copiar al portapapeles",
       "viewDetails": "Ver detalles"
     },
-
     "tables": {
       "noData": "No se han encontrado registros",
       "searchBar": {
@@ -69,7 +65,6 @@
       }
     }
   },
-
   "adminPanel": {
     "navigation": {
       "users": "Usuarios",
@@ -88,7 +83,6 @@
         "actions": "Acciones"
       }
     },
-
     "bets": {
       "title": "Apuestas",
       "createNewBet": "Crear apuesta",
@@ -131,7 +125,6 @@
         "emptyWinners": "No hay usuarios ganadores para esta opción."
       }
     },
-
     "logs": {
       "title": "Registros",
       "table": {
@@ -151,7 +144,6 @@
         }
       }
     },
-
     "userDetails": {
       "detailsCard": {
         "title": "Detalles del usuario",
@@ -180,20 +172,17 @@
       }
     }
   },
-
   "games": {
     "betAmount": {
       "label": "Cantidad de apuesta",
       "placeholder": "Introduce la cantidad de apuesta"
     },
-
     "actions": {
       "bet": "Apostar",
       "clearBet": "Borrar apuesta",
       "doubleBet": "Doblar apuesta",
       "repeatBet": "Repetir apuesta"
     },
-
     "blackjack": {
       "title": "Blackjack",
       "bkPays": "El blackjack paga 3 a 2",
@@ -204,7 +193,6 @@
         "stand": "Plantarse"
       }
     },
-
     "roulette": {
       "title": "Ruleta",
       "types": {
@@ -227,7 +215,6 @@
         "chipValue": "Valor de ficha"
       }
     },
-
     "slots": {
       "title": "Tragamonedas",
       "modes": {
@@ -245,7 +232,6 @@
         "totalPayout": "Ganancia total"
       }
     },
-
     "capyroad": {
       "title": "Capyroad",
       "description": "Cruza carretera por carretera para aumentar el multiplicador. Cada salto aumenta el premio potencial, pero también el riesgo de choque. Planta cuando quieras asegurar la ganancia.",
@@ -259,14 +245,12 @@
         "crashChance": "Riesgo"
       }
     },
-
     "result": {
       "lose": "Has perdido :/",
       "tie": "Empate",
       "win": "¡¡¡Has ganado!!!"
     }
   },
-
   "forms": {
     "buttons": {
       "cancel": "Cancelar",
@@ -277,7 +261,6 @@
       "update": "Actualizar",
       "changePassword": "Cambiar contraseña"
     },
-
     "page": {
       "login": "Iniciar sesión",
       "register": "Registrarse",
@@ -286,7 +269,6 @@
       "createBet": "Crear apuesta",
       "updateBet": "Editar apuesta"
     },
-
     "fields": {
       "email": {
         "label": "Correo electrónico",
@@ -294,7 +276,6 @@
         "required": "El correo electrónico es obligatorio",
         "pattern": "Formato de correo inválido"
       },
-
       "username": {
         "label": "Nombre de usuario",
         "placeholder": "Nombre de usuario",
@@ -302,7 +283,6 @@
         "minLength": "Mínimo 3 caracteres",
         "maxLength": "Máximo 25 caracteres"
       },
-
       "password": {
         "label": "Contraseña",
         "placeholder": "Contraseña",
@@ -313,27 +293,23 @@
         "minLength": "Mínimo 8 caracteres",
         "pattern": "Debe incluir mayúsculas, minúsculas y un número o carácter especial"
       },
-
       "confirmPassword": {
         "label": "Confirmar contraseña",
         "placeholder": "Confirmar contraseña",
         "required": "Debes confirmar la contraseña",
         "match": "Las contraseñas no coinciden"
       },
-
       "updatePassword": {
         "label": "Actualizar contraseña",
         "placeholder": "Introduce la contraseña para actualizarla (opcional)",
         "required": "Debes confirmar la contraseña",
         "match": "Las contraseñas no coinciden"
       },
-
       "balance": {
         "label": "Saldo",
         "placeholder": "0.00",
         "required": "El saldo es obligatorio"
       },
-
       "role": {
         "label": "Rol",
         "placeholder": "Selecciona un rol",
@@ -343,33 +319,28 @@
           "admin": "Administrador"
         }
       },
-
       "betLabel": {
         "label": "Mercado",
         "placeholder": "Real Madrid gana la Champions",
         "minLength": "Mínimo 3 caracteres",
         "maxLength": "Máximo 120 caracteres"
       },
-
       "endsAt": {
         "label": "Fecha de cierre",
         "placeholder": "Selecciona la fecha de cierre",
         "required": "La fecha de cierre es obligatoria",
         "invalid": "La fecha de cierre no es válida"
       },
-
       "betOptionLabel": {
         "label": "Etiqueta de la opción",
         "placeholder": "Sí / No / Candidato A",
         "required": "La etiqueta de la opción es obligatoria"
       },
-
       "betOptionOdd": {
         "label": "Cuota inicial",
         "placeholder": "2.00",
         "positive": "La cuota debe ser mayor que 0"
       },
-
       "betOptions": {
         "label": "Opciones de la apuesta",
         "hint": "Define al menos dos opciones para el mercado.",
@@ -380,7 +351,6 @@
         "maxItems": "No puedes añadir más de 20 opciones"
       }
     },
-
     "schema": {
       "required": "Este campo es obligatorio",
       "email": "Formato de correo inválido",
@@ -393,7 +363,6 @@
       "needNumberOrSpecial": "Debe incluir al menos un número o carácter especial"
     }
   },
-
   "pages": {
     "home": {
       "exploreGames": {
@@ -410,12 +379,10 @@
           "title": "Blackjack",
           "description": "Juego clásico de blackjack."
         },
-
         "capyroad": {
           "title": "Capyroad",
           "description": "¿Por qué cruzó la capibara la carretera? Quién sabe..."
         },
-
         "roulette": {
           "title": "Ruleta",
           "classic": {
@@ -427,7 +394,6 @@
             "description": "Juego de ruleta americana."
           }
         },
-
         "slots": {
           "title": "Tragamonedas",
           "beer": {
@@ -443,11 +409,9 @@
             "description": "Juego de tragamonedas con temática de Stardew Valley."
           }
         },
-
         "playNow": "Jugar ahora"
       }
     },
-
     "landingPage": {
       "hero": {
         "title": "Bienvenido a Pakito's Gambling",
@@ -455,14 +419,12 @@
         "join": "Unirse",
         "seeGames": "Ver juegos"
       },
-
       "cta": {
         "title": "¿Listo para empezar tu aventura?",
         "text": "Únete a miles de jugadores disfrutando de la mejor experiencia de casino online. Consigue hoy tu bono de bienvenida del 200%.",
         "exploreGames": "Explorar juegos",
         "join": "Unirse ahora"
       },
-
       "features": {
         "title": "¿Por qué elegir Pakito's Gambling?",
         "text": "Ofrecemos una experiencia de casino premium con las mejores funciones y un compromiso total con la satisfacción del jugador.",
@@ -493,7 +455,6 @@
           }
         }
       },
-
       "imagesGrid": {
         "title": "Juega en cualquier lugar",
         "text": "Accede a tus juegos desde cualquier dispositivo.",
@@ -512,7 +473,6 @@
           }
         }
       },
-
       "stats": {
         "games": "Juegos",
         "players": "Jugadores",
@@ -520,7 +480,6 @@
         "support": "Soporte"
       }
     },
-
     "profile": {
       "title": "Perfil",
       "profileCard": {
@@ -528,19 +487,16 @@
         "description": "Actualiza tu información personal"
       },
       "changePhoto": "Cambiar foto",
-
       "security": {
         "title": "Seguridad",
         "description": "Gestiona la seguridad de tu cuenta"
       },
-
       "danger": {
         "title": "Zona de peligro",
         "description": "Esta acción es irreversible. Todos tus datos serán eliminados.",
         "deleteAccount": "Eliminar cuenta"
       }
     },
-
     "addBalance": {
       "button": "Añadir saldo",
       "label": "Cantidad",
@@ -550,7 +506,6 @@
       "max": "La cantidad debe ser < 99999999999.99",
       "title": "Añadir saldo a la cuenta"
     },
-
     "bets": {
       "status": {
         "open": "ABIERTA",
@@ -604,7 +559,6 @@
       }
     }
   },
-
   "navbar": {
     "home": "Inicio",
     "allGames": "Todos los juegos",
@@ -622,7 +576,6 @@
       "logout": "Cerrar sesión"
     }
   },
-
   "message": {
     "error": {
       "401": "No autorizado",
@@ -662,7 +615,6 @@
       "noAdmin": "No tienes acceso a esto",
       "noLogin": "Debes iniciar sesión para acceder"
     },
-
     "info": {
       "loading": "Cargando...",
       "registered": "Tu cuenta ha sido creada, debes ir a la página de inicio de sesión",
@@ -671,7 +623,6 @@
       "uuidCopiedToClipboard": "UUID copiado al portapapeles",
       "NO_CHANGES": "No hay cambios para guardar"
     },
-
     "modal": {
       "default": {
         "accept": "Aceptar",
@@ -705,9 +656,13 @@
         "accept": "Sí, liquidar ahora",
         "cancel": "No, revisar antes",
         "title": "¿Liquidar la apuesta {{label}} dando como ganadora a {{option}}?"
+      },
+      "deleteAccount": {
+        "title": "¿Seguro de dejar atrás el club del gambling :(?",
+        "accept": "Tristemente, sí",
+        "cancel": "Nah, quiero seguir apostando"
       }
     },
-
     "success": {
       "AUTH_USER_LOGGED": "Inicio de sesión correcto",
       "AUTH_USER_REGISTERED": "Cuenta registrada correctamente",
@@ -722,7 +677,6 @@
       "USER_UPDATED": "Perfil actualizado",
       "logout": "Sesión cerrada correctamente"
     },
-
     "warning": {
       "cantDouble": "No tienes saldo para doblar",
       "playFirstToRepeat": "Juega una vez para repetir la apuesta",

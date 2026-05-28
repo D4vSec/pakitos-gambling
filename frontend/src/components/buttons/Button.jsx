@@ -15,7 +15,7 @@ const variantMap = {
 const sizeMap = {
   sm: "btn-sm",
   md: "btn-md",
-  lg: "btn-lg",
+  lg: "btn-md md:btn-lg",
 }
 
 const Button = ({
@@ -34,7 +34,7 @@ const Button = ({
   return (
     <button
       type={type}
-      className={`btn md:btn-md ${safeVariant} ${safeSize} flex items-center justify-center gap-2 rounded-lg border-none font-semibold shadow-[0_10px_25px_rgba(0,0,0,0.15)] transition-transform duration-300 ${className}`}
+      className={`btn  ${safeVariant} ${safeSize} flex items-center justify-center gap-2 rounded-lg font-semibold shadow-[0_10px_25px_rgba(0,0,0,0.15)] transition-all duration-300 ${className}`}
       onClick={onClick}
       disabled={disabled}>
       {svg}

@@ -3,7 +3,6 @@
     "name": "Pakito's Gambling",
     "copyright": "Toate drepturile rezervate de mafia din spate"
   },
-
   "ui": {
     "buttons": {
       "returnHome": "Înapoi la pagina principală",
@@ -15,7 +14,6 @@
       "cancel": "Anulează",
       "close": "Închide"
     },
-
     "badges": {
       "creatorsFav": "FAVORITUL CREATORILOR",
       "hot": "FIERBINTE",
@@ -25,12 +23,10 @@
       "user": "UTILIZATOR",
       "admin": "ADMIN"
     },
-
     "tooltip": {
       "copyToClipboard": "Copiere în clipboard",
       "viewDetails": "Vizualizare detalii"
     },
-
     "tables": {
       "noData": "Nu au fost găsite înregistrări",
       "searchBar": {
@@ -46,7 +42,7 @@
         "rowsPerPage": "Rânduri pe pagină"
       },
       "filters": {
-        "quickSearch": "Căutare rapidă",
+        "quickSearch": "Căutae rapidă",
         "searchBy": "Caută după...",
         "selectField": "Selectează câmpul",
         "select": "Selectează...",
@@ -69,7 +65,6 @@
       }
     }
   },
-
   "adminPanel": {
     "navigation": {
       "users": "Utilizatori",
@@ -88,7 +83,6 @@
         "actions": "Acțiuni"
       }
     },
-
     "bets": {
       "title": "Pariuri",
       "createNewBet": "Creează pariu",
@@ -131,7 +125,6 @@
         "emptyWinners": "Nu există câștigători pentru această opțiune."
       }
     },
-
     "logs": {
       "title": "Loguri",
       "table": {
@@ -151,7 +144,6 @@
         }
       }
     },
-
     "userDetails": {
       "detailsCard": {
         "title": "Detalii utilizator",
@@ -180,20 +172,17 @@
       }
     }
   },
-
   "games": {
     "betAmount": {
       "label": "Sumă pariată",
       "placeholder": "Introdu suma pariului"
     },
-
     "actions": {
       "bet": "Pariază",
       "clearBet": "Șterge pariul",
       "doubleBet": "Dubleză pariul",
       "repeatBet": "Repetă pariul"
     },
-
     "blackjack": {
       "title": "Blackjack",
       "bkPays": "Blackjack plătește 3 la 2",
@@ -204,7 +193,6 @@
         "stand": "Stai"
       }
     },
-
     "roulette": {
       "title": "Ruletă",
       "types": {
@@ -227,7 +215,6 @@
         "chipValue": "Valoare jeton"
       }
     },
-
     "slots": {
       "title": "Sloturi",
       "modes": {
@@ -245,7 +232,6 @@
         "totalPayout": "Câștig total"
       }
     },
-
     "capyroad": {
       "title": "Capyroad",
       "description": "Traversează șosea după șosea pentru a crește multiplicatorul. Fiecare salt mărește câștigul posibil, dar și riscul de accident. Oprește-te când vrei să securizezi premiul.",
@@ -259,14 +245,12 @@
         "crashChance": "Risc"
       }
     },
-
     "result": {
       "lose": "Ai pierdut :/",
       "tie": "Egalitate",
       "win": "Ai câștigat!!!"
     }
   },
-
   "forms": {
     "buttons": {
       "cancel": "Anulează",
@@ -277,7 +261,6 @@
       "update": "Actualizează",
       "changePassword": "Schimbă parola"
     },
-
     "page": {
       "login": "Autentificare",
       "register": "Înregistrare",
@@ -286,7 +269,6 @@
       "createBet": "Creează pariu",
       "updateBet": "Editează pariu"
     },
-
     "fields": {
       "email": {
         "label": "Email",
@@ -294,7 +276,6 @@
         "required": "Emailul este obligatoriu",
         "pattern": "Format de email invalid"
       },
-
       "username": {
         "label": "Nume utilizator",
         "placeholder": "Nume utilizator",
@@ -302,7 +283,6 @@
         "minLength": "Minim 3 caractere",
         "maxLength": "Maxim 25 caractere"
       },
-
       "password": {
         "label": "Parolă",
         "placeholder": "Parolă",
@@ -313,27 +293,23 @@
         "minLength": "Minim 8 caractere",
         "pattern": "Trebuie să conțină majuscule, minuscule și un număr sau caracter special"
       },
-
       "confirmPassword": {
         "label": "Confirmă parola",
         "placeholder": "Confirmă parola",
         "required": "Confirmarea parolei este obligatorie",
         "match": "Parolele nu coincid"
       },
-
       "updatePassword": {
         "label": "Actualizează parola",
         "placeholder": "Introdu parola pentru actualizare (opțional)",
         "required": "Confirmarea parolei este obligatorie",
         "match": "Parolele nu coincid"
       },
-
       "balance": {
         "label": "Sold",
         "placeholder": "0.00",
         "required": "Soldul este obligatoriu"
       },
-
       "role": {
         "label": "Rol",
         "placeholder": "Selectează un rol",
@@ -343,33 +319,28 @@
           "admin": "Administrator"
         }
       },
-
       "betLabel": {
         "label": "Piață",
         "placeholder": "Real Madrid câștigă Liga Campionilor",
         "minLength": "Minimum 3 caractere",
         "maxLength": "Maximum 120 caractere"
       },
-
       "endsAt": {
         "label": "Data închiderii",
         "placeholder": "Selectează data închiderii",
         "required": "Data închiderii este obligatorie",
         "invalid": "Data închiderii nu este validă"
       },
-
       "betOptionLabel": {
         "label": "Eticheta opțiunii",
         "placeholder": "Da / Nu / Candidatul A",
         "required": "Eticheta opțiunii este obligatorie"
       },
-
       "betOptionOdd": {
         "label": "Cotă inițială",
         "placeholder": "2.00",
         "positive": "Cota trebuie să fie mai mare decât 0"
       },
-
       "betOptions": {
         "label": "Opțiuni pariu",
         "hint": "Definește cel puțin două opțiuni pentru această piață.",
@@ -380,7 +351,6 @@
         "maxItems": "Nu poți adăuga mai mult de 20 de opțiuni"
       }
     },
-
     "schema": {
       "required": "Acest câmp este obligatoriu",
       "email": "Format de email invalid",
@@ -393,7 +363,6 @@
       "needNumberOrSpecial": "Trebuie să conțină cel puțin un număr sau caracter special"
     }
   },
-
   "pages": {
     "home": {
       "exploreGames": {
@@ -410,12 +379,10 @@
           "title": "Blackjack",
           "description": "Joc clasic de blackjack."
         },
-
         "capyroad": {
           "title": "Capyroad",
           "description": "De ce a traversat capibara drumul? Cine știe..."
         },
-
         "roulette": {
           "title": "Ruletă",
           "classic": {
@@ -427,7 +394,6 @@
             "description": "Joc de ruletă americană."
           }
         },
-
         "slots": {
           "title": "Sloturi",
           "beer": {
@@ -443,11 +409,9 @@
             "description": "Slot tematic Stardew Valley."
           }
         },
-
         "playNow": "Joacă acum"
       }
     },
-
     "landingPage": {
       "hero": {
         "title": "Bine ai venit la Pakito's Gambling",
@@ -455,14 +419,12 @@
         "join": "Alătură-te",
         "seeGames": "Vezi jocurile"
       },
-
       "cta": {
         "title": "Gata să începi aventura?",
         "text": "Alătură-te miilor de jucători și bucură-te de cea mai bună experiență de cazinou online. Primește bonusul de bun venit de 200% astăzi.",
         "exploreGames": "Explorează jocurile",
         "join": "Alătură-te acum"
       },
-
       "features": {
         "title": "De ce să alegi Pakito's Gambling?",
         "text": "Oferim o experiență premium de cazinou cu funcții de top și angajament total pentru satisfacția jucătorilor.",
@@ -493,7 +455,6 @@
           }
         }
       },
-
       "imagesGrid": {
         "title": "Joacă oriunde",
         "text": "Accesează jocurile de pe orice dispozitiv.",
@@ -512,7 +473,6 @@
           }
         }
       },
-
       "stats": {
         "games": "Jocuri",
         "players": "Jucători",
@@ -520,7 +480,6 @@
         "support": "Suport"
       }
     },
-
     "profile": {
       "title": "Profil",
       "profileCard": {
@@ -528,19 +487,16 @@
         "description": "Actualizează informațiile personale"
       },
       "changePhoto": "Schimbă fotografia",
-
       "security": {
         "title": "Securitate",
         "description": "Gestionează securitatea contului"
       },
-
       "danger": {
         "title": "Zonă periculoasă",
         "description": "Această acțiune este ireversibilă. Toate datele vor fi șterse.",
         "deleteAccount": "Șterge contul"
       }
     },
-
     "addBalance": {
       "button": "Adaugă sold",
       "label": "Sumă",
@@ -550,7 +506,6 @@
       "max": "Suma trebuie să fie < 99999999999.99",
       "title": "Adaugă sold în cont"
     },
-
     "bets": {
       "status": {
         "open": "DESCHIS",
@@ -604,7 +559,6 @@
       }
     }
   },
-
   "navbar": {
     "home": "Acasă",
     "allGames": "Toate jocurile",
@@ -622,7 +576,6 @@
       "logout": "Deconectare"
     }
   },
-
   "message": {
     "error": {
       "401": "Neautorizat",
@@ -662,7 +615,6 @@
       "noAdmin": "Nu ai acces",
       "noLogin": "Trebuie să fii autentificat"
     },
-
     "info": {
       "loading": "Se încarcă...",
       "registered": "Cont creat, mergi la autentificare",
@@ -671,7 +623,6 @@
       "uuidCopiedToClipboard": "UUID-ul a fost copiat în clipboard",
       "NO_CHANGES": "Nu există modificări de salvat"
     },
-
     "modal": {
       "default": {
         "accept": "Acceptă",
@@ -705,9 +656,13 @@
         "accept": "Da, lichidează acum",
         "cancel": "Nu, verific mai întâi",
         "title": "Lichidezi pariul {{label}} cu {{option}} ca opțiune câștigătoare?"
+      },
+      "deleteAccount": {
+        "title": "Sigur că lăsați clubul de jocuri de noroc în urmă :(?",
+        "accept": "Din regret, da",
+        "cancel": "Nu, vreau să pariez în continuare"
       }
     },
-
     "success": {
       "AUTH_USER_LOGGED": "Autentificare reușită",
       "AUTH_USER_REGISTERED": "Cont creat cu succes",
@@ -722,7 +677,6 @@
       "USER_UPDATED": "Profil actualizat",
       "logout": "Deconectare reușită"
     },
-
     "warning": {
       "cantDouble": "Nu ai fonduri pentru dublare",
       "playFirstToRepeat": "Joacă o dată pentru a repeta",
