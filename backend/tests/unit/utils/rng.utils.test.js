@@ -4,6 +4,7 @@ vi.mock('node:crypto', () => ({
 	default: {
 		randomInt: vi.fn(),
 		randomBytes: vi.fn(),
+		randomUUID: vi.fn(),
 	},
 }))
 
@@ -15,6 +16,7 @@ import {
 	randomId,
 	randomInt,
 	randomIntInclusive,
+	randomUUID,
 	shuffle,
 } from '../../../src/utils/rng.utils.js'
 
@@ -66,6 +68,13 @@ describe('rng utils', () => {
 		expect(randomId(2)).toBe('abcd')
 		expect(crypto.randomBytes).toHaveBeenCalledWith(2)
 		expect(toString).toHaveBeenCalledWith('hex')
+	})
+
+	it('delegates UUID generation to node crypto', () => {
+		crypto.randomUUID.mockReturnValueOnce('game-uuid')
+
+		expect(randomUUID()).toBe('game-uuid')
+		expect(crypto.randomUUID).toHaveBeenCalledTimes(1)
 	})
 
 	it('shuffles without mutating the original array', () => {

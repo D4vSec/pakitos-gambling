@@ -30,6 +30,10 @@ const randomId = (length = 32) => {
     return crypto.randomBytes(length).toString("hex")
 }
 
+const randomUUID = () => {
+    return crypto.randomUUID()
+}
+
 const shuffle = (array) => {
     const arr = [...array]
 
@@ -41,4 +45,4 @@ const shuffle = (array) => {
     return arr
 }
 
-export { randomInt, randomIntInclusive, randomFloat, randomFloatInRange, randomId, shuffle }
+export { randomInt, randomIntInclusive, randomFloat, randomFloatInRange, randomId, randomUUID, shuffle }

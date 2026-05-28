@@ -26,21 +26,27 @@ const isUserGameValid = (game, userId) => {
 const startGame = async (req, res) => {
     try {
         const id = req.user.id
-        const wallet = req.user.wallet
-        const { amount } = req.body
+        const { amount } = req.body ?? {}
+        const numericAmount = Number(amount)
 
-        if (amount <= 0 || isNaN(amount)) {
+        if (!Number.isFinite(numericAmount) || numericAmount <= 0) {
             return res.status(400).json({ code: "INVALID_BET_AMOUNT" })
         }
 
-        if (amount > wallet) {
+        const wallet = await User.getUserBalance(id)
+
+        if (wallet === null || numericAmount > wallet) {
+            return res.status(400).json({ code: "INSUFFICIENT_BALANCE" })
+        }
+
+        const updatedBalance = await User.updateUserBalance(id, -numericAmount, { type: "BET" })
+
+        if (updatedBalance === null) {
             return res.status(400).json({ code: "INSUFFICIENT_BALANCE" })
         }
 
         const capyRoad = createCapyRoad()
         const gameID = randomId()
-
-        await User.updateUserBalance(id, -amount, { type: "BET" })
 
         const road = 0
         const crashProbability = 0
@@ -53,7 +59,7 @@ const startGame = async (req, res) => {
             userId: id,
             status: "ongoing",
             createdAt: new Date().toISOString(),
-            amount,
+            amount: numericAmount,
             info: {
                 road,
                 crashProbability,
@@ -61,7 +67,7 @@ const startGame = async (req, res) => {
                 isCrashed,
                 multipliers: capyRoad.createMultiplierPath(payoutMultiplier),
             },
-            payout: amount * payoutMultiplier,
+            payout: numericAmount * payoutMultiplier,
         }
 
         games.set(game.gameID, game)
