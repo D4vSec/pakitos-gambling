@@ -6,8 +6,6 @@ import { useLocale } from "./LocaleProvider"
 
 const SessionContext = createContext()
 
-// TDOO: Generalizar el uso del localStorage
-// TODo: La gestión de las sesiones iniciadas y cerrarlas todas
 const SessionProvider = ({ children }) => {
   const defaultUser = {}
 
@@ -70,11 +68,7 @@ const SessionProvider = ({ children }) => {
       if (response?.code !== "AUTH_USER_REGISTERED") {
         throw new Error(response?.code)
       }
-
       addNotification(t(`message.success.${response?.code}`), "success")
-      addNotification(t("message.info.registered"), "info", 7000)
-
-      navigate("/login")
     } catch (error) {
       addNotification(t(`message.error.${error?.message}`), "error")
     } finally {
@@ -176,19 +170,27 @@ const SessionProvider = ({ children }) => {
         const message =
           response?.message ||
           (response?.errors
-            ? response.errors.map((e) => e.message || JSON.stringify(e)).join(" \n")
+            ? response.errors
+                .map((e) => e.message || JSON.stringify(e))
+                .join(" \n")
             : response?.code || "UNKNOWN_ERROR")
         throw new Error(message)
       }
 
-      addNotification(t ? t("message.success.USER_UPDATED") : "Profile updated", "success")
+      addNotification(
+        t ? t("message.success.USER_UPDATED") : "Profile updated",
+        "success",
+      )
 
       const userData = await getUserData()
       setUser(userData)
 
       return userData
     } catch (error) {
-      addNotification(t ? t(`message.error.${error?.message}`) : "Error updating profile", "error")
+      addNotification(
+        t ? t(`message.error.${error?.message}`) : "Error updating profile",
+        "error",
+      )
     } finally {
       setLoading(false)
     }
@@ -215,7 +217,10 @@ const SessionProvider = ({ children }) => {
 
       console.log("balance", response)
 
-      addNotification(t(`message.success.BALANCE_ADDED_SUCCESSFULLY`), "success")
+      addNotification(
+        t(`message.success.BALANCE_ADDED_SUCCESSFULLY`),
+        "success",
+      )
     } catch (error) {
       addNotification(t(`message.error.${error?.message}`), "error")
     } finally {
@@ -230,7 +235,9 @@ const SessionProvider = ({ children }) => {
         const parsedAmount = parseFloat(amount) || 0
 
         const newBalance =
-          type === "deposit" ? currentBalance + parsedAmount : currentBalance - parsedAmount
+          type === "deposit"
+            ? currentBalance + parsedAmount
+            : currentBalance - parsedAmount
 
         return {
           ...prev,
@@ -279,7 +286,9 @@ const SessionProvider = ({ children }) => {
     setUser,
   }
 
-  return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>
+  return (
+    <SessionContext.Provider value={value}>{children}</SessionContext.Provider>
+  )
 }
 
 export default SessionProvider

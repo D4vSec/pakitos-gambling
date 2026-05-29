@@ -20,7 +20,11 @@ const buildQueryParams = (options = {}) => {
   })
 
   Object.keys(filters).forEach((key) => {
-    if (filters[key] !== undefined && filters[key] !== null && filters[key] !== "") {
+    if (
+      filters[key] !== undefined &&
+      filters[key] !== null &&
+      filters[key] !== ""
+    ) {
       queryParams.append(key, filters[key])
     }
   })
@@ -119,21 +123,26 @@ const AdminProvider = ({ children }) => {
       }
 
       addNotification("User deleted successfully", "success")
-
-      getAllUsers()
+      return true
     } catch (error) {
       addNotification(t(`message.error.${error.message}`), "error", {
         duration: 10000,
       })
+      return false
     }
   }
 
-  const deleteModal = (userId) => {
+  const deleteModal = (userId, onAfterSuccess) => {
     if (userId === user?.id) {
       addNotification(t("message.warning.deleteYourself"), "warning")
     } else {
       addNotification(t("message.modal.deleteUser.title"), "modal", {
-        onAccept: () => deleteUser(userId),
+        onAccept: async () => {
+          const deleted = await deleteUser(userId)
+          if (deleted) {
+            onAfterSuccess?.()
+          }
+        },
         acceptLabel: t("message.modal.deleteUser.accept"),
         cancelLabel: t("message.modal.deleteUser.cancel"),
       })
@@ -318,10 +327,13 @@ const AdminProvider = ({ children }) => {
   const getBetSettlementPreview = useCallback(
     async (betId, winningOptionId) => {
       try {
-        const res = await post(`/api/v1/bets/admin/${betId}/settlement-preview`, {
-          headers: buildHeaders(),
-          body: { winningOptionId },
-        })
+        const res = await post(
+          `/api/v1/bets/admin/${betId}/settlement-preview`,
+          {
+            headers: buildHeaders(),
+            body: { winningOptionId },
+          },
+        )
 
         if (res.code) {
           throw new Error(res.code || "Error al obtener preview")
@@ -360,32 +372,40 @@ const AdminProvider = ({ children }) => {
 
   const deleteBetModal = useCallback(
     (betId, betLabel, onAfterSuccess) => {
-      addNotification(t("message.modal.deleteBet.title", { label: betLabel }), "modal", {
-        onAccept: async () => {
-          const deleted = await deleteBet(betId)
-          if (deleted) {
-            onAfterSuccess?.()
-          }
+      addNotification(
+        t("message.modal.deleteBet.title", { label: betLabel }),
+        "modal",
+        {
+          onAccept: async () => {
+            const deleted = await deleteBet(betId)
+            if (deleted) {
+              onAfterSuccess?.()
+            }
+          },
+          acceptLabel: t("message.modal.deleteBet.accept"),
+          cancelLabel: t("message.modal.deleteBet.cancel"),
         },
-        acceptLabel: t("message.modal.deleteBet.accept"),
-        cancelLabel: t("message.modal.deleteBet.cancel"),
-      })
+      )
     },
     [addNotification, deleteBet, t],
   )
 
   const closeBetModal = useCallback(
     (betId, betLabel, onAfterSuccess) => {
-      addNotification(t("message.modal.closeBet.title", { label: betLabel }), "modal", {
-        onAccept: async () => {
-          const closed = await closeBet(betId)
-          if (closed) {
-            onAfterSuccess?.()
-          }
+      addNotification(
+        t("message.modal.closeBet.title", { label: betLabel }),
+        "modal",
+        {
+          onAccept: async () => {
+            const closed = await closeBet(betId)
+            if (closed) {
+              onAfterSuccess?.()
+            }
+          },
+          acceptLabel: t("message.modal.closeBet.accept"),
+          cancelLabel: t("message.modal.closeBet.cancel"),
         },
-        acceptLabel: t("message.modal.closeBet.accept"),
-        cancelLabel: t("message.modal.closeBet.cancel"),
-      })
+      )
     },
     [addNotification, closeBet, t],
   )
@@ -412,8 +432,6 @@ const AdminProvider = ({ children }) => {
     },
     [addNotification, settleBet, t],
   )
-
-  // const createuser = async (data) => {}
 
   const value = useMemo(
     () => ({

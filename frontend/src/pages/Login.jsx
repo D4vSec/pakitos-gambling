@@ -40,8 +40,8 @@ const Login = () => {
     [t],
   )
 
-  const onSubmit = (data) => {
-    login(data)
+  const onSubmit = async (data) => {
+    await login(data)
     methods.reset()
   }
 
@@ -54,7 +54,9 @@ const Login = () => {
         <div className="card w-full max-w-md bg-base-100 shadow-xl rounded-2xl">
           <div className="card-body">
             <FormProvider {...methods}>
-              <form onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-col gap-4">
+              <form
+                onSubmit={methods.handleSubmit(onSubmit)}
+                className="flex flex-col gap-4">
                 {formFields.map((field) => (
                   <FormField
                     key={field.name}

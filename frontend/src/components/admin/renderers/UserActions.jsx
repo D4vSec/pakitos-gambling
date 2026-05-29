@@ -7,7 +7,7 @@ import Button from "../../buttons/Button"
 import TrashXSVG from "../../svg/actions/TrashXSVG"
 import InfoSVG from "../../svg/actions/InfoSVG"
 
-const UserActions = ({ id }) => {
+const UserActions = ({ id, onRefresh }) => {
   const navigate = useNavigate()
   const { deleteModal } = useAdmin()
   const { t } = useLocale()
@@ -31,7 +31,7 @@ const UserActions = ({ id }) => {
       label: "ui.buttons.delete",
       svg: <TrashXSVG />,
       variant: "error",
-      onClick: () => deleteModal(id),
+      onClick: () => deleteModal(id, onRefresh),
       tooltip: "tooltip-error",
     },
   ]

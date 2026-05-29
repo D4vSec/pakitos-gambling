@@ -8,11 +8,14 @@ import FormField from "@/components/forms/FormField"
 import Title from "@/components/layout/fonts/Title"
 import Button from "@/components/buttons/Button"
 import GradientBg from "@/components/layout/GradientBg"
-import { Navigate } from "react-router-dom"
+import { Navigate, useNavigate } from "react-router-dom"
+import { useNotification } from "@/providers/NotificationProvider"
 
 const Register = () => {
   const { t } = useLocale()
   const { register, isLogged } = useSession()
+  const { addNotification } = useNotification()
+  const navigate = useNavigate()
 
   const methods = useForm({
     resolver: zodResolver(registerSchema),
@@ -54,9 +57,11 @@ const Register = () => {
     [t],
   )
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     const { confirmPassword, ...info } = data
-    register(info)
+    await register(info)
+    addNotification(t("message.info.registered"), "info", 7000)
+    navigate("/login")
     methods.reset()
   }
 

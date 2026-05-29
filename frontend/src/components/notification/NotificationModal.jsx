@@ -23,12 +23,11 @@ const NotificationModal = ({ notification }) => {
   return (
     <dialog
       id="my_modal_5"
-      className={`modal ${open === true ? "modal-open" : "modal-close"} modal-bottom sm:modal-middle max-h-dvh`}
-    >
+      className={`modal ${open === true ? "modal-open" : "modal-close"} modal-bottom sm:modal-middle max-h-dvh`}>
       <div className="modal-box">
         <h3 className="font-bold text-lg text-center mb-6">{message}</h3>
         <div className="flex flex-col sm:flex-row justify-center gap-4 ">
-          <Button variant="error" className="px-8 py-4 sm:flex-1" onClick={accept}>
+          <Button variant="error" className=" sm:flex-1" onClick={accept}>
             {options?.acceptLabel || "Yes"}
           </Button>
           <Button variant="neutral" className="sm:flex-1" onClick={cancel}>

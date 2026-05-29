@@ -153,7 +153,7 @@ const UserForm = () => {
         email: payload.email,
         password: payload.password,
       }
-      register(payload)
+      await register(payload)
       console.log("register", payload)
     } else {
       payload = {
@@ -162,8 +162,8 @@ const UserForm = () => {
         role: payload.role,
       }
       await updateUser(id, payload)
-      navigate("/admin/users")
     }
+    navigate("/admin/users")
   }
 
   return loading ? (
@@ -193,7 +193,9 @@ const UserForm = () => {
                 ))}
                 <div className="form-control mt-2">
                   <Button className="w-full" variant="success">
-                    {t(isEdit ? "forms.buttons.update" : "forms.buttons.create")}
+                    {t(
+                      isEdit ? "forms.buttons.update" : "forms.buttons.create",
+                    )}
                   </Button>
                 </div>
               </form>

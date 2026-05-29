@@ -38,6 +38,7 @@ const UsersTable = () => {
     setSorting,
     filters,
     handleFilterChange,
+    refresh,
   } = useTable(getAllUsers, initialFilters, initialSorting)
 
   const columns = useMemo(
@@ -67,10 +68,12 @@ const UsersTable = () => {
       {
         id: "actions",
         header: t("adminPanel.users.table.actions"),
-        cell: ({ row }) => <UserActions id={row.original.id} />,
+        cell: ({ row }) => (
+          <UserActions id={row.original.id} onRefresh={refresh} />
+        ),
       },
     ],
-    [t],
+    [refresh, t],
   )
 
   return (
