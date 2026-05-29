@@ -602,6 +602,7 @@
       "INVALID_QUERY_PARAMS": "Filtrele trimise nu sunt valide",
       "INVALID_ENDS_AT": "Data închiderii nu este validă",
       "OPTION_NOT_FOUND": "Opțiunea selectată nu există",
+      "USER_NOT_FOUND": "Utilizatorul nu a fost găsit",
       "BET_NOT_FOUND": "Pariul nu există",
       "BET_ALREADY_PLACED_ON_MARKET": "Ai plasat deja un pariu pe această piață",
       "BET_ALREADY_SETTLED": "Pariul a fost deja lichidat",

@@ -18,11 +18,12 @@ const UserDetails = () => {
     let isActive = true
 
     const fetchUser = async () => {
+      setLoading(true)
       const res = await getUserById(id)
 
       if (!isActive) return
 
-      setUser(res)
+      setUser(res || null)
       setLoading(false)
     }
 
@@ -31,7 +32,7 @@ const UserDetails = () => {
     return () => {
       isActive = false
     }
-  }, [getUserById, id])
+  }, [id])
 
   return loading ? (
     <Loading clear />
@@ -44,11 +45,17 @@ const UserDetails = () => {
         <div className="w-full lg:max-w-sm">
           <UserCard user={user} />
         </div>
-        <div className="min-w-0 w-full">
+        <div className="card bg-base-100 p-6 min-w-0 w-full">
           <h2 className="mb-3 text-2xl font-bold">
             {t("adminPanel.userDetails.transactions.title")}
           </h2>
-          <UserTransactions />
+          {user ? (
+            <UserTransactions />
+          ) : (
+            <h3 className="text-center text-md sm:lg font-semibold">
+              {t("ui.tables.noData")}
+            </h3>
+          )}
         </div>
       </div>
     </div>

@@ -21,14 +21,18 @@ const BetSettlementPreview = ({ preview }) => {
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-base-content/50">
             {t("adminPanel.bets.detail.winningOption")}
           </p>
-          <p className="mt-2 text-lg font-semibold">{preview.winningOption?.label || "--"}</p>
+          <p className="mt-2 text-lg font-semibold">
+            {preview.winningOption?.label || "--"}
+          </p>
         </div>
 
         <div className="rounded-2xl border border-base-300 bg-base-200/70 p-4">
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-base-content/50">
             {t("adminPanel.bets.detail.totalWinningAmount")}
           </p>
-          <p className="mt-2 text-lg font-semibold">{formatBetAmount(preview.totalWinningAmount)}</p>
+          <p className="mt-2 text-lg font-semibold">
+            {formatBetAmount(preview.totalWinningAmount)}
+          </p>
         </div>
 
         <div className="rounded-2xl border border-base-300 bg-base-200/70 p-4">
@@ -43,7 +47,7 @@ const BetSettlementPreview = ({ preview }) => {
 
       <div className="overflow-x-auto rounded-2xl border border-base-300 bg-base-200/40">
         <table className="table table-sm md:table-md">
-          <thead>
+          <thead className="bg-base-100">
             <tr>
               <th>{t("adminPanel.bets.detail.userId")}</th>
               <th>{t("adminPanel.bets.detail.poolAmount")}</th>
@@ -53,7 +57,9 @@ const BetSettlementPreview = ({ preview }) => {
           <tbody>
             {preview.winners?.length > 0 ? (
               preview.winners.map((winner) => (
-                <tr key={winner.user_id}>
+                <tr
+                  key={winner.user_id}
+                  className="even:bg-base-200 odd:bg-neutral hover:bg-base-300 transition-colors">
                   <td>
                     <TruncateId id={winner.user_id} />
                   </td>

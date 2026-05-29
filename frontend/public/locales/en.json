@@ -602,6 +602,7 @@
       "INVALID_QUERY_PARAMS": "The provided filters are invalid",
       "INVALID_ENDS_AT": "Closing date is invalid",
       "OPTION_NOT_FOUND": "The selected option does not exist",
+      "USER_NOT_FOUND": "User not found",
       "BET_NOT_FOUND": "Bet not found",
       "BET_ALREADY_PLACED_ON_MARKET": "You already placed a bet on this market",
       "BET_ALREADY_SETTLED": "This bet has already been settled",

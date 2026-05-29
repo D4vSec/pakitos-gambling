@@ -251,44 +251,42 @@ const BetDetails = () => {
               </select>
             </label>
 
+            <Button
+              type="button"
+              className="w-full"
+              disabled={!selectedWinningOptionId || previewLoading || isSettled}
+              onClick={async () => {
+                setPreviewLoading(true)
+                const response = await getBetSettlementPreview(
+                  id,
+                  selectedWinningOptionId,
+                )
+                if (response) {
+                  setPreview(response)
+                }
+                setPreviewLoading(false)
+              }}>
+              {t("adminPanel.bets.detail.generatePreview")}
+            </Button>
+
+            {!isSettled ? (
               <Button
                 type="button"
+                variant="success"
                 className="w-full"
-                disabled={
-                  !selectedWinningOptionId || previewLoading || isSettled
-                }
-                onClick={async () => {
-                  setPreviewLoading(true)
-                  const response = await getBetSettlementPreview(
+                disabled={!selectedWinningOption}
+                onClick={() =>
+                  settleBetModal(
                     id,
-                    selectedWinningOptionId,
+                    bet.label,
+                    selectedWinningOption.label,
+                    selectedWinningOption.id,
+                    loadBet,
                   )
-                  if (response) {
-                    setPreview(response)
-                  }
-                  setPreviewLoading(false)
-                }}>
-                {t("adminPanel.bets.detail.generatePreview")}
+                }>
+                {t("adminPanel.bets.detail.settleBet")}
               </Button>
-
-              {!isSettled ? (
-                <Button
-                  type="button"
-                  variant="success"
-                  className="w-full"
-                  disabled={!selectedWinningOption}
-                  onClick={() =>
-                    settleBetModal(
-                      id,
-                      bet.label,
-                      selectedWinningOption.label,
-                      selectedWinningOption.id,
-                      loadBet,
-                    )
-                  }>
-                  {t("adminPanel.bets.detail.settleBet")}
-                </Button>
-              ) : null}
+            ) : null}
             <BetSettlementPreview preview={isSettled ? settlement : preview} />
           </div>
         </aside>

@@ -5,7 +5,7 @@ import BitcoinSVG from "@/components/svg/pictures/BitcoinSVG"
 const UserCard = ({ user }) => {
   const { t } = useLocale()
   return (
-    <div className="card w-full bg-base-200 shadow-sm lg:h-fit">
+    <div className="card w-full bg-base-100 shadow-sm lg:h-fit">
       <div className="card-body gap-3 p-5 sm:p-6">
         {user ? (
           <>
@@ -17,14 +17,16 @@ const UserCard = ({ user }) => {
               {user.username}
             </p>
             <p className="wrap-break-word text-sm sm:text-base">
-              <strong>{`${t("adminPanel.userDetails.detailsCard.email")}: `}</strong> {user.email}
+              <strong>{`${t("adminPanel.userDetails.detailsCard.email")}: `}</strong>{" "}
+              {user.email}
             </p>
             <p className="wrap-break-word text-sm capitalize sm:text-base">
-              <strong>{`${t("adminPanel.userDetails.detailsCard.role")}: `}</strong> {user.role}
+              <strong>{`${t("adminPanel.userDetails.detailsCard.role")}: `}</strong>{" "}
+              {user.role}
             </p>
             <p className="wrap-break-word text-sm sm:text-base flex gap-1">
-              <strong >
-                {`${t("adminPanel.userDetails.detailsCard.balance")}: `} 
+              <strong>
+                {`${t("adminPanel.userDetails.detailsCard.balance")}: `}
               </strong>
               <span className="flex gap-1">
                 {user.balance} <BitcoinSVG />
@@ -32,7 +34,9 @@ const UserCard = ({ user }) => {
             </p>
           </>
         ) : (
-          <h3 className="text-center text-lg">{t("adminPanel.userDetails.detailsCard.noUser")}</h3>
+          <h3 className="text-center text-lg sm:text-2xl font-semibold">
+            {t("adminPanel.userDetails.detailsCard.noUser")}
+          </h3>
         )}
       </div>
     </div>

@@ -41,8 +41,7 @@ const Table = ({
   return (
     <div className="w-full min-w-0 max-w-full rounded-lg bg-base-200 p-4">
       <div className="w-full min-w-0 max-w-full overflow-x-auto">
-        <table
-          className="table table-sm sm:table-md rounded-md">
+        <table className="table table-sm sm:table-md rounded-md">
           <thead>
             {table.getHeaderGroups().map((hg) => (
               <tr key={hg.id} className="bg-base-100">
@@ -66,6 +65,7 @@ const Table = ({
             {isLoading ? (
               <tr>
                 <td colSpan={columnCount} className="py-6 text-center">
+                  <span class="loading loading-spinner loading-xs sm:loading-sm mr-1"></span>
                   {t("message.info.loading")}
                 </td>
               </tr>

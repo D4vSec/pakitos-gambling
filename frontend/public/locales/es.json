@@ -602,6 +602,7 @@
       "INVALID_QUERY_PARAMS": "Los filtros enviados no son válidos",
       "INVALID_ENDS_AT": "La fecha de cierre no es válida",
       "OPTION_NOT_FOUND": "La opción seleccionada no existe",
+      "USER_NOT_FOUND": "Usuario no encontrado",
       "BET_NOT_FOUND": "La apuesta no existe",
       "BET_ALREADY_PLACED_ON_MARKET": "Ya realizaste una apuesta en este mercado",
       "BET_ALREADY_SETTLED": "La apuesta ya está liquidada",
