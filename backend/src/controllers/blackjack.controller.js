@@ -102,6 +102,7 @@ export const startGame = async (req, res) => {
         if (blackJack.calculateHandValue(playerHand) === 21) {
             game.status = GAME_STATUSES.finished
             game.player[FIRST_HAND].blackjack = true
+            game.player[FIRST_HAND].resolved = true
 
             if (blackJack.calculateHandValue(dealerHand) === 21) {
                 game.dealer[DEALER_HAND].blackjack = true
@@ -118,6 +119,7 @@ export const startGame = async (req, res) => {
         if (blackJack.calculateHandValue(dealerHand) === 21 && blackJack.calculateHandValue(playerHand) !== 21) {
             game.status = GAME_STATUSES.finished
             game.dealer[DEALER_HAND].blackjack = true
+            game.dealer[DEALER_HAND].resolved = true
             game.winners.push(winners.dealer)
         }
 
