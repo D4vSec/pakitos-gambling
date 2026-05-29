@@ -1,10 +1,5 @@
 import React from "react"
-import {
-  IconArrowBackUp,
-  IconMultiplier2x,
-  IconPlayCardJ,
-  IconRepeat,
-} from "@tabler/icons-react"
+import { IconArrowBackUp, IconMultiplier2x, IconPlayCard, IconRepeat } from "@tabler/icons-react"
 import Button from "../buttons/Button"
 import { useLocale } from "@/providers/LocaleProvider"
 
@@ -22,7 +17,7 @@ const BettingBtns = ({ children, actions, disabled }) => {
           onClick={repeat}
           disabled={disabled}
         >
-          {t("games.actions.repeatBet")}
+          <span className="hidden sm:flex">{t("games.actions.repeatBet")}</span>
         </Button>
 
         <Button
@@ -36,17 +31,17 @@ const BettingBtns = ({ children, actions, disabled }) => {
           }
           disabled={disabled}
         >
-          {t("games.actions.doubleBet")}
+          <span className="hidden sm:flex">{t("games.actions.repeatBet")}</span>
         </Button>
 
         <Button
           variant="primary"
-          className="w-full"
+          className="flex-1 basis-0 min-w-fit"
           onClick={clear}
           svg={<IconArrowBackUp />}
           disabled={disabled}
         >
-          {t("games.actions.clearBet")}
+          <span className="hidden sm:flex">{t("games.actions.clearBet")}</span>
         </Button>
       </div>
 
@@ -55,7 +50,7 @@ const BettingBtns = ({ children, actions, disabled }) => {
       <Button
         variant="secondary"
         className="min-w-fit w-full"
-        svg={<IconPlayCardJ />}
+        svg={<IconPlayCard />}
         onClick={start}
         disabled={disabled}
       >

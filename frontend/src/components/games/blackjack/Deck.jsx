@@ -8,7 +8,7 @@ const Deck = ({ deckRef }) => {
   }))
 
   return (
-    <div ref={deckRef} className="relative w-20 h-28 mt-4">
+    <div ref={deckRef} className="relative w-20 h-30 md:h-36 ">
       {deck.map((card, i) => (
         <div key={i} className="absolute" style={{ bottom: i * 1 }}>
           <Card key={i} card={card} forceHidden />

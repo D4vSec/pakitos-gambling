@@ -16,10 +16,10 @@ const Card = ({ card, forceHidden = false, isActive = false, flipped }) => {
   }
 
   const symbol = {
-    Hearts: <IconHeart />,
-    Diamonds: <IconDiamond />,
-    Clubs: <IconClubs />,
-    Spades: <IconSpade />,
+    Hearts: <IconHeart fill="red" />,
+    Diamonds: <IconDiamond fill="red" />,
+    Clubs: <IconClubs fill="black" />,
+    Spades: <IconSpade fill="black" />,
   }
 
   return (

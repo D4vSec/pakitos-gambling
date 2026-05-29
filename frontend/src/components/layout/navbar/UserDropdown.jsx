@@ -23,8 +23,6 @@ const UserDropdown = ({ vertical = false }) => {
       label: "navbar.userPill.balance",
       href: "/addBalance",
     },
-    { key: "coupon", label: "navbar.userPill.coupon", href: "" },
-    // TODO: Esconderlo sin el hidden
     {
       key: "adminPanel",
       label: "navbar.userPill.adminPanel",

@@ -6,10 +6,7 @@ import NavigationBtn from "./NavigationBtn"
 const GoBackBtn = ({ link }) => {
   const { t } = useLocale()
   return (
-    <NavigationBtn
-      variant="accent"
-      svg={<IconChevronLeft />}
-      to={link || -1}>
+    <NavigationBtn variant="neutral" svg={<IconChevronLeft />} to={link || -1}>
       {t("forms.buttons.goBack")}
     </NavigationBtn>
   )

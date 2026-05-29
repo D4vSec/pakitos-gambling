@@ -2,6 +2,7 @@ import React from "react"
 import Button from "@/components/buttons/Button"
 import { useLocale } from "@/providers/LocaleProvider"
 import { useNavigate } from "react-router-dom"
+import { Icon3dCubeSphere, IconPlayerPlay, IconTriangle } from "@tabler/icons-react"
 
 const GameCard = ({ game }) => {
   const { t } = useLocale()
@@ -36,9 +37,7 @@ const GameCard = ({ game }) => {
       </div>
 
       <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-        <Button className="border-none px-4 shadow-[0_10px_30px_rgba(0,0,0,0.3)] sm:px-5">
-          {t("pages.home.cards.playNow")}
-        </Button>
+        <Button svg={<IconTriangle className="rotate-90 scale-75 stroke-2" />}>{t("pages.home.cards.playNow")}</Button>
       </div>
 
       <div className="absolute inset-x-0 bottom-0 z-30 px-4 pb-4 sm:px-6 sm:pb-6">

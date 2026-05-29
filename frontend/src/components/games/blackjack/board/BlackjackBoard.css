@@ -1,12 +1,15 @@
 .dealer {
-    grid-area: 1 / 2 / 3 / 3;
+    grid-area: 1 / 2 / 2 / 3;
 }
+
 .player {
-    grid-area: 3 / 1 / 6 / 4;
+    grid-area: 3 / 2 / 4 / 3;
 }
+
 .deck {
     grid-area: 1 / 3 / 2 / 4;
 }
+
 .bg-blackjack {
-    grid-area: 1 / 1 / 5 / 5;
+    grid-area: 1 / 1 / 4 / 4;
 }

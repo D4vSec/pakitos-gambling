@@ -61,7 +61,7 @@ const Table = ({
             {isLoading ? (
               <tr>
                 <td colSpan={columnCount} className="py-6 text-center">
-                  <span class="loading loading-spinner loading-xs sm:loading-sm mr-1"></span>
+                  <span className="loading loading-spinner loading-xs sm:loading-sm mr-1"></span>
                   {t("message.info.loading")}
                 </td>
               </tr>
