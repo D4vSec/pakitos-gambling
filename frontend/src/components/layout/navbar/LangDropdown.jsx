@@ -12,7 +12,7 @@ const LangDropdown = ({ vertical = false }) => {
 
   const languages = [
     { key: "en", label: "English", svg: <UKFlagSVG /> },
-    { key: "es", label: "Español", svg: <SpanishFlagSVG /> },
+    { key: "es", label: "Spanish", svg: <SpanishFlagSVG /> },
     { key: "ro", label: "Romanian", svg: <RomainanFlagSVG /> },
   ]
 
@@ -30,7 +30,7 @@ const LangDropdown = ({ vertical = false }) => {
         className={`flex gap-2 items-center btn rounded-selector ${
           vertical ? "w-full justify-center" : "hover:bg-base-300"
         }`}>
-        {languages.find((l) => l.key === lang)?.svg}
+        {languages.find((item) => item.key === lang)?.svg}
         <p>{lang?.toUpperCase()}</p>
       </div>
       <ul

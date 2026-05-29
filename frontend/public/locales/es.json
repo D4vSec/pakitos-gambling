@@ -179,7 +179,7 @@
     },
     "actions": {
       "bet": "Apostar",
-      "clearBet": "Borrar apuesta",
+      "clearBet": "Limpiar apuesta",
       "doubleBet": "Doblar apuesta",
       "repeatBet": "Repetir apuesta"
     },

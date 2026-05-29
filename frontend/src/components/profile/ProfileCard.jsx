@@ -7,7 +7,7 @@ import { useNotification } from "@/providers/NotificationProvider"
 import { useLocale } from "@/providers/LocaleProvider"
 import Card from "../landingPage/Card"
 import Button from "../buttons/Button"
-import UserSVG from "../svg/users/UserSVG"
+import { IconUser } from "@tabler/icons-react"
 import FormField from "@/components/forms/FormField"
 
 const ProfileCard = () => {
@@ -71,7 +71,7 @@ const ProfileCard = () => {
   return (
     <Card className="py-6 px-6 border-0">
       <h2 className="flex items-center gap-2 text-2xl">
-        <UserSVG />
+        <IconUser />
         {t("pages.profile.profileCard.title")}
       </h2>
 

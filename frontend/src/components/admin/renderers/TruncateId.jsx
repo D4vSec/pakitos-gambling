@@ -1,7 +1,7 @@
 import React from "react"
+import { IconCopy } from "@tabler/icons-react"
 import { useNotification } from "@/providers/NotificationProvider"
 import { useLocale } from "@/providers/LocaleProvider"
-import CopySVG from "../../svg/actions/CopySVG"
 
 const TruncateId = ({ id }) => {
   const { t } = useLocale()
@@ -29,7 +29,7 @@ const TruncateId = ({ id }) => {
     <div className="tooltip tooltip-top">
       <div className="tooltip-content flex items-center justify-center gap-1">
         <span className="scale-[0.75]">
-          <CopySVG />
+          <IconCopy />
         </span>
         {id}
       </div>

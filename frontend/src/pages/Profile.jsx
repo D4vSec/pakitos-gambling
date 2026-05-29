@@ -8,9 +8,7 @@ import useAPI from "@/hooks/useAPI"
 import Title from "@/components/layout/fonts/Title"
 import Button from "@/components/buttons/Button"
 import GradientBg from "@/components/layout/GradientBg"
-import UserSVG from "@/components/svg/users/UserSVG"
-import ShieldSVG from "@/components/svg/pictures/ShieldSVG"
-import AlertTriangleSVG from "@/components/svg/actions/AlertTriangleSVG"
+import { IconAlertTriangle, IconShield, IconUser } from "@tabler/icons-react"
 
 const Profile = () => {
   const { user, updateProfile, logout, getAccessToken, getRefreshToken } =
@@ -102,7 +100,7 @@ const Profile = () => {
           <div className="card bg-base-100 shadow-xl">
             <div className="card-body">
               <h2 className="card-title text-xl">
-                <UserSVG />
+                <IconUser />
                 {t("pages.profile.profileCard.title")}
               </h2>
 
@@ -154,7 +152,7 @@ const Profile = () => {
           <div className="card bg-base-100 shadow-xl border border-warning/30">
             <div className="card-body">
               <h2 className="card-title text-xl">
-                <ShieldSVG />
+                <IconShield />
                 {t("pages.profile.security.title")}
               </h2>
 
@@ -214,7 +212,7 @@ const Profile = () => {
           <div className="card bg-base-100 shadow-xl border border-error">
             <div className="card-body">
               <h2 className="card-title text-error text-xl">
-                <AlertTriangleSVG />
+                <IconAlertTriangle />
                 {t("pages.profile.danger.title")}
               </h2>
 

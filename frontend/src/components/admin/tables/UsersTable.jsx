@@ -4,7 +4,7 @@ import { useLocale } from "@/providers/LocaleProvider"
 import useTable from "@/hooks/useTable"
 import Table from "./Table"
 import UserActions from "../renderers/UserActions"
-import BitcoinSVG from "@/components/svg/pictures/BitcoinSVG"
+import { IconCoinBitcoin } from "@tabler/icons-react"
 import RoleBadgeSelector from "../badges/RoleBadgeSelector"
 import UsersFilterBar from "../filters/UsersFilterBar"
 
@@ -61,7 +61,7 @@ const UsersTable = () => {
         header: t("adminPanel.users.table.balance"),
         cell: (info) => (
           <div className="flex items-center gap-1">
-            {info.getValue()} <BitcoinSVG />
+            {info.getValue()} <IconCoinBitcoin />
           </div>
         ),
       },

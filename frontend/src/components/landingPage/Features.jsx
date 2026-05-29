@@ -1,25 +1,27 @@
 import React from "react"
 import { useLocale } from "@/providers/LocaleProvider"
 
-import TrophySVG from "../svg/pictures/TrophySVG"
-import ControllerSVG from "../svg/pictures/ControllerSVG"
-import StarSVG from "../svg/pictures/StarSVG"
-import BoltSVG from "../svg/pictures/BoltSVG"
-import UserSVG from "../svg/users/UserSVG"
+import {
+  IconBolt,
+  IconDeviceGamepad2,
+  IconShield,
+  IconStar,
+  IconTrophy,
+  IconUser,
+} from "@tabler/icons-react"
 import SubtitleAndDesc from "../layout/fonts/SubtitleAndDesc"
 import FeatureCard from "./FeatureCard"
-import ShieldSVG from "../svg/pictures/ShieldSVG"
 
 const Features = () => {
   const { t } = useLocale()
 
   const features = [
-    { key: 1, icon: <ControllerSVG /> },
-    { key: 2, icon: <ShieldSVG /> },
-    { key: 3, icon: <TrophySVG /> },
-    { key: 4, icon: <BoltSVG /> },
-    { key: 5, icon: <UserSVG /> },
-    { key: 6, icon: <StarSVG /> },
+    { key: 1, icon: <IconDeviceGamepad2 /> },
+    { key: 2, icon: <IconShield /> },
+    { key: 3, icon: <IconTrophy /> },
+    { key: 4, icon: <IconBolt /> },
+    { key: 5, icon: <IconUser /> },
+    { key: 6, icon: <IconStar /> },
   ]
 
   return (

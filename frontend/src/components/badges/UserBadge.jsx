@@ -1,7 +1,7 @@
 import React from "react"
 import Badge from "./Badge"
 import { useLocale } from "@/providers/LocaleProvider"
-import UserSVG from "../svg/users/UserSVG"
+import { IconUser } from "@tabler/icons-react"
 
 const UserBadge = () => {
   const { t } = useLocale()
@@ -9,7 +9,7 @@ const UserBadge = () => {
   return (
     <Badge
       variant="ghost"
-      svg={<UserSVG />}
+      svg={<IconUser />}
       className="bg-zinc-400 text-neutral">
       {t("ui.badges.user")}
     </Badge>

@@ -1,10 +1,10 @@
 import React from "react"
 import Badge from "./Badge"
-import DolarSVG from "../svg/pictures/DolarSVG"
+import { IconCurrencyDollar } from "@tabler/icons-react"
 
 const PayoutBadge = ({ text }) => {
   return (
-    <Badge variant="success" svg={<DolarSVG />}>
+    <Badge variant="success" svg={<IconCurrencyDollar />}>
       {text}
     </Badge>
   )

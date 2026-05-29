@@ -15,7 +15,7 @@ import {
 import { useLocation, useParams } from "react-router-dom"
 import Subtitle from "@/components/layout/fonts/Subtitle"
 import { useNotification } from "@/providers/NotificationProvider"
-import BitcoinSVG from "@/components/svg/pictures/BitcoinSVG"
+import { IconCoinBitcoin } from "@tabler/icons-react"
 
 const sortOptionsForDetails = (options = []) =>
   [...options].sort((firstOption, secondOption) => {
@@ -339,7 +339,7 @@ const BetDetailsPage = () => {
                   </span>
                   <p className="flex shrink-0 items-center gap-1 font-semibold">
                     {formatBetAmount(summaryAmount)}{" "}
-                    <BitcoinSVG className="w-2 h-2" />
+                    <IconCoinBitcoin className="w-2 h-2" />
                   </p>
                 </div>
                 <div className="mt-2 flex flex-wrap items-center justify-between gap-3 text-sm">
@@ -348,7 +348,7 @@ const BetDetailsPage = () => {
                   </span>
                   <p className="flex shrink-0 items-center gap-1 font-semibold text-success">
                     {formatBetAmount(possibleOutcome)}{" "}
-                    <BitcoinSVG className="w-2 h-2" />
+                    <IconCoinBitcoin className="w-2 h-2" />
                   </p>
                 </div>
               </div>

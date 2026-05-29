@@ -6,12 +6,10 @@ import { useBlackjack } from "@/providers/BlackjackProvider"
 import { useLocale } from "@/providers/LocaleProvider"
 import "./BlackjackBoard.css"
 
-const isHiddenCard = (card) =>
-  card?.rank === "hidden" || card?.suit === "hidden"
+const isHiddenCard = (card) => card?.rank === "hidden" || card?.suit === "hidden"
 
 const BlackjackBoard = () => {
-  const { game, finishGame, dealQueue, completeQueuedAnimation } =
-    useBlackjack()
+  const { game, finishGame, dealQueue, completeQueuedAnimation } = useBlackjack()
   const { dealer, player } = game || {}
   const { t } = useLocale()
 
@@ -37,22 +35,15 @@ const BlackjackBoard = () => {
 
   const cardStates = useMemo(() => {
     const queuedDealIds = new Set(
-      dealQueue
-        .filter((event) => event.type === "DEAL_CARD")
-        .map((event) => event.card.id),
+      dealQueue.filter((event) => event.type === "DEAL_CARD").map((event) => event.card.id),
     )
 
     const queuedRevealIds = new Set(
-      dealQueue
-        .filter((event) => event.type === "REVEAL_CARD")
-        .map((event) => event.card.id),
+      dealQueue.filter((event) => event.type === "REVEAL_CARD").map((event) => event.card.id),
     )
 
     return gameCards.reduce((acc, card) => {
-      if (
-        queuedRevealIds.has(card.id) &&
-        cardStateOverrides[card.id] !== "faceUp"
-      ) {
+      if (queuedRevealIds.has(card.id) && cardStateOverrides[card.id] !== "faceUp") {
         acc[card.id] = "faceDown"
         return acc
       }
@@ -96,17 +87,12 @@ const BlackjackBoard = () => {
     }
   }, [dealQueue.length, finishGame, game])
 
-  const currentCardIds = useMemo(
-    () => new Set(gameCards.map((card) => card.id)),
-    [gameCards],
-  )
+  const currentCardIds = useMemo(() => new Set(gameCards.map((card) => card.id)), [gameCards])
 
   const updateCardState = useCallback(
     (cardId, state) => {
       setCardStateOverrides((prev) => ({
-        ...Object.fromEntries(
-          Object.entries(prev).filter(([id]) => currentCardIds.has(id)),
-        ),
+        ...Object.fromEntries(Object.entries(prev).filter(([id]) => currentCardIds.has(id))),
         [cardId]: state,
       }))
     },
@@ -116,7 +102,7 @@ const BlackjackBoard = () => {
   const finishedAndShown = game?.status === "finished" && dealQueue.length === 0
 
   return (
-    <div className="w-full h-full grid grid-cols-[1fr_3fr_1fr] grid-rows-[repeat(4,1fr)] gap-4 bg-base-200">
+    <div className="w-full h-full grid grid-cols-[1fr_3fr_1fr] grid-rows-[repeat(4,1fr)] gap-4 bg-linear-to-b from-emerald-900 via-green-800 to-green-900">
       <div className="dealer flex justify-center items-center">
         <Hands
           player={"dealer"}
@@ -145,9 +131,7 @@ const BlackjackBoard = () => {
 
       <div className="opacity-80 bg-blackjack flex justify-center items-center">
         <div className="bg-primary px-10 py-2 rounded-md shadow-md transform -skew-x-12">
-          <p className="font-bold text-xl text-white skew-x-12">
-            {t("games.blackjack.bkPays")}
-          </p>
+          <p className="font-bold text-xl text-white skew-x-12">{t("games.blackjack.bkPays")}</p>
         </div>
       </div>
 

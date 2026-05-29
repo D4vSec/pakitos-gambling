@@ -2,7 +2,7 @@ import React from "react"
 import AdminPageHeader from "@/components/admin/components/AdminPageHeader"
 import UsersTable from "@/components/admin/tables/UsersTable"
 import NavigationBtn from "@/components/buttons/NavigationBtn"
-import UserPlusSVG from "@/components/svg/users/UserPlusSVG"
+import { IconUserPlus } from "@tabler/icons-react"
 import { useLocale } from "@/providers/LocaleProvider"
 
 const AllUsers = () => {
@@ -16,7 +16,7 @@ const AllUsers = () => {
         actions={
           <NavigationBtn
             type="button"
-            svg={<UserPlusSVG />}
+            svg={<IconUserPlus />}
             variant="success"
             to="/admin/users/create">
             {t("adminPanel.users.createNewUser")}

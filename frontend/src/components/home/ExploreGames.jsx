@@ -15,7 +15,7 @@ import StarWarsImg from "@/assets/home/cards/starwars.webp"
 import StardewValleyImg from "@/assets/home/cards/stardewvalley.webp"
 import BeerManImg from "@/assets/home/cards/beerman.jpeg"
 import GameCard from "./GameCard"
-import ControllerSVG from "../svg/pictures/ControllerSVG"
+import { IconDeviceGamepad2 } from "@tabler/icons-react"
 
 const ExploreGames = () => {
   const { t } = useLocale()
@@ -70,7 +70,7 @@ const ExploreGames = () => {
       <div className="mb-5 sm:mb-6">
         <div className="flex items-start gap-3 sm:items-center sm:gap-4">
           <div className="rounded-xl bg-primary p-2 sm:p-2.5">
-            <ControllerSVG />
+            <IconDeviceGamepad2 />
           </div>
           <div className="min-w-0">
             <h3 className="text-xl font-bold text-secondary sm:text-2xl md:text-3xl">

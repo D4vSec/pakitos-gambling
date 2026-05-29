@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react"
 import Button from "@/components/buttons/Button"
 import { useSession } from "@/providers/SessionProvider"
-import BitcoinSVG from "@/components/svg/pictures/BitcoinSVG"
+import { IconCoinBitcoin } from "@tabler/icons-react"
 
 const ANIMATION_DURATION = 800
 
@@ -65,7 +65,7 @@ const UserBalance = () => {
       `}>
       <span className="flex items-center gap-2 text-lg">
         {displayBalance.toFixed(2)}
-        <BitcoinSVG />
+        <IconCoinBitcoin />
       </span>
 
       {delta !== null && (

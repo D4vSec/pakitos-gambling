@@ -7,10 +7,12 @@ import Loading from "@/components/Loading"
 import BetPoolDistributionTable from "@/components/admin/tables/BetPoolDistributionTable"
 import BetSettlementPreview from "@/components/admin/tables/BetSettlementPreview"
 import Title from "@/components/layout/fonts/Title"
-import CloseSVG from "@/components/svg/actions/CloseSVG"
-import EditSVG from "@/components/svg/actions/EditSVG"
-import TrashXSVG from "@/components/svg/actions/TrashXSVG"
-import ReloadSVG from "@/components/svg/pictures/ReloadSVG"
+import {
+  IconEdit,
+  IconReload,
+  IconTrashX,
+  IconX,
+} from "@tabler/icons-react"
 import { useAdmin } from "@/providers/AdminProvider"
 import { useLocale } from "@/providers/LocaleProvider"
 import { formatBetAmount, formatBetDate } from "@/utils/betsUtils"
@@ -109,7 +111,7 @@ const BetDetails = () => {
           <Button
             type="button"
             variant="secondary"
-            svg={<ReloadSVG />}
+            svg={<IconReload />}
             className="flex-1"
             onClick={() => loadBet()}>
             {t("adminPanel.bets.detail.refresh")}
@@ -117,7 +119,7 @@ const BetDetails = () => {
           <Button
             type="button"
             variant="warning"
-            svg={<EditSVG />}
+            svg={<IconEdit />}
             className="flex-1"
             onClick={() => navigate(`/admin/bets/edit/${id}`)}>
             {t("adminPanel.bets.detail.editBet")}
@@ -125,7 +127,7 @@ const BetDetails = () => {
           <Button
             type="button"
             variant="secondary"
-            svg={<CloseSVG />}
+            svg={<IconX />}
             className="flex-2"
             disabled={bet.status === "closed" || isSettled}
             onClick={() => closeBetModal(id, bet.label, loadBet)}>
@@ -134,7 +136,7 @@ const BetDetails = () => {
           <Button
             type="button"
             variant="error"
-            svg={<TrashXSVG />}
+            svg={<IconTrashX />}
             onClick={() =>
               deleteBetModal(id, bet.label, () => {
                 navigate("/admin/bets")

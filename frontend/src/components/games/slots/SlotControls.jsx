@@ -4,10 +4,12 @@ import { useSession } from "@/providers/SessionProvider"
 import { useNotification } from "@/providers/NotificationProvider"
 import { useLocale } from "@/providers/LocaleProvider"
 import Button from "@/components/buttons/Button"
-import BitcoinSVG from "@/components/svg/pictures/BitcoinSVG"
+import {
+  IconCoinBitcoin,
+  IconHourglass,
+  IconPlayerPlay,
+} from "@tabler/icons-react"
 import { getAnimTotalMs, DIMS_BY_TYPE } from "./slotConstants"
-import HourGlassSVG from "@/components/svg/pictures/HourGlassSVG"
-import PlaySVG from "@/components/svg/actions/PlaySVG"
 
 const NOTIF_DURATION = 1000
 
@@ -193,7 +195,7 @@ const SlotControls = ({ type = "3x3", onTypeChange }) => {
             className="w-full"
             onClick={handleStart}
             disabled={isBusy || !betAmount}
-            svg={isBusy ? <HourGlassSVG /> : <PlaySVG />}
+            svg={isBusy ? <IconHourglass /> : <IconPlayerPlay />}
           >
             {!isBusy && t("games.slots.controls.spin")}
           </Button>
@@ -206,7 +208,7 @@ const SlotControls = ({ type = "3x3", onTypeChange }) => {
             <p className="fieldset-legend text-md opacity-70">{t("games.betAmount.label")}:</p>
             <div className="flex items-center gap-1 font-bold text-base">
               <span>{session.bet}</span>
-              <BitcoinSVG />
+              <IconCoinBitcoin />
             </div>
           </div>
 
@@ -215,7 +217,7 @@ const SlotControls = ({ type = "3x3", onTypeChange }) => {
             className="w-full text-lg font-bold"
             onClick={handleSpin}
             disabled={isBusy}
-            svg={isBusy ? <HourGlassSVG /> : <PlaySVG />}
+            svg={isBusy ? <IconHourglass /> : <IconPlayerPlay />}
           >
             {!isBusy && t("games.slots.controls.spin")}
           </Button>
@@ -231,7 +233,7 @@ const SlotControls = ({ type = "3x3", onTypeChange }) => {
               <span className="opacity-70">{t("games.slots.controls.totalPayout")}:</span>
               <div className="flex items-center gap-1 font-bold">
                 <span>{totalPayout.toFixed(2)}</span>
-                <BitcoinSVG />
+                <IconCoinBitcoin />
               </div>
             </div>
           </div>

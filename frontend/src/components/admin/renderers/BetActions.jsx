@@ -1,10 +1,12 @@
 import React from "react"
 import { useNavigate } from "react-router-dom"
+import {
+  IconEdit,
+  IconInfoCircle,
+  IconTrashX,
+  IconX,
+} from "@tabler/icons-react"
 import Button from "@/components/buttons/Button"
-import CloseSVG from "@/components/svg/actions/CloseSVG"
-import EditSVG from "@/components/svg/actions/EditSVG"
-import InfoSVG from "@/components/svg/actions/InfoSVG"
-import TrashXSVG from "@/components/svg/actions/TrashXSVG"
 import { useLocale } from "@/providers/LocaleProvider"
 import { useAdmin } from "@/providers/AdminProvider"
 
@@ -16,21 +18,21 @@ const BetActions = ({ id, label, status, onRefresh }) => {
   const buttons = [
     {
       label: "ui.tooltip.viewDetails",
-      svg: <InfoSVG />,
+      svg: <IconInfoCircle />,
       variant: "info",
       onClick: () => navigate(`/admin/bets/${id}`),
       tooltip: "tooltip-info",
     },
     {
       label: "ui.buttons.edit",
-      svg: <EditSVG />,
+      svg: <IconEdit />,
       variant: "warning",
       onClick: () => navigate(`/admin/bets/edit/${id}`),
       tooltip: "tooltip-warning",
     },
     {
       label: "adminPanel.bets.detail.closeBet",
-      svg: <CloseSVG />,
+      svg: <IconX />,
       variant: "secondary",
       onClick: () => closeBetModal(id, label, onRefresh),
       tooltip: "tooltip-secondary",
@@ -38,7 +40,7 @@ const BetActions = ({ id, label, status, onRefresh }) => {
     },
     {
       label: "ui.buttons.delete",
-      svg: <TrashXSVG />,
+      svg: <IconTrashX />,
       variant: "error",
       onClick: () => deleteBetModal(id, label, onRefresh),
       tooltip: "tooltip-error",

@@ -1,6 +1,6 @@
 import React from "react"
 import { useLocale } from "@/providers/LocaleProvider"
-import BitcoinSVG from "@/components/svg/pictures/BitcoinSVG"
+import { IconCoinBitcoin } from "@tabler/icons-react"
 
 const UserCard = ({ user }) => {
   const { t } = useLocale()
@@ -29,7 +29,7 @@ const UserCard = ({ user }) => {
                 {`${t("adminPanel.userDetails.detailsCard.balance")}: `}
               </strong>
               <span className="flex gap-1">
-                {user.balance} <BitcoinSVG />
+                {user.balance} <IconCoinBitcoin />
               </span>
             </p>
           </>

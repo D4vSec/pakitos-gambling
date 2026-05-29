@@ -1,6 +1,6 @@
 import React from "react"
 import Button from "@/components/buttons/Button"
-import TrashXSVG from "@/components/svg/actions/TrashXSVG"
+import { IconTrashX } from "@tabler/icons-react"
 import { useLocale } from "@/providers/LocaleProvider"
 
 const BetOptionsFieldArray = ({
@@ -63,7 +63,7 @@ const BetOptionsFieldArray = ({
                   type="button"
                   variant="ghost"
                   size="sm"
-                  svg={<TrashXSVG />}
+                  svg={<IconTrashX />}
                   onClick={() => remove(index)}
                   disabled={disabled || fields.length <= 2}
                 />

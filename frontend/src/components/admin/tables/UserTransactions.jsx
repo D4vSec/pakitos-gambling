@@ -4,7 +4,7 @@ import { useAdmin } from "@/providers/AdminProvider"
 import { useLocale } from "@/providers/LocaleProvider"
 import useTable from "@/hooks/useTable"
 import Table from "./Table"
-import BitcoinSVG from "@/components/svg/pictures/BitcoinSVG"
+import { IconCoinBitcoin } from "@tabler/icons-react"
 import { fullDateFormatter } from "@/utils/adminUtils"
 import TransactionBadgeSelector from "../badges/TransactionBadgeSelector"
 import TransactionsFilterBar from "../filters/TransactionsFilterBar"
@@ -70,7 +70,7 @@ const UserTransactions = () => {
         header: t("adminPanel.userDetails.transactions.table.amount"),
         cell: (info) => (
           <div className="flex items-center gap-1 ">
-            {info.getValue()} <BitcoinSVG />
+            {info.getValue()} <IconCoinBitcoin />
           </div>
         ),
       },

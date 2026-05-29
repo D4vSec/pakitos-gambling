@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react"
-import InfoSVG from "../svg/actions/InfoSVG"
-import CheckSVG from "../svg/actions/CheckSVG"
-import AlertTriangleSVG from "../svg/actions/AlertTriangleSVG"
-import CircleXSVG from "../svg/actions/CircleXSVG"
+import {
+  IconAlertTriangle,
+  IconCircleCheck,
+  IconCircleX,
+  IconInfoCircle,
+} from "@tabler/icons-react"
 
 const Notification = ({ notification }) => {
   const [show, setShow] = useState(false)
@@ -15,10 +17,10 @@ const Notification = ({ notification }) => {
   }
 
   const svg = {
-    info: <InfoSVG />,
-    success: <CheckSVG />,
-    warning: <AlertTriangleSVG />,
-    error: <CircleXSVG />,
+    info: <IconInfoCircle />,
+    success: <IconCircleCheck />,
+    warning: <IconAlertTriangle />,
+    error: <IconCircleX />,
   }
 
   useEffect(() => {

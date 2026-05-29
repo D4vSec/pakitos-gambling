@@ -1,13 +1,13 @@
 import React from "react"
 import Badge from "./Badge"
 import { useLocale } from "@/providers/LocaleProvider"
-import UserKeySVG from "../svg/users/UserKeySVG"
+import { IconUserKey } from "@tabler/icons-react"
 
 const AdminBadge = () => {
   const { t } = useLocale()
 
   return (
-    <Badge variant="info" svg={<UserKeySVG />}>
+    <Badge variant="info" svg={<IconUserKey />}>
       {t("ui.badges.admin")}
     </Badge>
   )

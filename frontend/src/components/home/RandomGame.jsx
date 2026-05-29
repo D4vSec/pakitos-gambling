@@ -2,7 +2,7 @@ import Button from "@/components/buttons/Button"
 import { useLocale } from "@/providers/LocaleProvider"
 import React from "react"
 import { useNavigate } from "react-router-dom"
-import DiceSVG from "../svg/pictures/DiceSVG"
+import { IconDice5 } from "@tabler/icons-react"
 
 const RandomGame = () => {
   const { t } = useLocale()
@@ -33,7 +33,7 @@ const RandomGame = () => {
         {/* Left Content */}
         <div className="relative z-10 flex items-center gap-4">
           <div className="w-11 h-11 md:w-14 md:h-14 rounded-2xl bg-primary/10 border border-primary/30 flex items-center justify-center text-3xl shadow-md backdrop-blur-sm">
-            <DiceSVG className="sm:w-8 sm:h-8" />
+            <IconDice5 className="sm:w-8 sm:h-8" />
           </div>
 
           <div>

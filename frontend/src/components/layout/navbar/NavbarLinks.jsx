@@ -1,7 +1,9 @@
-import HomeSVG from "@/components/svg/pictures/HomeSVG"
-import CardsSVG from "@/components/svg/pictures/CardsSVG"
-import CoinsSVG from "@/components/svg/pictures/CoinsSVG"
-import StarSVG from "@/components/svg/pictures/StarSVG"
+import {
+  IconCards,
+  IconCoins,
+  IconHome,
+  IconStar,
+} from "@tabler/icons-react"
 import { useLocale } from "@/providers/LocaleProvider"
 import { useNavigate } from "react-router-dom"
 
@@ -12,19 +14,19 @@ const NavbarLinks = ({ className = "" }) => {
     {
       key: "home",
       label: "navbar.home",
-      Icon: HomeSVG,
+      Icon: IconHome,
       link: "/",
     },
     {
       key: "allGames",
       label: "navbar.allGames",
-      Icon: CardsSVG,
+      Icon: IconCards,
       link: "/home",
     },
     {
       key: "bets",
       label: "navbar.bets",
-      Icon: CoinsSVG,
+      Icon: IconCoins,
       link: "/bets",
     },
   ]

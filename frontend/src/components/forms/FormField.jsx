@@ -1,8 +1,7 @@
 import { useState } from "react"
 import { useFormContext } from "react-hook-form"
 import { useLocale } from "@/providers/LocaleProvider"
-import EyeSVG from "@/components/svg/actions/EyeSVG"
-import EyeOffSVG from "@/components/svg/actions/EyeOffSVG"
+import { IconEye, IconEyeOff } from "@tabler/icons-react"
 import Button from "@/components/buttons/Button"
 
 const FormField = ({
@@ -78,7 +77,7 @@ const FormField = ({
               className="absolute right-4 top-1/2 -translate-y-1/2 z-10 text-base-content/50 hover:text-base-content transition-colors"
               onClick={() => setShowPassword(!showPassword)}
               tabIndex="-1">
-              {showPassword ? <EyeOffSVG /> : <EyeSVG />}
+              {showPassword ? <IconEyeOff /> : <IconEye />}
             </Button>
           )}
         </label>

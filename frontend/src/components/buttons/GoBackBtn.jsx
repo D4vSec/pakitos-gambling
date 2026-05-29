@@ -1,6 +1,6 @@
 import React from "react"
 import { useLocale } from "@/providers/LocaleProvider"
-import ChevronLeftSVG from "../svg/actions/ChevronLeftSVG"
+import { IconChevronLeft } from "@tabler/icons-react"
 import NavigationBtn from "./NavigationBtn"
 
 const GoBackBtn = ({ link }) => {
@@ -8,7 +8,7 @@ const GoBackBtn = ({ link }) => {
   return (
     <NavigationBtn
       variant="accent"
-      svg={<ChevronLeftSVG />}
+      svg={<IconChevronLeft />}
       to={link || -1}>
       {t("forms.buttons.goBack")}
     </NavigationBtn>

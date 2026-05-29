@@ -1,9 +1,7 @@
 import React from "react"
 import { useLocale } from "@/providers/LocaleProvider"
-import SearchSVG from "@/components/svg/actions/SearchSVG"
-import CloseSVG from "@/components/svg/actions/CloseSVG"
+import { IconSearch, IconTrashX, IconX } from "@tabler/icons-react"
 import Button from "@/components/buttons/Button"
-import TrashXSVG from "@/components/svg/actions/TrashXSVG"
 
 const DynamicSearch = ({
   config,
@@ -115,7 +113,7 @@ const DynamicSearch = ({
             className="h-10 min-h-10 w-full xl:w-12 xl:min-w-10"
           >
             <span>
-              <SearchSVG />
+              <IconSearch />
             </span>
           </Button>
 
@@ -127,7 +125,7 @@ const DynamicSearch = ({
               onClick={onReset}
             >
               <span>
-                <TrashXSVG />
+                <IconTrashX />
               </span>
             </Button>
           )}

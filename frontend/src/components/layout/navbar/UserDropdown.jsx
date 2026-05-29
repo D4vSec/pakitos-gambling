@@ -1,6 +1,6 @@
 import React from "react"
 import { Link } from "react-router-dom"
-import UserSVG from "@/components/svg/users/UserSVG"
+import { IconUser } from "@tabler/icons-react"
 import { useLocale } from "@/providers/LocaleProvider"
 import { useSession } from "@/providers/SessionProvider"
 import { useNotification } from "@/providers/NotificationProvider"
@@ -55,7 +55,7 @@ const UserDropdown = ({ vertical = false }) => {
           vertical ? "w-full justify-center" : "hover:bg-base-300"
         }`}
       >
-        <UserSVG />
+        <IconUser />
         <p>{user?.username || t("navbar.userPill.guest")}</p>
       </div>
       {vertical && !noUser ? (

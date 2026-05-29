@@ -1,12 +1,7 @@
 import React from "react"
-import {
-  useReactTable,
-  getCoreRowModel,
-  flexRender,
-} from "@tanstack/react-table"
+import { useReactTable, getCoreRowModel, flexRender } from "@tanstack/react-table"
 import { useLocale } from "@/providers/LocaleProvider"
-import CaretUpSVG from "@/components/svg/actions/CaretUpSVG"
-import CaretDownSVG from "@/components/svg/actions/CaretDownSVG"
+import { IconCaretDownFilled, IconCaretUpFilled } from "@tabler/icons-react"
 import PaginationBar from "./PaginationBar"
 
 const Table = ({
@@ -49,11 +44,12 @@ const Table = ({
                   <th
                     key={h.id}
                     onClick={h.column.getToggleSortingHandler()}
-                    className="cursor-pointer whitespace-nowrap">
+                    className="cursor-pointer whitespace-nowrap"
+                  >
                     <div className="flex items-center gap-1">
                       {flexRender(h.column.columnDef.header, h.getContext())}
-                      {h.column.getIsSorted() === "asc" && <CaretUpSVG />}
-                      {h.column.getIsSorted() === "desc" && <CaretDownSVG />}
+                      {h.column.getIsSorted() === "asc" && <IconCaretUpFilled />}
+                      {h.column.getIsSorted() === "desc" && <IconCaretDownFilled />}
                     </div>
                   </th>
                 ))}
@@ -83,13 +79,11 @@ const Table = ({
                     striped
                       ? "odd:bg-neutral hover:bg-base-300 transition-colors"
                       : "hover:bg-base-300 transition-colors"
-                  }>
+                  }
+                >
                   {row.getVisibleCells().map((cell) => (
                     <td key={cell.id} className="whitespace-nowrap">
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </td>
                   ))}
                 </tr>

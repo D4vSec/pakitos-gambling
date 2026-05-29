@@ -1,11 +1,9 @@
 import React from "react"
 import { useNavigate } from "react-router-dom"
+import { IconEdit, IconInfoCircle, IconTrashX } from "@tabler/icons-react"
 import { useAdmin } from "@/providers/AdminProvider"
 import { useLocale } from "@/providers/LocaleProvider"
-import EditSVG from "../../svg/actions/EditSVG"
 import Button from "../../buttons/Button"
-import TrashXSVG from "../../svg/actions/TrashXSVG"
-import InfoSVG from "../../svg/actions/InfoSVG"
 
 const UserActions = ({ id, onRefresh }) => {
   const navigate = useNavigate()
@@ -15,21 +13,21 @@ const UserActions = ({ id, onRefresh }) => {
   const buttons = [
     {
       label: "ui.buttons.info",
-      svg: <InfoSVG />,
+      svg: <IconInfoCircle />,
       variant: "info",
       onClick: () => navigate(`/admin/users/${id}`),
       tooltip: "tooltip-info",
     },
     {
       label: "ui.buttons.edit",
-      svg: <EditSVG />,
+      svg: <IconEdit />,
       variant: "warning",
       onClick: () => navigate(`/admin/users/edit/${id}`),
       tooltip: "tooltip-warning",
     },
     {
       label: "ui.buttons.delete",
-      svg: <TrashXSVG />,
+      svg: <IconTrashX />,
       variant: "error",
       onClick: () => deleteModal(id, onRefresh),
       tooltip: "tooltip-error",

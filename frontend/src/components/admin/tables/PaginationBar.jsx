@@ -1,9 +1,11 @@
 import React from "react"
 import { useLocale } from "@/providers/LocaleProvider"
-import ChevronLeftSVG from "@/components/svg/actions/ChevronLeftSVG"
-import ChevronPipeLeftSVG from "@/components/svg/actions/ChevronPipeLeftSVG"
-import ChevronRightSVG from "@/components/svg/actions/ChevronRightSVG"
-import ChevronPipeRightSVG from "@/components/svg/actions/ChevronPipeRightSVG"
+import {
+  IconChevronLeft,
+  IconChevronLeftPipe,
+  IconChevronRightFilled,
+  IconChevronRightPipe,
+} from "@tabler/icons-react"
 import Button from "@/components/buttons/Button"
 
 const PaginationBar = ({ table }) => {
@@ -20,28 +22,28 @@ const PaginationBar = ({ table }) => {
     {
       key: "first",
       label: t("ui.tables.paginationBar.first"),
-      icon: <ChevronPipeLeftSVG />,
+      icon: <IconChevronLeftPipe />,
       onClick: () => table.setPageIndex(0),
       disabled: !table.getCanPreviousPage(),
     },
     {
       key: "prev",
       label: t("ui.tables.paginationBar.prev"),
-      icon: <ChevronLeftSVG />,
+      icon: <IconChevronLeft />,
       onClick: () => table.previousPage(),
       disabled: !table.getCanPreviousPage(),
     },
     {
       key: "next",
       label: t("ui.tables.paginationBar.next"),
-      icon: <ChevronRightSVG />,
+      icon: <IconChevronRightFilled />,
       onClick: () => table.nextPage(),
       disabled: !table.getCanNextPage(),
     },
     {
       key: "last",
       label: t("ui.tables.paginationBar.last"),
-      icon: <ChevronPipeRightSVG />,
+      icon: <IconChevronRightPipe />,
       onClick: () => table.setPageIndex(totalPages - 1),
       disabled: !table.getCanNextPage(),
     },

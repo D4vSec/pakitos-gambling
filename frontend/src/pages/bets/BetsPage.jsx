@@ -3,7 +3,7 @@ import BetMarketCard from "@/components/bets/BetMarketCard"
 import BetsFilterBar from "@/components/bets/BetsFilterBar"
 import GoBackBtn from "@/components/buttons/GoBackBtn"
 import GradientBg from "@/components/layout/GradientBg"
-import CoinsSVG from "@/components/svg/pictures/CoinsSVG"
+import { IconCoins } from "@tabler/icons-react"
 import useBets from "@/hooks/useBets"
 import { useLocale } from "@/providers/LocaleProvider"
 import Loading from "@/components/Loading"
@@ -75,7 +75,7 @@ const BetsPage = () => {
         <section className="flex flex-col gap-2 overflow-hidden rounded-2xl border border-base-300 bg-base-100 p-6 shadow-2xl shadow-primary/5 md:p-8">
           <div className="flex items-start gap-4">
             <div className="rounded-xl bg-primary p-2 sm:p-2.5">
-              <CoinsSVG />
+              <IconCoins />
             </div>
 
             <div className="flex-1 flex flex-col gap-2">

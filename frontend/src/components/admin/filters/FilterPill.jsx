@@ -1,4 +1,4 @@
-import CloseSVG from "@/components/svg/actions/CloseSVG"
+import { IconX } from "@tabler/icons-react"
 import { useLocale } from "@/providers/LocaleProvider"
 import Button from "@/components/buttons/Button"
 
@@ -24,7 +24,7 @@ const FilterPill = ({ label, value, onRemove, isEnum = false }) => {
         unstyled
         className="shrink-0 p-0.5 hover:scale-125 transition-transform bg-primary-focus/20 rounded-full"
         title={t("ui.buttons.close")}>
-        <CloseSVG className="w-3 h-3 md:w-3.5 md:h-3.5" />
+        <IconX className="w-3 h-3 md:w-3.5 md:h-3.5" />
       </Button>
     </div>
   )

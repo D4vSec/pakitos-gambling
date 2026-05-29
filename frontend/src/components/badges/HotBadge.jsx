@@ -1,12 +1,12 @@
 import React from "react"
 import Badge from "./Badge"
-import FlameSVG from "../svg/pictures/FlameSVG"
+import { IconFlame } from "@tabler/icons-react"
 import { useLocale } from "@/providers/LocaleProvider"
 
 const HotBadge = () => {
   const { t } = useLocale()
   return (
-    <Badge variant="primary" svg={<FlameSVG />}>
+    <Badge variant="primary" svg={<IconFlame />}>
       {t("ui.badges.hot")}
     </Badge>
   )

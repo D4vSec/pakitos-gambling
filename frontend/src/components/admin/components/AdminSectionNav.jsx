@@ -1,8 +1,10 @@
 import React from "react"
 import { NavLink } from "react-router-dom"
-import CoinsSVG from "@/components/svg/pictures/CoinsSVG"
-import LogsSVG from "@/components/svg/pictures/LogsSVG"
-import UsersSVG from "@/components/svg/users/UsersSVG"
+import {
+  IconCoins,
+  IconLogs,
+  IconUsers,
+} from "@tabler/icons-react"
 import { useLocale } from "@/providers/LocaleProvider"
 
 const sections = [
@@ -10,19 +12,19 @@ const sections = [
     key: "users",
     label: "adminPanel.navigation.users",
     to: "/admin/users",
-    Icon: UsersSVG,
+    Icon: IconUsers,
   },
   {
     key: "bets",
     label: "adminPanel.navigation.bets",
     to: "/admin/bets",
-    Icon: CoinsSVG,
+    Icon: IconCoins,
   },
   {
     key: "logs",
     label: "adminPanel.navigation.logs",
     to: "/admin/logs",
-    Icon: LogsSVG,
+    Icon: IconLogs,
   },
 ]
 

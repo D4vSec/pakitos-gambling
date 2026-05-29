@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import LastNumber from "../games/roulette/lastNums/LastNumber"
-import BitcoinSVG from "../svg/pictures/BitcoinSVG"
+import { IconCoinBitcoin } from "@tabler/icons-react"
 import { useLocale } from "@/providers/LocaleProvider"
 
 const RouletteNotification = ({ notification }) => {
@@ -55,7 +55,7 @@ const RouletteNotification = ({ notification }) => {
             <h2 className="text-xl font-bold text-center">
               +{notification.options.payout}
             </h2>
-            <BitcoinSVG />
+            <IconCoinBitcoin />
           </div>
         )}
       </div>

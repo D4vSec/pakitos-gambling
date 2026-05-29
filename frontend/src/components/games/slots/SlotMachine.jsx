@@ -4,7 +4,7 @@ import { useSlots } from "@/providers/SlotsProvider"
 import { useLocale } from "@/providers/LocaleProvider"
 import SlotGrid from "./SlotGrid"
 import SlotPaytable from "./SlotPaytable"
-import BitcoinSVG from "@/components/svg/pictures/BitcoinSVG"
+import { IconCoinBitcoin } from "@tabler/icons-react"
 import { DIMS_BY_TYPE } from "./slotConstants"
 import "./SlotMachine.css"
 
@@ -115,7 +115,7 @@ const SlotMachine = ({ type = "3x3", theme = "starwars" }) => {
                 <>
                   <span>{t("games.result.win")}</span>
                   <span>+{lastSpin.payout}</span>
-                  <BitcoinSVG />
+                  <IconCoinBitcoin />
                 </>
               ) : (
                 <span>{t("games.result.lose")}</span>

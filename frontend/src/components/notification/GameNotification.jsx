@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import BitcoinSVG from "../svg/pictures/BitcoinSVG"
+import { IconCoinBitcoin } from "@tabler/icons-react"
 
 const GameNotification = ({ notification }) => {
   const [phase, setPhase] = useState("enter")
@@ -38,7 +38,7 @@ const GameNotification = ({ notification }) => {
             <h2 className="text-xl font-bold text-center">
               {notification.options?.payout}
             </h2>
-            <BitcoinSVG />
+            <IconCoinBitcoin />
           </div>
         ))}
     </div>

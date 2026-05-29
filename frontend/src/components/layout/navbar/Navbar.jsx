@@ -1,7 +1,5 @@
 import React, { useEffect, useRef } from "react"
-import CherrySVG from "@/components/svg/pictures/CherrySVG"
-import MenuSVG from "@/components/svg/pictures/MenuSVG"
-import CloseSVG from "@/components/svg/actions/CloseSVG"
+import { IconCherry, IconMenu2, IconX } from "@tabler/icons-react"
 import NavigationBtn from "@/components/buttons/NavigationBtn"
 import NavbarLinks from "./NavbarLinks"
 import NavbarBtns from "./NavbarBtns"
@@ -37,7 +35,7 @@ const Navbar = () => {
           <div className="flex items-center justify-between w-full md:w-fit gap-3">
             <div className="flex gap-2 items-center">
               <div className="w-fit bg-primary rounded-xl p-2">
-                <CherrySVG />
+                <IconCherry />
               </div>
               <NavigationBtn
                 variant="ghost"
@@ -51,7 +49,7 @@ const Navbar = () => {
             <label
               htmlFor="main-drawer"
               className="btn btn-ghost btn-circle md:hidden">
-              <MenuSVG />
+              <IconMenu2 />
             </label>
           </div>
 
@@ -79,7 +77,7 @@ const Navbar = () => {
               {t("navbar.menu")}
             </h2>
             <label htmlFor="main-drawer" className="btn btn-ghost btn-circle">
-              <CloseSVG />
+              <IconX />
             </label>
           </div>
 
