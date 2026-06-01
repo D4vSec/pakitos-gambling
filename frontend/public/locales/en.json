@@ -27,6 +27,9 @@
       "copyToClipboard": "Copy to clipboard",
       "viewDetails": "View details"
     },
+    "labels": {
+      "redacted": "REDACTED"
+    },
     "tables": {
       "noData": "No data found",
       "searchBar": {

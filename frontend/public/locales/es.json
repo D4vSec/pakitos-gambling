@@ -27,6 +27,9 @@
       "copyToClipboard": "Copiar al portapapeles",
       "viewDetails": "Ver detalles"
     },
+    "labels": {
+      "redacted": "REDACTADO"
+    },
     "tables": {
       "noData": "No se han encontrado registros",
       "searchBar": {

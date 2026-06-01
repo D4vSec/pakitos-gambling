@@ -8,7 +8,7 @@ const TruncateId = ({ id }) => {
   const { addNotification } = useNotification()
 
   if (!id) {
-    return "REDACTED"
+    return t("ui.labels.redacted")
   }
 
   const shortId = `${id.slice(0, 4)}...${id.slice(-4)}`

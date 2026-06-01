@@ -27,6 +27,9 @@
       "copyToClipboard": "Copiere în clipboard",
       "viewDetails": "Vizualizare detalii"
     },
+    "labels": {
+      "redacted": "REDACTAT"
+    },
     "tables": {
       "noData": "Nu au fost găsite înregistrări",
       "searchBar": {
