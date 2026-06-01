@@ -46,7 +46,7 @@ const UserDetails = () => {
           <UserCard user={user} />
         </div>
         <div className="card bg-base-100 p-6 min-w-0 w-full">
-          <h2 className="mb-3 text-2xl font-bold">
+          <h2 className="mb-3 text-xl sm:text-2xl font-bold">
             {t("adminPanel.userDetails.transactions.title")}
           </h2>
           {user ? (

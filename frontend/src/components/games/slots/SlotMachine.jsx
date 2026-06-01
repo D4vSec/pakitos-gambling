@@ -33,8 +33,13 @@ const SlotMachine = ({ type = "3x3", theme = "starwars" }) => {
   // Gold flash overlay on win — fade in then fade out (bell curve, no abrupt start)
   useEffect(() => {
     if (!showResult || !lastSpin?.isWinner || !flashRef.current) return
-    gsap.timeline()
-      .fromTo(flashRef.current, { opacity: 0 }, { opacity: 0.45, duration: 0.35, ease: "power2.in" })
+    gsap
+      .timeline()
+      .fromTo(
+        flashRef.current,
+        { opacity: 0 },
+        { opacity: 0.45, duration: 0.35, ease: "power2.in" },
+      )
       .to(flashRef.current, { opacity: 0, duration: 1.0, ease: "power2.out" })
   }, [showResult, lastSpin?.isWinner])
 
@@ -65,12 +70,17 @@ const SlotMachine = ({ type = "3x3", theme = "starwars" }) => {
         <div className="flex-1 min-h-0 w-full flex items-center justify-center">
           <div
             className={`relative overflow-hidden ${
-              type === "3x3" ? "max-w-xl" :
-              type === "3x5" ? "max-w-4xl" :
-              /* 5x5 */        "max-w-2xl"
+              type === "3x3"
+                ? "max-w-xl"
+                : type === "3x5"
+                  ? "max-w-4xl"
+                  : /* 5x5 */ "max-w-2xl"
             }`}
-            style={{ aspectRatio: `${cols} / ${rows}`, maxHeight: "100%", width: "100%" }}
-          >
+            style={{
+              aspectRatio: `${cols} / ${rows}`,
+              maxHeight: "100%",
+              width: "100%",
+            }}>
             {/* Win flash overlay */}
             <div
               ref={flashRef}
@@ -115,7 +125,7 @@ const SlotMachine = ({ type = "3x3", theme = "starwars" }) => {
                 <>
                   <span>{t("games.result.win")}</span>
                   <span>+{lastSpin.payout}</span>
-                  <IconCoinBitcoin />
+                  <IconCoinBitcoin className="w-5 h-5 sm:w-6 sm:h-6" />
                 </>
               ) : (
                 <span>{t("games.result.lose")}</span>

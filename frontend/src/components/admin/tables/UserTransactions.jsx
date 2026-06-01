@@ -70,7 +70,8 @@ const UserTransactions = () => {
         header: t("adminPanel.userDetails.transactions.table.amount"),
         cell: (info) => (
           <div className="flex items-center gap-1 ">
-            {info.getValue()} <IconCoinBitcoin />
+            {info.getValue()}{" "}
+            <IconCoinBitcoin className="w-5 h-5 sm:w-6 sm:h-6" />
           </div>
         ),
       },

@@ -1,10 +1,6 @@
 import React from "react"
 import { NavLink } from "react-router-dom"
-import {
-  IconCoins,
-  IconLogs,
-  IconUsers,
-} from "@tabler/icons-react"
+import { IconCoins, IconLogs, IconUsers } from "@tabler/icons-react"
 import { useLocale } from "@/providers/LocaleProvider"
 
 const sections = [
@@ -32,7 +28,7 @@ const AdminSectionNav = () => {
   const { t } = useLocale()
 
   return (
-    <nav className="mx-auto grid w-full max-w-5xl grid-cols-3 gap-1 rounded-2xl bg-base-200 p-1.5 shadow-lg">
+    <nav className="fixed inset-x-0 bottom-0 z-40 grid w-full grid-cols-3 gap-1 border border-base-300/60 bg-base-200/95 p-1.5 shadow-xl backdrop-blur md:static md:mx-auto md:max-w-5xl md:rounded-2xl md:bg-base-200 md:shadow-lg md:backdrop-blur-none">
       {sections.map(({ key, label, to, Icon }) => (
         <div
           key={key}
@@ -40,7 +36,7 @@ const AdminSectionNav = () => {
           <NavLink
             to={to}
             className={({ isActive }) =>
-              `flex min-h-12 items-center justify-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold transition-all duration-200 ${
+              `flex min-h-14 flex-col items-center justify-center gap-1 rounded-xl px-3 py-2 text-xs font-semibold transition-all duration-200 md:min-h-12 md:flex-row md:gap-2 md:text-sm ${
                 isActive
                   ? "bg-primary text-primary-content shadow-md"
                   : "bg-transparent text-base-content/75 hover:bg-base-100/8 hover:text-base-content"
@@ -49,7 +45,9 @@ const AdminSectionNav = () => {
             <span className="inline-flex opacity-85">
               <Icon />
             </span>
-            <span className="truncate text-center">{t(label)}</span>
+            <span className="truncate text-center leading-tight">
+              {t(label)}
+            </span>
           </NavLink>
         </div>
       ))}

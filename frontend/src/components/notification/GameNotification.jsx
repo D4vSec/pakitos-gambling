@@ -38,7 +38,7 @@ const GameNotification = ({ notification }) => {
             <h2 className="text-xl font-bold text-center">
               {notification.options?.payout}
             </h2>
-            <IconCoinBitcoin />
+            <IconCoinBitcoin className="w-5 h-5 sm:w-6 sm:h-6" />
           </div>
         ))}
     </div>

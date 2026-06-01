@@ -214,11 +214,94 @@ Contrato para el frontend de admin sobre filtros, ordenación y selección de co
 
 ---
 
+## 4. GET `/api/v1/bets/admin`
+
+### Query params soportados
+
+| Param | Tipo | Valores permitidos |
+| --- | --- | --- |
+| `page` | number | entero positivo |
+| `limit` | number | entero positivo, máximo 100 |
+| `name` | string \| json array string | texto libre, busca sobre `bets.label` |
+| `label` | string \| json array string | alias de `name`, busca sobre `bets.label` |
+| `status` | enum \| json array enum | `open`, `closed` |
+| `optionsCount` | number \| json array number | número exacto de opciones del mercado |
+| `options_count` | number \| json array number | alias de `optionsCount` |
+| `options` | number \| json array number | alias de `optionsCount` |
+| `fromEndsAt` | date | `bets.ends_at >= fromEndsAt` |
+| `toEndsAt` | date | `bets.ends_at <= toEndsAt` |
+| `fromCreatedAt` | date | `bets.created_at >= fromCreatedAt` |
+| `toCreatedAt` | date | `bets.created_at <= toCreatedAt` |
+| `sortBy` | enum | `name`, `label`, `status`, `endsAt`, `ends_at`, `createdAt`, `created_at` |
+| `sortOrder` | enum | `asc`, `desc`, `none` |
+| `filterField` | enum | `name`, `label`, `status` |
+| `filterValue` | dinámico | valor compatible con `filterField` |
+| `filters` | json array/object | filtros dinámicos múltiples |
+
+### Ejemplos por filtro
+
+| Caso | Ejemplo |
+| --- | --- |
+| Paginación | `/api/v1/bets/admin?page=1&limit=20` |
+| Filtrar por nombre | `/api/v1/bets/admin?name=Champions` |
+| Filtrar por label | `/api/v1/bets/admin?label=League` |
+| Filtrar por varios nombres | `/api/v1/bets/admin?name=["Champions","Final"]` |
+| Filtrar por estado | `/api/v1/bets/admin?status=open` |
+| Multi-estado | `/api/v1/bets/admin?status=["open","closed"]` |
+| Filtrar por número de opciones | `/api/v1/bets/admin?optionsCount=2` |
+| Filtrar por varios números de opciones | `/api/v1/bets/admin?optionsCount=[2,3]` |
+| Fecha de cierre desde | `/api/v1/bets/admin?fromEndsAt=2026-06-01` |
+| Fecha de cierre hasta | `/api/v1/bets/admin?toEndsAt=2026-06-30` |
+| Rango de cierre | `/api/v1/bets/admin?fromEndsAt=2026-06-01&toEndsAt=2026-06-30` |
+| Fecha de creación desde | `/api/v1/bets/admin?fromCreatedAt=2026-05-01` |
+| Fecha de creación hasta | `/api/v1/bets/admin?toCreatedAt=2026-05-31` |
+| Rango de creación | `/api/v1/bets/admin?fromCreatedAt=2026-05-01&toCreatedAt=2026-05-31` |
+| Ordenación por cierre | `/api/v1/bets/admin?sortBy=endsAt&sortOrder=desc` |
+| Ordenación por creación | `/api/v1/bets/admin?sortBy=createdAt&sortOrder=asc` |
+| Filtro dinámico único por label | `/api/v1/bets/admin?filterField=label&filterValue=League` |
+| Filtro dinámico único por status | `/api/v1/bets/admin?filterField=status&filterValue=["open"]` |
+| Filtro dinámico único por opciones | `/api/v1/bets/admin?filterField=optionsCount&filterValue=2` |
+| Filtros dinámicos múltiples | `/api/v1/bets/admin?filters=[{"field":"status","values":["open"]},{"field":"optionsCount","values":[2]},{"field":"label","values":["League"]}]` |
+| Combinación de filtros | `/api/v1/bets/admin?name=Champions&status=open&optionsCount=2&fromEndsAt=2026-06-01&toCreatedAt=2026-05-31&sortBy=endsAt&sortOrder=desc` |
+
+### Ejemplo de respuesta
+
+```json
+{
+  "page": 1,
+  "limit": 20,
+  "totalPages": 3,
+  "bets": [
+    {
+      "id": "44444444-4444-4444-4444-444444444444",
+      "label": "Champions League Final",
+      "ends_at": "2026-06-01T18:00:00.000Z",
+      "created_at": "2026-05-13T11:00:00.000Z",
+      "status": "open",
+      "options": [
+        {
+          "id": "55555555-5555-5555-5555-555555555555",
+          "label": "Madrid",
+          "odd": 2.1
+        },
+        {
+          "id": "66666666-6666-6666-6666-666666666666",
+          "label": "Barca",
+          "odd": 1.8
+        }
+      ]
+    }
+  ]
+}
+```
+
+---
+
 ## Errores esperables
 
 | Código | Cuándo ocurre |
 | --- | --- |
 | `INVALID_QUERY_PARAMS` | columna, enum, UUID, JSON de `filters` o tipo de query inválido |
-| `INVALID_DATE_RANGE` | `fromDate > toDate` |
+| `INVALID_DATE_RANGE` | cualquier rango inválido, por ejemplo `fromEndsAt > toEndsAt` o `fromCreatedAt > toCreatedAt` |
 | `PAGE_EXCEDED` | se pide una página mayor que `totalPages` |
 | `USER_NOT_FOUND` | el `:id` no existe o no es UUID válido en rutas de usuario |
