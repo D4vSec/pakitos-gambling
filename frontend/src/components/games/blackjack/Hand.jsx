@@ -3,6 +3,10 @@ import Card from "./Card"
 
 const Hand = ({ hand, isActive, cardRefs, cardStates }) => {
   const cards = Array.isArray(hand?.hand) ? hand.hand : []
+  const stackOffsetClass =
+    cards.length >= 5
+      ? "-ml-6 sm:-ml-7 md:-ml-8 lg:-ml-9"
+      : "-ml-7 sm:-ml-8 md:-ml-9 lg:-ml-10"
 
   const getCardState = (card) => {
     if (cardStates?.[card.id]) return cardStates[card.id]
@@ -42,16 +46,16 @@ const Hand = ({ hand, isActive, cardRefs, cardStates }) => {
   }
 
   return (
-    <div className="z-10 flex flex-col gap-3 justify-center items-center">
+    <div className="flex max-w-full flex-col items-center justify-center gap-2 sm:gap-3">
       {cards.length > 0 && (
-        <div className="flex items-start">
+        <div className="flex max-w-full items-start px-1">
           {cards.map((card, i) => {
             const state = getCardState(card)
 
             return (
               <div
                 key={card.id || `${card.rank}-${card.suit}-${i}`}
-                className={i !== 0 ? "-ml-10" : ""}>
+                className={i !== 0 ? stackOffsetClass : ""}>
                 <div
                   ref={(el) => {
                     if (card.id && cardRefs?.current) {
@@ -59,10 +63,10 @@ const Hand = ({ hand, isActive, cardRefs, cardStates }) => {
                     }
                   }}
                   style={{
-                    marginTop: `${i * 1}rem`,
+                    marginTop: `${i * 0.65}rem`,
                   }}>
                   {state === "pending" ? (
-                    <div className="w-17 h-23 md:w-20 md:h-28" />
+                    <div className="w-[clamp(3.75rem,8vw,5rem)] lg:w-[clamp(5.5rem,6vw,6rem)] aspect-5/7" />
                   ) : (
                     <Card
                       card={card}
@@ -78,7 +82,7 @@ const Hand = ({ hand, isActive, cardRefs, cardStates }) => {
         </div>
       )}
 
-      <p className="font-bold text-xl">{displayValue}</p>
+      <p className="text-lg font-bold sm:text-xl">{displayValue}</p>
     </div>
   )
 }

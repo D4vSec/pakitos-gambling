@@ -16,7 +16,7 @@ const GameNotifications = () => {
   }, [])
 
   return (
-    <div className="absolute w-full h-full flex flex-col justify-center items-center gap-4 z-10 pointer-events-none">
+    <div className="absolute inset-0 z-20 flex h-full w-full flex-col items-center justify-center gap-4 pointer-events-none">
       {games.map((notification) => {
         switch (notification?.options?.game) {
           case "roulette":

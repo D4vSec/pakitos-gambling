@@ -1,5 +1,11 @@
 import React from "react"
-import { IconHeart, IconClubs, IconSpade, IconDiamond, IconCherry } from "@tabler/icons-react"
+import {
+  IconHeart,
+  IconClubs,
+  IconSpade,
+  IconDiamond,
+  IconCherry,
+} from "@tabler/icons-react"
 
 const Card = ({ card, forceHidden = false, isActive = false, flipped }) => {
   const { rank, suit } = card
@@ -23,40 +29,39 @@ const Card = ({ card, forceHidden = false, isActive = false, flipped }) => {
   }
 
   return (
-    <div className="w-17 h-23 md:w-20 md:h-28 perspective-[1000px]">
+    <div className="w-[clamp(3.75rem,8vw,5rem)] lg:w-[clamp(5.5rem,6vw,6rem)] aspect-5/7 perspective-[1000px]">
       <div
         className="relative w-full h-full transition-transform duration-500"
         style={{
           transformStyle: "preserve-3d",
           transform: shouldBeFlipped ? "rotateY(0deg)" : "rotateY(180deg)",
-        }}
-      >
+        }}>
         {/* FRONT */}
         <div
           className={`absolute w-full h-full bg-white ${
             isHidden ? "" : color[suit]
-          } font-bold text-xl rounded-lg p-2 flex flex-col gap-1 backface-hidden border border-gray-200 shadow-md ${
-            isActive ? "ring-4 ring-green-400" : ""
+          } flex flex-col gap-0.5 rounded-lg border border-gray-200 p-1.5 font-bold text-[clamp(0.875rem,2.2vw,1.25rem)] shadow-md backface-hidden md:gap-1 md:p-2 ${
+            isActive ? "ring-2 ring-green-400 md:ring-4" : ""
           }`}
-          style={{ backfaceVisibility: "hidden" }}
-        >
+          style={{ backfaceVisibility: "hidden" }}>
           {!isHidden && (
             <>
               <p className="ml-1">{rank}</p>
-              {symbol[suit]}
+              <div className="w-[clamp(0.95rem,2.8vw,1.5rem)] h-[clamp(0.95rem,2.8vw,1.5rem)]">
+                {symbol[suit]}
+              </div>
             </>
           )}
         </div>
 
         {/* BACK */}
         <div
-          className="absolute w-full h-full bg-blue-600 rounded-lg border-white border-6 flex items-center justify-center text-white shadow-md"
+          className="absolute flex h-full w-full items-center justify-center rounded-lg border-4 border-white bg-blue-600 text-white shadow-md md:border-6"
           style={{
             transform: "rotateY(180deg)",
             backfaceVisibility: "hidden",
-          }}
-        >
-          <IconCherry />
+          }}>
+          <IconCherry className="h-[clamp(1.1rem,3vw,1.8rem)] w-[clamp(1.1rem,3vw,1.8rem)]" />
         </div>
       </div>
     </div>

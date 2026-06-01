@@ -125,7 +125,7 @@ const BlackjackBoard = () => {
         />
       </div>
 
-      <div className="deck flex justify-center items-start">
+      <div className="deck flex justify-center items-start pt-2 sm:pt-3 md:pt-4 lg:pt-5">
         <Deck deckRef={deckRef} />
       </div>
 

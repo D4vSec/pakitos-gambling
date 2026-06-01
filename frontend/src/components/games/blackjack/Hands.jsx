@@ -48,7 +48,7 @@ const Hands = ({
   return (
     <div
       className={`
-        flex gap-8
+        flex max-w-full items-center justify-center gap-3 sm:gap-5 md:gap-6 lg:gap-8
         transition-opacity duration-700 ease-out
         ${fade ? "opacity-0" : "opacity-100"}
       `}>

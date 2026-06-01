@@ -1,4 +1,4 @@
-[] Responsive bj
+[x] Responsive bj
 [] Responsive ruleta
 [] Responsive slots
 [] Responsive capy

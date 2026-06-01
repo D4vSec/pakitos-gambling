@@ -3,9 +3,9 @@ import GameScreen from "./GameScreen"
 
 const GameTemplate = ({ game, description, controls }) => {
   return (
-    <div className="grid grid-rows-1 lg:grid-rows-[minmax(0,1fr)_auto] h-full min-h-0 w-full min-w-0 gap-2 md:gap-3 lg:gap-6 p-1.5 md:p-2 lg:py-6 lg:px-4 xl:px-10">
+    <div className="flex w-full min-w-0 flex-col gap-2 p-1.5 md:gap-3 md:p-2 lg:gap-6 lg:px-4 lg:py-6 xl:px-10">
       <GameScreen game={game} controls={controls} />
-      <div>{description}</div>
+      <div className="w-full shrink-0">{description}</div>
     </div>
   )
 }
