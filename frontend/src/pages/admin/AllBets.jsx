@@ -17,6 +17,7 @@ const AllBets = () => {
           <NavigationBtn
             type="button"
             svg={<IconCoins />}
+            className="w-full sm:w-fit"
             variant="success"
             to="/admin/bets/create">
             {t("adminPanel.bets.createNewBet")}

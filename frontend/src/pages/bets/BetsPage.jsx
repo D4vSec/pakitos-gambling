@@ -65,9 +65,9 @@ const BetsPage = () => {
     <GradientBg>
       <div className="flex w-full flex-col gap-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <GoBackBtn link="/home" />
+          <GoBackBtn link="/home" className="w-full md:w-fit" />
 
-          <div className="badge badge-secondary badge-lg px-4 py-4 font-semibold">
+          <div className="w-full md:w-fit badge badge-secondary badge-lg px-4 py-4 font-semibold">
             {t("pages.bets.list.marketCount", { count: bets.length })}
           </div>
         </div>

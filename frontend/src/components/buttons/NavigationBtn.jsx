@@ -7,6 +7,7 @@ const NavigationBtn = ({
   to,
   onClick,
   state,
+  className = "",
   replace = false,
   type = "button",
   ...props
@@ -29,7 +30,7 @@ const NavigationBtn = ({
   }
 
   return (
-    <Button type={type} onClick={handleClick} {...props}>
+    <Button type={type} onClick={handleClick} className={className} {...props}>
       {children}
     </Button>
   )

@@ -17,6 +17,7 @@ const AllUsers = () => {
           <NavigationBtn
             type="button"
             svg={<IconUserPlus />}
+            className="w-full sm:w-fit"
             variant="success"
             to="/admin/users/create">
             {t("adminPanel.users.createNewUser")}

@@ -7,12 +7,7 @@ import Loading from "@/components/Loading"
 import BetPoolDistributionTable from "@/components/admin/tables/BetPoolDistributionTable"
 import BetSettlementPreview from "@/components/admin/tables/BetSettlementPreview"
 import Title from "@/components/layout/fonts/Title"
-import {
-  IconEdit,
-  IconReload,
-  IconTrashX,
-  IconX,
-} from "@tabler/icons-react"
+import { IconEdit, IconReload, IconTrashX, IconX } from "@tabler/icons-react"
 import { useAdmin } from "@/providers/AdminProvider"
 import { useLocale } from "@/providers/LocaleProvider"
 import { formatBetAmount, formatBetDate } from "@/utils/betsUtils"
@@ -96,7 +91,7 @@ const BetDetails = () => {
     <Loading />
   ) : !bet ? (
     <div className="flex w-full max-w-6xl flex-col gap-6">
-      <GoBackBtn link="/admin/bets" />
+      <GoBackBtn link="/admin/bets" className="w-full" />
       <section className="rounded-2xl border border-dashed border-base-300 bg-base-100 p-8 text-center shadow-xl">
         <Title className="m-0 text-3xl sm:text-4xl">
           {t("adminPanel.bets.detail.noBet")}
@@ -106,7 +101,7 @@ const BetDetails = () => {
   ) : (
     <div className="flex w-full max-w-7xl flex-col gap-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <GoBackBtn link="/admin/bets" />
+        <GoBackBtn link="/admin/bets" className="w-full md:w-fit" />
         <div className="w-full md:w-auto grid gap-2 grid-cols-2 md:grid-cols-4">
           <Button
             type="button"

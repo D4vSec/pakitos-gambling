@@ -12,7 +12,7 @@ const DateRangeInput = ({ fromDate, toDate, onChange, label }) => {
         </span>
       </label>
 
-      <div className="grid grid-cols-1 gap-2 sm:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] sm:items-center">
+      <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] gap-2 items-center">
         <input
           type="date"
           aria-label={t("ui.tables.filters.from")}
@@ -21,7 +21,7 @@ const DateRangeInput = ({ fromDate, toDate, onChange, label }) => {
           onChange={(e) => onChange({ fromDate: e.target.value })}
         />
 
-        <span className="hidden opacity-50 font-light shrink-0 sm:flex sm:items-center sm:justify-center">
+        <span className="flex shrink-0 items-center justify-center font-light opacity-50">
           |
         </span>
 

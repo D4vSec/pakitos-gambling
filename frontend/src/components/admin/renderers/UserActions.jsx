@@ -34,7 +34,7 @@ const UserActions = ({ id, onRefresh }) => {
     },
   ]
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2 itemscan">
       {buttons.map((button, index) => (
         <div
           key={index}

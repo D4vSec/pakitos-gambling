@@ -2,7 +2,7 @@ import React from "react"
 import Button from "@/components/buttons/Button"
 import { IconTrashX } from "@tabler/icons-react"
 import { useLocale } from "@/providers/LocaleProvider"
-
+import { IconPlus } from "@tabler/icons-react"
 const BetOptionsFieldArray = ({
   append,
   disabled,
@@ -30,7 +30,9 @@ const BetOptionsFieldArray = ({
         <Button
           type="button"
           variant="secondary"
+          className="w-full sm:w-fit"
           onClick={() => append({ label: "", odd: "2.00" })}
+          svg={<IconPlus />}
           disabled={disabled || fields.length >= 20}>
           {t("forms.fields.betOptions.addOption")}
         </Button>
@@ -74,7 +76,7 @@ const BetOptionsFieldArray = ({
                   <label className="floating-label w-full">
                     <span>{t("forms.fields.betOptionLabel.label")}</span>
                     <input
-                      className={`input input-lg w-full ${labelError ? "input-error" : ""} border-secondary/10`}
+                      className={`input input-md sm:input-lg w-full ${labelError ? "input-error" : ""} border-secondary/10`}
                       placeholder={t("forms.fields.betOptionLabel.placeholder")}
                       disabled={disabled}
                       {...register(`options.${index}.label`)}

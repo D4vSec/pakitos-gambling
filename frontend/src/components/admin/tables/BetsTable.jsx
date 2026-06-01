@@ -41,6 +41,16 @@ const BetsTable = () => {
       {
         accessorKey: "label",
         header: t("adminPanel.bets.table.label"),
+        cell: (info) => {
+          const label = info.getValue()
+          return (
+            <div
+              className="tooltip tooltip-top relative max-w-40 sm:max-w-56 lg:max-w-72 xl:max-w-96 [&:before]:max-w-40 [&:before]:whitespace-normal [&:before]:break-word sm:[&:before]:max-w-56 lg:[&:before]:max-w-72 xl:[&:before]:max-w-96"
+              data-tip={label}>
+              <div className="truncate">{label}</div>
+            </div>
+          )
+        },
       },
       {
         accessorKey: "status",

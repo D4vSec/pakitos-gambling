@@ -9,10 +9,12 @@ const AdminPageHeader = ({ title, backLink = "/home", actions }) => {
     <div className="flex w-full min-w-0 flex-col gap-4">
       <Title>{title}</Title>
 
-      <div className="flex w-full min-w-0 flex-wrap items-center justify-between gap-3">
-        <GoBackBtn link={backLink} />
+      <div className="flex w-full min-w-0 flex-wrap items-center justify-between gap-2 sm:gap-3">
+        <GoBackBtn link={backLink} className="w-full sm:w-fit" />
         {hasActions ? (
-          <div className="flex min-w-0 flex-wrap justify-end gap-2">{actions}</div>
+          <div className="flex w-full sm:w-fit min-w-0 flex-wrap justify-end gap-2">
+            {actions}
+          </div>
         ) : (
           <div />
         )}
