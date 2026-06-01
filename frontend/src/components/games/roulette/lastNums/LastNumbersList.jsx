@@ -2,7 +2,8 @@ import React from "react"
 import { useRoulette } from "@/providers/RouletteProvider"
 import LastNumber from "./LastNumber"
 import { useLocale } from "@/providers/LocaleProvider"
-const LastNumbersList = () => {
+
+const LastNumbersList = ({ compact = false, vertical = false }) => {
   const { winningNums, rouletteValues } = useRoulette()
   const { t } = useLocale()
   const last4Objects = winningNums
@@ -11,10 +12,18 @@ const LastNumbersList = () => {
     .filter(Boolean)
 
   return (
-    <div className="flex flex-col gap-4 justify-center items-center">
-      <h2 className="font-bold text-2xl">{t("games.roulette.lastNumbers")}</h2>
+    <div className="flex flex-col items-center justify-center gap-2 lg:gap-3">
+      <h2
+        className={`text-center text-xl font-bold leading-tight ${
+          compact ? "max-w-[8ch]" : "max-w-none"
+        }`}>
+        {t("games.roulette.lastNumbers")}
+      </h2>
       {last4Objects.length ? (
-        <div className="flex flex-row  justify-center items-center gap-2">
+        <div
+          className={`flex items-center justify-center gap-2 ${
+            vertical ? "flex-col" : "flex-row"
+          }`}>
           {last4Objects.map((item, index) => (
             <LastNumber key={index} number={item.text} />
           ))}

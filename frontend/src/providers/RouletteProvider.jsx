@@ -3,7 +3,6 @@ import React, {
   useContext,
   useCallback,
   useState,
-  useEffect,
   useMemo,
   useRef,
 } from "react"
@@ -19,7 +18,6 @@ import {
   ROULETTE_0_ORDER,
   ROULETTE_00_ORDER,
 } from "@/components/games/roulette/rouletteConsts"
-import gsap from "gsap"
 
 const RouletteContext = createContext()
 
@@ -46,8 +44,10 @@ const RouletteProvider = ({ children }) => {
   const [winningNums, setWinningNums] = useState([])
   const [lastBet, setLastBet] = useState({})
   const [isSpinning, setIsSpinning] = useState(false)
+  const [showSpinView, setShowSpinView] = useState(false)
 
   const [spinData, setSpinData] = useState(null)
+  const [settledNumber, setSettledNumber] = useState(0)
 
   const rouletteRef = useRef(null)
 
@@ -227,8 +227,11 @@ const RouletteProvider = ({ children }) => {
   }
 
   const spin = async () => {
+    if (isSpinning || showSpinView) return
+
     try {
       setIsSpinning(true)
+      setShowSpinView(true)
 
       const res = await post("/api/v1/roulette/spin", {
         headers: {
@@ -246,7 +249,6 @@ const RouletteProvider = ({ children }) => {
 
       const outcome = getGameOutcome(res)
       const payout = getTotalPayout(res)
-
       const randomOffset = Math.random() * 360
 
       const winningNumber = res?.result?.winningNumber
@@ -272,6 +274,7 @@ const RouletteProvider = ({ children }) => {
 
       // Se ejecuta handleFinish()
     } catch (error) {
+      setShowSpinView(false)
       addNotification(t(`message.error.${error.message}`), "error")
     } finally {
       setIsSpinning(false)
@@ -311,9 +314,15 @@ const RouletteProvider = ({ children }) => {
     return []
   }, [type])
 
-  const handleFinish = () => {
+  const handleFinish = useCallback(() => {
     if (!spinData) return
     const data = spinData
+
+    setShowSpinView(false)
+
+    setLastBet(game)
+    setSettledNumber(data.winningNumber)
+    setSpinData(null)
 
     addNotification(
       `${t("message.info.winningNumber")}: ${data.winningNumber} | ${t(
@@ -334,12 +343,8 @@ const RouletteProvider = ({ children }) => {
       },
     )
 
-    setLastBet(game)
-
-    setTimeout(() => {
-      setWinningNums((prev) => [spinData?.winningNumber, ...prev].slice(0, 10))
-      updateBalance("deposit", data.payout)
-    }, 300)
+    setWinningNums((prev) => [data.winningNumber, ...prev].slice(0, 10))
+    updateBalance("deposit", data.payout)
 
     setGame((prev) => ({
       ...prev,
@@ -347,28 +352,7 @@ const RouletteProvider = ({ children }) => {
     }))
 
     setBetAmount(0)
-  }
-
-  useEffect(() => {
-    if (!spinData || !rouletteRef.current) return
-
-    gsap.killTweensOf(rouletteRef.current)
-
-    const spins = 3
-
-    const finalRotation = 360 * spins + spinData.randomOffset
-
-    gsap.fromTo(
-      rouletteRef.current,
-      { rotation: 0 },
-      {
-        rotation: finalRotation,
-        duration: 4,
-        ease: "power4.out",
-        onComplete: handleFinish,
-      },
-    )
-  }, [spinData])
+  }, [addNotification, game, spinData, t, updateBalance])
 
   const value = useMemo(
     () => ({
@@ -387,11 +371,14 @@ const RouletteProvider = ({ children }) => {
       spin,
       isSpinning,
       spinData,
+      settledNumber,
+      showSpinView,
       rouletteRef,
       rouletteValues,
       getChipsForCell,
       getIndexFromNumber,
       getFinalAngleFromIndex,
+      handleFinish,
       WHEEL_OFFSET_DEG,
     }),
     [
@@ -403,6 +390,11 @@ const RouletteProvider = ({ children }) => {
       type,
       isSpinning,
       spinData,
+      settledNumber,
+      showSpinView,
+      rouletteValues,
+      getChipsForCell,
+      handleFinish,
     ],
   )
 

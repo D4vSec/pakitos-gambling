@@ -1,10 +1,25 @@
 import React, { useEffect, useState } from "react"
 import { IconCoinBitcoin } from "@tabler/icons-react"
+import useCurrentBreakpoint from "@/hooks/useCurrentBreakpoint"
 
 const GameNotification = ({ notification }) => {
   const [phase, setPhase] = useState("enter")
+  const breakpoint = useCurrentBreakpoint()
 
   const ease = 300
+  const breakpointScale = {
+    base: 0.9,
+    sm: 0.95,
+    md: 1,
+    lg: 1.05,
+    xl: 1.1,
+    "2xl": 1.15,
+  }
+  const phaseScale = {
+    enter: 0.5,
+    hold: 1,
+    exit: 0.75,
+  }
 
   const typeClasses = {
     info: "alert-info",
@@ -28,9 +43,13 @@ const GameNotification = ({ notification }) => {
     }
   }, [notification.id])
 
+  const currentScale =
+    (breakpointScale[breakpoint] || breakpointScale.md) * phaseScale[phase]
+
   return (
     <div
-      className={`alert alert-vertical p-5 rounded-xl ${typeClasses[notification.type] || "alert-info"} transition-all duration-300 ease-out ${phase === "enter" ? "opacity-0 scale-50" : phase === "hold" ? "opacity-100 scale-100" : "opacity-0 scale-75"} origin-center`}>
+      className={`alert alert-vertical p-5 rounded-xl ${typeClasses[notification.type] || "alert-info"} transition-all duration-300 ease-out origin-center ${phase === "hold" ? "opacity-100" : "opacity-0"}`}
+      style={{ transform: `scale(${currentScale})` }}>
       <h1 className="text-4xl text-center font-bold">{notification.message}</h1>
       {!notification.options?.payout ||
         (notification.options?.payout !== 0 && (

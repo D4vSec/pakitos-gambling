@@ -1,6 +1,30 @@
 @import "tailwindcss";
 
-@media screen and (min-width: 48rem) {
+.roulette-board {
+  aspect-ratio: 10 / 28;
+  height: 100%;
+  max-width: 100%;
+  width: auto;
+}
+
+@media screen and (min-width: 40rem) {
+  .roulette-board {
+    aspect-ratio: 28 / 10;
+    height: auto;
+    max-height: 100%;
+    width: min(100%, 44rem);
+  }
+}
+
+@media screen and (min-width: 64rem) {
+  .roulette-board {
+    height: auto;
+    max-height: calc(100% - 2rem);
+    width: min(100%, 68rem);
+  }
+}
+
+@media screen and (min-width: 40rem) {
   .roulette0-single {
     grid-area: 1 / 1 / 7 / 3;
   }
@@ -157,7 +181,12 @@
   }
 }
 
-@media screen and (max-width: 48rem) {
+@media screen and (max-width: 39.999rem) {
+  .roulette-chip-layer > .relative > .absolute {
+    bottom: 50% !important;
+    transform: translate(-50%, 50%) !important;
+  }
+
   .roulette0-single {
     grid-area: 1 / 5 / 3 / 11;
   }
@@ -240,7 +269,7 @@
   }
 
   .roulette22 {
-    grid-area: 17 / 5 / 20 / 7;
+    grid-area: 17 / 5 / 19 / 7;
   }
   .roulette23 {
     grid-area: 17 / 7 / 19 / 9;
@@ -332,54 +361,64 @@
   }
 }
 
-#rouletteBoard[data-hovercell="1-12"] .r-group-1-12.r-group-red,
-#rouletteBoard[data-hovercell="13-24"] .r-group-13-24.r-group-red,
-#rouletteBoard[data-hovercell="25-36"] .r-group-25-36.r-group-red {
+.xs-only-lastnums {
+  display: flex;
+}
+
+@media screen and (min-width: 40rem) {
+  .xs-only-lastnums {
+    display: none;
+  }
+}
+
+.roulette-board[data-hovercell="1-12"] .r-group-1-12.r-group-red,
+.roulette-board[data-hovercell="13-24"] .r-group-13-24.r-group-red,
+.roulette-board[data-hovercell="25-36"] .r-group-25-36.r-group-red {
   @apply bg-red-400;
 }
 
-#rouletteBoard[data-hovercell="1-12"] .r-group-1-12.r-group-black,
-#rouletteBoard[data-hovercell="13-24"] .r-group-13-24.r-group-black,
-#rouletteBoard[data-hovercell="25-36"] .r-group-25-36.r-group-black {
+.roulette-board[data-hovercell="1-12"] .r-group-1-12.r-group-black,
+.roulette-board[data-hovercell="13-24"] .r-group-13-24.r-group-black,
+.roulette-board[data-hovercell="25-36"] .r-group-25-36.r-group-black {
   @apply bg-gray-600;
 }
 
-#rouletteBoard[data-hovercell="even"] .r-group-even.r-group-red,
-#rouletteBoard[data-hovercell="odd"] .r-group-odd.r-group-red {
+.roulette-board[data-hovercell="even"] .r-group-even.r-group-red,
+.roulette-board[data-hovercell="odd"] .r-group-odd.r-group-red {
   @apply bg-red-400;
 }
 
-#rouletteBoard[data-hovercell="even"] .r-group-even.r-group-black,
-#rouletteBoard[data-hovercell="odd"] .r-group-odd.r-group-black {
+.roulette-board[data-hovercell="even"] .r-group-even.r-group-black,
+.roulette-board[data-hovercell="odd"] .r-group-odd.r-group-black {
   @apply bg-gray-600;
 }
 
-#rouletteBoard[data-hovercell="row1"] .r-group-row1.r-group-red,
-#rouletteBoard[data-hovercell="row2"] .r-group-row2.r-group-red,
-#rouletteBoard[data-hovercell="row3"] .r-group-row3.r-group-red {
+.roulette-board[data-hovercell="row1"] .r-group-row1.r-group-red,
+.roulette-board[data-hovercell="row2"] .r-group-row2.r-group-red,
+.roulette-board[data-hovercell="row3"] .r-group-row3.r-group-red {
   @apply bg-red-400;
 }
 
-#rouletteBoard[data-hovercell="row1"] .r-group-row1.r-group-black,
-#rouletteBoard[data-hovercell="row2"] .r-group-row2.r-group-black,
-#rouletteBoard[data-hovercell="row3"] .r-group-row3.r-group-black {
+.roulette-board[data-hovercell="row1"] .r-group-row1.r-group-black,
+.roulette-board[data-hovercell="row2"] .r-group-row2.r-group-black,
+.roulette-board[data-hovercell="row3"] .r-group-row3.r-group-black {
   @apply bg-gray-600;
 }
 
-#rouletteBoard[data-hovercell="red"] .r-group-red {
+.roulette-board[data-hovercell="red"] .r-group-red {
   @apply bg-red-400;
 }
 
-#rouletteBoard[data-hovercell="black"] .r-group-black {
+.roulette-board[data-hovercell="black"] .r-group-black {
   @apply bg-gray-600;
 }
 
-#rouletteBoard[data-hovercell="1-18"] .r-group-1-18.r-group-red,
-#rouletteBoard[data-hovercell="19-36"] .r-group-19-36.r-group-red {
+.roulette-board[data-hovercell="1-18"] .r-group-1-18.r-group-red,
+.roulette-board[data-hovercell="19-36"] .r-group-19-36.r-group-red {
   @apply bg-red-400;
 }
 
-#rouletteBoard[data-hovercell="1-18"] .r-group-1-18.r-group-black,
-#rouletteBoard[data-hovercell="19-36"] .r-group-19-36.r-group-black {
+.roulette-board[data-hovercell="1-18"] .r-group-1-18.r-group-black,
+.roulette-board[data-hovercell="19-36"] .r-group-19-36.r-group-black {
   @apply bg-gray-600;
 }

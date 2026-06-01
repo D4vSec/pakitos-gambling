@@ -5,9 +5,11 @@ const BettingInput = ({ bet, readOnly }) => {
   const { betAmount, updateBetAmount } = bet
   const { t } = useLocale()
   return (
-    <div className="flex flex-col md:flex-row items-baseline gap-1">
-      <div className="flex flex-col gap-1 w-full">
-        <p className="fieldset-legend text-md ">{t("games.betAmount.label")}:</p>
+    <div className="flex flex-col items-baseline gap-1 md:flex-row">
+      <div className="flex w-full flex-row items-center gap-2 md:flex-col md:items-stretch md:gap-1">
+        <p className="fieldset-legend shrink-0 text-sm sm:text-md">
+          {t("games.betAmount.label")}:
+        </p>
         <input
           type="number"
           placeholder={t("games.betAmount.placeholder")}
@@ -25,7 +27,7 @@ const BettingInput = ({ bet, readOnly }) => {
             const parsed = Number(value)
             updateBetAmount(Number(parsed.toFixed(2)))
           }}
-          className="input w-full"
+          className="input input-sm h-8 min-h-8 min-w-0 flex-1 md:input-md md:h-auto md:w-full"
         />
       </div>
     </div>

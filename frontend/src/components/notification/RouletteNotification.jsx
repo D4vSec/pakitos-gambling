@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react"
 import LastNumber from "../games/roulette/lastNums/LastNumber"
 import { IconCoinBitcoin } from "@tabler/icons-react"
 import { useLocale } from "@/providers/LocaleProvider"
+import useCurrentBreakpoint from "@/hooks/useCurrentBreakpoint"
 
 const RouletteNotification = ({ notification }) => {
   const [phase, setPhase] = useState("enter")
+  const breakpoint = useCurrentBreakpoint()
 
   const { t } = useLocale()
 
@@ -16,6 +18,19 @@ const RouletteNotification = ({ notification }) => {
   }
 
   const ease = 300
+  const breakpointScale = {
+    base: 0.9,
+    sm: 0.95,
+    md: 1,
+    lg: 1.05,
+    xl: 1.1,
+    "2xl": 1.15,
+  }
+  const phaseScale = {
+    enter: 0.5,
+    hold: 1,
+    exit: 0.75,
+  }
 
   useEffect(() => {
     setPhase("enter")
@@ -32,17 +47,15 @@ const RouletteNotification = ({ notification }) => {
     }
   }, [notification.id])
 
+  const currentScale =
+    (breakpointScale[breakpoint] || breakpointScale.md) * phaseScale[phase]
+
   return (
     <div
       className={`alert alert-vertical p-5 rounded-xl transition-all duration-300 ease-out origin-center
         ${typeClasses[notification.type]}
-        ${
-          phase === "enter"
-            ? "opacity-0 scale-50"
-            : phase === "hold"
-              ? "opacity-100 scale-100"
-              : "opacity-0 scale-75"
-        }`}>
+        ${phase === "hold" ? "opacity-100" : "opacity-0"}`}
+      style={{ transform: `scale(${currentScale})` }}>
       <div className="flex flex-col items-center gap-2">
         <LastNumber number={notification.options?.number} />
 

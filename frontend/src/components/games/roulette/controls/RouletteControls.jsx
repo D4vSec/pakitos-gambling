@@ -38,8 +38,8 @@ const RouletteControls = () => {
   }
 
   return (
-    <div className="flex flex-col gap-6 w-full h-full p-4">
-      <h2 className="font-bold text-xl text-center">
+    <div className="flex h-full w-full flex-col gap-1.5 p-2 sm:gap-1.5 sm:p-2 lg:gap-5 lg:p-4">
+      <h2 className="text-center text-xl font-bold ">
         {t(`games.roulette.types.${type}`)}
       </h2>
 
@@ -51,7 +51,8 @@ const RouletteControls = () => {
           clear: clearBets,
           double: doubleBets,
           start: handleStartGame,
-        }}></BettingBtns>
+        }}
+        compact></BettingBtns>
 
       <ChipSelector selectedChip={selectedChip} setSelectedChip={updateChip} />
     </div>

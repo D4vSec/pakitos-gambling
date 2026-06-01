@@ -6,6 +6,7 @@ const LastNumber = ({ number }) => {
 
   number === 37 && (number = "00")
   const item = rouletteValues.find((i) => i.text === String(number)) || {}
+  const isPlaceholder = number === true
 
   const getBgColor = (color) => {
     switch (color) {
@@ -22,7 +23,11 @@ const LastNumber = ({ number }) => {
 
   return (
     <div
-      className={`${getBgColor(item.color)} border-2 border-gray-700 w-12 h-12 md:w-13 md:h-13 lg:w-15 lg:h-15 rounded-lg flex justify-center items-center text-white font-bold`}>
+      className={`${getBgColor(item.color)} flex items-center justify-center rounded-lg border-2 border-gray-700 text-white font-bold ${
+        isPlaceholder
+          ? "h-10 w-10 sm:h-12 sm:w-12 md:h-15 md:w-15"
+          : "h-15 w-15"
+      }`}>
       {item.text}
     </div>
   )

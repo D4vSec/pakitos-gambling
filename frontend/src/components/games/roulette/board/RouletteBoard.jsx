@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useCallback, useEffect } from "react"
+import React, { useMemo, useRef, useCallback } from "react"
 import { useRoulette } from "@/providers/RouletteProvider"
 import PlacedChips from "../chips/PlacedChips"
 import NumberBet from "./NumberBet"
@@ -7,13 +7,16 @@ import "./RouletteBoard.css"
 
 const RouletteBoard = () => {
   const { rouletteValues, updateBets, getChipsForCell } = useRoulette()
-
   const boardRef = useRef(null)
 
   const handleClick = useCallback(
     (e) => {
       const button = e.target.closest("button")
       if (!button) return
+
+      if (boardRef.current) {
+        boardRef.current.dataset.hovercell = ""
+      }
 
       const item = JSON.parse(button.dataset.info)
       updateBets(item)
@@ -39,34 +42,20 @@ const RouletteBoard = () => {
 
   return (
     <div
-      id="rouletteBoard"
       ref={boardRef}
       className="
+    roulette-board
     grid
-    grid-cols-10 grid-rows-28
-    md:grid-cols-28 md:grid-rows-10
+      grid-cols-10 grid-rows-28
+    sm:grid-cols-28 sm:grid-rows-10
     gap-1
-    /* MOBILE (base) */
-    h-[calc(100%-1rem)]
-    w-[calc(100%-0.5rem)]
-    /* SM */
-    sm:h-[calc(100%-1.5rem)]
-    sm:w-[calc(100%-1rem)]
-    /* MD */
-    md:h-[calc(100%-2rem)]
-    md:w-[calc(100%-1.5rem)]
-    /* LG */
-    lg:h-[calc(100%-4rem)]
-    lg:w-[calc(100%-1rem)]
-    /* XL */
-    xl:h-[calc(100%-2rem)]
-    xl:w-[calc(100%-3rem)]
-    /* 2XL */
-    2xl:h-[calc(100%-2rem)]
-    2xl:w-[calc(100%-6rem)]
-    aspect-10/28 md:aspect-28/10
     text-white"
-      onClick={handleClick}>
+      onClick={handleClick}
+      onMouseLeave={() => {
+        if (boardRef.current) {
+          boardRef.current.dataset.hovercell = ""
+        }
+      }}>
       {numbers.map((cell) => (
         <NumberBet key={cell.text} item={cell}>
           <PlacedChips chips={getChipsForCell(cell)} />
