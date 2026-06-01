@@ -1,5 +1,5 @@
 import React from "react"
-import { useRoulette } from "@/providers/RouletteProvider"
+import { useRoulette } from "@/providers/rouletteContext"
 import RouletteBoard from "./board/RouletteBoard"
 import LastNumbersList from "./lastNums/LastNumbersList"
 import RouletteWheel from "./roulettes/RouletteWheel"

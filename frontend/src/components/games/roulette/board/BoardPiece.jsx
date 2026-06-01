@@ -1,9 +1,9 @@
 import React from "react"
-import { useRoulette } from "@/providers/RouletteProvider"
+import { useRoulette } from "@/providers/rouletteContext"
 import { useLocale } from "@/providers/LocaleProvider"
 import Button from "@/components/buttons/Button"
 
-const BoardPiece = ({ item, children }) => {
+const BoardPiece = ({ item, cellId, children }) => {
   const { type } = useRoulette()
   const { t } = useLocale()
 
@@ -29,7 +29,7 @@ const BoardPiece = ({ item, children }) => {
       type="button"
       unstyled
       className={`${gridClass} ${bgColor} ${textColor} font-bold flex justify-center items-center border border-gray-700 rounded relative`}
-      data-info={JSON.stringify(item)}>
+      data-cell-id={cellId}>
       {["red", "black", "odd", "even"].includes(item.text)
         ? t(`games.roulette.board.${item.text}`)
         : item.text}

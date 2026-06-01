@@ -1,13 +1,19 @@
 import React, { useMemo, useRef, useCallback } from "react"
-import { useRoulette } from "@/providers/RouletteProvider"
+import { useRoulette } from "@/providers/rouletteContext"
 import PlacedChips from "../chips/PlacedChips"
 import NumberBet from "./NumberBet"
 import ExternalBet from "./ExternalBet"
 import "./RouletteBoard.css"
 
+const getCellId = (cell) => `${cell.type}-${cell.bet}`
+
 const RouletteBoard = () => {
   const { rouletteValues, updateBets, getChipsForCell } = useRoulette()
   const boardRef = useRef(null)
+
+  const cellById = useMemo(() => {
+    return new Map(rouletteValues.map((cell) => [getCellId(cell), cell]))
+  }, [rouletteValues])
 
   const handleClick = useCallback(
     (e) => {
@@ -18,10 +24,12 @@ const RouletteBoard = () => {
         boardRef.current.dataset.hovercell = ""
       }
 
-      const item = JSON.parse(button.dataset.info)
+      const item = cellById.get(button.dataset.cellId)
+      if (!item) return
+
       updateBets(item)
     },
-    [updateBets],
+    [cellById, updateBets],
   )
 
   const { numbers, externals } = useMemo(() => {
@@ -57,13 +65,17 @@ const RouletteBoard = () => {
         }
       }}>
       {numbers.map((cell) => (
-        <NumberBet key={cell.text} item={cell}>
+        <NumberBet key={cell.text} item={cell} cellId={getCellId(cell)}>
           <PlacedChips chips={getChipsForCell(cell)} />
         </NumberBet>
       ))}
 
       {externals.map((cell) => (
-        <ExternalBet key={cell.text} item={cell} onHover={onHover}>
+        <ExternalBet
+          key={cell.text}
+          item={cell}
+          cellId={getCellId(cell)}
+          onHover={onHover}>
           <PlacedChips chips={getChipsForCell(cell)} />
         </ExternalBet>
       ))}

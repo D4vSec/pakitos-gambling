@@ -1,7 +1,7 @@
 import React from "react"
 import Chip from "./Chip"
 
-const PlacedChips = ({ chips }) => {
+const PlacedChips = React.memo(({ chips }) => {
     const offsetY = 5
     const offsetX = 15
     const maxPerColumn = 10
@@ -41,6 +41,6 @@ const PlacedChips = ({ chips }) => {
             ))}
         </div>
     )
-}
+})
 
 export default PlacedChips

@@ -1,20 +1,10 @@
 import React, { useEffect, useState } from "react"
 import { IconCoinBitcoin } from "@tabler/icons-react"
-import useCurrentBreakpoint from "@/hooks/useCurrentBreakpoint"
 
 const GameNotification = ({ notification }) => {
   const [phase, setPhase] = useState("enter")
-  const breakpoint = useCurrentBreakpoint()
 
   const ease = 300
-  const breakpointScale = {
-    base: 0.9,
-    sm: 0.95,
-    md: 1,
-    lg: 1.05,
-    xl: 1.1,
-    "2xl": 1.15,
-  }
   const phaseScale = {
     enter: 0.5,
     hold: 1,
@@ -27,29 +17,24 @@ const GameNotification = ({ notification }) => {
     warning: "alert-warning",
     error: "alert-error",
   }
+  const duration = notification.options?.duration || 2800
 
   useEffect(() => {
-    setPhase("enter")
-
     const t1 = setTimeout(() => setPhase("hold"), ease)
-    const t2 = setTimeout(
-      () => setPhase("exit"),
-      notification.options?.duration - ease || 2500,
-    )
+    const t2 = setTimeout(() => setPhase("exit"), duration - ease)
 
     return () => {
       clearTimeout(t1)
       clearTimeout(t2)
     }
-  }, [notification.id])
-
-  const currentScale =
-    (breakpointScale[breakpoint] || breakpointScale.md) * phaseScale[phase]
+  }, [duration, notification.id])
 
   return (
     <div
-      className={`alert alert-vertical p-5 rounded-xl ${typeClasses[notification.type] || "alert-info"} transition-all duration-300 ease-out origin-center ${phase === "hold" ? "opacity-100" : "opacity-0"}`}
-      style={{ transform: `scale(${currentScale})` }}>
+      className={`alert alert-vertical p-5 rounded-xl ${typeClasses[notification.type] || "alert-info"} transition-all duration-300 ease-out origin-center [--notification-breakpoint-scale:0.9] sm:[--notification-breakpoint-scale:0.95] md:[--notification-breakpoint-scale:1] lg:[--notification-breakpoint-scale:1.05] xl:[--notification-breakpoint-scale:1.1] 2xl:[--notification-breakpoint-scale:1.15] ${phase === "hold" ? "opacity-100" : "opacity-0"}`}
+      style={{
+        transform: `scale(calc(var(--notification-breakpoint-scale) * ${phaseScale[phase]}))`,
+      }}>
       <h1 className="text-4xl text-center font-bold">{notification.message}</h1>
       {!notification.options?.payout ||
         (notification.options?.payout !== 0 && (
