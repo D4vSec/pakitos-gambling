@@ -18,24 +18,25 @@ const GameNotification = ({ notification }) => {
     warning: "alert-warning",
     error: "alert-error",
   }
+  const duration = notification.options?.duration || 2800
 
   useEffect(() => {
     const t1 = setTimeout(() => setPhase("hold"), ease)
-    const t2 = setTimeout(() => setPhase("exit"), exitDelay)
+    const t2 = setTimeout(() => setPhase("exit"), duration - ease)
 
     return () => {
       clearTimeout(t1)
       clearTimeout(t2)
     }
-  }, [exitDelay, notification.id])
+  }, [duration, notification.id])
 
   return (
     <div
-      className={`alert alert-vertical p-5 rounded-xl ${typeClasses[notification.type] || "alert-info"} transition-all duration-300 ease-out origin-center ${phase === "hold" ? "opacity-100" : "opacity-0"}`}
-      style={{ transform: `scale(${phaseScale[phase]})` }}>
-      <h1 className="text-[2rem] sm:text-[2.15rem] md:text-4xl lg:text-[2.4rem] xl:text-[2.5rem] 2xl:text-[2.6rem] text-center font-bold">
-        {notification.message}
-      </h1>
+      className={`alert alert-vertical p-5 rounded-xl ${typeClasses[notification.type] || "alert-info"} transition-all duration-300 ease-out origin-center [--notification-breakpoint-scale:0.9] sm:[--notification-breakpoint-scale:0.95] md:[--notification-breakpoint-scale:1] lg:[--notification-breakpoint-scale:1.05] xl:[--notification-breakpoint-scale:1.1] 2xl:[--notification-breakpoint-scale:1.15] ${phase === "hold" ? "opacity-100" : "opacity-0"}`}
+      style={{
+        transform: `scale(calc(var(--notification-breakpoint-scale) * ${phaseScale[phase]}))`,
+      }}>
+      <h1 className="text-4xl text-center font-bold">{notification.message}</h1>
       {!notification.options?.payout ||
         (notification.options?.payout !== 0 && (
           <div className="flex items-center gap-1">

@@ -1,7 +1,7 @@
 import React from "react"
 import BettingInput from "../../BettingInput"
 import ChipSelector from "./ChipSelector"
-import { useRoulette } from "@/providers/RouletteProvider"
+import { useRoulette } from "@/providers/rouletteContext"
 import { useNotification } from "@/providers/NotificationProvider"
 import BettingBtns from "../../BettingBtns"
 import { useLocale } from "@/providers/LocaleProvider"
@@ -15,7 +15,6 @@ const RouletteControls = () => {
     clearBets,
     repeatBets,
     doubleBets,
-    game,
     spin,
     type,
   } = useRoulette()
@@ -29,7 +28,6 @@ const RouletteControls = () => {
       addNotification(t("message.error.bet0"), "error")
       return
     }
-    console.log("g", game)
     addNotification(t("message.warning.spinning"), "warning", {
       duration: 2000,
     })

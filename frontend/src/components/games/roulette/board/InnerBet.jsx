@@ -1,7 +1,7 @@
 import React from "react"
 
 // TODO: hacer apuestas entre numeros
-const InnerBet = ({ item, children }) => {
+const InnerBet = () => {
   return <div></div>
 }
 

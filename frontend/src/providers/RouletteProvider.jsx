@@ -1,6 +1,4 @@
 import React, {
-  createContext,
-  useContext,
   useCallback,
   useState,
   useMemo,
@@ -18,11 +16,14 @@ import {
   ROULETTE_0_ORDER,
   ROULETTE_00_ORDER,
 } from "@/components/games/roulette/rouletteConsts"
-
-const RouletteContext = createContext()
+import {
+  RouletteAnimationContext,
+  RouletteContext,
+} from "@/providers/rouletteContext"
 
 const WHEEL_OFFSET_DEG = 355
 const WHEEL_INDEX_OFFSET = 0
+const EMPTY_CHIPS = []
 
 const RouletteProvider = ({ children }) => {
   const location = useLocation()
@@ -50,6 +51,8 @@ const RouletteProvider = ({ children }) => {
   const [settledNumber, setSettledNumber] = useState(0)
 
   const rouletteRef = useRef(null)
+  const gameRef = useRef(game)
+  const spinDataRef = useRef(spinData)
 
   const { getRefreshToken, getAccessToken, updateBalance, user } = useSession()
   const { balance } = user
@@ -57,7 +60,43 @@ const RouletteProvider = ({ children }) => {
   const { post } = useAPI()
   const { t } = useLocale()
 
-  const updateBets = (bet) => {
+  React.useEffect(() => {
+    gameRef.current = game
+  }, [game])
+
+  React.useEffect(() => {
+    spinDataRef.current = spinData
+  }, [spinData])
+
+  const getTotalPayout = useCallback((gameResult) => {
+    if (!gameResult?.bets) return 0
+
+    return gameResult.bets.reduce((total, bet) => {
+      return total + (bet.payout || 0)
+    }, 0)
+  }, [])
+
+  const getTotalBet = useCallback((gameResult) => {
+    if (!gameResult?.bets) return 0
+
+    return gameResult.bets.reduce((total, bet) => {
+      return total + (bet.amount || 0)
+    }, 0)
+  }, [])
+
+  const getGameOutcome = useCallback(
+    (gameResult) => {
+      const totalPayout = getTotalPayout(gameResult)
+      const totalBet = getTotalBet(gameResult)
+
+      if (totalPayout > totalBet) return "win"
+      if (totalPayout < totalBet) return "lose"
+      return "tie"
+    },
+    [getTotalBet, getTotalPayout],
+  )
+
+  const updateBets = useCallback((bet) => {
     if (!selectedChip || selectedChip <= 0) {
       addNotification(t("message.warning.selectChipFirst"), "warning")
       return
@@ -101,16 +140,28 @@ const RouletteProvider = ({ children }) => {
     })
 
     setBetAmount((prev) => prev + selectedChip)
-    console.log(game)
-  }
+  }, [addNotification, balance, selectedChip, t, updateBalance])
 
-  const updateBetAmount = (amount) => {
+  const updateBetAmount = useCallback((amount) => {
     setBetAmount(amount)
-  }
+  }, [])
 
-  const updateChip = (chip) => setSelectedChip(chip)
+  const updateChip = useCallback((chip) => setSelectedChip(chip), [])
 
-  const repeatBets = () => {
+  const clearBets = useCallback(() => {
+    const currentGame = gameRef.current
+    updateBalance(
+      "deposit",
+      currentGame.bets.reduce((total, bet) => total + bet.amount, 0),
+    )
+    setGame((prev) => ({
+      ...prev,
+      bets: [],
+    }))
+    setBetAmount(0)
+  }, [updateBalance])
+
+  const repeatBets = useCallback(() => {
     if (!Object.keys(lastBet).length) {
       addNotification(t("message.warning.playFirstToRepeat"), "warning")
       return
@@ -122,27 +173,21 @@ const RouletteProvider = ({ children }) => {
     }
 
     clearBets()
-    console.log("bb", lastBet.bets)
-    console.log("l", lastBet)
     setGame(lastBet)
     const lastAmount = getTotalBet(lastBet)
     setBetAmount(lastAmount)
     updateBalance("withdrawal", lastAmount)
-  }
+  }, [
+    addNotification,
+    balance,
+    clearBets,
+    getTotalBet,
+    lastBet,
+    t,
+    updateBalance,
+  ])
 
-  const clearBets = () => {
-    updateBalance(
-      "deposit",
-      game.bets.reduce((total, bet) => total + bet.amount, 0),
-    )
-    setGame((prev) => ({
-      ...prev,
-      bets: [],
-    }))
-    setBetAmount(0)
-  }
-
-  const doubleBets = () => {
+  const doubleBets = useCallback(() => {
     const totalCurrent = betAmount
     const totalAfterDouble = totalCurrent * 2
 
@@ -167,7 +212,7 @@ const RouletteProvider = ({ children }) => {
       }
     })
     setBetAmount((prev) => prev * 2)
-  }
+  }, [addNotification, balance, betAmount, t, updateBalance])
 
   const chipsCache = useMemo(() => {
     const cache = new Map()
@@ -185,7 +230,7 @@ const RouletteProvider = ({ children }) => {
         }
       }
 
-      // clave única por celda
+      // Unique key per betting cell.
       const key = `${bet.type}-${bet.bet}`
       cache.set(key, chips)
     }
@@ -196,17 +241,19 @@ const RouletteProvider = ({ children }) => {
   const getChipsForCell = useCallback(
     (cell) => {
       const key = `${cell.type}-${cell.bet}`
-      const EMPTY = []
-      return chipsCache.get(key) ?? EMPTY
+      return chipsCache.get(key) ?? EMPTY_CHIPS
     },
     [chipsCache],
   )
 
-  const getIndexFromNumber = (number) => {
-    const order = type === "ZeroZero" ? ROULETTE_00_ORDER : ROULETTE_0_ORDER
-    const rawIndex = order.indexOf(number)
-    return (rawIndex + WHEEL_INDEX_OFFSET + order.length) % order.length
-  }
+  const getIndexFromNumber = useCallback(
+    (number) => {
+      const order = type === "ZeroZero" ? ROULETTE_00_ORDER : ROULETTE_0_ORDER
+      const rawIndex = order.indexOf(number)
+      return (rawIndex + WHEEL_INDEX_OFFSET + order.length) % order.length
+    },
+    [type],
+  )
 
   const { anglePerSlot, rotationOffset } = useMemo(() => {
     const order = type === "ZeroZero" ? ROULETTE_00_ORDER : ROULETTE_0_ORDER
@@ -220,13 +267,16 @@ const RouletteProvider = ({ children }) => {
     }
   }, [type])
 
-  const getFinalAngleFromIndex = (index) => {
-    const angle = index * anglePerSlot + rotationOffset + WHEEL_OFFSET_DEG
+  const getFinalAngleFromIndex = useCallback(
+    (index) => {
+      const angle = index * anglePerSlot + rotationOffset + WHEEL_OFFSET_DEG
 
-    return angle % 360
-  }
+      return angle % 360
+    },
+    [anglePerSlot, rotationOffset],
+  )
 
-  const spin = async () => {
+  const spin = useCallback(async () => {
     if (isSpinning || showSpinView) return
 
     try {
@@ -245,8 +295,6 @@ const RouletteProvider = ({ children }) => {
         throw new Error(res.code)
       }
 
-      console.log("rouletteStatus", res)
-
       const outcome = getGameOutcome(res)
       const payout = getTotalPayout(res)
       const randomOffset = Math.random() * 360
@@ -255,12 +303,6 @@ const RouletteProvider = ({ children }) => {
 
       const index = getIndexFromNumber(winningNumber)
       const finalAngle = getFinalAngleFromIndex(index)
-
-      console.log("1", {
-        winningNumber,
-        index,
-        finalAngle,
-      })
 
       setSpinData({
         winningNumber,
@@ -279,34 +321,20 @@ const RouletteProvider = ({ children }) => {
     } finally {
       setIsSpinning(false)
     }
-  }
-
-  const getTotalPayout = (gameResult) => {
-    if (!gameResult?.bets) return 0
-
-    return gameResult.bets.reduce((total, bet) => {
-      return total + (bet.payout || 0)
-    }, 0)
-  }
-
-  const getTotalBet = (gameResult) => {
-    if (!gameResult?.bets) return 0
-
-    return gameResult.bets.reduce((total, bet) => {
-      return total + (bet.amount || 0)
-    }, 0)
-  }
-
-  const getGameOutcome = (gameResult) => {
-    const totalPayout = getTotalPayout(gameResult)
-    console.log("payout", totalPayout)
-    const totalBet = getTotalBet(gameResult)
-    console.log("bet", totalBet)
-
-    if (totalPayout > totalBet) return "win"
-    if (totalPayout < totalBet) return "lose"
-    return "tie"
-  }
+  }, [
+    addNotification,
+    game,
+    getAccessToken,
+    getFinalAngleFromIndex,
+    getGameOutcome,
+    getIndexFromNumber,
+    getRefreshToken,
+    getTotalPayout,
+    isSpinning,
+    post,
+    showSpinView,
+    t,
+  ])
 
   const rouletteValues = useMemo(() => {
     if (type === "ZeroZero") return ROULETTE_00_VALUES
@@ -315,12 +343,12 @@ const RouletteProvider = ({ children }) => {
   }, [type])
 
   const handleFinish = useCallback(() => {
-    if (!spinData) return
-    const data = spinData
+    const data = spinDataRef.current
+    if (!data) return
 
     setShowSpinView(false)
 
-    setLastBet(game)
+    setLastBet(gameRef.current)
     setSettledNumber(data.winningNumber)
     setSpinData(null)
 
@@ -352,7 +380,17 @@ const RouletteProvider = ({ children }) => {
     }))
 
     setBetAmount(0)
-  }, [addNotification, game, spinData, t, updateBalance])
+  }, [addNotification, t, updateBalance])
+
+  const animationValue = useMemo(
+    () => ({
+      rouletteRef,
+      spinData,
+      settledNumber,
+      handleFinish,
+    }),
+    [handleFinish, settledNumber, spinData],
+  )
 
   const value = useMemo(
     () => ({
@@ -382,33 +420,38 @@ const RouletteProvider = ({ children }) => {
       WHEEL_OFFSET_DEG,
     }),
     [
+      clearBets,
+      doubleBets,
       game,
-      lastBet,
-      selectedChip,
-      betAmount,
-      winningNums,
-      type,
+      getChipsForCell,
+      getFinalAngleFromIndex,
+      getIndexFromNumber,
+      handleFinish,
       isSpinning,
-      spinData,
+      lastBet,
+      betAmount,
+      repeatBets,
+      rouletteValues,
+      selectedChip,
       settledNumber,
       showSpinView,
-      rouletteValues,
-      getChipsForCell,
-      handleFinish,
+      spin,
+      spinData,
+      type,
+      updateBetAmount,
+      updateBets,
+      updateChip,
+      winningNums,
     ],
   )
 
-  return <RouletteContext value={value}>{children}</RouletteContext>
+  return (
+    <RouletteContext value={value}>
+      <RouletteAnimationContext value={animationValue}>
+        {children}
+      </RouletteAnimationContext>
+    </RouletteContext>
+  )
 }
 
 export default RouletteProvider
-
-export const useRoulette = () => {
-  const context = useContext(RouletteContext)
-
-  if (!context) {
-    throw new Error("Provider outside scope")
-  }
-
-  return context
-}

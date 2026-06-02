@@ -1,5 +1,5 @@
 import React from "react"
-import { useRoulette } from "@/providers/RouletteProvider"
+import { useRoulette } from "@/providers/rouletteContext"
 import LastNumber from "./LastNumber"
 import { useLocale } from "@/providers/LocaleProvider"
 
