@@ -176,6 +176,10 @@
     }
   },
   "games": {
+    "description": {
+      "summaryTitle": "Summary",
+      "howToPlayTitle": "How to play"
+    },
     "betAmount": {
       "label": "Bet amount",
       "placeholder": "Enter bet amount"
@@ -189,6 +193,9 @@
     "blackjack": {
       "title": "Blackjack",
       "bkPays": "Blackjack pays 3 to 2",
+      "imageAlt": "Blackjack table illustration",
+      "summary": "<p><b>Beat the dealer, not the table.</b></p><p>Blackjack is a fast card game where your goal is to finish closer to <b>21</b> than the dealer without going over.</p><ul><li>Quick tactical decisions</li><li>Strong hands can pay immediately</li><li>Every extra card changes the risk</li></ul>",
+      "howToPlay": "<p><b>Round flow</b></p><ul><li>Place your bet and start the hand</li><li><b>Hit</b> to draw another card</li><li><b>Stand</b> to keep your total</li><li><b>Double</b> to raise the stake for one last card</li><li><b>Split</b> when you receive a pair</li></ul><p>If your hand beats the dealer without busting, you win.</p>",
       "actions": {
         "double": "Double",
         "hit": "Hit",
@@ -202,6 +209,11 @@
         "Zero": "European Roulette",
         "ZeroZero": "American Roulette"
       },
+      "imageAltZero": "European roulette wheel",
+      "imageAltZeroZero": "American roulette wheel",
+      "summaryZero": "<p><b>The classic single-zero table.</b></p><p>European roulette is the cleaner version of roulette, built around one green zero and a wide range of betting styles.</p><ul><li>Bet on exact numbers</li><li>Cover colors, odds, evens, or ranges</li><li>Mix safer bets with high-payout picks</li></ul>",
+      "summaryZeroZero": "<p><b>Same thrill, extra edge on the wheel.</b></p><p>American roulette adds both <b>0</b> and <b>00</b>, keeping the same core flow while shifting the odds slightly.</p><ul><li>More green pockets</li><li>Same inside and outside bets</li><li>Classic casino feel</li></ul>",
+      "howToPlay": "<p><b>How a spin works</b></p><ul><li>Pick your chip value</li><li>Place bets on numbers or board sections</li><li>Spin the wheel and watch where the ball lands</li><li>Winning bets pay automatically</li></ul><p>You can combine cautious and risky bets in the same round.</p>",
       "board": {
         "black": "Black",
         "even": "Even",
@@ -220,12 +232,23 @@
     },
     "slots": {
       "title": "Slots",
+      "imageAlt": {
+        "3x3": "3x3 slots placeholder artwork",
+        "3x5": "3x5 slots placeholder artwork",
+        "5x5": "5x5 slots placeholder artwork"
+      },
       "modes": {
         "3x3": "3x3 Machine",
         "3x5": "3x5 Machine",
         "5x5": "5x5 Machine"
       },
       "description": "Classic slot machine. Match symbols across paylines to win. The rarer the symbol, the higher the payout!",
+      "summary": {
+        "3x3": "<p><b>Compact and classic.</b></p><p>This 3x3 machine keeps the action clean and readable, perfect for quick spins and straightforward wins.</p><ul><li>Fast sessions</li><li>Simple reel layout</li><li>Easy to read at a glance</li></ul>",
+        "3x5": "<p><b>More reels, more routes to win.</b></p><p>The 3x5 setup opens the board with extra paylines and more room for symbol combinations.</p><ul><li>Wider than 3x3</li><li>More active line variety</li><li>A bit more strategic</li></ul>",
+        "5x5": "<p><b>Big grid, loud energy.</b></p><p>This 5x5 version fills the screen with a denser reel field and a more chaotic spin pattern.</p><ul><li>Largest visual board</li><li>High-action feel</li><li>Best for a busier machine</li></ul>"
+      },
+      "howToPlay": "<p><b>Spin sequence</b></p><ul><li>Choose the machine type</li><li>Set your bet amount</li><li>Spin the reels and watch the symbols land</li><li>Matching symbols on active paylines create payouts</li></ul><p>Keep spinning or end the session whenever you want.</p>",
       "controls": {
         "selectType": "Machine type",
         "startSession": "Start game",
@@ -237,7 +260,10 @@
     },
     "capyroad": {
       "title": "Capyroad",
+      "imageAlt": "Capyroad placeholder card",
       "description": "Cross one road at a time to raise your multiplier. Every jump increases the potential payout, but also the crash risk. Cash out whenever you want to secure the winnings.",
+      "summary": "<p><b>Crossy Road energy with betting pressure.</b></p><p>Capyroad is a risk-and-cashout game inspired by <b>Crossy Road</b> and <b>Chicken Road</b>. Each safe lane pushes your capybara forward and raises the multiplier.</p><ul><li>Safe crosses build the reward</li><li>Each new lane adds tension</li><li>You choose when to stop and secure the run</li></ul>",
+      "howToPlay": "<p><b>Push your luck</b></p><ul><li>Start a round to enter the road</li><li>Press <b>Cross</b> to move to the next lane</li><li>Each success increases the payout multiplier</li><li>The crash chance also rises as you keep going</li><li>Use <b>Cash out</b> before a crash to lock the reward</li></ul><p>Longer runs can pay more, but one mistake can wipe the round.</p>",
       "actions": {
         "cross": "Cross",
         "cashout": "Cash out"

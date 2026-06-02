@@ -176,6 +176,10 @@
     }
   },
   "games": {
+    "description": {
+      "summaryTitle": "Rezumat",
+      "howToPlayTitle": "Cum se joacă"
+    },
     "betAmount": {
       "label": "Sumă pariată",
       "placeholder": "Introdu suma pariului"
@@ -189,6 +193,9 @@
     "blackjack": {
       "title": "Blackjack",
       "bkPays": "Blackjack plătește 3 la 2",
+      "imageAlt": "Ilustrație cu masă de blackjack",
+      "summary": "<p><b>Bate dealerul, nu masa.</b></p><p>Blackjack este un joc de cărți în care încerci să ajungi mai aproape de <b>21</b> decât dealerul, fără să depășești limita.</p><ul><li>Decizii rapide</li><li>Mâinile bune pot plăti imediat</li><li>Fiecare alegere schimbă riscul</li></ul>",
+      "howToPlay": "<p><b>Cum curge runda</b></p><ul><li>Plasează pariul și începe mâna</li><li><b>Hit</b> adaugă o carte nouă</li><li><b>Stand</b> păstrează totalul curent</li><li><b>Double</b> mărește pariul pentru o ultimă carte</li><li><b>Split</b> împarte mâna când primești o pereche</li></ul><p>Dacă termini mai bine decât dealerul fără să bustuiești, câștigi.</p>",
       "actions": {
         "double": "Dubleză",
         "hit": "Trage carte",
@@ -202,6 +209,11 @@
         "Zero": "Ruletă europeană",
         "ZeroZero": "Ruletă americană"
       },
+      "imageAltZero": "Roată de ruletă europeană",
+      "imageAltZeroZero": "Roată de ruletă americană",
+      "summaryZero": "<p><b>Masa clasică cu un singur zero.</b></p><p>Ruleta europeană este varianta mai curată a ruletei, construită în jurul unui singur zero verde și a mai multor stiluri de pariere.</p><ul><li>Pariază pe numere exacte</li><li>Acoperă culori, par/impar sau intervale</li><li>Combină pariuri sigure cu payout mare</li></ul>",
+      "summaryZeroZero": "<p><b>Aceeași tensiune, cu un plus pe roată.</b></p><p>Ruleta americană adaugă <b>0</b> și <b>00</b>, păstrând senzația clasică de cazino, dar schimbând puțin șansele.</p><ul><li>Mai multe buzunare verzi</li><li>Aceleași pariuri inside și outside</li><li>Atmosferă clasică de cazino</li></ul>",
+      "howToPlay": "<p><b>Cum funcționează o rotire</b></p><ul><li>Alege valoarea jetonului</li><li>Pune pariuri pe numere sau pe zone ale mesei</li><li>Apasă spin și urmărește unde se oprește bila</li><li>Pariurile câștigătoare sunt plătite automat</li></ul><p>Poți combina pariuri mai sigure cu unele mai riscante în aceeași rundă.</p>",
       "board": {
         "black": "Negru",
         "even": "Par",
@@ -220,12 +232,23 @@
     },
     "slots": {
       "title": "Sloturi",
+      "imageAlt": {
+        "3x3": "Imagine provizorie pentru slot 3x3",
+        "3x5": "Imagine provizorie pentru slot 3x5",
+        "5x5": "Imagine provizorie pentru slot 5x5"
+      },
       "modes": {
         "3x3": "Mașină 3x3",
         "3x5": "Mașină 3x5",
         "5x5": "Mașină 5x5"
       },
       "description": "Slot clasic. Potrivește simbolurile pe liniile de plată pentru a câștiga. Cu cât simbolul este mai rar, cu atât câștigul este mai mare!",
+      "summary": {
+        "3x3": "<p><b>Compact și clasic.</b></p><p>Slotul 3x3 păstrează jocul simplu și clar, perfect pentru rotiri rapide și combinații ușor de urmărit.</p><ul><li>Sesiuni rapide</li><li>Layout simplu</li><li>Ușor de citit</li></ul>",
+        "3x5": "<p><b>Mai multe role, mai multe rute spre câștig.</b></p><p>Versiunea 3x5 deschide tabla cu mai multe linii active și mai mult spațiu pentru combinații.</p><ul><li>Layout mai lat</li><li>Mai multă varietate</li><li>Puțin mai strategic</li></ul>",
+        "5x5": "<p><b>Grilă mare, energie ridicată.</b></p><p>Modelul 5x5 umple ecranul cu o mașină mai densă și o senzație mai haotică la fiecare rotire.</p><ul><li>Cea mai mare tablă</li><li>Senzație de acțiune continuă</li><li>Ideal pentru intensitate</li></ul>"
+      },
+      "howToPlay": "<p><b>Secvența unui spin</b></p><ul><li>Alege tipul mașinii</li><li>Setează suma pariată</li><li>Învârte rolele și urmărește simbolurile</li><li>Simbolurile aliniate pe liniile active aduc payout</li></ul><p>Poți continua sau poți opri sesiunea când vrei.</p>",
       "controls": {
         "selectType": "Tipul mașinii",
         "startSession": "Începe jocul",
@@ -237,7 +260,10 @@
     },
     "capyroad": {
       "title": "Capyroad",
+      "imageAlt": "Card provizoriu Capyroad",
       "description": "Traversează șosea după șosea pentru a crește multiplicatorul. Fiecare salt mărește câștigul posibil, dar și riscul de accident. Oprește-te când vrei să securizezi premiul.",
+      "summary": "<p><b>Energie de Crossy Road cu presiune de cashout.</b></p><p>Capyroad este un joc de risc inspirat de <b>Crossy Road</b> și <b>Chicken Road</b>. Fiecare bandă trecută cu bine împinge capibara înainte și crește multiplicatorul.</p><ul><li>Traversările sigure cresc recompensa</li><li>Fiecare bandă nouă adaugă tensiune</li><li>Tu alegi când securizezi cursa</li></ul>",
+      "howToPlay": "<p><b>Riști sau încasezi</b></p><ul><li>Pornește runda și intră pe drum</li><li>Apasă <b>Traversează</b> ca să mergi pe banda următoare</li><li>Fiecare succes crește multiplicatorul</li><li>Șansa de crash urcă pe măsură ce continui</li><li>Folosește <b>Încasează</b> înainte de crash ca să blochezi premiul</li></ul><p>Dacă forțezi prea mult, o singură greșeală poate șterge toată runda.</p>",
       "actions": {
         "cross": "Traversează",
         "cashout": "Încasează"

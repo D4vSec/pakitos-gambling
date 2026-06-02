@@ -5,6 +5,7 @@ import CapyroadProvider from "@/providers/CapyroadProvider"
 import Capyroad from "@/components/games/capyroad/Capyroad"
 import { useLocale } from "@/providers/LocaleProvider"
 import CapyroadControls from "@/components/games/capyroad/controls/CapyroadControls"
+import capyroadImage from "@/assets/home/cards/capybara_packet_tracer.jpeg"
 
 const CapyroadGame = () => {
   const { t } = useLocale()
@@ -13,9 +14,15 @@ const CapyroadGame = () => {
       <GameTemplate
         game={<Capyroad />}
         description={
-          <GameDescription title={t("games.capyroad.title")}>
-            {t("games.capyroad.description")}
-          </GameDescription>
+          <GameDescription
+            title={t("games.capyroad.title")}
+            image={capyroadImage}
+            imageAlt={t("games.capyroad.imageAlt")}
+            summaryTitle={t("games.description.summaryTitle")}
+            summary={t("games.capyroad.summary")}
+            howToPlayTitle={t("games.description.howToPlayTitle")}
+            howToPlay={t("games.capyroad.howToPlay")}
+          />
         }
         controls={<CapyroadControls />}
       />

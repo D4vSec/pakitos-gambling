@@ -176,6 +176,10 @@
     }
   },
   "games": {
+    "description": {
+      "summaryTitle": "Resumen",
+      "howToPlayTitle": "Cómo se juega"
+    },
     "betAmount": {
       "label": "Cantidad de apuesta",
       "placeholder": "Introduce la cantidad de apuesta"
@@ -189,6 +193,9 @@
     "blackjack": {
       "title": "Blackjack",
       "bkPays": "El blackjack paga 3 a 2",
+      "imageAlt": "Ilustración de una mesa de blackjack",
+      "summary": "<p><b>Gana al crupier, no a la mesa.</b></p><p>Blackjack es un juego de cartas en el que buscas acercarte a <b>21</b> más que el crupier sin pasarte.</p><ul><li>Decisiones rápidas</li><li>Las manos fuertes pagan muy bien</li><li>Cada carta extra cambia el riesgo</li></ul>",
+      "howToPlay": "<p><b>Flujo de la ronda</b></p><ul><li>Haz tu apuesta y comienza la mano</li><li><b>Pedir</b> añade otra carta</li><li><b>Plantarse</b> conserva tu total</li><li><b>Doblar</b> sube la apuesta a cambio de una última carta</li><li><b>Separar</b> divide la mano cuando recibes una pareja</li></ul><p>Si acabas mejor que el crupier sin pasarte, ganas.</p>",
       "actions": {
         "double": "Doblar",
         "hit": "Pedir carta",
@@ -202,6 +209,11 @@
         "Zero": "Ruleta europea",
         "ZeroZero": "Ruleta americana"
       },
+      "imageAltZero": "Rueda de ruleta europea",
+      "imageAltZeroZero": "Rueda de ruleta americana",
+      "summaryZero": "<p><b>La mesa clásica de un solo cero.</b></p><p>La ruleta europea es la versión más limpia de la ruleta, con un único cero verde y muchas formas distintas de apostar.</p><ul><li>Apuesta a números exactos</li><li>Cubre colores, pares, impares o rangos</li><li>Combina apuestas seguras con otras de pago alto</li></ul>",
+      "summaryZeroZero": "<p><b>La misma emoción, con un extra en la rueda.</b></p><p>La ruleta americana añade <b>0</b> y <b>00</b>, manteniendo la esencia del juego pero cambiando ligeramente las probabilidades.</p><ul><li>Más casillas verdes</li><li>La misma mezcla de apuestas interiores y exteriores</li><li>Sensación de casino clásico</li></ul>",
+      "howToPlay": "<p><b>Cómo funciona una tirada</b></p><ul><li>Elige el valor de tu ficha</li><li>Coloca apuestas en números o zonas del tablero</li><li>Pulsa girar y espera a que la bola se detenga</li><li>Las apuestas ganadoras se pagan automáticamente</li></ul><p>Puedes mezclar apuestas conservadoras y arriesgadas en la misma ronda.</p>",
       "board": {
         "black": "Negro",
         "even": "Par",
@@ -220,12 +232,23 @@
     },
     "slots": {
       "title": "Tragamonedas",
+      "imageAlt": {
+        "3x3": "Imagen provisional de tragamonedas 3x3",
+        "3x5": "Imagen provisional de tragamonedas 3x5",
+        "5x5": "Imagen provisional de tragamonedas 5x5"
+      },
       "modes": {
         "3x3": "Máquina 3x3",
         "3x5": "Máquina 3x5",
         "5x5": "Máquina 5x5"
       },
       "description": "Tragamonedas clásica. Alinea símbolos en las líneas de pago para ganar. ¡Cuanto más raro sea el símbolo, mayor será el premio!",
+      "summary": {
+        "3x3": "<p><b>Compacta y clásica.</b></p><p>La máquina 3x3 mantiene la acción simple y clara, ideal para tiradas rápidas y premios fáciles de leer.</p><ul><li>Sesiones ágiles</li><li>Distribución sencilla</li><li>Muy fácil de entender</li></ul>",
+        "3x5": "<p><b>Más rodillos, más caminos para ganar.</b></p><p>La versión 3x5 abre el tablero con más líneas activas y más espacio para formar combinaciones.</p><ul><li>Formato más ancho</li><li>Mayor variedad de líneas</li><li>Un poco más estratégica</li></ul>",
+        "5x5": "<p><b>Cuadrícula grande, energía alta.</b></p><p>La 5x5 llena la pantalla con una máquina más densa y un ritmo visual más caótico.</p><ul><li>El tablero más grande</li><li>Sensación de mucha acción</li><li>Ideal si quieres algo intenso</li></ul>"
+      },
+      "howToPlay": "<p><b>Secuencia de juego</b></p><ul><li>Elige el tipo de máquina</li><li>Selecciona la cantidad de apuesta</li><li>Gira los rodillos y espera a que caigan los símbolos</li><li>Las coincidencias en las líneas activas generan premios</li></ul><p>Puedes seguir tirando o cerrar la sesión cuando quieras.</p>",
       "controls": {
         "selectType": "Tipo de máquina",
         "startSession": "Iniciar partida",
@@ -237,7 +260,10 @@
     },
     "capyroad": {
       "title": "Capyroad",
+      "imageAlt": "Tarjeta provisional de Capyroad",
       "description": "Cruza carretera por carretera para aumentar el multiplicador. Cada salto aumenta el premio potencial, pero también el riesgo de choque. Planta cuando quieras asegurar la ganancia.",
+      "summary": "<p><b>Energía de Crossy Road con presión de apuesta.</b></p><p>Capyroad es un juego de riesgo y cashout inspirado en <b>Crossy Road</b> y <b>Chicken Road</b>. Cada cruce seguro hace avanzar a tu capibara y sube el multiplicador.</p><ul><li>Los cruces seguros aumentan el premio</li><li>Cada carril nuevo mete más tensión</li><li>Tú decides cuándo cerrar la carrera</li></ul>",
+      "howToPlay": "<p><b>Aprieta o cobra</b></p><ul><li>Empieza una ronda para entrar en la carretera</li><li>Pulsa <b>Cruzar</b> para pasar al siguiente carril</li><li>Cada éxito aumenta el multiplicador</li><li>La probabilidad de choque también sube</li><li>Usa <b>Cobrar</b> antes de chocar para asegurar el premio</li></ul><p>Si te alargas demasiado, una sola caída puede borrar toda la ronda.</p>",
       "actions": {
         "cross": "Cruzar",
         "cashout": "Cobrar"

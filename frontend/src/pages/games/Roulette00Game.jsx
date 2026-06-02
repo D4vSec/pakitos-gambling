@@ -5,6 +5,7 @@ import React from "react"
 import RouletteControls from "@/components/games/roulette/controls/RouletteControls"
 import RouletteProvider from "@/providers/RouletteProvider"
 import { useLocale } from "@/providers/LocaleProvider"
+import roulette00Image from "@/assets/home/cards/roulette00banner.jpg"
 
 const Roulette00Game = () => {
   const { t } = useLocale()
@@ -13,15 +14,15 @@ const Roulette00Game = () => {
       <GameTemplate
         game={<Roulette />}
         description={
-          <GameDescription title={t("games.roulette.types.ZeroZero")}>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum
-            earum quos, suscipit sed nobis excepturi distinctio quidem quas
-            ullam blanditiis dolores sit quo corporis! Provident possimus a
-            magni id modi? Lorem ipsum dolor sit amet consectetur adipisicing
-            elit. Dolorum earum quos, suscipit sed nobis excepturi distinctio
-            quidem quas ullam blanditiis dolores sit quo corporis! Provident
-            possimus a magni id modi?
-          </GameDescription>
+          <GameDescription
+            title={t("games.roulette.types.ZeroZero")}
+            image={roulette00Image}
+            imageAlt={t("games.roulette.imageAltZeroZero")}
+            summaryTitle={t("games.description.summaryTitle")}
+            summary={t("games.roulette.summaryZeroZero")}
+            howToPlayTitle={t("games.description.howToPlayTitle")}
+            howToPlay={t("games.roulette.howToPlay")}
+          />
         }
         controls={<RouletteControls />}
       />

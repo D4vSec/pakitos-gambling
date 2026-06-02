@@ -5,6 +5,7 @@ import GameDescription from "@/components/games/GameDescription"
 import GameTemplate from "@/components/games/GameTemplate"
 import BlackjackProvider from "@/providers/BlackjackProvider"
 import { useLocale } from "@/providers/LocaleProvider"
+import blackjackImage from "@/assets/home/cards/blackjack.png"
 
 const BlackjackGame = () => {
   const { t } = useLocale()
@@ -13,52 +14,15 @@ const BlackjackGame = () => {
       <GameTemplate
         game={<BlackjackBoard />}
         description={
-          <GameDescription title={t("games.blackjack.title")}>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorum
-            earum quos, suscipit sed nobis excepturi distinctio quidem quas
-            ullam blanditiis dolores sit quo corporis! Provident possimus a
-            magni id modi? Lorem ipsum dolor sit amet consectetur adipisicing
-            elit. Dolorum earum quos, suscipit sed nobis excepturi distinctio
-            quidem quas ullam blanditiis dolores sit quo corporis! Provident
-            possimus a magni id modi? Lorem ipsum dolor sit amet, consectetur
-            adipisicing elit. Dolorum earum quos, suscipit sed nobis excepturi
-            distinctio quidem quas ullam blanditiis dolores sit quo corporis!
-            Provident possimus a magni id modi? Lorem ipsum dolor sit amet
-            consectetur adipisicing elit. Dolorum earum quos, suscipit sed nobis
-            excepturi distinctio quidem quas ullam blanditiis dolores sit quo
-            corporis! Provident possimus a magni id modi? Lorem ipsum dolor sit
-            amet, consectetur adipisicing elit. Dolorum earum quos, suscipit sed
-            nobis excepturi distinctio quidem quas ullam blanditiis dolores sit
-            quo corporis! Provident possimus a magni id modi? Lorem ipsum dolor
-            sit amet consectetur adipisicing elit. Dolorum earum quos, suscipit
-            sed nobis excepturi distinctio quidem quas ullam blanditiis dolores
-            sit quo corporis! Provident possimus a magni id modi? Lorem ipsum
-            dolor sit amet, consectetur adipisicing elit. Dolorum earum quos,
-            suscipit sed nobis excepturi distinctio quidem quas ullam blanditiis
-            dolores sit quo corporis! Provident possimus a magni id modi? Lorem
-            ipsum dolor sit amet consectetur adipisicing elit. Dolorum earum
-            quos, suscipit sed nobis excepturi distinctio quidem quas ullam
-            blanditiis dolores sit quo corporis! Provident possimus a magni id
-            modi? Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-            Dolorum earum quos, suscipit sed nobis excepturi distinctio quidem
-            quas ullam blanditiis dolores sit quo corporis! Provident possimus a
-            magni id modi? Lorem ipsum dolor sit amet consectetur adipisicing
-            elit. Dolorum earum quos, suscipit sed nobis excepturi distinctio
-            quidem quas ullam blanditiis dolores sit quo corporis! Provident
-            possimus a magni id modi? Lorem ipsum dolor sit amet, consectetur
-            adipisicing elit. Dolorum earum quos, suscipit sed nobis excepturi
-            distinctio quidem quas ullam blanditiis dolores sit quo corporis!
-            Provident possimus a magni id modi? Lorem ipsum dolor sit amet
-            consectetur adipisicing elit. Dolorum earum quos, suscipit sed nobis
-            excepturi distinctio quidem quas ullam blanditiis dolores sit quo
-            corporis! Provident possimus a magni id modi? Lorem ipsum dolor sit
-            amet, consectetur adipisicing elit. Dolorum earum quos, suscipit sed
-            nobis excepturi distinctio quidem quas ullam blanditiis dolores sit
-            quo corporis! Provident possimus a magni id modi? Lorem ipsum dolor
-            sit amet consectetur adipisicing elit. Dolorum earum quos, suscipit
-            sed nobis excepturi distinctio quidem quas ullam blanditiis dolores
-            sit quo corporis! Provident possimus a magni id modi?
-          </GameDescription>
+          <GameDescription
+            title={t("games.blackjack.title")}
+            image={blackjackImage}
+            imageAlt={t("games.blackjack.imageAlt")}
+            summaryTitle={t("games.description.summaryTitle")}
+            summary={t("games.blackjack.summary")}
+            howToPlayTitle={t("games.description.howToPlayTitle")}
+            howToPlay={t("games.blackjack.howToPlay")}
+          />
         }
         controls={<BlackjackControls />}
       />
