@@ -5,43 +5,28 @@ import logger from "#utils/logger.utils"
 import { randomUUID } from "#utils/rng.utils"
 
 const spinRoulette = async (req, res) => {
-    const { rouletteType, bets } = req.body
-    const normalizedBets = Array.isArray(bets) ? bets : [bets]
-
-    const isAllowedRoulette = (rt) => ["Zero", "ZeroZero"].includes(rt)
-
-    const isValidBetShape = (bet) => bet && typeof bet === "object" && Number.isFinite(bet.amount) && bet.amount > 0
-
-    const numberBetOutOfRange = (bet, rt) => {
-        if (bet.type !== "number") return false
-        const max = rt === "Zero" ? 36 : 37
-        return !Number.isInteger(bet.bet) || bet.bet < 0 || bet.bet > max
-    }
-
-    const invalidBetTypeFor = (bet) => {
-        if (bet.type === "color") return !["red", "black"].includes(bet.bet)
-        if (bet.type === "odd/even") return !["odd", "even"].includes(bet.bet)
-        if (bet.type === "twelve") return !["1-12", "13-24", "25-36"].includes(bet.bet)
-        if (bet.type === "row") return !["row1", "row2", "row3"].includes(bet.bet)
-        if (bet.type === "half") return !["1-18", "19-36"].includes(bet.bet)
-        return false
-    }
-
-    if (!isAllowedRoulette(rouletteType)) return res.status(400).json({ code: "INVALID_ROULETTE_TYPE" })
-
-    if (normalizedBets.some((b) => !isValidBetShape(b))) return res.status(400).json({ code: "INVALID_BET" })
-
-    if (normalizedBets.some((b) => numberBetOutOfRange(b, rouletteType))) return res.status(400).json({ code: "INVALID_BET" })
-
-    if (normalizedBets.some((b) => invalidBetTypeFor(b))) return res.status(400).json({ code: "INVALID_BET_TYPE" })
-
     const id = req.user.id
     const wallet = await User.getUserBalance(id)
+    
+    const { rouletteType, bets } = req.body
+    const normalizedBets = Array.isArray(bets) ? bets : [bets]
     const totalAmount = normalizedBets.reduce((acc, b) => acc + b.amount, 0)
 
     if (totalAmount > wallet) return res.status(400).json({ code: "INSUFFICIENT_BALANCE" })
 
     const roulette = createRoulette()
+
+    if (!roulette.isAllowedRoulette(rouletteType))
+        return res.status(400).json({ code: "INVALID_ROULETTE_TYPE" })
+
+    if (normalizedBets.some((b) => !roulette.isValidBetShape(b)))
+        return res.status(400).json({ code: "INVALID_BET" })
+
+    if (normalizedBets.some((b) => roulette.numberBetOutOfRange(b, rouletteType)))
+        return res.status(400).json({ code: "INVALID_BET" })
+
+    if (normalizedBets.some((b) => roulette.invalidBetTypeFor(b)))
+        return res.status(400).json({ code: "INVALID_BET_TYPE" })
 
     const evaluateBet = (bet, winningNumber) => {
         let isWinner = false

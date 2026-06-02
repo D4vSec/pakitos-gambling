@@ -14,12 +14,31 @@ const createRoulette = () => {
         [3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36],
     ]
 
-    const redNumbers = [
-        1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36,
-    ]
-    const blackNumbers = [
-        2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35,
-    ]
+    const redNumbers = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36]
+    const blackNumbers = [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35]
+
+    const isAllowedRoulette = (type) => ["Zero", "ZeroZero"].includes(type)
+
+    const isValidBetShape = (bet) =>
+        bet && typeof bet === "object" && Number.isFinite(bet.amount) && bet.amount > 0
+
+    const numberBetOutOfRange = (bet, rouletteType) => {
+        if (isNumberBet(bet.type)) return false
+        const max = rouletteType === "Zero" ? 36 : 37
+        return !Number.isInteger(bet.bet) || bet.bet < 0 || bet.bet > max
+    }
+
+    const invalidBetTypeFor = (bet) => {
+        if (isNumberBet(bet.type)) return true
+        if (isColorBet(bet.type)) return !["red", "black"].includes(bet.bet)
+        if (isOddBet(bet.type)) return !["odd", "even"].includes(bet.bet)
+        if (isTwelveBet(bet.type)) return !["1-12", "13-24", "25-36"].includes(bet.bet)
+        if (isRowBet(bet.type)) return !["row1", "row2", "row3"].includes(bet.bet)
+        if (isHalfBet(bet.type)) return !["1-18", "19-36"].includes(bet.bet)
+        return false
+    }
+
+    
 
     const spinRoulette = (rouletteType) => {
         if (rouletteType === "Zero") return randomIntInclusive(0, 36)
@@ -46,8 +65,7 @@ const createRoulette = () => {
     }
 
     const isOddWinner = (bet, winningNumber) => {
-        if (bet === "odd")
-            return winningNumber % 2 === 1 && !isZeroZero(winningNumber)
+        if (bet === "odd") return winningNumber % 2 === 1 && !isZeroZero(winningNumber)
         if (bet === "even") return winningNumber % 2 === 0 && !isZero(winningNumber)
         return false
     }
@@ -95,6 +113,10 @@ const createRoulette = () => {
         isRowBet,
         isHalfBet,
         getColor,
+        isAllowedRoulette,
+        isValidBetShape,
+        numberBetOutOfRange,
+        invalidBetTypeFor,
     }
 }
 
