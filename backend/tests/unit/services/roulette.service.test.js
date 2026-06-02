@@ -52,4 +52,26 @@ describe('roulette service', () => {
 		expect(roulette.isRowWinner('row3', 30)).toBe(true)
 		expect(roulette.isHalfWinner('19-36', 22)).toBe(true)
 	})
+
+	it('validates number ranges only for number bets', () => {
+		const roulette = createRoulette()
+
+		expect(roulette.numberBetOutOfRange({ type: 'number', bet: 7, amount: 10 }, 'Zero')).toBe(
+			false,
+		)
+		expect(roulette.numberBetOutOfRange({ type: 'number', bet: 37, amount: 10 }, 'Zero')).toBe(
+			true,
+		)
+		expect(
+			roulette.numberBetOutOfRange({ type: 'color', bet: 'red', amount: 10 }, 'Zero'),
+		).toBe(false)
+	})
+
+	it('accepts valid number and outside bets by type', () => {
+		const roulette = createRoulette()
+
+		expect(roulette.invalidBetTypeFor({ type: 'number', bet: 12, amount: 10 })).toBe(false)
+		expect(roulette.invalidBetTypeFor({ type: 'color', bet: 'red', amount: 10 })).toBe(false)
+		expect(roulette.invalidBetTypeFor({ type: 'color', bet: 'blue', amount: 10 })).toBe(true)
+	})
 })
