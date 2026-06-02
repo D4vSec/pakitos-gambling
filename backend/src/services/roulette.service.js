@@ -23,13 +23,13 @@ const createRoulette = () => {
         bet && typeof bet === "object" && Number.isFinite(bet.amount) && bet.amount > 0
 
     const numberBetOutOfRange = (bet, rouletteType) => {
-        if (isNumberBet(bet.type)) return false
+        if (!isNumberBet(bet.type)) return false
         const max = rouletteType === "Zero" ? 36 : 37
         return !Number.isInteger(bet.bet) || bet.bet < 0 || bet.bet > max
     }
 
     const invalidBetTypeFor = (bet) => {
-        if (isNumberBet(bet.type)) return true
+        if (isNumberBet(bet.type)) return false
         if (isColorBet(bet.type)) return !["red", "black"].includes(bet.bet)
         if (isOddBet(bet.type)) return !["odd", "even"].includes(bet.bet)
         if (isTwelveBet(bet.type)) return !["1-12", "13-24", "25-36"].includes(bet.bet)
