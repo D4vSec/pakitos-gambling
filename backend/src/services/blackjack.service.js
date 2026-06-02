@@ -77,7 +77,7 @@ const createBlackJack = () => {
     }
 
     //Dealer logic
-    const dealerPlay = (deck, dealerHand, playerHand) => {
+    const dealerPlay = (deck, dealerHand, playerHand) => { //TODO: Change this method it doesn't need the playerHand parameter, the dealer will play the same regardless of the player's hand
         while (calculateHandValue(dealerHand) < 17) {
             dealerHand = [...dealerHand, deck[0]]
             deck.shift()
@@ -85,7 +85,7 @@ const createBlackJack = () => {
         return dealerHand
     }
 
-    const dealerPlaySplit = (deck, dealerHand, playerHand1, playerHand2) => {
+    const dealerPlaySplit = (deck, dealerHand, playerHand1, playerHand2) => { //TODO: Remove this method, the dealer will play the same regardless of the player's hand, this method is not necessary   
         while (calculateHandValue(dealerHand) < 17) {
             dealerHand = [...dealerHand, deck[0]]
             deck.shift()
