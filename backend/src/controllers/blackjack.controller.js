@@ -1,5 +1,6 @@
 import createBlackJack from "#services/blackjack.service"
 import User from "#models/user.model"
+import Audit from "#services/audit.service"
 import logger from "#utils/logger.utils"
 import { randomUUID } from "#utils/rng.utils"
 
@@ -112,11 +113,15 @@ export const startGame = async (req, res) => {
             }
             let result = blackJack.getPayout(game, FIRST_HAND)
             game.payout = result ? result.payout : 0
-            if (game.payout > 0) await User.updateUserBalance(id, game.payout, { type: result.type })
+            if (game.payout > 0)
+                await User.updateUserBalance(id, game.payout, { type: result.type })
         }
 
         //If the dealer hits a blackJack
-        if (blackJack.calculateHandValue(dealerHand) === 21 && blackJack.calculateHandValue(playerHand) !== 21) {
+        if (
+            blackJack.calculateHandValue(dealerHand) === 21 &&
+            blackJack.calculateHandValue(playerHand) !== 21
+        ) {
             game.status = GAME_STATUSES.finished
             game.dealer[DEALER_HAND].blackjack = true
             game.dealer[DEALER_HAND].resolved = true
@@ -127,7 +132,29 @@ export const startGame = async (req, res) => {
 
         // Create a copy for the response to avoid modifying the stored game state and hide the dealer card and the deck from the response
         const responseGame = blackJack.hideDealerCard(dealerHand, game)
-        res.status(200).json(Object.fromEntries(Object.entries(responseGame).filter(([key]) => key !== "deck")))
+
+        if (game.status === GAME_STATUSES.finished) {
+            const deviceInfo = Audit.getUserAgentRaw(req)
+            Audit.createAudit({
+                user_id: id,
+                action: "GAME_RESULT",
+                details: {
+                    type: "BLACKJACK",
+                    bets: game.player.map((hand) => ({ bet: hand.bet, hand: hand.hand })),
+                    dealerHand: game.dealer[DEALER_HAND].hand,
+                    playerHand: game.player.map((hand) => hand.hand),
+                    winners: game.winners,
+                    payout: game.payout,
+                    date: new Date().toISOString(),
+                },
+                ip_address: Audit.getClientIp(req),
+                user_agent: deviceInfo ? JSON.stringify(deviceInfo.raw) : null,
+            })
+        }
+
+        res.status(200).json(
+            Object.fromEntries(Object.entries(responseGame).filter(([key]) => key !== "deck")),
+        )
     } catch (error) {
         console.log(error)
         logger.error("Error starting game: ", error)
@@ -150,7 +177,10 @@ export const hit = async (req, res) => {
         //TODO: HIT WITH SPLIT IS NOT WORKING
         if (game.split) {
             if (game.player[FIRST_HAND].resolved) {
-                game.player[SECOND_HAND].hand = blackJack.hit(game.deck, game.player[SECOND_HAND].hand)
+                game.player[SECOND_HAND].hand = blackJack.hit(
+                    game.deck,
+                    game.player[SECOND_HAND].hand,
+                )
 
                 game.player[SECOND_HAND] = blackJack.setHand(game.player[SECOND_HAND]) //TODO: Maybe I can abstract this logic since it is repeated a lot of times in the code
 
@@ -165,17 +195,27 @@ export const hit = async (req, res) => {
 
                 if (game.status === GAME_STATUSES.finished) {
                     if (!game.player[FIRST_HAND].bust || !game.player[SECOND_HAND].bust) {
-                        game.dealer[DEALER_HAND].hand = blackJack.dealerPlay(game.deck, game.dealer[DEALER_HAND].hand, game.player[SECOND_HAND].hand)
+                        game.dealer[DEALER_HAND].hand = blackJack.dealerPlay(
+                            game.deck,
+                            game.dealer[DEALER_HAND].hand,
+                            game.player[SECOND_HAND].hand,
+                        )
                         game.dealer[DEALER_HAND] = blackJack.setHand(game.dealer[DEALER_HAND])
                     }
 
                     if (!game.player[FIRST_HAND].bust) {
-                        const winner = blackJack.determinateWinner(game.player[FIRST_HAND].value, game.dealer[DEALER_HAND].value)
+                        const winner = blackJack.determinateWinner(
+                            game.player[FIRST_HAND].value,
+                            game.dealer[DEALER_HAND].value,
+                        )
                         game.winners.push(winner)
                     }
 
                     if (!game.player[SECOND_HAND].bust) {
-                        const winner2 = blackJack.determinateWinner(game.player[SECOND_HAND].value, game.dealer[DEALER_HAND].value)
+                        const winner2 = blackJack.determinateWinner(
+                            game.player[SECOND_HAND].value,
+                            game.dealer[DEALER_HAND].value,
+                        )
                         game.winners.push(winner2)
                     }
 
@@ -186,11 +226,16 @@ export const hit = async (req, res) => {
 
                     game.payout = (result ? result.payout : 0) + (result2 ? result2.payout : 0)
 
-                    if (result.payout > 0) await User.updateUserBalance(id, result.payout, { type: result.type })
-                    if (result2.payout > 0) await User.updateUserBalance(id, result2.payout, { type: result2.type })
+                    if (result.payout > 0)
+                        await User.updateUserBalance(id, result.payout, { type: result.type })
+                    if (result2.payout > 0)
+                        await User.updateUserBalance(id, result2.payout, { type: result2.type })
                 }
             } else {
-                game.player[FIRST_HAND].hand = blackJack.hit(game.deck, game.player[FIRST_HAND].hand)
+                game.player[FIRST_HAND].hand = blackJack.hit(
+                    game.deck,
+                    game.player[FIRST_HAND].hand,
+                )
 
                 game.player[FIRST_HAND] = blackJack.setHand(game.player[FIRST_HAND])
 
@@ -211,14 +256,22 @@ export const hit = async (req, res) => {
             if (game.player[FIRST_HAND].blackjack) {
                 game.status = GAME_STATUSES.finished
 
-                game.dealer[DEALER_HAND].hand = blackJack.dealerPlay(game.deck, game.dealer[DEALER_HAND].hand, game.player[FIRST_HAND].hand)
+                game.dealer[DEALER_HAND].hand = blackJack.dealerPlay(
+                    game.deck,
+                    game.dealer[DEALER_HAND].hand,
+                    game.player[FIRST_HAND].hand,
+                )
                 game.dealer[DEALER_HAND] = blackJack.setHand(game.dealer[DEALER_HAND])
 
-                const winner = blackJack.determinateWinner(game.player[FIRST_HAND].value, game.dealer[DEALER_HAND].value)
+                const winner = blackJack.determinateWinner(
+                    game.player[FIRST_HAND].value,
+                    game.dealer[DEALER_HAND].value,
+                )
                 game.winners.push(winner)
                 let result = blackJack.getPayout(game, FIRST_HAND)
                 game.payout = result ? result.payout : 0
-                if (game.payout > 0) await User.updateUserBalance(id, game.payout, { type: result.type })
+                if (game.payout > 0)
+                    await User.updateUserBalance(id, game.payout, { type: result.type })
             }
         }
 
@@ -227,7 +280,28 @@ export const hit = async (req, res) => {
         // Create a copy for the response
         const responseGame = blackJack.hideDealerCard(game.dealer[DEALER_HAND].hand, game)
 
-        res.status(200).json(Object.fromEntries(Object.entries(responseGame).filter(([key]) => key !== "deck")))
+        if (game.status === GAME_STATUSES.finished) {
+            const deviceInfo = Audit.getUserAgentRaw(req)
+            Audit.createAudit({
+                user_id: id,
+                action: "GAME_RESULT",
+                details: {
+                    type: "BLACKJACK",
+                    bets: game.player.map((hand) => ({ bet: hand.bet, hand: hand.hand })),
+                    dealerHand: game.dealer[DEALER_HAND].hand,
+                    playerHand: game.player.map((hand) => hand.hand),
+                    winners: game.winners,
+                    payout: game.payout,
+                    date: new Date().toISOString(),
+                },
+                ip_address: Audit.getClientIp(req),
+                user_agent: deviceInfo ? JSON.stringify(deviceInfo.raw) : null,
+            })
+        }
+
+        res.status(200).json(
+            Object.fromEntries(Object.entries(responseGame).filter(([key]) => key !== "deck")),
+        )
     } catch (error) {
         console.log(error)
         logger.error("Error hitting:", error)
@@ -252,12 +326,22 @@ export const stand = async (req, res) => {
             //If the player is already resolved the first hand, and decides to stand with the second hand,
             //the dealer plays his hand and we determinate the winner of both hands
             if (game.player[FIRST_HAND].resolved) {
-                game.dealer[DEALER_HAND].hand = blackJack.dealerPlay(game.deck, game.dealer[DEALER_HAND].hand, game.player[SECOND_HAND].hand)
+                game.dealer[DEALER_HAND].hand = blackJack.dealerPlay(
+                    game.deck,
+                    game.dealer[DEALER_HAND].hand,
+                    game.player[SECOND_HAND].hand,
+                )
                 game.dealer[DEALER_HAND] = blackJack.setHand(game.dealer[DEALER_HAND])
 
-                const winner = blackJack.determinateWinner(game.player[FIRST_HAND].value, game.dealer[DEALER_HAND].value)
+                const winner = blackJack.determinateWinner(
+                    game.player[FIRST_HAND].value,
+                    game.dealer[DEALER_HAND].value,
+                )
 
-                const winner2 = blackJack.determinateWinner(game.player[SECOND_HAND].value, game.dealer[DEALER_HAND].value)
+                const winner2 = blackJack.determinateWinner(
+                    game.player[SECOND_HAND].value,
+                    game.dealer[DEALER_HAND].value,
+                )
 
                 game.winners.push(winner)
                 game.winners.push(winner2)
@@ -266,8 +350,10 @@ export const stand = async (req, res) => {
                 const results = blackJack.getPayout(game, FIRST_HAND)
                 const results2 = blackJack.getPayout(game, SECOND_HAND)
                 game.payout = (results ? results.payout : 0) + (results2 ? results2.payout : 0)
-                if (results.payout > 0) await User.updateUserBalance(id, results.payout, { type: results.type })
-                if (results2.payout > 0) await User.updateUserBalance(id, results2.payout, { type: results2.type })
+                if (results.payout > 0)
+                    await User.updateUserBalance(id, results.payout, { type: results.type })
+                if (results2.payout > 0)
+                    await User.updateUserBalance(id, results2.payout, { type: results2.type })
             } else {
                 //If the player decides to stand with the first hand, we just mark it as resolved
                 //and wait for the player to play with the second hand
@@ -277,24 +363,53 @@ export const stand = async (req, res) => {
             //If there is no split, the dealer plays his hand and we determinate the winner
             game.player[FIRST_HAND].resolved = true
 
-            game.dealer[DEALER_HAND].hand = blackJack.dealerPlay(game.deck, game.dealer[DEALER_HAND].hand, game.player[FIRST_HAND].hand)
+            game.dealer[DEALER_HAND].hand = blackJack.dealerPlay(
+                game.deck,
+                game.dealer[DEALER_HAND].hand,
+                game.player[FIRST_HAND].hand,
+            )
             game.dealer[DEALER_HAND] = blackJack.setHand(game.dealer[DEALER_HAND])
 
-            const winner = blackJack.determinateWinner(game.player[FIRST_HAND].value, game.dealer[DEALER_HAND].value)
+            const winner = blackJack.determinateWinner(
+                game.player[FIRST_HAND].value,
+                game.dealer[DEALER_HAND].value,
+            )
             game.winners.push(winner)
             game.status = GAME_STATUSES.finished
 
             const result = blackJack.getPayout(game, FIRST_HAND)
 
             game.payout = result ? result.payout : 0
-            if (game.payout > 0) await User.updateUserBalance(id, game.payout, { type: result.type })
+            if (game.payout > 0)
+                await User.updateUserBalance(id, game.payout, { type: result.type })
         }
 
         games.set(gameId, game)
 
         const responseGame = blackJack.hideDealerCard(game.dealerHand, game)
 
-        res.status(200).json(Object.fromEntries(Object.entries(responseGame).filter(([key]) => key !== "deck")))
+        if (game.status === GAME_STATUSES.finished) {
+            const deviceInfo = Audit.getUserAgentRaw(req)
+            Audit.createAudit({
+                user_id: id,
+                action: "GAME_RESULT",
+                details: {
+                    type: "BLACKJACK",
+                    bets: game.player.map((hand) => ({ bet: hand.bet, hand: hand.hand })),
+                    dealerHand: game.dealer[DEALER_HAND].hand,
+                    playerHand: game.player.map((hand) => hand.hand),
+                    winners: game.winners,
+                    payout: game.payout,
+                    date: new Date().toISOString(),
+                },
+                ip_address: Audit.getClientIp(req),
+                user_agent: deviceInfo ? JSON.stringify(deviceInfo.raw) : null,
+            })
+        }
+
+        res.status(200).json(
+            Object.fromEntries(Object.entries(responseGame).filter(([key]) => key !== "deck")),
+        )
     } catch (error) {
         console.log(error)
         logger.error({ message: "Error standing:", error })
@@ -327,7 +442,9 @@ export const double = async (req, res) => {
         //If the game is not split we do the usual thing
         if (!game.split) {
             if (game.player[FIRST_HAND].hand.length !== 2) {
-                await User.updateUserBalance(id, game.player[FIRST_HAND].bet / 2, { type: "REFUND" })
+                await User.updateUserBalance(id, game.player[FIRST_HAND].bet / 2, {
+                    type: "REFUND",
+                })
                 return res.status(400).json({ code: "CANNOT_DOUBLE not split" })
             }
 
@@ -337,39 +454,58 @@ export const double = async (req, res) => {
 
             if (!game.player[FIRST_HAND].bust) {
                 console.log(game.dealer[DEALER_HAND].hand)
-                game.dealer[DEALER_HAND].hand = blackJack.dealerPlay(game.deck, game.dealer[DEALER_HAND].hand, game.player[FIRST_HAND].hand)
+                game.dealer[DEALER_HAND].hand = blackJack.dealerPlay(
+                    game.deck,
+                    game.dealer[DEALER_HAND].hand,
+                    game.player[FIRST_HAND].hand,
+                )
                 game.dealer[DEALER_HAND] = blackJack.setHand(game.dealer[DEALER_HAND])
 
-                const winner = blackJack.determinateWinner(game.player[FIRST_HAND].value, game.dealer[DEALER_HAND].value)
+                const winner = blackJack.determinateWinner(
+                    game.player[FIRST_HAND].value,
+                    game.dealer[DEALER_HAND].value,
+                )
 
                 game.winners.push(winner)
                 game.status = GAME_STATUSES.finished
 
                 let result = blackJack.getPayout(game, FIRST_HAND)
                 game.payout = result ? result.payout : 0
-                if (game.payout > 0) await User.updateUserBalance(id, game.payout, { type: result.type })
+                if (game.payout > 0)
+                    await User.updateUserBalance(id, game.payout, { type: result.type })
             } else {
                 game.status = GAME_STATUSES.finished
                 game.winners.push(winners.dealer)
             }
-            games.set(gameId, game)
         } else {
             //If the player has split and the first hand is already resolved, we double the second hand, if not we double the first hand)
             if (game.player[FIRST_HAND].resolved) {
                 if (game.player[SECOND_HAND].hand.length !== 2) {
-                    await User.updateUserBalance(id, game.player[SECOND_HAND].bet / 2, { type: "REFUND" })
+                    await User.updateUserBalance(id, game.player[SECOND_HAND].bet / 2, {
+                        type: "REFUND",
+                    })
                     return res.status(400).json({ code: "CANNOT_DOUBLE split resolved 1" })
                 }
 
-                game.player[SECOND_HAND].hand = blackJack.hit(game.deck, game.player[SECOND_HAND].hand)
+                game.player[SECOND_HAND].hand = blackJack.hit(
+                    game.deck,
+                    game.player[SECOND_HAND].hand,
+                )
                 game.player[SECOND_HAND].doubled = true
                 game.player[SECOND_HAND] = blackJack.setHand(game.player[SECOND_HAND])
 
                 if (!game.player[SECOND_HAND].bust) {
-                    game.dealer[DEALER_HAND].hand = blackJack.dealerPlay(game.deck, game.dealer[DEALER_HAND].hand, game.player[SECOND_HAND].hand)
+                    game.dealer[DEALER_HAND].hand = blackJack.dealerPlay(
+                        game.deck,
+                        game.dealer[DEALER_HAND].hand,
+                        game.player[SECOND_HAND].hand,
+                    )
                     game.dealer[DEALER_HAND] = blackJack.setHand(game.dealer[DEALER_HAND])
 
-                    const winner = blackJack.determinateWinner(game.player[FIRST_HAND].value, game.dealer[DEALER_HAND].value)
+                    const winner = blackJack.determinateWinner(
+                        game.player[FIRST_HAND].value,
+                        game.dealer[DEALER_HAND].value,
+                    )
 
                     game.winners.push(winner)
                     game.status = GAME_STATUSES.finished
@@ -377,23 +513,28 @@ export const double = async (req, res) => {
                     const results = blackJack.getPayout(game, FIRST_HAND)
                     const results2 = blackJack.getPayout(game, SECOND_HAND)
                     game.payout = (results ? results.payout : 0) + (results2 ? results2.payout : 0)
-                    if (results.payout > 0) await User.updateUserBalance(id, results.payout, { type: results.type })
-                    if (results2.payout > 0) await User.updateUserBalance(id, results2.payout, { type: results2.type })
+                    if (results.payout > 0)
+                        await User.updateUserBalance(id, results.payout, { type: results.type })
+                    if (results2.payout > 0)
+                        await User.updateUserBalance(id, results2.payout, { type: results2.type })
                 } else {
                     game.status = GAME_STATUSES.finished
                     game.winners.push(winners.dealer)
                 }
-
-                games.set(gameId, game)
             }
 
             if (!game.player[FIRST_HAND].resolved) {
                 if (game.player[FIRST_HAND].hand.length !== 2) {
-                    await User.updateUserBalance(id, game.player[FIRST_HAND].bet / 2, { type: "REFUND" })
+                    await User.updateUserBalance(id, game.player[FIRST_HAND].bet / 2, {
+                        type: "REFUND",
+                    })
                     return res.status(400).json({ code: "CANNOT_DOUBLE split resolved 2" })
                 }
                 // If the player decides to double with the first hand we have to check a few things too
-                game.player[FIRST_HAND].hand = blackJack.hit(game.deck, game.player[FIRST_HAND].hand)
+                game.player[FIRST_HAND].hand = blackJack.hit(
+                    game.deck,
+                    game.player[FIRST_HAND].hand,
+                )
                 game.player[FIRST_HAND].doubled = true
                 game.player[FIRST_HAND] = blackJack.setHand(game.player[FIRST_HAND])
                 //If the player is busted we only set the winner of the hand and I mark the hand resolved
@@ -402,13 +543,34 @@ export const double = async (req, res) => {
                 }
                 //Otherwise we wait to see what happens with the second hand
             }
-
-            games.set(gameId, game)
         }
+
+        games.set(gameId, game)
 
         const responseGame = JSON.parse(JSON.stringify(game))
 
-        res.status(200).json(Object.fromEntries(Object.entries(responseGame).filter(([key]) => key !== "deck")))
+        if (game.status === GAME_STATUSES.finished) {
+            const deviceInfo = Audit.getUserAgentRaw(req)
+            Audit.createAudit({
+                user_id: id,
+                action: "GAME_RESULT",
+                details: {
+                    type: "BLACKJACK",
+                    bets: game.player.map((hand) => ({ bet: hand.bet, hand: hand.hand })),
+                    dealerHand: game.dealer[DEALER_HAND].hand,
+                    playerHand: game.player.map((hand) => hand.hand),
+                    winners: game.winners,
+                    payout: game.payout,
+                    date: new Date().toISOString(),
+                },
+                ip_address: Audit.getClientIp(req),
+                user_agent: deviceInfo ? JSON.stringify(deviceInfo.raw) : null,
+            })
+        }
+
+        res.status(200).json(
+            Object.fromEntries(Object.entries(responseGame).filter(([key]) => key !== "deck")),
+        )
     } catch (error) {
         console.log(error)
         logger.error("Error doubling:", error)
@@ -444,7 +606,9 @@ export const split = async (req, res) => {
             return res.status(400).json({ code: "CANNOT_SPLIT" })
         }
         //DEV: I am skipping the check for the split condition for now, but in a real game the player can only split if the first two cards have the same rank
-        if (/*game.player.hand.length === 2 && game.player.hand[0].value === game.player.hand[1].value*/ true) {
+        if (
+            /*game.player.hand.length === 2 && game.player.hand[0].value === game.player.hand[1].value*/ true
+        ) {
             game.split = true
             const [splitHand1, splitHand2] = blackJack.split(game.player[FIRST_HAND].hand)
             game.player[FIRST_HAND].hand = splitHand1
@@ -482,12 +646,22 @@ export const split = async (req, res) => {
                 game.player[SECOND_HAND].resolved = true
                 game.status = GAME_STATUSES.finished
 
-                game.dealer[DEALER_HAND].hand = blackJack.dealerPlay(game.deck, game.dealer[DEALER_HAND].hand, game.player[SECOND_HAND].hand)
+                game.dealer[DEALER_HAND].hand = blackJack.dealerPlay(
+                    game.deck,
+                    game.dealer[DEALER_HAND].hand,
+                    game.player[SECOND_HAND].hand,
+                )
                 game.dealer[DEALER_HAND] = blackJack.setHand(game.dealer[DEALER_HAND])
 
-                const winner = blackJack.determinateWinner(game.player[FIRST_HAND].value, game.dealer[DEALER_HAND].value)
+                const winner = blackJack.determinateWinner(
+                    game.player[FIRST_HAND].value,
+                    game.dealer[DEALER_HAND].value,
+                )
 
-                const winner2 = blackJack.determinateWinner(game.player[SECOND_HAND].value, game.dealer[DEALER_HAND].value)
+                const winner2 = blackJack.determinateWinner(
+                    game.player[SECOND_HAND].value,
+                    game.dealer[DEALER_HAND].value,
+                )
 
                 game.winners.push(winner)
                 game.winners.push(winner2)
@@ -497,15 +671,38 @@ export const split = async (req, res) => {
 
                 game.payout = (results ? results.payout : 0) + (results2 ? results2.payout : 0)
 
-                if (results.payout > 0) await User.updateUserBalance(id, results.payout, { type: results.type })
-                if (results2.payout > 0) await User.updateUserBalance(id, results2.payout, { type: results2.type })
+                if (results.payout > 0)
+                    await User.updateUserBalance(id, results.payout, { type: results.type })
+                if (results2.payout > 0)
+                    await User.updateUserBalance(id, results2.payout, { type: results2.type })
             }
 
             games.set(gameId, game)
 
             const responseGame = blackJack.hideDealerCard(game.dealerHand, game)
 
-            res.status(200).json(Object.fromEntries(Object.entries(responseGame).filter(([key]) => key !== "deck")))
+            if (game.status === GAME_STATUSES.finished) {
+                const deviceInfo = Audit.getUserAgentRaw(req)
+                Audit.createAudit({
+                    user_id: id,
+                    action: "GAME_RESULT",
+                    details: {
+                        type: "BLACKJACK",
+                        bets: game.player.map((hand) => ({ bet: hand.bet, hand: hand.hand })),
+                        dealerHand: game.dealer[DEALER_HAND].hand,
+                        playerHand: game.player.map((hand) => hand.hand),
+                        winners: game.winners,
+                        payout: game.payout,
+                        date: new Date().toISOString(),
+                    },
+                    ip_address: Audit.getClientIp(req),
+                    user_agent: deviceInfo ? JSON.stringify(deviceInfo.raw) : null,
+                })
+            }
+
+            res.status(200).json(
+                Object.fromEntries(Object.entries(responseGame).filter(([key]) => key !== "deck")),
+            )
         } else {
             return res.status(400).json({ code: "CANNOT_SPLIT" })
         }
@@ -538,7 +735,6 @@ export const deleteGame = (req, res) => {
 }
 
 export const getGame = (req, res) => {
-
     const blackJack = createBlackJack()
 
     try {
@@ -559,7 +755,9 @@ export const getGame = (req, res) => {
 
         const responseGame = blackJack.hideDealerCard(game.dealerHand, game)
 
-        res.status(200).json(Object.fromEntries(Object.entries(responseGame).filter(([key]) => key !== "deck")))
+        res.status(200).json(
+            Object.fromEntries(Object.entries(responseGame).filter(([key]) => key !== "deck")),
+        )
     } catch (error) {
         logger.error("Error getting game:", error)
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
