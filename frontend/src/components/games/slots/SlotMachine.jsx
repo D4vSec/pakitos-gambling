@@ -27,10 +27,8 @@ const SlotMachine = ({ type = "3x3", theme = "starwars" }) => {
     if (isSpinning) setShowResult(false)
   }, [isSpinning])
 
-  // Called by SlotGrid when the last reel finishes landing
   const handleAllSettled = useCallback(() => setShowResult(true), [])
 
-  // Gold flash overlay on win — fade in then fade out (bell curve, no abrupt start)
   useEffect(() => {
     if (!showResult || !lastSpin?.isWinner || !flashRef.current) return
     gsap
@@ -46,27 +44,36 @@ const SlotMachine = ({ type = "3x3", theme = "starwars" }) => {
   const hasWon = showResult && !!lastSpin?.isWinner
 
   return (
-    <div className="flex flex-row items-stretch gap-3 w-full h-full p-3">
-      {/* Left: paytable — fixed width, full height */}
-      <SlotPaytable theme={theme} />
+    <div className="flex flex-row items-stretch gap-2 md:gap-3 w-full h-full p-1.5 md:p-3">
 
-      {/* Right: machine content */}
-      <div className="flex flex-col items-center justify-center gap-2 flex-1 min-w-0 h-full">
-        {/* Machine header */}
-        <div className="flex flex-col items-center gap-1 shrink-0">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_6px_2px] shadow-amber-400/70 animate-pulse" />
-            <h2 className="text-2xl font-black tracking-widest uppercase bg-linear-to-r from-amber-300 via-yellow-400 to-amber-300 bg-clip-text text-transparent drop-shadow">
+      {/* Paytable lateral — visible from md up */}
+      <div className="hidden md:flex">
+        <SlotPaytable theme={theme} />
+      </div>
+
+      {/* Machine content */}
+      <div className="flex flex-col items-center gap-1 md:gap-2 flex-1 min-w-0 h-full">
+
+        {/* Paytable horizontal — móvil only, encima de los reels */}
+        <div className="md:hidden w-full shrink-0">
+          <SlotPaytable theme={theme} horizontal />
+        </div>
+
+        {/* Header */}
+        <div className="flex flex-col items-center gap-0.5 shrink-0">
+          <div className="flex items-center gap-1.5 md:gap-2">
+            <span className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-amber-400 shadow-[0_0_6px_2px] shadow-amber-400/70 animate-pulse" />
+            <h2 className="text-base md:text-2xl font-black tracking-widest uppercase bg-linear-to-r from-amber-300 via-yellow-400 to-amber-300 bg-clip-text text-transparent drop-shadow">
               {t("games.slots.title")}
             </h2>
-            <span className="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_6px_2px] shadow-amber-400/70 animate-pulse" />
+            <span className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-amber-400 shadow-[0_0_6px_2px] shadow-amber-400/70 animate-pulse" />
           </div>
-          <span className="text-[10px] font-semibold tracking-[0.25em] uppercase text-amber-600/70">
-            {t(`games.slots.${type}`)}
+          <span className="text-[8px] md:text-[10px] font-semibold tracking-[0.2em] md:tracking-[0.25em] uppercase text-amber-600/70">
+            {t(`games.slots.modes.${type}`)}
           </span>
         </div>
 
-        {/* Reel window — fills remaining height, aspect ratio keeps it square/proportional */}
+        {/* Reel window */}
         <div className="flex-1 min-h-0 w-full flex items-center justify-center">
           <div
             className={`relative overflow-hidden ${
@@ -74,12 +81,12 @@ const SlotMachine = ({ type = "3x3", theme = "starwars" }) => {
                 ? "max-w-xl"
                 : type === "3x5"
                   ? "max-w-4xl"
-                  : /* 5x5 */ "max-w-2xl"
+                  : "max-w-2xl"
             }`}
             style={{
               aspectRatio: `${cols} / ${rows}`,
-              maxHeight: "100%",
-              width: "100%",
+              height: "100%",
+              maxWidth: "100%",
             }}>
             {/* Win flash overlay */}
             <div
@@ -91,8 +98,7 @@ const SlotMachine = ({ type = "3x3", theme = "starwars" }) => {
               }}
             />
 
-            {/* Top decorative bar */}
-            <div className="h-3 rounded-t-xl bg-linear-to-r from-amber-800 via-yellow-500 to-amber-800 shadow-[0_2px_8px] shadow-amber-500/30" />
+            <div className="h-2 md:h-3 rounded-t-xl bg-linear-to-r from-amber-800 via-yellow-500 to-amber-800 shadow-[0_2px_8px] shadow-amber-500/30" />
 
             <SlotGrid
               grid={lastSpin?.grid ?? null}
@@ -107,16 +113,15 @@ const SlotMachine = ({ type = "3x3", theme = "starwars" }) => {
               onAllSettled={handleAllSettled}
             />
 
-            {/* Bottom decorative bar */}
-            <div className="h-3 rounded-b-xl bg-linear-to-r from-amber-800 via-yellow-500 to-amber-800 shadow-[0_-2px_8px] shadow-amber-500/30" />
+            <div className="h-2 md:h-3 rounded-b-xl bg-linear-to-r from-amber-800 via-yellow-500 to-amber-800 shadow-[0_-2px_8px] shadow-amber-500/30" />
           </div>
         </div>
 
-        {/* Result — fixed height so layout never shifts */}
-        <div className="h-9 flex items-center justify-center shrink-0">
+        {/* Result */}
+        <div className="h-7 md:h-9 flex items-center justify-center shrink-0">
           {lastSpin && showResult && (
             <div
-              className={`flex items-center gap-2 text-lg font-bold transition-opacity duration-300 ${
+              className={`flex items-center gap-1.5 md:gap-2 text-base md:text-lg font-bold transition-opacity duration-300 ${
                 lastSpin.isWinner
                   ? "text-warning drop-shadow-[0_0_6px_rgba(251,191,36,0.8)]"
                   : "text-error/80"
@@ -125,7 +130,7 @@ const SlotMachine = ({ type = "3x3", theme = "starwars" }) => {
                 <>
                   <span>{t("games.result.win")}</span>
                   <span>+{lastSpin.payout}</span>
-                  <IconCoinBitcoin className="w-5 h-5 sm:w-6 sm:h-6" />
+                  <IconCoinBitcoin className="w-4 h-4 md:w-5 md:h-5" />
                 </>
               ) : (
                 <span>{t("games.result.lose")}</span>
@@ -133,6 +138,7 @@ const SlotMachine = ({ type = "3x3", theme = "starwars" }) => {
             </div>
           )}
         </div>
+
       </div>
     </div>
   )

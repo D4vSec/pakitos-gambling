@@ -51,32 +51,59 @@ const PAYTABLE = {
   ],
 }
 
-const SlotPaytable = ({ theme = "starwars" }) => {
+const SlotPaytable = ({ theme = "starwars", horizontal = false }) => {
   const entries = PAYTABLE[theme]
   if (!entries) return null
 
+  if (horizontal) {
+    return (
+      <div className="w-full flex flex-row items-center rounded-lg border border-amber-800/40 bg-neutral-900/80 overflow-hidden">
+        {/* Label */}
+        <div className="px-2.5 py-2 bg-linear-to-r from-amber-900/60 to-amber-800/40 border-r border-amber-800/40 shrink-0 self-stretch flex flex-col items-center justify-center gap-0.5">
+          <p className="text-[8px] font-bold tracking-widest uppercase text-amber-400/80 leading-tight">Pay</p>
+          <p className="text-[8px] text-amber-500/60 leading-none">×bet</p>
+        </div>
+        {/* Symbols */}
+        <div className="flex-1 flex flex-row divide-x divide-amber-800/20 overflow-x-auto">
+          {entries.map(({ symbol, img, payout }) => (
+            <div key={symbol} className="flex-1 min-w-0 flex flex-col items-center justify-center gap-0.5 py-1 px-0.5">
+              <img
+                src={img}
+                alt={symbol}
+                className="w-7 h-7 rounded object-cover border border-amber-800/30 shrink-0"
+              />
+              <span className="text-[8px] font-bold text-amber-300 leading-none whitespace-nowrap">
+                ×{payout}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
   return (
-    <div className="h-full w-35 shrink-0 flex flex-col rounded-xl border border-amber-800/40 bg-neutral-900/80 overflow-hidden ml-15">
+    <div className="h-full w-24 md:w-28 lg:w-32 shrink-0 flex flex-col rounded-xl border border-amber-800/40 bg-neutral-900/80 overflow-hidden">
       {/* Header */}
-      <div className="px-2 py-1.5 bg-linear-to-b from-amber-900/60 to-amber-800/40 border-b border-amber-800/40 shrink-0">
-        <p className="text-center text-[9px] font-bold tracking-widest uppercase text-amber-400/80 leading-tight">
+      <div className="px-1 py-1 md:px-2 md:py-1.5 bg-linear-to-b from-amber-900/60 to-amber-800/40 border-b border-amber-800/40 shrink-0">
+        <p className="text-center text-[8px] md:text-[9px] font-bold tracking-widest uppercase text-amber-400/80 leading-tight">
           Paytable
         </p>
-        <p className="text-center text-[9px] text-amber-500/60 leading-none">
+        <p className="text-center text-[8px] md:text-[9px] text-amber-500/60 leading-none">
           ×bet
         </p>
       </div>
 
-      {/* Symbol list — each row gets equal height via flex-1 */}
+      {/* Symbol list */}
       <div className="flex-1 flex flex-col divide-y divide-amber-800/20 min-h-0">
         {entries.map(({ symbol, img, payout }) => (
-          <div key={symbol} className="flex-1 flex items-center justify-center gap-2 min-h-0">
+          <div key={symbol} className="flex-1 flex items-center justify-center gap-1 md:gap-2 min-h-0 px-1">
             <img
               src={img}
               alt={symbol}
-              className="w-15 h-15 rounded object-cover border border-amber-800/30 shrink-0"
+              className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 rounded object-cover border border-amber-800/30 shrink-0"
             />
-            <span className="text-[11px] font-bold text-amber-300 leading-none">
+            <span className="text-[9px] md:text-[10px] lg:text-[11px] font-bold text-amber-300 leading-none">
               ×{payout}
             </span>
           </div>
