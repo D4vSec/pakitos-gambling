@@ -42,6 +42,11 @@ services:
             dockerfile: docker/Dockerfile.backend
             target: ${NODE_ENV:-development}
         container_name: node_backend
+        healthcheck:
+          test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/health"]
+          interval: 10s
+          timeout: 5s
+          retries: 5
         volumes:
             - ./backend:/app
             - /app/node_modules
@@ -97,7 +102,7 @@ services:
             - '80:80'
         depends_on:
             backend:
-                condition: service_healthy
+                condition: service_started
         networks:
             - app-network
         restart: unless-stopped
