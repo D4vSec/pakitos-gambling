@@ -3,10 +3,15 @@ import { useRoulette } from "@/providers/rouletteContext"
 
 const LastNumber = ({ number }) => {
   const { rouletteValues } = useRoulette()
-
-  number === 37 && (number = "00")
-  const item = rouletteValues.find((i) => i.text === String(number)) || {}
   const isPlaceholder = number === true
+
+  const normalizedNumber = (() => {
+    if (number === "00" || number === 37 || number === "37") return "00"
+    if (number === null || number === undefined) return ""
+    return String(number)
+  })()
+
+  const item = rouletteValues.find((i) => i.text === normalizedNumber) || {}
 
   const getBgColor = (color) => {
     switch (color) {

@@ -1,9 +1,4 @@
-import React, {
-  useCallback,
-  useState,
-  useMemo,
-  useRef,
-} from "react"
+import React, { useCallback, useState, useMemo, useRef } from "react"
 import useAPI from "@/hooks/useAPI"
 import { useNotification } from "@/providers/NotificationProvider"
 import { useSession } from "./SessionProvider"
@@ -16,14 +11,25 @@ import {
   ROULETTE_0_ORDER,
   ROULETTE_00_ORDER,
 } from "@/components/games/roulette/rouletteConsts"
-import {
-  RouletteAnimationContext,
-  RouletteContext,
-} from "@/providers/rouletteContext"
+import { RouletteAnimationContext, RouletteContext } from "@/providers/rouletteContext"
 
 const WHEEL_OFFSET_DEG = 355
 const WHEEL_INDEX_OFFSET = 0
 const EMPTY_CHIPS = []
+const DOUBLE_ZERO_SENTINEL = 37
+
+const normalizeWinningNumber = (number) => {
+  if (number === "00") return DOUBLE_ZERO_SENTINEL
+  if (number === null || number === undefined || number === "") return number
+
+  const parsedNumber = Number(number)
+  return Number.isNaN(parsedNumber) ? number : parsedNumber
+}
+
+const formatWinningNumber = (number) => {
+  const normalizedNumber = normalizeWinningNumber(number)
+  return normalizedNumber === DOUBLE_ZERO_SENTINEL ? "00" : String(normalizedNumber)
+}
 
 const RouletteProvider = ({ children }) => {
   const location = useLocation()
@@ -96,51 +102,52 @@ const RouletteProvider = ({ children }) => {
     [getTotalBet, getTotalPayout],
   )
 
-  const updateBets = useCallback((bet) => {
-    if (!selectedChip || selectedChip <= 0) {
-      addNotification(t("message.warning.selectChipFirst"), "warning")
-      return
-    }
+  const updateBets = useCallback(
+    (bet) => {
+      if (!selectedChip || selectedChip <= 0) {
+        addNotification(t("message.warning.selectChipFirst"), "warning")
+        return
+      }
 
-    if (balance < selectedChip) {
-      addNotification(t("message.error.INSUFFICIENT_BALANCE"), "error")
-      return
-    }
+      if (balance < selectedChip) {
+        addNotification(t("message.error.INSUFFICIENT_BALANCE"), "error")
+        return
+      }
 
-    updateBalance("withdrawal", selectedChip)
+      updateBalance("withdrawal", selectedChip)
 
-    setGame((prev) => {
-      const existingIndex = prev.bets.findIndex(
-        (b) => b.type === bet.type && b.bet === bet.bet,
-      )
+      setGame((prev) => {
+        const existingIndex = prev.bets.findIndex((b) => b.type === bet.type && b.bet === bet.bet)
 
-      let updatedBets = []
+        let updatedBets = []
 
-      if (existingIndex !== -1) {
-        updatedBets = [...prev.bets]
-        updatedBets[existingIndex] = {
-          ...updatedBets[existingIndex],
-          amount: updatedBets[existingIndex].amount + selectedChip,
+        if (existingIndex !== -1) {
+          updatedBets = [...prev.bets]
+          updatedBets[existingIndex] = {
+            ...updatedBets[existingIndex],
+            amount: updatedBets[existingIndex].amount + selectedChip,
+          }
+        } else {
+          updatedBets = [
+            ...prev.bets,
+            {
+              type: bet.type,
+              bet: bet.bet,
+              amount: selectedChip,
+            },
+          ]
         }
-      } else {
-        updatedBets = [
-          ...prev.bets,
-          {
-            type: bet.type,
-            bet: bet.bet,
-            amount: selectedChip,
-          },
-        ]
-      }
 
-      return {
-        ...prev,
-        bets: updatedBets,
-      }
-    })
+        return {
+          ...prev,
+          bets: updatedBets,
+        }
+      })
 
-    setBetAmount((prev) => prev + selectedChip)
-  }, [addNotification, balance, selectedChip, t, updateBalance])
+      setBetAmount((prev) => prev + selectedChip)
+    },
+    [addNotification, balance, selectedChip, t, updateBalance],
+  )
 
   const updateBetAmount = useCallback((amount) => {
     setBetAmount(amount)
@@ -177,15 +184,7 @@ const RouletteProvider = ({ children }) => {
     const lastAmount = getTotalBet(lastBet)
     setBetAmount(lastAmount)
     updateBalance("withdrawal", lastAmount)
-  }, [
-    addNotification,
-    balance,
-    clearBets,
-    getTotalBet,
-    lastBet,
-    t,
-    updateBalance,
-  ])
+  }, [addNotification, balance, clearBets, getTotalBet, lastBet, t, updateBalance])
 
   const doubleBets = useCallback(() => {
     const totalCurrent = betAmount
@@ -249,7 +248,7 @@ const RouletteProvider = ({ children }) => {
   const getIndexFromNumber = useCallback(
     (number) => {
       const order = type === "ZeroZero" ? ROULETTE_00_ORDER : ROULETTE_0_ORDER
-      const rawIndex = order.indexOf(number)
+      const rawIndex = order.indexOf(normalizeWinningNumber(number))
       return (rawIndex + WHEEL_INDEX_OFFSET + order.length) % order.length
     },
     [type],
@@ -299,7 +298,7 @@ const RouletteProvider = ({ children }) => {
       const payout = getTotalPayout(res)
       const randomOffset = Math.random() * 360
 
-      const winningNumber = res?.result?.winningNumber
+      const winningNumber = normalizeWinningNumber(res?.result?.winningNumber)
 
       const index = getIndexFromNumber(winningNumber)
       const finalAngle = getFinalAngleFromIndex(index)
@@ -353,14 +352,10 @@ const RouletteProvider = ({ children }) => {
     setSpinData(null)
 
     addNotification(
-      `${t("message.info.winningNumber")}: ${data.winningNumber} | ${t(
+      `${t("message.info.winningNumber")}: ${formatWinningNumber(data.winningNumber)} | ${t(
         `games.roulette.board.${data.color}`,
       )}`,
-      data.outcome === "win"
-        ? "success"
-        : data.outcome === "lose"
-          ? "error"
-          : "info",
+      data.outcome === "win" ? "success" : data.outcome === "lose" ? "error" : "info",
       {
         scope: "games",
         duration: 4000,
@@ -447,9 +442,7 @@ const RouletteProvider = ({ children }) => {
 
   return (
     <RouletteContext value={value}>
-      <RouletteAnimationContext value={animationValue}>
-        {children}
-      </RouletteAnimationContext>
+      <RouletteAnimationContext value={animationValue}>{children}</RouletteAnimationContext>
     </RouletteContext>
   )
 }
