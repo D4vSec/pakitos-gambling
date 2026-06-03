@@ -145,7 +145,7 @@ const SlotControls = ({
   return (
     <div className="flex flex-col gap-4 w-full h-full p-4">
       <h2 className="font-bold text-xl text-center">
-        {t(`games.slots.modes.${type}`)}
+        {t(`games.slots.themes.${theme}.title`)}
       </h2>
 
       {!isActive && (
@@ -162,6 +162,12 @@ const SlotControls = ({
               updateBetAmount,
             }}
             readOnly={isActive || isBusy}
+          />
+
+          <SlotActions
+            theme={theme}
+            showSessionActions={false}
+            showHistory={false}
           />
 
           <BettingBtns

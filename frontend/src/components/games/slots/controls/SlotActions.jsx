@@ -73,14 +73,17 @@ const SlotActions = ({
   onEndSession,
   theme = "starwars",
   spins = [],
+  showSessionActions = true,
+  showHistory = true,
 }) => {
   const { t } = useLocale()
+  const mobileActionsCols = showHistory ? "grid-cols-2" : "grid-cols-1"
 
   return (
     <>
       {children}
 
-      <div className="grid grid-cols-2 gap-2 lg:hidden">
+      <div className={`grid ${mobileActionsCols} gap-2 lg:hidden`}>
         <Button
           variant="neutral"
           size="sm"
@@ -90,60 +93,68 @@ const SlotActions = ({
           svg={<IconTable />}>
           {t("games.slots.controls.paytable")}
         </Button>
-        <Button
-          variant="neutral"
-          size="sm"
-          onClick={() =>
-            document.getElementById("slot-history-modal")?.showModal()
-          }
-          disabled={spins.length === 0}
-          svg={<IconListDetails />}>
-          {t("games.slots.controls.history")}
-        </Button>
+        {showHistory && (
+          <Button
+            variant="neutral"
+            size="sm"
+            onClick={() =>
+              document.getElementById("slot-history-modal")?.showModal()
+            }
+            disabled={spins.length === 0}
+            svg={<IconListDetails />}>
+            {t("games.slots.controls.history")}
+          </Button>
+        )}
       </div>
 
-      <Button
-        variant="secondary"
-        className="w-full text-lg font-bold"
-        onClick={onSpin}
-        disabled={disabled}
-        svg={disabled ? <IconHourglass /> : <IconPlayerPlay />}>
-        {!disabled && t("games.slots.controls.spin")}
-      </Button>
+      {showSessionActions && (
+        <>
+          <Button
+            variant="secondary"
+            className="w-full text-lg font-bold"
+            onClick={onSpin}
+            disabled={disabled}
+            svg={disabled ? <IconHourglass /> : <IconPlayerPlay />}>
+            {!disabled && t("games.slots.controls.spin")}
+          </Button>
 
-      <Button
-        variant="primary"
-        size="md"
-        className="w-full mt-auto"
-        onClick={onEndSession}
-        disabled={disabled}>
-        {t("games.slots.controls.endSession")}
-      </Button>
+          <Button
+            variant="primary"
+            size="md"
+            className="w-full mt-auto"
+            onClick={onEndSession}
+            disabled={disabled}>
+            {t("games.slots.controls.endSession")}
+          </Button>
 
-      <SlotHistory spins={spins} />
+          <SlotHistory spins={spins} />
+        </>
+      )}
 
-      <dialog
-        id="slot-history-modal"
-        className="modal modal-bottom sm:modal-middle lg:hidden">
-        <div className="modal-box">
-          <h3 className="mb-4 text-center text-lg font-bold">
-            {t("games.slots.controls.history")}
-          </h3>
-          <SlotHistory spins={spins} compact />
-          <div className="modal-action">
-            <form method="dialog" className="w-full">
-              <Button variant="neutral" className="w-full">
-                {t("ui.buttons.close")}
-              </Button>
-            </form>
+      {showHistory && (
+        <dialog
+          id="slot-history-modal"
+          className="modal modal-bottom sm:modal-middle lg:hidden">
+          <div className="modal-box">
+            <h3 className="mb-4 text-center text-lg font-bold">
+              {t("games.slots.controls.history")}
+            </h3>
+            <SlotHistory spins={spins} compact />
+            <div className="modal-action">
+              <form method="dialog" className="w-full">
+                <Button variant="neutral" className="w-full">
+                  {t("ui.buttons.close")}
+                </Button>
+              </form>
+            </div>
           </div>
-        </div>
-      </dialog>
+        </dialog>
+      )}
 
       <dialog
         id="slot-paytable-modal"
         className="modal modal-bottom sm:modal-middle lg:hidden">
-        <div className="modal-box">
+        <div className="modal-box max-w-[calc(100vw-1rem)] overflow-x-hidden">
           <h3 className="mb-4 text-center text-lg font-bold">
             {t("games.slots.controls.paytable")}
           </h3>

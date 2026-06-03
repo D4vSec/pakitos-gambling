@@ -242,6 +242,17 @@
         "3x5": "3x5 Machine",
         "5x5": "5x5 Machine"
       },
+      "themes": {
+        "starwars": {
+          "title": "Slot Star Wars"
+        },
+        "stardewvalley": {
+          "title": "Slot Stardew Valley"
+        },
+        "beerman": {
+          "title": "Slot Beer-Man"
+        }
+      },
       "description": "Classic slot machine. Match symbols across paylines to win. The rarer the symbol, the higher the payout!",
       "summary": {
         "3x3": "<p><b>Compact and classic.</b></p><p>This 3x3 machine keeps the action clean and readable, perfect for quick spins and straightforward wins.</p><ul><li>Fast sessions</li><li>Simple reel layout</li><li>Easy to read at a glance</li></ul>",

@@ -242,6 +242,17 @@
         "3x5": "Mașină 3x5",
         "5x5": "Mașină 5x5"
       },
+      "themes": {
+        "starwars": {
+          "title": "Slot Star Wars"
+        },
+        "stardewvalley": {
+          "title": "Slot Stardew Valley"
+        },
+        "beerman": {
+          "title": "Slot Beer-Man"
+        }
+      },
       "description": "Slot clasic. Potrivește simbolurile pe liniile de plată pentru a câștiga. Cu cât simbolul este mai rar, cu atât câștigul este mai mare!",
       "summary": {
         "3x3": "<p><b>Compact și clasic.</b></p><p>Slotul 3x3 păstrează jocul simplu și clar, perfect pentru rotiri rapide și combinații ușor de urmărit.</p><ul><li>Sesiuni rapide</li><li>Layout simplu</li><li>Ușor de citit</li></ul>",

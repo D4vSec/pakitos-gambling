@@ -242,6 +242,17 @@
         "3x5": "Máquina 3x5",
         "5x5": "Máquina 5x5"
       },
+      "themes": {
+        "starwars": {
+          "title": "Tragamonedas Star Wars"
+        },
+        "stardewvalley": {
+          "title": "Tragamonedas Stardew Valley"
+        },
+        "beerman": {
+          "title": "Tragamonedas Beer-Man"
+        }
+      },
       "description": "Tragamonedas clásica. Alinea símbolos en las líneas de pago para ganar. ¡Cuanto más raro sea el símbolo, mayor será el premio!",
       "summary": {
         "3x3": "<p><b>Compacta y clásica.</b></p><p>La máquina 3x3 mantiene la acción simple y clara, ideal para tiradas rápidas y premios fáciles de leer.</p><ul><li>Sesiones ágiles</li><li>Distribución sencilla</li><li>Muy fácil de entender</li></ul>",
