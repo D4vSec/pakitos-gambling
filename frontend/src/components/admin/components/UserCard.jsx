@@ -1,6 +1,6 @@
 import React from "react"
 import { useLocale } from "@/providers/LocaleProvider"
-import { IconCoinBitcoin } from "@tabler/icons-react"
+import { IconCoinBitcoin, IconUser } from "@tabler/icons-react"
 
 const UserCard = ({ user }) => {
   const { t } = useLocale()
@@ -9,30 +9,29 @@ const UserCard = ({ user }) => {
       <div className="card-body gap-3 p-5 sm:p-6">
         {user ? (
           <>
-            <h2 className="card-title text-xl sm:text-2xl">
+            <h2 className="card-title text-xl ">
+              <IconUser />
               {t("adminPanel.userDetails.detailsCard.title")}
             </h2>
-            <p className="wrap-break-word text-sm sm:text-base">
-              <strong>{`${t("adminPanel.userDetails.detailsCard.username")}: `}</strong>
-              {user.username}
-            </p>
-            <p className="wrap-break-word text-sm sm:text-base">
-              <strong>{`${t("adminPanel.userDetails.detailsCard.email")}: `}</strong>{" "}
-              {user.email}
-            </p>
-            <p className="wrap-break-word text-sm capitalize sm:text-base">
-              <strong>{`${t("adminPanel.userDetails.detailsCard.role")}: `}</strong>{" "}
-              {user.role}
-            </p>
-            <p className="wrap-break-word text-sm sm:text-base flex gap-1">
-              <strong>
-                {`${t("adminPanel.userDetails.detailsCard.balance")}: `}
-              </strong>
-              <span className="flex gap-1 items-center">
-                {user.balance}
-                <IconCoinBitcoin className="w-5 h-5 sm:w-6 sm:h-6" />
-              </span>
-            </p>
+            <div className="flex flex-col gap-1.5">
+              <p className="wrap-break-word text-sm sm:text-base">
+                <strong>{`${t("adminPanel.userDetails.detailsCard.username")}: `}</strong>
+                {user.username}
+              </p>
+              <p className="wrap-break-word text-sm sm:text-base">
+                <strong>{`${t("adminPanel.userDetails.detailsCard.email")}: `}</strong> {user.email}
+              </p>
+              <p className="wrap-break-word text-sm capitalize sm:text-base">
+                <strong>{`${t("adminPanel.userDetails.detailsCard.role")}: `}</strong> {user.role}
+              </p>
+              <p className="wrap-break-word text-sm sm:text-base flex gap-1">
+                <strong>{`${t("adminPanel.userDetails.detailsCard.balance")}: `}</strong>
+                <span className="flex gap-1 items-center">
+                  {user.balance}
+                  <IconCoinBitcoin className="w-5 h-5 sm:w-6 sm:h-6" />
+                </span>
+              </p>
+            </div>
           </>
         ) : (
           <h3 className="text-center text-lg sm:text-2xl font-semibold">

@@ -7,6 +7,7 @@ import UserTransactions from "@/components/admin/tables/UserTransactions"
 import GoBackBtn from "@/components/buttons/GoBackBtn"
 import UserCard from "@/components/admin/components/UserCard"
 import UserSessions from "@/components/profile/UserSessions"
+import { IconCreditCard } from "@tabler/icons-react"
 
 const UserDetails = () => {
   const [user, setUser] = useState(null)
@@ -53,21 +54,18 @@ const UserDetails = () => {
             <h2 className="mb-3 text-xl sm:text-2xl font-bold">
               {t("adminPanel.userDetails.sessions.title")}
             </h2>
-            <h3 className="text-center text-md sm:lg font-semibold">
-              {t("ui.tables.noData")}
-            </h3>
+            <h3 className="text-center text-md sm:lg font-semibold">{t("ui.tables.noData")}</h3>
           </div>
         )}
         <div className="card bg-base-100 p-6 min-w-0 w-full lg:col-span-2">
-          <h2 className="mb-3 text-xl sm:text-2xl font-bold">
+          <h2 className="mb-3 text-xl card-title">
+            <IconCreditCard />
             {t("adminPanel.userDetails.transactions.title")}
           </h2>
           {user ? (
             <UserTransactions />
           ) : (
-            <h3 className="text-center text-md sm:lg font-semibold">
-              {t("ui.tables.noData")}
-            </h3>
+            <h3 className="text-center text-md sm:lg font-semibold">{t("ui.tables.noData")}</h3>
           )}
         </div>
       </div>

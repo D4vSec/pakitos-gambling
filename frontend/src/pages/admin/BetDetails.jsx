@@ -7,7 +7,14 @@ import Loading from "@/components/Loading"
 import BetPoolDistributionTable from "@/components/admin/tables/BetPoolDistributionTable"
 import BetSettlementPreview from "@/components/admin/tables/BetSettlementPreview"
 import Title from "@/components/layout/fonts/Title"
-import { IconEdit, IconReload, IconTrashX, IconX } from "@tabler/icons-react"
+import {
+  IconEdit,
+  IconFileDollar,
+  IconOption,
+  IconReload,
+  IconTrashX,
+  IconX,
+} from "@tabler/icons-react"
 import { useAdmin } from "@/providers/AdminProvider"
 import { useLocale } from "@/providers/LocaleProvider"
 import { formatBetAmount, formatBetDate } from "@/utils/betsUtils"
@@ -17,13 +24,8 @@ const BetDetails = () => {
   const { id } = useParams()
   const navigate = useNavigate()
   const { t } = useLocale()
-  const {
-    closeBetModal,
-    deleteBetModal,
-    getAdminBet,
-    getBetSettlementPreview,
-    settleBetModal,
-  } = useAdmin()
+  const { closeBetModal, deleteBetModal, getAdminBet, getBetSettlementPreview, settleBetModal } =
+    useAdmin()
   const [betData, setBetData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [preview, setPreview] = useState(null)
@@ -42,10 +44,7 @@ const BetDetails = () => {
     if (response) {
       setBetData(response)
       setSelectedWinningOptionId((currentOptionId) => {
-        if (
-          currentOptionId &&
-          response.options?.some((option) => option.id === currentOptionId)
-        ) {
+        if (currentOptionId && response.options?.some((option) => option.id === currentOptionId)) {
           return currentOptionId
         }
 
@@ -93,9 +92,7 @@ const BetDetails = () => {
     <div className="flex w-full max-w-6xl flex-col gap-6">
       <GoBackBtn link="/admin/bets" className="w-full" />
       <section className="rounded-2xl border border-dashed border-base-300 bg-base-100 p-8 text-center shadow-xl">
-        <Title className="m-0 text-3xl sm:text-4xl">
-          {t("adminPanel.bets.detail.noBet")}
-        </Title>
+        <Title className="m-0 text-3xl sm:text-4xl">{t("adminPanel.bets.detail.noBet")}</Title>
       </section>
     </div>
   ) : (
@@ -108,7 +105,8 @@ const BetDetails = () => {
             variant="secondary"
             svg={<IconReload />}
             className="flex-1"
-            onClick={() => loadBet()}>
+            onClick={() => loadBet()}
+          >
             {t("adminPanel.bets.detail.refresh")}
           </Button>
           <Button
@@ -116,7 +114,8 @@ const BetDetails = () => {
             variant="warning"
             svg={<IconEdit />}
             className="flex-1"
-            onClick={() => navigate(`/admin/bets/edit/${id}`)}>
+            onClick={() => navigate(`/admin/bets/edit/${id}`)}
+          >
             {t("adminPanel.bets.detail.editBet")}
           </Button>
           <Button
@@ -125,7 +124,8 @@ const BetDetails = () => {
             svg={<IconX />}
             className="flex-2"
             disabled={bet.status === "closed" || isSettled}
-            onClick={() => closeBetModal(id, bet.label, loadBet)}>
+            onClick={() => closeBetModal(id, bet.label, loadBet)}
+          >
             {t("adminPanel.bets.detail.closeBet")}
           </Button>
           <Button
@@ -136,7 +136,8 @@ const BetDetails = () => {
               deleteBetModal(id, bet.label, () => {
                 navigate("/admin/bets")
               })
-            }>
+            }
+          >
             {t("adminPanel.bets.detail.deleteBet")}
           </Button>
         </div>
@@ -146,9 +147,7 @@ const BetDetails = () => {
         <div className="flex flex-col gap-2 md:gap-3">
           <div className="flex flex-col gap-4 md:gap-5">
             <BetStatusBadge status={bet.status} />
-            <Subtitle className="m-0 text-left text-4xl md:text-5xl">
-              {bet.label}
-            </Subtitle>
+            <Subtitle className="m-0 text-left text-4xl md:text-5xl">{bet.label}</Subtitle>
           </div>
           <p className="max-w-3xl text-sm text-base-content/70 md:text-base">
             {t("adminPanel.bets.detail.summary")}
@@ -159,7 +158,8 @@ const BetDetails = () => {
           {infoCards.map((item) => (
             <div
               key={item.label}
-              className="rounded-2xl border border-base-300 bg-base-300/70 p-3 md:p-4">
+              className="rounded-2xl border border-base-300 bg-base-300/70 p-3 md:p-4"
+            >
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-base-content/75">
                 {item.label}
               </p>
@@ -185,9 +185,7 @@ const BetDetails = () => {
                   {t("adminPanel.bets.detail.settledAt")}
                 </p>
                 <p className="mt-2 text-lg font-semibold">
-                  {settlement.settledAt
-                    ? formatBetDate(settlement.settledAt)
-                    : "--"}
+                  {settlement.settledAt ? formatBetDate(settlement.settledAt) : "--"}
                 </p>
               </div>
 
@@ -207,7 +205,8 @@ const BetDetails = () => {
       <div className="grid gap-6 xl:grid-cols-[1.6fr_0.9fr]">
         <section className="rounded-2xl border border-base-300 bg-base-100 p-6 shadow-xl">
           <div className="mb-4">
-            <h2 className="text-2xl font-bold">
+            <h2 className="card-title text-xl">
+              <IconOption />
               {t("adminPanel.bets.detail.poolDistribution")}
             </h2>
             <p className="mt-2 text-sm text-base-content/70">
@@ -219,7 +218,8 @@ const BetDetails = () => {
         </section>
 
         <aside className="rounded-2xl border border-base-300 bg-base-100 p-6 shadow-xl">
-          <h2 className="text-2xl font-bold">
+          <h2 className="card-title text-xl">
+            <IconFileDollar />
             {isSettled
               ? t("adminPanel.bets.detail.settledResult")
               : t("adminPanel.bets.detail.settlementPreview")}
@@ -237,9 +237,8 @@ const BetDetails = () => {
                 className="select select-lg w-full"
                 value={selectedWinningOptionId}
                 disabled={isSettled}
-                onChange={(event) =>
-                  setSelectedWinningOptionId(event.target.value)
-                }>
+                onChange={(event) => setSelectedWinningOptionId(event.target.value)}
+              >
                 {options?.map((option) => (
                   <option key={option.id} value={option.id}>
                     {option.label}
@@ -254,15 +253,13 @@ const BetDetails = () => {
               disabled={!selectedWinningOptionId || previewLoading || isSettled}
               onClick={async () => {
                 setPreviewLoading(true)
-                const response = await getBetSettlementPreview(
-                  id,
-                  selectedWinningOptionId,
-                )
+                const response = await getBetSettlementPreview(id, selectedWinningOptionId)
                 if (response) {
                   setPreview(response)
                 }
                 setPreviewLoading(false)
-              }}>
+              }}
+            >
               {t("adminPanel.bets.detail.generatePreview")}
             </Button>
 
@@ -280,7 +277,8 @@ const BetDetails = () => {
                     selectedWinningOption.id,
                     loadBet,
                   )
-                }>
+                }
+              >
                 {t("adminPanel.bets.detail.settleBet")}
               </Button>
             ) : null}
