@@ -1,6 +1,7 @@
 import React from "react"
 import Button from "@/components/buttons/Button"
 import { useLocale } from "@/providers/LocaleProvider"
+import { GAME_ACTION_BUTTON_FLEX_CLASS } from "../../gameControlClasses"
 
 const CapyroadActions = ({
   disabled,
@@ -30,7 +31,7 @@ const CapyroadActions = ({
         <Button
           key={i}
           variant={btn.variant}
-          className="flex-1 min-w-fit"
+          className={GAME_ACTION_BUTTON_FLEX_CLASS}
           onClick={btn.onClick}
           disabled={disabled || btn.disabled}>
           {t(btn.label)}

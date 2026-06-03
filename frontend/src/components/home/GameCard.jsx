@@ -2,7 +2,7 @@ import React from "react"
 import Button from "@/components/buttons/Button"
 import { useLocale } from "@/providers/LocaleProvider"
 import { useNavigate } from "react-router-dom"
-import { Icon3dCubeSphere, IconPlayerPlay, IconTriangle } from "@tabler/icons-react"
+import { IconTriangle } from "@tabler/icons-react"
 
 const GameCard = ({ game }) => {
   const { t } = useLocale()
@@ -11,8 +11,7 @@ const GameCard = ({ game }) => {
   return (
     <article
       onClick={() => navigate(game.route)}
-      className="group relative aspect-6/5 cursor-pointer overflow-hidden rounded-[1.35rem] border border-white/10 bg-neutral shadow-[0_18px_45px_rgba(0,0,0,0.24)] transition-all duration-500 hover:-translate-y-1 hover:border-primary/35 hover:shadow-[0_28px_80px_rgba(0,0,0,0.38)] sm:aspect-7/5 sm:rounded-[1.55rem] lg:rounded-[1.75rem]"
-    >
+      className="group relative aspect-6/5 cursor-pointer overflow-hidden rounded-[1.35rem] border border-white/10 bg-neutral shadow-[0_18px_45px_rgba(0,0,0,0.24)] transition-all duration-500 hover:-translate-y-1 hover:border-primary/35 hover:shadow-[0_28px_80px_rgba(0,0,0,0.38)] sm:aspect-7/5 sm:rounded-[1.55rem] lg:rounded-[1.75rem]">
       <img
         src={game.img}
         alt={game.game}
@@ -30,14 +29,18 @@ const GameCard = ({ game }) => {
 
       <div className="absolute left-3 top-3 z-30 flex max-w-[70%] flex-wrap gap-1.5 pr-2 sm:left-4 sm:top-4 sm:gap-2 sm:pr-4">
         {game.badges.map((badge, i) => (
-          <span key={i} className="origin-top-left scale-[0.82] drop-shadow-sm sm:scale-[0.9]">
+          <span
+            key={i}
+            className="origin-top-left scale-[0.82] drop-shadow-sm sm:scale-[0.9]">
             {badge}
           </span>
         ))}
       </div>
 
       <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-        <Button svg={<IconTriangle className="rotate-90 scale-75 stroke-2" />}>{t("pages.home.cards.playNow")}</Button>
+        <Button svg={<IconTriangle className="rotate-90 scale-75 stroke-2" />}>
+          {t("pages.home.cards.playNow")}
+        </Button>
       </div>
 
       <div className="absolute inset-x-0 bottom-0 z-30 px-4 pb-4 sm:px-6 sm:pb-6">

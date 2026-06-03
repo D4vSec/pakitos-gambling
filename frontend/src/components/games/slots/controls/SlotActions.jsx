@@ -9,19 +9,30 @@ import {
   IconPlayerPlay,
   IconTable,
 } from "@tabler/icons-react"
+import {
+  GAME_ACTION_BUTTON_BASIS_CLASS,
+  GAME_ACTION_BUTTON_FULL_CLASS,
+} from "../../gameControlClasses"
 
 const MAX_HISTORY_RESULTS = 10
 
 const SlotHistory = ({ spins, compact = false }) => {
   const { t } = useLocale()
   const recentSpins = spins.slice(-MAX_HISTORY_RESULTS)
+  const historyClassName = compact
+    ? "flex flex-col gap-2 text-sm"
+    : "hidden flex-col gap-3 text-sm lg:flex lg:text-base"
+  const emptyHistoryClassName = compact
+    ? "flex justify-between text-sm"
+    : "hidden justify-between text-sm lg:flex lg:text-base"
+  const rowClassName = compact
+    ? "flex items-center justify-between gap-2"
+    : "flex items-center justify-between gap-3"
+  const iconClassName = compact ? "h-4 w-4" : "h-4 w-4 lg:h-5 lg:w-5"
 
   if (recentSpins.length === 0) {
     return (
-      <div
-        className={`flex justify-between text-sm ${
-          compact ? "" : "hidden lg:flex"
-        }`}>
+      <div className={emptyHistoryClassName}>
         <span className="opacity-70">{t("games.slots.controls.history")}:</span>
         <span className="font-bold">0/{MAX_HISTORY_RESULTS}</span>
       </div>
@@ -29,12 +40,9 @@ const SlotHistory = ({ spins, compact = false }) => {
   }
 
   return (
-    <div className={`flex flex-col gap-2 text-sm ${compact ? "" : "hidden lg:flex"}`}>
+    <div className={historyClassName}>
       <div className="flex justify-between">
         <span className="opacity-70">{t("games.slots.controls.history")}:</span>
-        <span className="font-bold">
-          {recentSpins.length}/{MAX_HISTORY_RESULTS}
-        </span>
       </div>
 
       <div className="flex flex-col gap-1">
@@ -44,9 +52,7 @@ const SlotHistory = ({ spins, compact = false }) => {
           const payout = Number(spin.payout || 0).toFixed(2)
 
           return (
-            <div
-              key={`${spinNumber}-${index}`}
-              className="flex items-center justify-between gap-2">
+            <div key={`${spinNumber}-${index}`} className={rowClassName}>
               <span className="min-w-10 opacity-70">#{spinNumber}</span>
               <span
                 className={`flex-1 truncate font-bold ${
@@ -56,7 +62,7 @@ const SlotHistory = ({ spins, compact = false }) => {
               </span>
               <span className="flex items-center gap-1 font-bold">
                 {payout}
-                <IconCoinBitcoin className="h-4 w-4" />
+                <IconCoinBitcoin className={iconClassName} />
               </span>
             </div>
           )
@@ -66,27 +72,52 @@ const SlotHistory = ({ spins, compact = false }) => {
   )
 }
 
+const SlotSessionSummary = ({ spins }) => {
+  const { t } = useLocale()
+  const totalPayout = spins.reduce((acc, spin) => acc + (spin.payout ?? 0), 0)
+
+  return (
+    <div className="flex flex-col gap-2 text-sm">
+      <div className="flex justify-between">
+        <span className="opacity-70">{t("games.slots.controls.spins")}:</span>
+        <span className="font-bold">{spins.length}</span>
+      </div>
+      <div className="flex items-center justify-between">
+        <span className="opacity-70">
+          {t("games.slots.controls.totalPayout")}:
+        </span>
+        <div className="flex items-center gap-1 font-bold">
+          <span>{totalPayout.toFixed(2)}</span>
+          <IconCoinBitcoin className="h-5 w-5 sm:h-6 sm:w-6" />
+        </div>
+      </div>
+    </div>
+  )
+}
+
 const SlotActions = ({
-  children,
   disabled,
   onSpin,
   onEndSession,
   theme = "starwars",
   spins = [],
+  historySpins = spins,
   showSessionActions = true,
   showHistory = true,
 }) => {
   const { t } = useLocale()
   const mobileActionsCols = showHistory ? "grid-cols-2" : "grid-cols-1"
+  const mobileActionsGap = "gap-2 sm:gap-2"
 
   return (
     <>
-      {children}
+      {showSessionActions && <SlotSessionSummary spins={spins} />}
 
-      <div className={`grid ${mobileActionsCols} gap-2 lg:hidden`}>
+      <div
+        className={`grid w-full ${mobileActionsCols} ${mobileActionsGap} lg:hidden`}>
         <Button
           variant="neutral"
-          size="sm"
+          className={GAME_ACTION_BUTTON_BASIS_CLASS}
           onClick={() =>
             document.getElementById("slot-paytable-modal")?.showModal()
           }
@@ -96,11 +127,11 @@ const SlotActions = ({
         {showHistory && (
           <Button
             variant="neutral"
-            size="sm"
+            className={GAME_ACTION_BUTTON_BASIS_CLASS}
             onClick={() =>
               document.getElementById("slot-history-modal")?.showModal()
             }
-            disabled={spins.length === 0}
+            disabled={historySpins.length === 0}
             svg={<IconListDetails />}>
             {t("games.slots.controls.history")}
           </Button>
@@ -109,25 +140,26 @@ const SlotActions = ({
 
       {showSessionActions && (
         <>
-          <Button
-            variant="secondary"
-            className="w-full text-lg font-bold"
-            onClick={onSpin}
-            disabled={disabled}
-            svg={disabled ? <IconHourglass /> : <IconPlayerPlay />}>
-            {!disabled && t("games.slots.controls.spin")}
-          </Button>
+          <div className="grid w-full grid-cols-1 gap-2 xl:grid-cols-2">
+            <Button
+              variant="secondary"
+              className={`${GAME_ACTION_BUTTON_FULL_CLASS} text-lg font-bold`}
+              onClick={onSpin}
+              disabled={disabled}
+              svg={disabled ? <IconHourglass /> : <IconPlayerPlay />}>
+              {!disabled && t("games.slots.controls.spin")}
+            </Button>
 
-          <Button
-            variant="primary"
-            size="md"
-            className="w-full mt-auto"
-            onClick={onEndSession}
-            disabled={disabled}>
-            {t("games.slots.controls.endSession")}
-          </Button>
+            <Button
+              variant="primary"
+              className={GAME_ACTION_BUTTON_FULL_CLASS}
+              onClick={onEndSession}
+              disabled={disabled}>
+              {t("games.slots.controls.endSession")}
+            </Button>
+          </div>
 
-          <SlotHistory spins={spins} />
+          <SlotHistory spins={historySpins} />
         </>
       )}
 
@@ -139,10 +171,12 @@ const SlotActions = ({
             <h3 className="mb-4 text-center text-lg font-bold">
               {t("games.slots.controls.history")}
             </h3>
-            <SlotHistory spins={spins} compact />
+            <SlotHistory spins={historySpins} compact />
             <div className="modal-action">
               <form method="dialog" className="w-full">
-                <Button variant="neutral" className="w-full">
+                <Button
+                  variant="neutral"
+                  className={GAME_ACTION_BUTTON_FULL_CLASS}>
                   {t("ui.buttons.close")}
                 </Button>
               </form>
@@ -161,7 +195,9 @@ const SlotActions = ({
           <SlotPaytable theme={theme} horizontal />
           <div className="modal-action">
             <form method="dialog" className="w-full">
-              <Button variant="neutral" className="w-full">
+              <Button
+                variant="neutral"
+                className={GAME_ACTION_BUTTON_FULL_CLASS}>
                 {t("ui.buttons.close")}
               </Button>
             </form>

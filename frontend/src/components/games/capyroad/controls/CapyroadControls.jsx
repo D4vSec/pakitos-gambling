@@ -25,8 +25,8 @@ const CapyroadControls = () => {
   const isBettingDisabled = !disabled || isOutcomeAnimationRunning
 
   return (
-    <div className="flex flex-col gap-4 w-full h-full p-4">
-      <h2 className="font-bold text-xl text-center m-0 p-0">{t("games.capyroad.title")}</h2>
+    <div className="flex h-full w-full flex-col gap-1.5 p-2 sm:gap-1.5 sm:p-2 lg:gap-5 lg:p-4">
+      <h2 className="m-0 p-0 text-center text-xl font-bold">{t("games.capyroad.title")}</h2>
 
       <BettingInput bet={{ betAmount, updateBetAmount }} readOnly={isBettingDisabled} />
 

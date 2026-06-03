@@ -185,7 +185,7 @@
       "placeholder": "Introduce la cantidad de apuesta"
     },
     "actions": {
-      "bet": "Apostar",
+      "bet": "Jugar",
       "clearBet": "Limpiar apuesta",
       "doubleBet": "Doblar apuesta",
       "repeatBet": "Repetir apuesta"
@@ -266,7 +266,7 @@
         "spin": "Girar",
         "endSession": "Finalizar partida",
         "spins": "Tiradas",
-        "history": "Historial de sesión",
+        "history": "Historial de partidas",
         "paytable": "Pagos",
         "showPaytable": "Ver pagos",
         "hidePaytable": "Ocultar pagos",

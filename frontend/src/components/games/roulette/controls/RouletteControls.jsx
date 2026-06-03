@@ -5,6 +5,7 @@ import { useRoulette } from "@/providers/RouletteProvider"
 import { useNotification } from "@/providers/NotificationProvider"
 import BettingBtns from "../../BettingBtns"
 import { useLocale } from "@/providers/LocaleProvider"
+import { IconHourglass, IconRotate360 } from "@tabler/icons-react"
 
 const RouletteControls = () => {
   const {
@@ -16,14 +17,19 @@ const RouletteControls = () => {
     repeatBets,
     doubleBets,
     spin,
+    isSpinning,
+    showSpinView,
     type,
   } = useRoulette()
 
   const { addNotification } = useNotification()
 
   const { t } = useLocale()
+  const isBusy = isSpinning || showSpinView
 
   const handleStartGame = () => {
+    if (isBusy) return
+
     if (betAmount <= 0) {
       addNotification(t("message.error.bet0"), "error")
       return
@@ -49,10 +55,16 @@ const RouletteControls = () => {
           clear: clearBets,
           double: doubleBets,
           start: handleStartGame,
+          startLabel: "games.slots.controls.spin",
+          startSvg: isBusy ? <IconHourglass /> : <IconRotate360 />,
         }}
-        compact></BettingBtns>
+        disabled={isBusy}></BettingBtns>
 
-      <ChipSelector selectedChip={selectedChip} setSelectedChip={updateChip} />
+      <ChipSelector
+        selectedChip={selectedChip}
+        setSelectedChip={updateChip}
+        disabled={isBusy}
+      />
     </div>
   )
 }

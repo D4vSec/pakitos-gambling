@@ -1,6 +1,7 @@
 import Button from "@/components/buttons/Button"
 import React from "react"
 import { useBlackjack } from "@/providers/BlackjackProvider"
+import { GAME_ACTION_BUTTON_FLEX_CLASS } from "../../gameControlClasses"
 
 import { useLocale } from "@/providers/LocaleProvider"
 
@@ -33,7 +34,7 @@ const BlackjackActions = ({ disabled }) => {
         <Button
           key={i}
           variant="neutral"
-          className="flex-1 min-w-fit"
+          className={GAME_ACTION_BUTTON_FLEX_CLASS}
           onClick={btn.onClick}
           disabled={disabled || btn.disabled}>
           {t(btn.label)}

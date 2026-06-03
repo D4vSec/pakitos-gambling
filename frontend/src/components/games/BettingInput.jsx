@@ -27,7 +27,7 @@ const BettingInput = ({ bet, readOnly }) => {
             const parsed = Number(value)
             updateBetAmount(Number(parsed.toFixed(2)))
           }}
-          className="input input-sm h-8 min-h-8 min-w-0 flex-1 md:input-md md:h-auto md:w-full"
+          className="input input-md h-8 min-h-8 min-w-0 flex-1  md:h-auto md:w-full"
         />
       </div>
     </div>

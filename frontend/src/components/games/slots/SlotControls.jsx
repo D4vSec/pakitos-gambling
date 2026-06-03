@@ -8,19 +8,15 @@ import BettingBtns from "@/components/games/BettingBtns"
 import SlotActions from "./controls/SlotActions"
 import SlotTypeSelector from "./controls/SlotTypeSelector"
 import {
-  IconCoinBitcoin,
   IconHourglass,
   IconPlayerPlay,
+  IconRotate360,
 } from "@tabler/icons-react"
 import { getAnimTotalMs, DIMS_BY_TYPE } from "./slotConstants"
 
 const NOTIF_DURATION = 1000
 
-const SlotControls = ({
-  type = "3x3",
-  theme = "starwars",
-  onTypeChange,
-}) => {
+const SlotControls = ({ type = "3x3", theme = "starwars", onTypeChange }) => {
   const dims = DIMS_BY_TYPE[type] ?? { rows: 3, cols: 3 }
   const NOTIF_DELAY_MS = getAnimTotalMs(dims.cols, dims.rows)
   const { session, spins, loading, createSession, spin, endSession } =
@@ -32,10 +28,10 @@ const SlotControls = ({
   const [betAmount, setBetAmount] = useState("")
   const [lastBet, setLastBet] = useState("")
   const [isAnimating, setIsAnimating] = useState(false)
+  const [visibleHistorySpins, setVisibleHistorySpins] = useState([])
   const animTimerRef = useRef(null)
 
   const balance = parseFloat(user?.balance) || 0
-  const totalPayout = spins.reduce((acc, s) => acc + (s.payout ?? 0), 0)
   const isActive = !!session
   const isBusy = loading || isAnimating
   const displayedBetAmount = isActive ? session.bet : betAmount
@@ -48,6 +44,8 @@ const SlotControls = ({
   }
 
   const handleStart = async () => {
+    if (isBusy) return
+
     const amount = parseFloat(betAmount)
     if (!amount || amount <= 0) {
       addNotification(t("message.error.bet0"), "error")
@@ -58,6 +56,7 @@ const SlotControls = ({
       return
     }
     setLastBet(betAmount)
+    setVisibleHistorySpins([])
     setIsAnimating(true)
 
     try {
@@ -90,7 +89,10 @@ const SlotControls = ({
   }
 
   const handleSpin = async () => {
+    if (isBusy) return
     if (!session?.gameId) return
+
+    setVisibleHistorySpins(spins)
     setIsAnimating(true)
     const result = await spin(session.gameId).catch(() => null)
     if (!result) {
@@ -120,8 +122,11 @@ const SlotControls = ({
   }
 
   const handleEnd = async () => {
+    if (isBusy) return
     if (!session?.gameId) return
+
     await endSession(session.gameId)
+    setVisibleHistorySpins([])
     setBetAmount("")
     setLastBet("")
   }
@@ -143,18 +148,14 @@ const SlotControls = ({
   }
 
   return (
-    <div className="flex flex-col gap-4 w-full h-full p-4">
-      <h2 className="font-bold text-xl text-center">
+    <div className="flex h-full w-full flex-col gap-4 p-2 sm:gap-1.5 sm:p-2 lg:gap-5 lg:p-4">
+      <h2 className="text-center text-xl font-bold">
         {t(`games.slots.themes.${theme}.title`)}
       </h2>
 
       {!isActive && (
-        <>
-          <SlotTypeSelector
-            type={type}
-            onTypeChange={onTypeChange}
-            disabled={isBusy}
-          />
+        <div className="flex flex-col gap-2  lg:contents">
+          <SlotTypeSelector type={type} onTypeChange={onTypeChange} />
 
           <BettingInput
             bet={{
@@ -177,43 +178,20 @@ const SlotControls = ({
               clear: clearBet,
               start: handleStart,
               startLabel: "games.slots.controls.spin",
-              startSvg: isBusy ? <IconHourglass /> : <IconPlayerPlay />,
-            }}
-            disabled={{
-              all: isBusy,
-              repeat: !lastBet,
-              double: !betAmount,
-              start: !betAmount,
+              startSvg: isBusy ? <IconHourglass /> : <IconRotate360 />,
             }}
           />
-        </>
+        </div>
       )}
 
       {isActive && (
         <SlotActions
-          disabled={isBusy}
           onSpin={handleSpin}
           onEndSession={handleEnd}
           theme={theme}
-          spins={spins}>
-          <div className="flex flex-col gap-2 text-sm">
-            <div className="flex justify-between">
-              <span className="opacity-70">
-                {t("games.slots.controls.spins")}:
-              </span>
-              <span className="font-bold">{spins.length}</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="opacity-70">
-                {t("games.slots.controls.totalPayout")}:
-              </span>
-              <div className="flex items-center gap-1 font-bold">
-                <span>{totalPayout.toFixed(2)}</span>
-                <IconCoinBitcoin className="w-5 h-5 sm:w-6 sm:h-6" />
-              </div>
-            </div>
-          </div>
-        </SlotActions>
+          spins={spins}
+          historySpins={isAnimating ? visibleHistorySpins : spins}
+        />
       )}
     </div>
   )

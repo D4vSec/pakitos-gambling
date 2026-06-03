@@ -2,13 +2,17 @@ import React from "react"
 import {
   IconArrowBackUp,
   IconMultiplier2x,
-  IconPlayCard,
   IconRepeat,
+  IconTriangle,
 } from "@tabler/icons-react"
 import Button from "../buttons/Button"
 import { useLocale } from "@/providers/LocaleProvider"
+import {
+  GAME_ACTION_BUTTON_BASIS_CLASS,
+  GAME_ACTION_BUTTON_FULL_CLASS,
+} from "./gameControlClasses"
 
-const BettingBtns = ({ children, actions, disabled, compact = false }) => {
+const BettingBtns = ({ children, actions, disabled }) => {
   const { repeat, clear, double, start } = actions
   const { t } = useLocale()
   const disabledMap =
@@ -17,16 +21,12 @@ const BettingBtns = ({ children, actions, disabled, compact = false }) => {
     typeof disabled === "boolean" ? disabled : Boolean(disabledMap.all)
   const isDisabled = (action) => isAllDisabled || Boolean(disabledMap[action])
   const startLabel = actions.startLabel ?? "games.actions.bet"
-  const startSvg = actions.startSvg ?? <IconPlayCard />
-  const rootClassName = compact
-    ? "flex flex-wrap gap-2 w-full md:gap-4"
-    : "flex flex-wrap gap-4 w-full"
-  const buttonClassName = compact
-    ? "flex-1 basis-0 min-w-fit h-10 min-h-10 md:h-11 md:min-h-11 lg:h-auto lg:min-h-12"
-    : "flex-1 basis-0 min-w-fit"
-  const startButtonClassName = compact
-    ? "min-w-fit w-full h-11 min-h-10 md:h-10 md:min-h-11 lg:h-auto lg:min-h-12"
-    : "min-w-fit w-full"
+  const startSvg = actions.startSvg ?? (
+    <IconTriangle className="rotate-90 scale-75 stroke-2" />
+  )
+  const rootClassName = "flex w-full flex-wrap gap-2 md:gap-4"
+  const buttonClassName = GAME_ACTION_BUTTON_BASIS_CLASS
+  const startButtonClassName = GAME_ACTION_BUTTON_FULL_CLASS
 
   return (
     <div className={rootClassName}>

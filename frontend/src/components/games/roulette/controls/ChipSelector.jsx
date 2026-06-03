@@ -6,7 +6,7 @@ import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react"
 
 const MOBILE_CHIPS_PER_PAGE = 5
 
-const ChipSelector = ({ selectedChip, setSelectedChip }) => {
+const ChipSelector = ({ selectedChip, setSelectedChip, disabled = false }) => {
   const { t } = useLocale()
   const [page, setPage] = useState(0)
 
@@ -29,7 +29,8 @@ const ChipSelector = ({ selectedChip, setSelectedChip }) => {
       key={chip.idSuffix}
       type="button"
       onClick={() => setSelectedChip(chip.value)}
-      className={`cursor-pointer rounded-full border-2 p-0.5 transition-colors [&_svg]:h-7 [&_svg]:w-7 md:[&_svg]:h-8 md:[&_svg]:w-8 ${
+      disabled={disabled}
+      className={`cursor-pointer rounded-full border-2 p-0.5 transition-colors disabled:cursor-not-allowed disabled:opacity-50 [&_svg]:h-7 [&_svg]:w-7 md:[&_svg]:h-8 md:[&_svg]:w-8 ${
         selectedChip === chip.value ? "border-yellow-400" : "border-transparent"
       }`}
       aria-label={`${t("games.roulette.controls.chipValue")}: ${chip.value}`}>
@@ -48,6 +49,7 @@ const ChipSelector = ({ selectedChip, setSelectedChip }) => {
           type="button"
           className="btn btn-ghost btn-circle btn-xs shrink-0"
           onClick={goToPreviousPage}
+          disabled={disabled}
           aria-label="Previous chips">
           <IconChevronLeft size={18} />
         </button>
@@ -58,6 +60,7 @@ const ChipSelector = ({ selectedChip, setSelectedChip }) => {
           type="button"
           className="btn btn-ghost btn-circle btn-xs shrink-0"
           onClick={goToNextPage}
+          disabled={disabled}
           aria-label="Next chips">
           <IconChevronRight size={18} />
         </button>

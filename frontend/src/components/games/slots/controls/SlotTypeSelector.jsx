@@ -17,9 +17,11 @@ const SlotTypeSelector = ({ type, onTypeChange, disabled }) => {
           <Button
             key={mode}
             type="button"
+            size="md"
             variant={type === mode ? "primary" : "ghost"}
-            size="sm"
-            className={`flex-1 ${type === mode ? "" : "border border-base-content/20"}`}
+            className={`flex-1 btn-sm md:btn-md ${
+              type === mode ? "" : "border border-base-content/20"
+            }`}
             onClick={() => onTypeChange?.(mode)}
             disabled={disabled}>
             {mode}
