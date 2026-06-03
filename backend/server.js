@@ -15,4 +15,7 @@ db.connect()
 
         })
     })
-    .catch((err) => logger.fatal("DB connection error:", err))
+    .catch((err) => {
+        logger.fatal("DB connection error:", err)
+        process.exit(1)
+    })

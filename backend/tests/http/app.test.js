@@ -41,3 +41,11 @@ describe('not found', () => {
 		expect(response.body).toEqual({ code: 'NOT_FOUND' })
 	})
 })
+
+describe('health check', () => {
+	it('returns ok for the container health endpoint', async () => {
+		const response = await request(app).get('/health')
+		expect(response.status).toBe(200)
+		expect(response.body).toEqual({ status: 'ok' })
+	})
+})

@@ -27,6 +27,10 @@ app.use(cors(corsConfig))
 app.use(useragent());
 app.disable('x-powered-by')
 
+app.get('/health', (_req, res) => {
+	res.status(200).json({ status: 'ok' })
+})
+
 app.use(`/${API_VERSION}`, globalLimiter)
 app.use(`/${API_VERSION}/user`, userRoutes)
 app.use(`/${API_VERSION}/auth`, authRoutes)
