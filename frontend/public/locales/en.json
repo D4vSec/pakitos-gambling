@@ -255,6 +255,10 @@
         "spin": "Spin",
         "endSession": "End session",
         "spins": "Spins",
+        "history": "Session history",
+        "paytable": "Paytable",
+        "showPaytable": "Show paytable",
+        "hidePaytable": "Hide paytable",
         "totalPayout": "Total payout"
       }
     },

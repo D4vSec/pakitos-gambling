@@ -1,10 +1,8 @@
-import React, { useCallback, useEffect, useRef, useState } from "react"
-import gsap from "gsap"
+import React, { useCallback, useState } from "react"
 import { useSlots } from "@/providers/SlotsProvider"
 import { useLocale } from "@/providers/LocaleProvider"
 import SlotGrid from "./SlotGrid"
 import SlotPaytable from "./SlotPaytable"
-import { IconCoinBitcoin } from "@tabler/icons-react"
 import { DIMS_BY_TYPE } from "./slotConstants"
 import "./SlotMachine.css"
 
@@ -20,87 +18,46 @@ const SlotMachine = ({ type = "3x3", theme = "starwars" }) => {
   const rows = session?.rows ?? defaultRows
   const cols = session?.cols ?? defaultCols
 
-  const [showResult, setShowResult] = useState(false)
-  const flashRef = useRef(null)
+  const [settledSpinCount, setSettledSpinCount] = useState(0)
+  const [gridFrameWidth, setGridFrameWidth] = useState(null)
 
-  useEffect(() => {
-    if (isSpinning) setShowResult(false)
-  }, [isSpinning])
-
-  const handleAllSettled = useCallback(() => setShowResult(true), [])
-
-  useEffect(() => {
-    if (!showResult || !lastSpin?.isWinner || !flashRef.current) return
-    gsap
-      .timeline()
-      .fromTo(
-        flashRef.current,
-        { opacity: 0 },
-        { opacity: 0.45, duration: 0.35, ease: "power2.in" },
-      )
-      .to(flashRef.current, { opacity: 0, duration: 1.0, ease: "power2.out" })
-  }, [showResult, lastSpin?.isWinner])
-
-  const hasWon = showResult && !!lastSpin?.isWinner
+  const handleAllSettled = useCallback(() => {
+    setSettledSpinCount(spins.length)
+  }, [spins.length])
+  const handleGridSizeChange = useCallback(({ width }) => {
+    setGridFrameWidth((prevWidth) => (prevWidth === width ? prevWidth : width))
+  }, [])
+  const hasWon =
+    !isSpinning && settledSpinCount === spins.length && !!lastSpin?.isWinner
 
   return (
-    <div className="flex flex-row items-stretch gap-2 md:gap-3 w-full h-full p-1.5 md:p-3">
-
-      {/* Paytable lateral — visible from md up */}
-      <div className="hidden md:flex">
+    <div className="flex h-full w-full flex-row items-stretch gap-2 p-1.5 md:gap-3 md:p-3">
+      <div className="hidden lg:flex">
         <SlotPaytable theme={theme} />
       </div>
 
-      {/* Machine content */}
-      <div className="flex flex-col items-center gap-1 md:gap-2 flex-1 min-w-0 h-full">
-
-        {/* Paytable horizontal — móvil only, encima de los reels */}
-        <div className="md:hidden w-full shrink-0">
-          <SlotPaytable theme={theme} horizontal />
-        </div>
-
-        {/* Header */}
-        <div className="flex flex-col items-center gap-0.5 shrink-0">
-          <div className="flex items-center gap-1.5 md:gap-2">
-            <span className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-amber-400 shadow-[0_0_6px_2px] shadow-amber-400/70 animate-pulse" />
-            <h2 className="text-base md:text-2xl font-black tracking-widest uppercase bg-linear-to-r from-amber-300 via-yellow-400 to-amber-300 bg-clip-text text-transparent drop-shadow">
-              {t("games.slots.title")}
-            </h2>
-            <span className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-amber-400 shadow-[0_0_6px_2px] shadow-amber-400/70 animate-pulse" />
-          </div>
-          <span className="text-[8px] md:text-[10px] font-semibold tracking-[0.2em] md:tracking-[0.25em] uppercase text-amber-600/70">
-            {t(`games.slots.modes.${type}`)}
-          </span>
-        </div>
-
-        {/* Reel window */}
-        <div className="flex-1 min-h-0 w-full flex items-center justify-center">
+      <div className="flex h-full min-w-0 flex-1   items-center justify-center">
+        <div className="flex h-full max-h-full w-full min-w-0 flex-col items-center justify-center gap-3 md:gap-4">
           <div
-            className={`relative overflow-hidden ${
-              type === "3x3"
-                ? "max-w-xl"
-                : type === "3x5"
-                  ? "max-w-4xl"
-                  : "max-w-2xl"
-            }`}
+            className="flex max-w-full shrink-0 flex-col items-center gap-0.5"
             style={{
-              aspectRatio: `${cols} / ${rows}`,
-              height: "100%",
-              maxWidth: "100%",
+              width: gridFrameWidth ? `${gridFrameWidth}px` : undefined,
             }}>
-            {/* Win flash overlay */}
-            <div
-              ref={flashRef}
-              className="pointer-events-none absolute inset-0 z-20 rounded-xl opacity-0"
-              style={{
-                background:
-                  "radial-gradient(ellipse at center, rgba(251,191,36,0.6) 0%, transparent 70%)",
-              }}
-            />
+            <div className="flex items-center gap-1.5 md:gap-2">
+              <span className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-amber-400 shadow-[0_0_6px_2px] shadow-amber-400/70 animate-pulse" />
+              <h2 className="text-base md:text-2xl font-black tracking-widest uppercase bg-linear-to-r from-accent via-warning to-accent bg-clip-text text-transparent drop-shadow">
+                {t("games.slots.title")}
+              </h2>
+              <span className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-amber-400 shadow-[0_0_6px_2px] shadow-amber-400/70 animate-pulse" />
+            </div>
+            <span className="text-sm md:text-md font-semibold tracking-[0.2em] md:tracking-[0.25em] uppercase text-secondary">
+              {t(`games.slots.modes.${type}`)}
+            </span>
+          </div>
 
-            <div className="h-2 md:h-3 rounded-t-xl bg-linear-to-r from-amber-800 via-yellow-500 to-amber-800 shadow-[0_2px_8px] shadow-amber-500/30" />
-
+          <div className="flex min-h-0 w-full items-center justify-center">
             <SlotGrid
+              className="max-h-full max-w-full"
               grid={lastSpin?.grid ?? null}
               winningLines={lastSpin?.winningLines ?? []}
               rows={rows}
@@ -111,34 +68,10 @@ const SlotMachine = ({ type = "3x3", theme = "starwars" }) => {
               isSpinning={isSpinning}
               hasWon={hasWon}
               onAllSettled={handleAllSettled}
+              onSizeChange={handleGridSizeChange}
             />
-
-            <div className="h-2 md:h-3 rounded-b-xl bg-linear-to-r from-amber-800 via-yellow-500 to-amber-800 shadow-[0_-2px_8px] shadow-amber-500/30" />
           </div>
         </div>
-
-        {/* Result */}
-        <div className="h-7 md:h-9 flex items-center justify-center shrink-0">
-          {lastSpin && showResult && (
-            <div
-              className={`flex items-center gap-1.5 md:gap-2 text-base md:text-lg font-bold transition-opacity duration-300 ${
-                lastSpin.isWinner
-                  ? "text-warning drop-shadow-[0_0_6px_rgba(251,191,36,0.8)]"
-                  : "text-error/80"
-              }`}>
-              {lastSpin.isWinner ? (
-                <>
-                  <span>{t("games.result.win")}</span>
-                  <span>+{lastSpin.payout}</span>
-                  <IconCoinBitcoin className="w-4 h-4 md:w-5 md:h-5" />
-                </>
-              ) : (
-                <span>{t("games.result.lose")}</span>
-              )}
-            </div>
-          )}
-        </div>
-
       </div>
     </div>
   )

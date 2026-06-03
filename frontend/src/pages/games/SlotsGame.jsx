@@ -22,8 +22,19 @@ const SlotsGame = ({ type = "3x3", theme = "starwars" }) => {
   return (
     <SlotsProvider key={selectedType} type={selectedType}>
       <GameTemplate
-        game={<SlotMachine type={selectedType} theme={theme} />}
-        controls={<SlotControls type={selectedType} theme={theme} onTypeChange={setSelectedType} />}
+        game={
+          <SlotMachine
+            type={selectedType}
+            theme={theme}
+          />
+        }
+        controls={
+          <SlotControls
+            type={selectedType}
+            theme={theme}
+            onTypeChange={setSelectedType}
+          />
+        }
         description={
           <GameDescription
             title={t("games.slots.title")}

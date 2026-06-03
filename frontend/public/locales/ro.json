@@ -255,6 +255,10 @@
         "spin": "Învârte",
         "endSession": "Încheie sesiunea",
         "spins": "Rotiri",
+        "history": "Istoric sesiune",
+        "paytable": "Tabel plăți",
+        "showPaytable": "Arată plățile",
+        "hidePaytable": "Ascunde plățile",
         "totalPayout": "Câștig total"
       }
     },

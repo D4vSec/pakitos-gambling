@@ -28,14 +28,38 @@ import seven5x5Img from "@/assets/games/seven5x5.png"
 
 const SYMBOLS = ["cherry", "lemon", "orange", "plum", "bell", "bar", "seven"]
 const DISPLAY_BY_THEME = {
-  "starwars":      { cherry: cherry3x3Img, lemon: lemon3x3Img, orange: orange3x3Img, plum: plum3x3Img, bell: bell3x3Img, bar: bar3x3Img, seven: seven3x3Img },
-  "stardewvalley": { cherry: cherry3x5Img, lemon: lemon3x5Img, orange: orange3x5Img, plum: plum3x5Img, bell: bell3x5Img, bar: bar3x5Img, seven: seven3x5Img },
-  "beerman":       { cherry: cherry5x5Img, lemon: lemon5x5Img, orange: orange5x5Img, plum: plum5x5Img, bell: bell5x5Img, bar: bar5x5Img, seven: seven5x5Img },
+  starwars: {
+    cherry: cherry3x3Img,
+    lemon: lemon3x3Img,
+    orange: orange3x3Img,
+    plum: plum3x3Img,
+    bell: bell3x3Img,
+    bar: bar3x3Img,
+    seven: seven3x3Img,
+  },
+  stardewvalley: {
+    cherry: cherry3x5Img,
+    lemon: lemon3x5Img,
+    orange: orange3x5Img,
+    plum: plum3x5Img,
+    bell: bell3x5Img,
+    bar: bar3x5Img,
+    seven: seven3x5Img,
+  },
+  beerman: {
+    cherry: cherry5x5Img,
+    lemon: lemon5x5Img,
+    orange: orange5x5Img,
+    plum: plum5x5Img,
+    bell: bell5x5Img,
+    bar: bar5x5Img,
+    seven: seven5x5Img,
+  },
 }
 const PLACEHOLDER_BY_THEME = {
-  "starwars":      imagenInicio3x3Img,
-  "stardewvalley": imagenInicio3x5Img,
-  "beerman":       beermanImg,
+  starwars: imagenInicio3x3Img,
+  stardewvalley: imagenInicio3x5Img,
+  beerman: beermanImg,
 }
 const rand = () => SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)]
 
@@ -48,7 +72,7 @@ const SlotReel = ({
   symbols = [],
   rows = 3,
   colIndex = 0,
-  machineType = "3x3",
+  reelSize = 171,
   theme = "starwars",
   isSpinning,
   stopDelay = 0,
@@ -107,7 +131,7 @@ const SlotReel = ({
       clearWinTweens()
     },
     [],
-  ) // eslint-disable-line react-hooks/exhaustive-deps
+  )
 
   useEffect(() => {
     clearWinTweens()
@@ -116,11 +140,11 @@ const SlotReel = ({
       // Fresh spin: kill any leftover animations from previous round
       clearSpinTweens()
       phaseRef.current = "spinning"
-      setPhase("spinning")
 
       spinRafRef.current = requestAnimationFrame(() => {
         spinRafRef.current = null
         if (phaseRef.current !== "spinning") return
+        setPhase("spinning")
 
         const makeTween = (el, delay) => {
           if (!el) return null
@@ -151,21 +175,27 @@ const SlotReel = ({
           const imgB = imgBRefs.current[r]
           // Cascade: each row starts slightly after the one above
           const rowOffset = r * 0.018
-          return [makeTween(imgA, rowOffset), makeTween(imgB, STAGGER + rowOffset)]
+          return [
+            makeTween(imgA, rowOffset),
+            makeTween(imgB, STAGGER + rowOffset),
+          ]
         })
       })
     } else if (phaseRef.current === "spinning") {
       // Do NOT call clearSpinTweens() here — each reel must keep spinning
       // until its own stopDelay fires. Clearing here would freeze all reels at once.
       phaseRef.current = "decelerating"
-      setPhase("decelerating")
+      requestAnimationFrame(() => {
+        if (phaseRef.current === "decelerating") setPhase("decelerating")
+      })
 
       stopTimerRef.current = setTimeout(() => {
         stopTimerRef.current = null
         clearSpinTweens() // stop only THIS reel's animation
         hideImgB()
 
-        const finalSyms = symbols.length === rows ? [...symbols] : Array(rows).fill(null)
+        const finalSyms =
+          symbols.length === rows ? [...symbols] : Array(rows).fill(null)
 
         landRafRef.current = requestAnimationFrame(() => {
           landRafRef.current = null
@@ -213,10 +243,17 @@ const SlotReel = ({
       return gsap.fromTo(
         el,
         { scale: 1 },
-        { scale: 1.05, duration: 0.4, repeat: -1, yoyo: true, ease: "power2.inOut", delay: 0.35 },
+        {
+          scale: 1.05,
+          duration: 0.4,
+          repeat: -1,
+          yoyo: true,
+          ease: "power2.inOut",
+          delay: 0.35,
+        },
       )
     })
-  }, [phase, winningCells, colIndex]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [phase, winningCells, colIndex])
 
   // Sync static display on idle (initial load / session recovery / session end)
   useEffect(() => {
@@ -224,11 +261,13 @@ const SlotReel = ({
     // Reset to idle when session ends (all symbols cleared while stopped)
     if (phaseRef.current === "stopped" && allNull) {
       phaseRef.current = "idle"
-      setPhase("idle")
+      requestAnimationFrame(() => setPhase("idle"))
     }
     if (phaseRef.current !== "idle") return
     const syms = symbols.length === rows ? [...symbols] : Array(rows).fill(null)
-    setIdleSymbols(syms)
+    requestAnimationFrame(() => {
+      if (phaseRef.current === "idle") setIdleSymbols(syms)
+    })
     hideImgB()
     imgARefs.current.forEach((imgA, r) => {
       if (!imgA) return
@@ -237,13 +276,19 @@ const SlotReel = ({
       imgA.alt = sym ?? ""
       gsap.set(imgA, { y: 0, opacity: sym ? 1 : 0 })
     })
-  }, [symbols]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [symbols, rows, DISPLAY])
 
   return (
-    <div className="flex flex-col gap-1.5 flex-1 px-1.5">
+    <div
+      className="grid shrink-0 gap-0 px-0"
+      style={{
+        width: `${reelSize}px`,
+        gridTemplateRows: `repeat(${rows}, ${reelSize}px)`,
+      }}>
       {Array.from({ length: rows }, (_, r) => {
         const sym = idleSymbols[r]
-        const isWin = phase === "stopped" && !!winningCells?.has(`${r},${colIndex}`)
+        const isWin =
+          phase === "stopped" && !!winningCells?.has(`${r},${colIndex}`)
         return (
           <div
             key={r}
@@ -251,7 +296,7 @@ const SlotReel = ({
               cellRefs.current[r] = el
             }}
             className={`
-              relative w-full aspect-square overflow-hidden rounded-lg border-2 select-none
+              relative aspect-square h-full w-full overflow-hidden rounded-lg border-2 select-none
               transition-all duration-500
               ${
                 isWin

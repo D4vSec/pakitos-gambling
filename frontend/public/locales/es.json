@@ -255,6 +255,10 @@
         "spin": "Girar",
         "endSession": "Finalizar partida",
         "spins": "Tiradas",
+        "history": "Historial de sesión",
+        "paytable": "Pagos",
+        "showPaytable": "Ver pagos",
+        "hidePaytable": "Ocultar pagos",
         "totalPayout": "Ganancia total"
       }
     },

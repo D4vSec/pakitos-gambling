@@ -11,6 +11,13 @@ import { useLocale } from "@/providers/LocaleProvider"
 const BettingBtns = ({ children, actions, disabled, compact = false }) => {
   const { repeat, clear, double, start } = actions
   const { t } = useLocale()
+  const disabledMap =
+    typeof disabled === "object" && disabled !== null ? disabled : {}
+  const isAllDisabled =
+    typeof disabled === "boolean" ? disabled : Boolean(disabledMap.all)
+  const isDisabled = (action) => isAllDisabled || Boolean(disabledMap[action])
+  const startLabel = actions.startLabel ?? "games.actions.bet"
+  const startSvg = actions.startSvg ?? <IconPlayCard />
   const rootClassName = compact
     ? "flex flex-wrap gap-2 w-full md:gap-4"
     : "flex flex-wrap gap-4 w-full"
@@ -29,7 +36,7 @@ const BettingBtns = ({ children, actions, disabled, compact = false }) => {
           className={buttonClassName}
           svg={<IconRepeat />}
           onClick={repeat}
-          disabled={disabled}>
+          disabled={isDisabled("repeat")}>
           <span className="hidden sm:flex">{t("games.actions.repeatBet")}</span>
         </Button>
 
@@ -42,7 +49,7 @@ const BettingBtns = ({ children, actions, disabled, compact = false }) => {
               <IconMultiplier2x />
             </span>
           }
-          disabled={disabled}>
+          disabled={isDisabled("double")}>
           <span className="hidden sm:flex">{t("games.actions.doubleBet")}</span>
         </Button>
 
@@ -51,7 +58,7 @@ const BettingBtns = ({ children, actions, disabled, compact = false }) => {
           className={buttonClassName}
           onClick={clear}
           svg={<IconArrowBackUp />}
-          disabled={disabled}>
+          disabled={isDisabled("clear")}>
           <span className="hidden sm:flex">{t("games.actions.clearBet")}</span>
         </Button>
       </div>
@@ -61,10 +68,10 @@ const BettingBtns = ({ children, actions, disabled, compact = false }) => {
       <Button
         variant="secondary"
         className={startButtonClassName}
-        svg={<IconPlayCard />}
+        svg={startSvg}
         onClick={start}
-        disabled={disabled}>
-        {t("games.actions.bet")}
+        disabled={isDisabled("start")}>
+        {t(startLabel)}
       </Button>
     </div>
   )

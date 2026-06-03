@@ -303,6 +303,8 @@ const RouletteProvider = ({ children }) => {
       setIsSpinning(true)
       setShowSpinView(true)
 
+      console.log("Roulette spin payload:", game)
+
       const res = await post("/api/v1/roulette/spin", {
         headers: {
           "x-refresh-token": getRefreshToken(),
