@@ -26,7 +26,7 @@ const isUserGameValid = (game, userId) => {
 const startGame = async (req, res) => {
     try {
         const id = req.user.id
-        const { amount } = req.body ?? {}
+        const { amount } = req.body
         const numericAmount = Number(amount)
 
         if (!Number.isFinite(numericAmount) || numericAmount <= 0) {
@@ -46,7 +46,7 @@ const startGame = async (req, res) => {
         }
 
         const capyRoad = createCapyRoad()
-        const gameID = randomId()
+        const gameID = crypto.randomUUID()
 
         const road = 0
         const crashProbability = 0

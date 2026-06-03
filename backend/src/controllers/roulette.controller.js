@@ -7,10 +7,11 @@ import { randomUUID } from "#utils/rng.utils"
 const spinRoulette = async (req, res) => {
     const id = req.user.id
     const wallet = await User.getUserBalance(id)
-    
+
     const { rouletteType, bets } = req.body
-    const normalizedBets = Array.isArray(bets) ? bets : [bets]
-    const totalAmount = normalizedBets.reduce((acc, b) => acc + b.amount, 0)
+    if (Array.isArray(bets) && bets.length === 0)
+        return res.status(400).json({ code: "INVALID_BETS_FORMAT" })
+    const totalAmount = bets.reduce((acc, b) => acc + b.amount, 0)
 
     if (totalAmount > wallet) return res.status(400).json({ code: "INSUFFICIENT_BALANCE" })
 
@@ -19,56 +20,17 @@ const spinRoulette = async (req, res) => {
     if (!roulette.isAllowedRoulette(rouletteType))
         return res.status(400).json({ code: "INVALID_ROULETTE_TYPE" })
 
-    if (normalizedBets.some((b) => !roulette.isValidBetShape(b)))
+    if (bets.some((bet) => !roulette.isValidBetShape(bet)))
         return res.status(400).json({ code: "INVALID_BET" })
 
-    if (normalizedBets.some((b) => roulette.numberBetOutOfRange(b, rouletteType)))
-        return res.status(400).json({ code: "INVALID_BET" })
-
-    if (normalizedBets.some((b) => roulette.invalidBetTypeFor(b)))
+    if (bets.some((b) => roulette.invalidBetTypeFor(b, rouletteType)))
         return res.status(400).json({ code: "INVALID_BET_TYPE" })
-
-    const evaluateBet = (bet, winningNumber) => {
-        let isWinner = false
-        let multiplier = 0
-        const { type, bet: singleBet, amount } = bet
-
-        if (roulette.isNumberBet(type)) {
-            isWinner = roulette.isNumberWinner(singleBet, winningNumber)
-            multiplier = 36
-        } else if (roulette.isColorBet(type)) {
-            isWinner = roulette.isColorWinner(singleBet, winningNumber)
-            multiplier = 2
-        } else if (roulette.isOddBet(type)) {
-            isWinner = roulette.isOddWinner(singleBet, winningNumber)
-            multiplier = 2
-        } else if (roulette.isTwelveBet(type)) {
-            isWinner = roulette.isTwelveWinner(singleBet, winningNumber)
-            multiplier = 3
-        } else if (roulette.isRowBet(type)) {
-            isWinner = roulette.isRowWinner(singleBet, winningNumber)
-            multiplier = 3
-        } else if (roulette.isHalfBet(type)) {
-            isWinner = roulette.isHalfWinner(singleBet, winningNumber)
-            multiplier = 2
-        }
-
-        return {
-            ...bet,
-            type,
-            singleBet,
-            amount,
-            isWinner,
-            payout: isWinner ? amount * multiplier : 0,
-            multiplier,
-        }
-    }
 
     try {
         await User.updateUserBalance(id, -totalAmount, { type: "BET" })
 
         const winningNumber = roulette.spinRoulette(rouletteType)
-        const results = normalizedBets.map((b) => evaluateBet(b, winningNumber))
+        const results = bets.map((bet) => roulette.evaluateBet(bet, winningNumber))
 
         const totalPayout = results.reduce((acc, r) => acc + r.payout, 0)
 
@@ -83,7 +45,7 @@ const spinRoulette = async (req, res) => {
             details: {
                 type: "ROULETTE",
                 rouletteType,
-                bets: normalizedBets,
+                bets,
                 winningNumber: winningNumber === 37 ? "00" : winningNumber,
                 color,
                 payout: totalPayout,
@@ -104,7 +66,8 @@ const spinRoulette = async (req, res) => {
                 winningNumber: winningNumber === 37 ? "00" : winningNumber,
                 color,
                 isZero: roulette.isZero(winningNumber),
-                isZeroZero: roulette.isZeroZero(winningNumber),
+                isZeroZero:
+                    rouletteType === "ZeroZero" ? roulette.isZeroZero(winningNumber) : false,
             },
         })
     } catch (error) {
