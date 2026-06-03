@@ -1,7 +1,7 @@
 import React from "react"
 import BettingInput from "../../BettingInput"
 import ChipSelector from "./ChipSelector"
-import { useRoulette } from "@/providers/rouletteContext"
+import { useRoulette } from "@/providers/RouletteProvider"
 import { useNotification } from "@/providers/NotificationProvider"
 import BettingBtns from "../../BettingBtns"
 import { useLocale } from "@/providers/LocaleProvider"

@@ -1,5 +1,5 @@
 import React, { useMemo, useRef, useCallback } from "react"
-import { useRoulette } from "@/providers/rouletteContext"
+import { useRoulette } from "@/providers/RouletteProvider"
 import PlacedChips from "../chips/PlacedChips"
 import NumberBet from "./NumberBet"
 import ExternalBet from "./ExternalBet"

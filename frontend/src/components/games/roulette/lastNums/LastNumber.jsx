@@ -1,5 +1,5 @@
 import React from "react"
-import { useRoulette } from "@/providers/rouletteContext"
+import { useRoulette } from "@/providers/RouletteProvider"
 
 const LastNumber = ({ number }) => {
   const { rouletteValues } = useRoulette()

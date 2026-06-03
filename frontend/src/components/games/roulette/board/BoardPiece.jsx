@@ -1,5 +1,5 @@
 import React from "react"
-import { useRoulette } from "@/providers/rouletteContext"
+import { useRoulette } from "@/providers/RouletteProvider"
 import { useLocale } from "@/providers/LocaleProvider"
 import Button from "@/components/buttons/Button"
 
