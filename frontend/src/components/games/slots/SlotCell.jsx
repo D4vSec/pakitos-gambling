@@ -68,7 +68,7 @@ const SlotCell = ({ symbol, isWinning = false, animKey, isLanding = false }) => 
         relative w-full aspect-square overflow-hidden rounded-lg border-2 select-none
         transition-colors duration-300
         ${isWinning
-          ? "border-warning bg-warning/15 shadow-lg shadow-warning/40"
+          ? "border-success bg-success/15 shadow-lg shadow-success/40"
           : "border-neutral-700 bg-neutral-800"
         }
       `}

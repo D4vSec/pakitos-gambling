@@ -41,8 +41,6 @@ const SlotGrid = ({
   theme = "starwars",
   paylines,
   isSpinning = false,
-  hasWon = false,
-  onAllSettled,
   onSizeChange,
 }) => {
   const containerRef = useRef(null)
@@ -94,11 +92,7 @@ const SlotGrid = ({
           className={`
             relative grid h-full w-full overflow-hidden rounded-lg border-2 bg-neutral-950
             transition-all duration-500
-            ${
-              hasWon
-                ? "border-warning shadow-[0_0_24px_4px] shadow-warning/40"
-                : "border-amber-600/40 shadow-inner"
-            }
+            border-amber-600/40 shadow-inner
           `}
           style={{ gridTemplateColumns: `repeat(${cols}, ${reelSize}px)` }}>
           {Array.from({ length: cols }, (_, c) => (
@@ -115,7 +109,6 @@ const SlotGrid = ({
               isSpinning={isSpinning}
               stopDelay={getStopDelays(cols)[c] ?? c * 350}
               winningCells={winningCells}
-              onSettled={c === cols - 1 ? onAllSettled : undefined}
             />
           ))}
 

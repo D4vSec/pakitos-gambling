@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { useSlots } from "@/providers/SlotsProvider"
 import { useSession } from "@/providers/SessionProvider"
 import { useNotification } from "@/providers/NotificationProvider"
@@ -7,14 +7,10 @@ import BettingInput from "@/components/games/BettingInput"
 import BettingBtns from "@/components/games/BettingBtns"
 import SlotActions from "./controls/SlotActions"
 import SlotTypeSelector from "./controls/SlotTypeSelector"
-import {
-  IconHourglass,
-  IconPlayerPlay,
-  IconRotate360,
-} from "@tabler/icons-react"
+import { IconHourglass, IconRotate360 } from "@tabler/icons-react"
 import { getAnimTotalMs, DIMS_BY_TYPE } from "./slotConstants"
 
-const NOTIF_DURATION = 1000
+const NOTIF_DURATION = 2000
 
 const SlotControls = ({ type = "3x3", theme = "starwars", onTypeChange }) => {
   const dims = DIMS_BY_TYPE[type] ?? { rows: 3, cols: 3 }
@@ -35,6 +31,7 @@ const SlotControls = ({ type = "3x3", theme = "starwars", onTypeChange }) => {
   const isActive = !!session
   const isBusy = loading || isAnimating
   const displayedBetAmount = isActive ? session.bet : betAmount
+  const displayedSpins = isAnimating ? visibleHistorySpins : spins
 
   const scheduleAnimEnd = () => {
     clearTimeout(animTimerRef.current)
@@ -62,7 +59,7 @@ const SlotControls = ({ type = "3x3", theme = "starwars", onTypeChange }) => {
     try {
       const sessionRes = await createSession({ type, amount })
       // Use gameId directly from response — state update is async and not ready yet
-      const result = await spin(sessionRes.gameId)
+      const result = await spin(sessionRes)
       scheduleAnimEnd()
       setTimeout(() => {
         addNotification(
@@ -76,11 +73,7 @@ const SlotControls = ({ type = "3x3", theme = "starwars", onTypeChange }) => {
         )
       }, NOTIF_DELAY_MS)
       setTimeout(() => {
-        if (result.balance != null)
-          setUser((prev) => ({
-            ...prev,
-            balance: Number(result.balance).toFixed(2),
-          }))
+        syncResultBalance(result.balance)
       }, NOTIF_DELAY_MS + NOTIF_DURATION)
     } catch {
       setIsAnimating(false)
@@ -94,7 +87,7 @@ const SlotControls = ({ type = "3x3", theme = "starwars", onTypeChange }) => {
 
     setVisibleHistorySpins(spins)
     setIsAnimating(true)
-    const result = await spin(session.gameId).catch(() => null)
+    const result = await spin(session).catch(() => null)
     if (!result) {
       setIsAnimating(false)
       return
@@ -113,11 +106,7 @@ const SlotControls = ({ type = "3x3", theme = "starwars", onTypeChange }) => {
       )
     }, NOTIF_DELAY_MS)
     setTimeout(() => {
-      if (result.balance != null)
-        setUser((prev) => ({
-          ...prev,
-          balance: Number(result.balance).toFixed(2),
-        }))
+      syncResultBalance(result.balance)
     }, NOTIF_DELAY_MS + NOTIF_DURATION)
   }
 
@@ -147,6 +136,25 @@ const SlotControls = ({ type = "3x3", theme = "starwars", onTypeChange }) => {
     setBetAmount("")
   }
 
+  const syncResultBalance = (balance) => {
+    const nextBalance = Number(balance)
+    if (!Number.isFinite(nextBalance)) return
+
+    setUser((prev) => ({
+      ...prev,
+      balance: nextBalance.toFixed(2),
+    }))
+  }
+
+  useEffect(() => {
+    setBetAmount("")
+    setLastBet("")
+    setVisibleHistorySpins([])
+    setIsAnimating(false)
+    clearTimeout(animTimerRef.current)
+    return () => clearTimeout(animTimerRef.current)
+  }, [type])
+
   return (
     <div className="flex h-full w-full flex-col gap-4 p-2 sm:gap-1.5 sm:p-2 lg:gap-5 lg:p-4">
       <h2 className="text-center text-xl font-bold">
@@ -166,9 +174,11 @@ const SlotControls = ({ type = "3x3", theme = "starwars", onTypeChange }) => {
           />
 
           <SlotActions
+            disabled={isBusy}
             theme={theme}
             showSessionActions={false}
             showHistory={false}
+            bet={0}
           />
 
           <BettingBtns
@@ -186,11 +196,13 @@ const SlotControls = ({ type = "3x3", theme = "starwars", onTypeChange }) => {
 
       {isActive && (
         <SlotActions
+          disabled={isBusy}
           onSpin={handleSpin}
           onEndSession={handleEnd}
           theme={theme}
-          spins={spins}
-          historySpins={isAnimating ? visibleHistorySpins : spins}
+          spins={displayedSpins}
+          historySpins={displayedSpins}
+          bet={session?.bet ?? 0}
         />
       )}
     </div>

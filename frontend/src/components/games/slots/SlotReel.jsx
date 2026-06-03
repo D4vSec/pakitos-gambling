@@ -300,7 +300,7 @@ const SlotReel = ({
               transition-all duration-500
               ${
                 isWin
-                  ? "border-warning bg-warning/15 shadow-[0_0_12px_2px] shadow-warning/50"
+                  ? "border-neutral-700 bg-neutral-800 shadow-[0_0_12px_2px] shadow-success/40"
                   : "border-neutral-700 bg-neutral-800"
               }
             `}
@@ -337,6 +337,9 @@ const SlotReel = ({
               style={{ transform: "translateY(100%)", opacity: 0 }}
               alt=""
             />
+            {isWin && (
+              <div className="pointer-events-none absolute inset-0 z-10 bg-success/20" />
+            )}
           </div>
         )
       })}

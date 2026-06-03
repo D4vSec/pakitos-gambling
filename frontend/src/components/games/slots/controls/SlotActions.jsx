@@ -6,19 +6,29 @@ import {
   IconCoinBitcoin,
   IconHourglass,
   IconListDetails,
-  IconPlayerPlay,
+  IconRotate360,
   IconTable,
+  IconCancel,
 } from "@tabler/icons-react"
 import {
   GAME_ACTION_BUTTON_BASIS_CLASS,
   GAME_ACTION_BUTTON_FULL_CLASS,
 } from "../../gameControlClasses"
 
-const MAX_HISTORY_RESULTS = 10
+const MAX_HISTORY_RESULTS = 15
+const formatSignedAmount = (value) => {
+  const amount = Number(value) || 0
+  const absAmount = Math.abs(amount).toFixed(2)
 
-const SlotHistory = ({ spins, compact = false }) => {
+  if (amount > 0) return `+${absAmount}`
+  if (amount < 0) return `-${absAmount}`
+  return absAmount
+}
+
+const SlotHistory = ({ spins, bet = 0, compact = false }) => {
   const { t } = useLocale()
   const recentSpins = spins.slice(-MAX_HISTORY_RESULTS)
+  const numericBet = Number(bet) || 0
   const historyClassName = compact
     ? "flex flex-col gap-2 text-sm"
     : "hidden flex-col gap-3 text-sm lg:flex lg:text-base"
@@ -49,7 +59,15 @@ const SlotHistory = ({ spins, compact = false }) => {
         {recentSpins.map((spin, index) => {
           const spinNumber =
             spin.spinNumber ?? spins.length - recentSpins.length + index + 1
-          const payout = Number(spin.payout || 0).toFixed(2)
+          const netAmount = spin.isWinner
+            ? Number(spin.payout || 0)
+            : -numericBet
+          const amountClass =
+            netAmount > 0
+              ? "text-success"
+              : netAmount < 0
+                ? "text-error/80"
+                : "text-base-content/70"
 
           return (
             <div key={`${spinNumber}-${index}`} className={rowClassName}>
@@ -60,8 +78,9 @@ const SlotHistory = ({ spins, compact = false }) => {
                 }`}>
                 {t(`games.result.${spin.isWinner ? "win" : "lose"}`)}
               </span>
-              <span className="flex items-center gap-1 font-bold">
-                {payout}
+              <span
+                className={`flex items-center gap-1 font-bold ${amountClass}`}>
+                {formatSignedAmount(netAmount)}
                 <IconCoinBitcoin className={iconClassName} />
               </span>
             </div>
@@ -72,9 +91,20 @@ const SlotHistory = ({ spins, compact = false }) => {
   )
 }
 
-const SlotSessionSummary = ({ spins }) => {
+const SlotSessionSummary = ({ spins, bet = 0 }) => {
   const { t } = useLocale()
-  const totalPayout = spins.reduce((acc, spin) => acc + (spin.payout ?? 0), 0)
+  const numericBet = Number(bet) || 0
+  const totalOutcome = spins.reduce(
+    (acc, spin) =>
+      acc + (spin.isWinner ? Number(spin.payout || 0) : -numericBet),
+    0,
+  )
+  const totalOutcomeClass =
+    totalOutcome > 0
+      ? "text-success"
+      : totalOutcome < 0
+        ? "text-error/80"
+        : "text-base-content/70"
 
   return (
     <div className="flex flex-col gap-2 text-sm">
@@ -86,8 +116,9 @@ const SlotSessionSummary = ({ spins }) => {
         <span className="opacity-70">
           {t("games.slots.controls.totalPayout")}:
         </span>
-        <div className="flex items-center gap-1 font-bold">
-          <span>{totalPayout.toFixed(2)}</span>
+        <div
+          className={`flex items-center gap-1 font-bold ${totalOutcomeClass}`}>
+          <span>{formatSignedAmount(totalOutcome)}</span>
           <IconCoinBitcoin className="h-5 w-5 sm:h-6 sm:w-6" />
         </div>
       </div>
@@ -102,6 +133,7 @@ const SlotActions = ({
   theme = "starwars",
   spins = [],
   historySpins = spins,
+  bet = 0,
   showSessionActions = true,
   showHistory = true,
 }) => {
@@ -111,7 +143,7 @@ const SlotActions = ({
 
   return (
     <>
-      {showSessionActions && <SlotSessionSummary spins={spins} />}
+      {showSessionActions && <SlotSessionSummary spins={spins} bet={bet} />}
 
       <div
         className={`grid w-full ${mobileActionsCols} ${mobileActionsGap} lg:hidden`}>
@@ -121,6 +153,7 @@ const SlotActions = ({
           onClick={() =>
             document.getElementById("slot-paytable-modal")?.showModal()
           }
+          disabled={disabled}
           svg={<IconTable />}>
           {t("games.slots.controls.paytable")}
         </Button>
@@ -131,7 +164,7 @@ const SlotActions = ({
             onClick={() =>
               document.getElementById("slot-history-modal")?.showModal()
             }
-            disabled={historySpins.length === 0}
+            disabled={disabled || historySpins.length === 0}
             svg={<IconListDetails />}>
             {t("games.slots.controls.history")}
           </Button>
@@ -146,7 +179,7 @@ const SlotActions = ({
               className={`${GAME_ACTION_BUTTON_FULL_CLASS} text-lg font-bold`}
               onClick={onSpin}
               disabled={disabled}
-              svg={disabled ? <IconHourglass /> : <IconPlayerPlay />}>
+              svg={disabled ? <IconHourglass /> : <IconRotate360 />}>
               {!disabled && t("games.slots.controls.spin")}
             </Button>
 
@@ -154,12 +187,13 @@ const SlotActions = ({
               variant="primary"
               className={GAME_ACTION_BUTTON_FULL_CLASS}
               onClick={onEndSession}
-              disabled={disabled}>
+              disabled={disabled}
+              svg={<IconCancel />}>
               {t("games.slots.controls.endSession")}
             </Button>
           </div>
 
-          <SlotHistory spins={historySpins} />
+          <SlotHistory spins={historySpins} bet={bet} />
         </>
       )}
 
@@ -171,7 +205,7 @@ const SlotActions = ({
             <h3 className="mb-4 text-center text-lg font-bold">
               {t("games.slots.controls.history")}
             </h3>
-            <SlotHistory spins={historySpins} compact />
+            <SlotHistory spins={historySpins} bet={bet} compact />
             <div className="modal-action">
               <form method="dialog" className="w-full">
                 <Button

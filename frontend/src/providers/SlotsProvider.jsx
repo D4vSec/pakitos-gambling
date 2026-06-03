@@ -55,6 +55,19 @@ const SlotsProvider = ({ type = "3x3", children }) => {
     }
   }, [getAccessToken, getRefreshToken])
 
+  const syncUserBalance = useCallback(
+    (balance) => {
+      const nextBalance = Number(balance)
+      if (!Number.isFinite(nextBalance)) return
+
+      setUser((prev) => ({
+        ...prev,
+        balance: nextBalance.toFixed(2),
+      }))
+    },
+    [setUser],
+  )
+
   const createSession = async ({ type = "3x5", amount }) => {
     setLoading(true)
     setError(null)
@@ -80,6 +93,7 @@ const SlotsProvider = ({ type = "3x3", children }) => {
       setSpins([])
       setStoredGameId(type, res.gameId)
       setStoredPaylines(type, res.paylines)
+      syncUserBalance(res.balance)
 
       return res
     } catch (err) {
@@ -91,19 +105,59 @@ const SlotsProvider = ({ type = "3x3", children }) => {
     }
   }
 
-  const spin = async (gameId) => {
+  const spin = async (gameInput) => {
+    const gameId =
+      typeof gameInput === "object" && gameInput !== null
+        ? gameInput.gameId
+        : gameInput
+    const sessionBet =
+      typeof gameInput === "object" && gameInput !== null
+        ? gameInput.bet
+        : undefined
+    const sessionMachineType =
+      typeof gameInput === "object" && gameInput !== null
+        ? gameInput.machineType
+        : undefined
+
     setLoading(true)
     setIsSpinning(true)
     setError(null)
-    const MIN_SPIN_MS = 3000
+    const MIN_SPIN_MS = 2500
     const t0 = Date.now()
     try {
+      const betAmount = Number(sessionBet ?? session?.bet ?? 0)
       const res = await post(`/api/v1/slots/${gameId}/spin`, {
         headers: authHeaders(),
       })
 
       if (!res || res.code) {
         throw new Error(res?.code || "UNKNOWN_ERROR")
+      }
+
+      console.log("[SlotsProvider] incoming game info", {
+        gameId,
+        machineType: sessionMachineType ?? session?.machineType,
+        bet: sessionBet ?? session?.bet,
+        betAmount,
+        spinNumber: res.spinNumber,
+        payout: res.payout,
+        isWinner: res.isWinner,
+        balance: res.balance,
+        winningLines: res.winningLines,
+      })
+
+      if (!Number.isFinite(Number(res.payout ?? 0))) {
+        console.warn("[SlotsProvider] unexpected payout value", {
+          gameId,
+          payout: res.payout,
+        })
+      }
+
+      if (!Number.isFinite(Number(res.balance ?? 0))) {
+        console.warn("[SlotsProvider] unexpected balance value", {
+          gameId,
+          balance: res.balance,
+        })
       }
 
       const spinResult = {
@@ -116,9 +170,6 @@ const SlotsProvider = ({ type = "3x3", children }) => {
       }
 
       setSpins((s) => [...s, spinResult])
-
-      // Balance is applied by SlotControls after the animation completes,
-      // so the player sees the result before the number changes.
 
       return res
     } catch (err) {

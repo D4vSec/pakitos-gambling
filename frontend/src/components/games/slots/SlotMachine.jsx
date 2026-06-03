@@ -18,18 +18,10 @@ const SlotMachine = ({ type = "3x3", theme = "starwars" }) => {
   const rows = session?.rows ?? defaultRows
   const cols = session?.cols ?? defaultCols
 
-  const [settledSpinCount, setSettledSpinCount] = useState(0)
   const [gridFrameWidth, setGridFrameWidth] = useState(null)
-
-  const handleAllSettled = useCallback(() => {
-    setSettledSpinCount(spins.length)
-  }, [spins.length])
   const handleGridSizeChange = useCallback(({ width }) => {
     setGridFrameWidth((prevWidth) => (prevWidth === width ? prevWidth : width))
   }, [])
-  const hasWon =
-    !isSpinning && settledSpinCount === spins.length && !!lastSpin?.isWinner
-
   return (
     <div className="flex h-full w-full flex-row items-stretch gap-2 p-1.5 md:gap-3 md:p-3">
       <div className="hidden lg:flex">
@@ -66,8 +58,6 @@ const SlotMachine = ({ type = "3x3", theme = "starwars" }) => {
               theme={theme}
               paylines={session?.paylines}
               isSpinning={isSpinning}
-              hasWon={hasWon}
-              onAllSettled={handleAllSettled}
               onSizeChange={handleGridSizeChange}
             />
           </div>
