@@ -22,14 +22,9 @@ const createRoulette = () => {
     const isValidBetShape = (bet) =>
         bet && typeof bet === "object" && Number.isFinite(bet.amount) && bet.amount > 0
 
-    const numberBetOutOfRange = (bet, rouletteType) => {
-        if (!isNumberBet(bet.type)) return false
-        const max = rouletteType === "Zero" ? 36 : 37
-        return !Number.isInteger(bet.bet) || bet.bet < 0 || bet.bet > max
-    }
 
-    const invalidBetTypeFor = (bet) => {
-        if (isNumberBet(bet.type)) return false
+    const invalidBetTypeFor = (bet, rouletteType) => {
+        if (isNumberBet(bet.type)) return !Number.isInteger(bet.bet) || bet.bet < 0 || bet.bet > (rouletteType === "Zero" ? 36 : 37)
         if (isColorBet(bet.type)) return !["red", "black"].includes(bet.bet)
         if (isOddBet(bet.type)) return !["odd", "even"].includes(bet.bet)
         if (isTwelveBet(bet.type)) return !["1-12", "13-24", "25-36"].includes(bet.bet)
@@ -37,8 +32,6 @@ const createRoulette = () => {
         if (isHalfBet(bet.type)) return !["1-18", "19-36"].includes(bet.bet)
         return false
     }
-
-    
 
     const spinRoulette = (rouletteType) => {
         if (rouletteType === "Zero") return randomIntInclusive(0, 36)
@@ -90,6 +83,42 @@ const createRoulette = () => {
         return false
     }
 
+    const evaluateBet = (bet, winningNumber) => {
+        let isWinner = false
+        let multiplier = 0
+        const { type, bet: singleBet, amount } = bet
+
+        if (isNumberBet(type)) {
+            isWinner = isNumberWinner(singleBet, winningNumber)
+            multiplier = 36
+        } else if (isColorBet(type)) {
+            isWinner = isColorWinner(singleBet, winningNumber)
+            multiplier = 2
+        } else if (isOddBet(type)) {
+            isWinner = isOddWinner(singleBet, winningNumber)
+            multiplier = 2
+        } else if (isTwelveBet(type)) {
+            isWinner = isTwelveWinner(singleBet, winningNumber)
+            multiplier = 3
+        } else if (isRowBet(type)) {
+            isWinner = isRowWinner(singleBet, winningNumber)
+            multiplier = 3
+        } else if (isHalfBet(type)) {
+            isWinner = isHalfWinner(singleBet, winningNumber)
+            multiplier = 2
+        }
+
+        return {
+            ...bet,
+            type,
+            singleBet,
+            amount,
+            isWinner,
+            payout: isWinner ? amount * multiplier : 0,
+            multiplier,
+        }
+    }
+
     const getColor = (winningNumber) => {
         if (redNumbers.includes(winningNumber)) return "red"
         if (blackNumbers.includes(winningNumber)) return "black"
@@ -115,8 +144,8 @@ const createRoulette = () => {
         getColor,
         isAllowedRoulette,
         isValidBetShape,
-        numberBetOutOfRange,
         invalidBetTypeFor,
+        evaluateBet,
     }
 }
 
