@@ -56,8 +56,24 @@ const getActiveSessionsByUserId = async (userId) => {
 	return rows
 }
 
+const getSessionsByUserId = async (userId) => {
+	const { rows } = await db.query(
+		"SELECT id, user_id, device_info, revoked, expires_at, created_at FROM sessions WHERE user_id = $1 ORDER BY created_at DESC",
+		[userId],
+	)
+	return rows
+}
+
 const revokeSession = async (sessionId) => {
-	await db.query("UPDATE sessions SET revoked = true WHERE id = $1", [sessionId])
+	await db.query("UPDATE sessions SET revoked = true WHERE id::text = $1", [String(sessionId)])
+}
+
+const revokeSessionByUserId = async (userId, sessionId) => {
+	const { rowCount } = await db.query(
+		"UPDATE sessions SET revoked = true WHERE user_id = $1 AND id::text = $2 AND revoked = false",
+		[userId, String(sessionId)],
+	)
+	return rowCount > 0
 }
 
 const verifyTokenMatch = async (sessions, refreshToken) => {
@@ -68,4 +84,4 @@ const verifyTokenMatch = async (sessions, refreshToken) => {
 	return null
 }
 
-export default { createSession, getActiveSessionsByUserId, revokeSession, verifyTokenMatch }
+export default { createSession, getActiveSessionsByUserId, getSessionsByUserId, revokeSession, revokeSessionByUserId, verifyTokenMatch }

@@ -5,9 +5,11 @@ import { getDiscoveredRoutes } from '../helpers/routeDiscovery.js'
 
 const ADMIN_ID = '11111111-1111-1111-1111-111111111111'
 const TARGET_USER_ID = '22222222-2222-2222-2222-222222222222'
+const TARGET_SESSION_ID = '1'
 const normalizeAdminPath = (path) =>
 	path
 		.replace('/v1/user/1/transactions', `/v1/user/${TARGET_USER_ID}/transactions`)
+		.replace('/v1/user/1/sessions/1', `/v1/user/${TARGET_USER_ID}/sessions/${TARGET_SESSION_ID}`)
 		.replace('/v1/user/1', `/v1/user/${TARGET_USER_ID}`)
 		.replace('/v1/bets/admin/1/close', `/v1/bets/admin/${TARGET_USER_ID}/close`)
 		.replace('/v1/bets/admin/1/settlement-preview', `/v1/bets/admin/${TARGET_USER_ID}/settlement-preview`)
@@ -35,6 +37,13 @@ vi.mock('#models/user.model', () => ({
 		countTransactionsByUser: vi.fn(),
 		countUsers: vi.fn(),
 		findUsers: vi.fn(),
+	},
+}))
+
+vi.mock('#models/session.model', () => ({
+	default: {
+		getSessionsByUserId: vi.fn(),
+		revokeSessionByUserId: vi.fn(),
 	},
 }))
 
@@ -76,6 +85,7 @@ vi.mock('#services/audit.service', () => ({
 
 const { default: app } = await import('../../src/app.js')
 const { default: User } = await import('#models/user.model')
+const { default: Session } = await import('#models/session.model')
 const { default: Bets } = await import('#models/bets.model')
 const { default: BetService } = await import('#services/bets.service')
 const { default: AuditService } = await import('#services/audit.service')
@@ -141,6 +151,8 @@ describe('admin routes', () => {
 		User.countTransactionsByUser.mockResolvedValue(0)
 		User.countUsers.mockResolvedValue(1)
 		User.findUsers.mockResolvedValue([{ id: ADMIN_ID, username: 'admin', email: 'admin@example.com', role: 'admin', balance: 100 }])
+		Session.getSessionsByUserId.mockResolvedValue([])
+		Session.revokeSessionByUserId.mockResolvedValue(true)
 
 		Bets.deleteBet.mockResolvedValue(undefined)
 		Bets.getBetById.mockResolvedValue({ id: TARGET_USER_ID, label: 'Bet', ends_at: '2026-06-01T18:00:00.000Z', status: 'open' })

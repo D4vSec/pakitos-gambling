@@ -156,6 +156,22 @@
         "balance": "Sold",
         "noUser": "Utilizator negăsit"
       },
+      "sessions": {
+        "title": "Sesiuni",
+        "table": {
+          "device": "Dispozitiv",
+          "status": "Status",
+          "createdAt": "Creat la",
+          "expiresAt": "Expiră la",
+          "actions": "Actiuni",
+          "remove": "Sterge sesiunea"
+        },
+        "status": {
+          "active": "Activă",
+          "expired": "Expirată",
+          "revoked": "Revocată"
+        }
+      },
       "transactions": {
         "title": "Tranzacții",
         "table": {
@@ -654,6 +670,7 @@
       "INVALID_QUERY_PARAMS": "Filtrele trimise nu sunt valide",
       "INVALID_ENDS_AT": "Data închiderii nu este validă",
       "OPTION_NOT_FOUND": "Opțiunea selectată nu există",
+      "SESSION_NOT_FOUND": "Sesiunea nu a fost gasita",
       "USER_NOT_FOUND": "Utilizatorul nu a fost găsit",
       "BET_NOT_FOUND": "Pariul nu există",
       "BET_ALREADY_PLACED_ON_MARKET": "Ai plasat deja un pariu pe această piață",
@@ -725,6 +742,7 @@
       "BET_DELETED": "Pariul a fost șters cu succes",
       "BET_CLOSED_BY_ADMIN": "Pariul a fost închis cu succes",
       "BET_SETTLED": "Pariul a fost lichidat cu succes",
+      "SESSION_REVOKED": "Sesiunea a fost stearsa",
       "BET_PLACED": "Pariul a fost plasat cu succes",
       "LANGUAGE_CHANGED": "Limba schimbată",
       "USER_UPDATED": "Profil actualizat",

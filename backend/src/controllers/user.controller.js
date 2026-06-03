@@ -1,4 +1,5 @@
 import User from '#models/user.model'
+import Session from '#models/session.model'
 import * as z from 'zod'
 import {
 	TRANSACTION_FILTER_FIELDS,
@@ -328,6 +329,30 @@ const getTransactions = async (req, res) => {
 	}
 }
 
+const getSessions = async (req, res) => {
+	try {
+		const sessions = await Session.getSessionsByUserId(req.user.id)
+		res.json({ sessions: sessions || [] })
+	} catch (err) {
+		logger.error(err)
+		res.status(500).json({ code: 'SERVER_ERROR' })
+	}
+}
+
+const revokeSession = async (req, res) => {
+	try {
+		const { sessionId } = req.params
+
+		const revoked = await Session.revokeSessionByUserId(req.user.id, sessionId)
+		if (!revoked) return res.status(404).json({ code: 'SESSION_NOT_FOUND' })
+
+		res.status(200).json({ code: 'SUCCESS' })
+	} catch (err) {
+		logger.error(err)
+		res.status(500).json({ code: 'SERVER_ERROR' })
+	}
+}
+
 const createTransaction = async (req, res) => {
 	try {
 		const schema = z
@@ -426,4 +451,38 @@ const getTransactionsByUserId = async (req, res) => {
 	}
 }
 
-export { getProfile, getAllUsers, deleteSelf, updateSelf, getUserById, updateUserById, deleteUserById, getSelfBalance, getTransactions, createTransaction, getTransactionsByUserId }
+const getSessionsByUserId = async (req, res) => {
+	try {
+		const { id } = req.params
+		if (!isValidUuid(id)) return res.status(404).json({ code: 'USER_NOT_FOUND' })
+
+		const user = await User.findUserById(id)
+		if (!user) return res.status(404).json({ code: 'USER_NOT_FOUND' })
+
+		const sessions = await Session.getSessionsByUserId(id)
+		res.json({ sessions: sessions || [] })
+	} catch (err) {
+		logger.error(err)
+		res.status(500).json({ code: 'SERVER_ERROR' })
+	}
+}
+
+const revokeSessionByUserId = async (req, res) => {
+	try {
+		const { id, sessionId } = req.params
+		if (!isValidUuid(id)) return res.status(404).json({ code: 'USER_NOT_FOUND' })
+
+		const user = await User.findUserById(id)
+		if (!user) return res.status(404).json({ code: 'USER_NOT_FOUND' })
+
+		const revoked = await Session.revokeSessionByUserId(id, sessionId)
+		if (!revoked) return res.status(404).json({ code: 'SESSION_NOT_FOUND' })
+
+		res.status(200).json({ code: 'SUCCESS' })
+	} catch (err) {
+		logger.error(err)
+		res.status(500).json({ code: 'SERVER_ERROR' })
+	}
+}
+
+export { getProfile, getAllUsers, deleteSelf, updateSelf, getUserById, updateUserById, deleteUserById, getSelfBalance, getTransactions, getSessions, revokeSession, createTransaction, getTransactionsByUserId, getSessionsByUserId, revokeSessionByUserId }

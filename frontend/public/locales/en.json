@@ -156,6 +156,22 @@
         "balance": "Balance",
         "noUser": "User not found"
       },
+      "sessions": {
+        "title": "Sessions",
+        "table": {
+          "device": "Device",
+          "status": "Status",
+          "createdAt": "Created at",
+          "expiresAt": "Expires at",
+          "actions": "Actions",
+          "remove": "Remove session"
+        },
+        "status": {
+          "active": "Active",
+          "expired": "Expired",
+          "revoked": "Revoked"
+        }
+      },
       "transactions": {
         "title": "Transactions",
         "table": {
@@ -654,6 +670,7 @@
       "INVALID_QUERY_PARAMS": "The provided filters are invalid",
       "INVALID_ENDS_AT": "Closing date is invalid",
       "OPTION_NOT_FOUND": "The selected option does not exist",
+      "SESSION_NOT_FOUND": "Session not found",
       "USER_NOT_FOUND": "User not found",
       "BET_NOT_FOUND": "Bet not found",
       "BET_ALREADY_PLACED_ON_MARKET": "You already placed a bet on this market",
@@ -725,6 +742,7 @@
       "BET_DELETED": "Bet deleted successfully",
       "BET_CLOSED_BY_ADMIN": "Bet closed successfully",
       "BET_SETTLED": "Bet settled successfully",
+      "SESSION_REVOKED": "Session removed successfully",
       "BET_PLACED": "Bet placed successfully",
       "LANGUAGE_CHANGED": "Language changed successfully",
       "USER_UPDATED": "Profile updated",

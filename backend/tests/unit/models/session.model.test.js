@@ -55,4 +55,27 @@ describe('session model', () => {
 		expect(comparePassword).toHaveBeenNthCalledWith(1, 'hash-1', 'refresh-token')
 		expect(comparePassword).toHaveBeenNthCalledWith(2, 'hash-2', 'refresh-token')
 	})
+
+	it('lists user sessions without refresh token hashes', async () => {
+		const rows = [{ id: 'session-1', user_id: 'user-1', revoked: false }]
+		db.query.mockResolvedValueOnce({ rows })
+
+		await expect(sessionModel.getSessionsByUserId('user-1')).resolves.toEqual(rows)
+
+		expect(db.query).toHaveBeenCalledWith(
+			'SELECT id, user_id, device_info, revoked, expires_at, created_at FROM sessions WHERE user_id = $1 ORDER BY created_at DESC',
+			['user-1'],
+		)
+	})
+
+	it('revokes a user session by user and session id', async () => {
+		db.query.mockResolvedValueOnce({ rowCount: 1 })
+
+		await expect(sessionModel.revokeSessionByUserId('user-1', 'session-1')).resolves.toBe(true)
+
+		expect(db.query).toHaveBeenCalledWith(
+			'UPDATE sessions SET revoked = true WHERE user_id = $1 AND id::text = $2 AND revoked = false',
+			['user-1', 'session-1'],
+		)
+	})
 })

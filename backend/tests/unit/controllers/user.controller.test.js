@@ -14,6 +14,13 @@ vi.mock('#models/user.model', () => ({
 	},
 }))
 
+vi.mock('#models/session.model', () => ({
+	default: {
+		getSessionsByUserId: vi.fn(),
+		revokeSessionByUserId: vi.fn(),
+	},
+}))
+
 vi.mock('#services/audit.service', () => ({
 	default: {
 		createAudit: vi.fn(),
@@ -34,15 +41,20 @@ import {
 	deleteUserById,
 	getAllUsers,
 	getProfile,
+	getSessions,
+	getSessionsByUserId,
 	getSelfBalance,
 	getTransactions,
 	getTransactionsByUserId,
 	getUserById,
+	revokeSession,
+	revokeSessionByUserId,
 	updateSelf,
 	updateUserById,
 } from '../../../src/controllers/user.controller.js'
 import Audit from '#services/audit.service'
 import User from '#models/user.model'
+import Session from '#models/session.model'
 import logger from '#utils/logger.utils'
 
 const createResponse = () => ({
@@ -362,6 +374,7 @@ describe('user.controller profile and admin actions', () => {
 
 describe('user.controller lists', () => {
 	const userId = '11111111-1111-1111-1111-111111111111'
+	const sessionId = '1'
 
 	beforeEach(() => {
 		vi.clearAllMocks()
@@ -376,6 +389,11 @@ describe('user.controller lists', () => {
 			{ id: 't1', amount: 25, type: 'BET' },
 			{ id: 't2', amount: 50, type: 'WIN' },
 		])
+		Session.getSessionsByUserId.mockResolvedValue([
+			{ id: 's1', user_id: userId, revoked: false },
+			{ id: 's2', user_id: userId, revoked: true },
+		])
+		Session.revokeSessionByUserId.mockResolvedValue(true)
 	})
 
 	it('returns paginated users', async () => {
@@ -446,6 +464,40 @@ describe('user.controller lists', () => {
 		expect(res.json).toHaveBeenCalledWith({ code: 'SERVER_ERROR' })
 	})
 
+	it('returns sessions for the current user', async () => {
+		const res = createResponse()
+
+		await getSessions({ user: { id: userId } }, res)
+
+		expect(Session.getSessionsByUserId).toHaveBeenCalledWith(userId)
+		expect(res.json).toHaveBeenCalledWith({
+			sessions: [
+				{ id: 's1', user_id: userId, revoked: false },
+				{ id: 's2', user_id: userId, revoked: true },
+			],
+		})
+	})
+
+	it('revokes a session for the current user', async () => {
+		const res = createResponse()
+
+		await revokeSession({ user: { id: userId }, params: { sessionId } }, res)
+
+		expect(Session.revokeSessionByUserId).toHaveBeenCalledWith(userId, sessionId)
+		expect(res.status).toHaveBeenCalledWith(200)
+		expect(res.json).toHaveBeenCalledWith({ code: 'SUCCESS' })
+	})
+
+	it('returns 404 when revoking a missing current user session', async () => {
+		Session.revokeSessionByUserId.mockResolvedValueOnce(false)
+		const res = createResponse()
+
+		await revokeSession({ user: { id: userId }, params: { sessionId } }, res)
+
+		expect(res.status).toHaveBeenCalledWith(404)
+		expect(res.json).toHaveBeenCalledWith({ code: 'SESSION_NOT_FOUND' })
+	})
+
 	it('returns paginated transactions for another user', async () => {
 		User.findUserById.mockResolvedValueOnce({ id: userId })
 		const res = createResponse()
@@ -464,6 +516,34 @@ describe('user.controller lists', () => {
 				{ id: 't2', amount: 50, type: 'WIN' },
 			],
 		})
+	})
+
+	it('returns sessions for another user', async () => {
+		User.findUserById.mockResolvedValueOnce({ id: userId })
+		const res = createResponse()
+
+		await getSessionsByUserId({ params: { id: userId } }, res)
+
+		expect(User.findUserById).toHaveBeenCalledWith(userId)
+		expect(Session.getSessionsByUserId).toHaveBeenCalledWith(userId)
+		expect(res.json).toHaveBeenCalledWith({
+			sessions: [
+				{ id: 's1', user_id: userId, revoked: false },
+				{ id: 's2', user_id: userId, revoked: true },
+			],
+		})
+	})
+
+	it('revokes a session for another user', async () => {
+		User.findUserById.mockResolvedValueOnce({ id: userId })
+		const res = createResponse()
+
+		await revokeSessionByUserId({ params: { id: userId, sessionId } }, res)
+
+		expect(User.findUserById).toHaveBeenCalledWith(userId)
+		expect(Session.revokeSessionByUserId).toHaveBeenCalledWith(userId, sessionId)
+		expect(res.status).toHaveBeenCalledWith(200)
+		expect(res.json).toHaveBeenCalledWith({ code: 'SUCCESS' })
 	})
 
 	it('returns 404 when the requested user does not exist', async () => {

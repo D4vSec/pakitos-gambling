@@ -8,6 +8,7 @@ import useAPI from "@/hooks/useAPI"
 import Title from "@/components/layout/fonts/Title"
 import Button from "@/components/buttons/Button"
 import GradientBg from "@/components/layout/GradientBg"
+import UserSessions from "@/components/profile/UserSessions"
 import { IconAlertTriangle, IconShield, IconUser } from "@tabler/icons-react"
 
 const Profile = () => {
@@ -147,6 +148,8 @@ const Profile = () => {
               </div>
             </div>
           </div>
+
+          <UserSessions />
 
           {/* SEGURIDAD */}
           <div className="card bg-base-100 shadow-xl border border-warning/30">

@@ -156,6 +156,22 @@
         "balance": "Saldo",
         "noUser": "Usuario no encontrado"
       },
+      "sessions": {
+        "title": "Sesiones",
+        "table": {
+          "device": "Dispositivo",
+          "status": "Estado",
+          "createdAt": "Creada",
+          "expiresAt": "Expira",
+          "actions": "Acciones",
+          "remove": "Eliminar sesion"
+        },
+        "status": {
+          "active": "Activa",
+          "expired": "Expirada",
+          "revoked": "Revocada"
+        }
+      },
       "transactions": {
         "title": "Transacciones",
         "table": {
@@ -654,6 +670,7 @@
       "INVALID_QUERY_PARAMS": "Los filtros enviados no son válidos",
       "INVALID_ENDS_AT": "La fecha de cierre no es válida",
       "OPTION_NOT_FOUND": "La opción seleccionada no existe",
+      "SESSION_NOT_FOUND": "Sesion no encontrada",
       "USER_NOT_FOUND": "Usuario no encontrado",
       "BET_NOT_FOUND": "La apuesta no existe",
       "BET_ALREADY_PLACED_ON_MARKET": "Ya realizaste una apuesta en este mercado",
@@ -725,6 +742,7 @@
       "BET_DELETED": "Apuesta eliminada correctamente",
       "BET_CLOSED_BY_ADMIN": "Apuesta cerrada correctamente",
       "BET_SETTLED": "Apuesta liquidada correctamente",
+      "SESSION_REVOKED": "Sesion eliminada correctamente",
       "BET_PLACED": "Apuesta realizada correctamente",
       "LANGUAGE_CHANGED": "Idioma cambiado correctamente",
       "USER_UPDATED": "Perfil actualizado",
