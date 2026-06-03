@@ -568,7 +568,15 @@
         "description": "Discover open and closed markets across all kinds of stories, with a cleaner view built to compare options and jump in at a glance.",
         "emptyTitle": "No bets match the current filters",
         "emptyDescription": "Try another name or change the selected status.",
-        "marketCount": "{{count}} markets"
+        "marketCount": "{{count}} markets",
+        "showing": "Showing {{start}}-{{end}} of {{total}}",
+        "cards": "Cards",
+        "list": "List",
+        "cardView": "Card view",
+        "listView": "List view",
+        "perPage": "Per page",
+        "previousPage": "Previous page",
+        "nextPage": "Next page"
       },
       "card": {
         "market": "Market",

@@ -52,10 +52,10 @@ describe('bets model', () => {
 		expect(db.query).toHaveBeenCalledWith(
 			"SELECT bets.*, CASE WHEN bets.ends_at < CURRENT_TIMESTAMP THEN 'closed' ELSE 'open' END AS status, COALESCE(json_agg(json_build_object('id', bets_options.id, 'label', bets_options.label, 'odd', bets_options.odd) ORDER BY bets_options.id) FILTER (WHERE bets_options.id IS NOT NULL), '[]'::json) AS options FROM bets LEFT JOIN bets_options ON bets.id = bets_options.bet_id WHERE bets.ends_at >= $1 AND bets.ends_at <= $2 AND bets.created_at >= $3 AND bets.created_at <= $4 GROUP BY bets.id ORDER BY bets.created_at DESC LIMIT $5 OFFSET $6",
 			[
-				'2026-06-01T00:00:00.000Z',
-				'2026-06-30T23:59:59.999Z',
-				'2026-05-01T00:00:00.000Z',
-				'2026-05-31T23:59:59.999Z',
+				'2026-06-01 00:00:00.000',
+				'2026-06-30 23:59:59.999',
+				'2026-05-01 00:00:00.000',
+				'2026-05-31 23:59:59.999',
 				20,
 				0,
 			],

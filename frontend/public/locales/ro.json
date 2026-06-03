@@ -568,7 +568,15 @@
         "description": "Descoperă piețe deschise și închise pe tot felul de subiecte, într-o interfață mai curată pentru a compara opțiunile și a intra rapid în piață.",
         "emptyTitle": "Nu există pariuri pentru filtrele curente",
         "emptyDescription": "Încearcă alt nume sau schimbă starea selectată.",
-        "marketCount": "{{count}} piețe"
+        "marketCount": "{{count}} piețe",
+        "showing": "Se afișează {{start}}-{{end}} din {{total}}",
+        "cards": "Carduri",
+        "list": "Lista",
+        "cardView": "Vizualizare carduri",
+        "listView": "Vizualizare lista",
+        "perPage": "Pe pagina",
+        "previousPage": "Pagina anterioara",
+        "nextPage": "Pagina urmatoare"
       },
       "card": {
         "market": "Piață",

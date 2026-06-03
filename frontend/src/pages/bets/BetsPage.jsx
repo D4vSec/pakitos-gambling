@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react"
-import BetMarketCard from "@/components/bets/BetMarketCard"
+import AllBets from "@/components/bets/AllBets"
 import BetsFilterBar from "@/components/bets/BetsFilterBar"
 import GoBackBtn from "@/components/buttons/GoBackBtn"
 import GradientBg from "@/components/layout/GradientBg"
@@ -8,27 +8,40 @@ import useBets from "@/hooks/useBets"
 import { useLocale } from "@/providers/LocaleProvider"
 import Loading from "@/components/Loading"
 import Subtitle from "@/components/layout/fonts/Subtitle"
-import { PacmanLoader } from "react-spinners"
 
 const BetsPage = () => {
   const { t } = useLocale()
   const { getBets } = useBets()
   const [bets, setBets] = useState([])
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(12)
   const [loading, setLoading] = useState(true)
   const [isRefreshing, setIsRefreshing] = useState(false)
   const hasLoadedRef = useRef(false)
   const [filters, setFilters] = useState({
     name: "",
     status: "",
+    fromEndsAt: "",
+    toEndsAt: "",
   })
 
   const appliedFilters = useMemo(
     () => ({
       name: filters.name || "",
       status: filters.status || "",
+      fromEndsAt: filters.fromEndsAt || "",
+      toEndsAt: filters.toEndsAt || "",
     }),
     [filters],
   )
+
+  const totalPages = Math.max(1, Math.ceil(bets.length / pageSize))
+  const safePage = Math.min(page, totalPages)
+  const paginatedBets = useMemo(() => {
+    const start = (safePage - 1) * pageSize
+
+    return bets.slice(start, start + pageSize)
+  }, [bets, safePage, pageSize])
 
   useEffect(() => {
     let isActive = true
@@ -91,43 +104,44 @@ const BetsPage = () => {
 
         <BetsFilterBar
           filters={filters}
-          onChange={(nextFilters) =>
+          onChange={(nextFilters) => {
             setFilters((previousFilters) => ({
               ...previousFilters,
               ...nextFilters,
             }))
-          }
+            setPage(1)
+          }}
         />
 
         <section className="relative min-h-40">
           {bets.length > 0 ? (
-            <div
-              className={`grid grid-cols-1 gap-4 transition-opacity duration-200 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 ${
-                isRefreshing ? "opacity-45" : "opacity-100"
-              }`}>
-              {bets.map((bet) => (
-                <BetMarketCard key={bet.id} bet={bet} />
-              ))}
-            </div>
+            <AllBets
+              bets={paginatedBets}
+              totalBets={bets.length}
+              page={safePage}
+              pageSize={pageSize}
+              totalPages={totalPages}
+              onPageChange={setPage}
+              onPageSizeChange={(nextPageSize) => {
+                setPageSize(nextPageSize)
+                setPage(1)
+              }}
+              isRefreshing={isRefreshing}
+            />
           ) : (
             <div
               className={`rounded-4xl border border-dashed border-base-300 bg-base-100 p-8 text-center shadow-xl transition-opacity duration-200 ${
                 isRefreshing ? "opacity-45" : "opacity-100"
-              }`}>
-              <h2 className="text-xl md:text-2xl font-bold">
-                {t("pages.bets.list.emptyTitle")}
-              </h2>
+              }`}
+            >
+              <h2 className="text-xl md:text-2xl font-bold">{t("pages.bets.list.emptyTitle")}</h2>
               <p className="mt-3 text-sm md:text-md text-base-content/70">
                 {t("pages.bets.list.emptyDescription")}
               </p>
             </div>
           )}
 
-          {isRefreshing && (
-            <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-              <PacmanLoader color="#fff" size={14} />
-            </div>
-          )}
+          {isRefreshing && <Loading />}
         </section>
       </div>
     </GradientBg>

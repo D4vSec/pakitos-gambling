@@ -54,8 +54,8 @@ describe('admin query utils', () => {
 	})
 
 	it('normalizes date boundaries', () => {
-		expect(normalizeDate('2026-05-13', 'start')).toBe('2026-05-13T00:00:00.000Z')
-		expect(normalizeDate('2026-05-13', 'end')).toBe('2026-05-13T23:59:59.999Z')
+		expect(normalizeDate('2026-05-13', 'start')).toBe('2026-05-13 00:00:00.000')
+		expect(normalizeDate('2026-05-13', 'end')).toBe('2026-05-13 23:59:59.999')
 		expect(normalizeDate('not-a-date')).toBeNull()
 	})
 

@@ -568,7 +568,15 @@
         "description": "Descubre apuestas abiertas y cerradas sobre temas de todo tipo, con una vista más limpia para comparar opciones y entrar al mercado de un vistazo.",
         "emptyTitle": "No hay apuestas que coincidan con los filtros",
         "emptyDescription": "Prueba con otro nombre o cambia el estado seleccionado.",
-        "marketCount": "{{count}} mercados"
+        "marketCount": "{{count}} mercados",
+        "showing": "Mostrando {{start}}-{{end}} de {{total}}",
+        "cards": "Tarjetas",
+        "list": "Lista",
+        "cardView": "Vista de tarjetas",
+        "listView": "Vista de lista",
+        "perPage": "Por pagina",
+        "previousPage": "Pagina anterior",
+        "nextPage": "Pagina siguiente"
       },
       "card": {
         "market": "Mercado",

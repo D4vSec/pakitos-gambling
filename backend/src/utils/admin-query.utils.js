@@ -34,7 +34,7 @@ const normalizeDate = (value, boundary = "start") => {
 	if (typeof value !== "string") return null
 
 	if (DATE_ONLY_REGEX.test(value)) {
-		return boundary === "end" ? `${value}T23:59:59.999Z` : `${value}T00:00:00.000Z`
+		return boundary === "end" ? `${value} 23:59:59.999` : `${value} 00:00:00.000`
 	}
 
 	const parsed = new Date(value)

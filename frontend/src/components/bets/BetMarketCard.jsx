@@ -7,11 +7,11 @@ import { formatBetDate, sortBetOptions } from "@/utils/betsUtils"
 
 const BetMarketCard = ({ bet }) => {
   const { t } = useLocale()
-  const previewOptions = sortBetOptions(bet.options || []).slice(0, 2)
+  const options = sortBetOptions(bet.options || [])
   const userBet = bet.userBet || null
   const hasUserBet = Boolean(bet.hasUserBet && userBet)
 
-  const displayOptions = previewOptions.map((option) => {
+  const displayOptions = options.map((option) => {
     if (!hasUserBet || option.id !== userBet.betOptionId) {
       return option
     }
