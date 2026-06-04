@@ -13,8 +13,16 @@ import { getAnimTotalMs, DIMS_BY_TYPE } from "./slotConstants"
 const NOTIF_DURATION = 2000
 
 const SlotControls = ({ theme = "starwars" }) => {
-  const { type, setType, session, spins, loading, createSession, spin, endSession } =
-    useSlots()
+  const {
+    type,
+    setType,
+    session,
+    spins,
+    loading,
+    createSession,
+    spin,
+    endSession,
+  } = useSlots()
   const dims = DIMS_BY_TYPE[type] ?? { rows: 3, cols: 3 }
   const NOTIF_DELAY_MS = getAnimTotalMs(dims.cols, dims.rows)
   const { user, setUser } = useSession()
@@ -91,7 +99,11 @@ const SlotControls = ({ theme = "starwars" }) => {
         )
       }, NOTIF_DELAY_MS)
       setTimeout(() => {
-        adjustUserBalance(result.isWinner ? Number(sessionRes.bet ?? amount) + Number(result.payout ?? 0) : 0)
+        adjustUserBalance(
+          result.isWinner
+            ? Number(sessionRes.bet ?? amount) + Number(result.payout ?? 0)
+            : 0,
+        )
       }, NOTIF_DELAY_MS)
     } catch {
       if (hasAppliedSpinDeduction) {
@@ -134,7 +146,11 @@ const SlotControls = ({ theme = "starwars" }) => {
       )
     }, NOTIF_DELAY_MS)
     setTimeout(() => {
-      adjustUserBalance(result.isWinner ? Number(session.bet ?? 0) + Number(result.payout ?? 0) : 0)
+      adjustUserBalance(
+        result.isWinner
+          ? Number(session.bet ?? 0) + Number(result.payout ?? 0)
+          : 0,
+      )
     }, NOTIF_DELAY_MS)
   }
 
@@ -174,22 +190,24 @@ const SlotControls = ({ theme = "starwars" }) => {
   }, [type])
 
   return (
-    <div className="flex h-full w-full flex-col gap-4 p-2 sm:gap-1.5 sm:p-2 lg:gap-5 lg:p-4">
+    <div className="flex h-full w-full flex-col p-2 gap-2 sm:p-2 lg:p-4">
       <h2 className="text-center text-xl font-bold">
         {t(`games.slots.themes.${theme}.title`)}
       </h2>
 
       {!isActive && (
         <>
-          <SlotActions
-            disabled={isBusy}
-            theme={theme}
-            showSessionActions={false}
-            showHistory={false}
-            bet={0}
-          />
+          <div className="">
+            <SlotActions
+              disabled={isBusy}
+              theme={theme}
+              showSessionActions={false}
+              showHistory={false}
+              bet={0}
+            />
+          </div>
 
-          <form className="flex flex-col gap-2  lg:contents" onSubmit={handleStartSubmit}>
+          <form className="flex flex-col gap-4 " onSubmit={handleStartSubmit}>
             <SlotTypeSelector type={type} onTypeChange={setType} />
 
             <BettingInput
@@ -215,15 +233,17 @@ const SlotControls = ({ theme = "starwars" }) => {
       )}
 
       {isActive && (
-        <SlotActions
-          disabled={isBusy}
-          onSpin={handleSpin}
-          onEndSession={handleEnd}
-          theme={theme}
-          spins={displayedSpins}
-          historySpins={displayedSpins}
-          bet={session?.bet ?? 0}
-        />
+        <div className="mt-4">
+          <SlotActions
+            disabled={isBusy}
+            onSpin={handleSpin}
+            onEndSession={handleEnd}
+            theme={theme}
+            spins={displayedSpins}
+            historySpins={displayedSpins}
+            bet={session?.bet ?? 0}
+          />
+        </div>
       )}
     </div>
   )

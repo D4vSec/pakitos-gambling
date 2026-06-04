@@ -139,14 +139,14 @@ const SlotActions = ({
 }) => {
   const { t } = useLocale()
   const mobileActionsCols = showHistory ? "grid-cols-2" : "grid-cols-1"
-  const mobileActionsGap = "gap-2 sm:gap-2"
+  const mobileActionsGap = "gap-2"
 
   return (
     <>
       {showSessionActions && <SlotSessionSummary spins={spins} bet={bet} />}
 
       <div
-        className={`grid w-full ${mobileActionsCols} ${mobileActionsGap} lg:hidden`}>
+        className={`py-2 grid w-full ${mobileActionsCols} ${mobileActionsGap} lg:hidden`}>
         <Button
           type="button"
           variant="neutral"
@@ -175,7 +175,7 @@ const SlotActions = ({
 
       {showSessionActions && (
         <>
-          <div className="grid w-full grid-cols-1 gap-2 xl:grid-cols-2">
+          <div className="grid w-full grid-cols-1 gap-2 lg:pt-4 lg:pb-4 2xl:grid-cols-2">
             <Button
               type="button"
               variant="secondary"

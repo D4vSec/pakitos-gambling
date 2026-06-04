@@ -4,6 +4,13 @@ import { useBlackjack } from "@/providers/BlackjackProvider"
 import { GAME_ACTION_BUTTON_FLEX_CLASS } from "../../gameControlClasses"
 
 import { useLocale } from "@/providers/LocaleProvider"
+import {
+  IconArrowsSplit,
+  IconCards,
+  IconHandStop,
+  IconMultiplier2x,
+  IconPlayCard,
+} from "@tabler/icons-react"
 
 const BlackjackActions = ({ disabled }) => {
   const { game, hit, stand, double, split } = useBlackjack()
@@ -12,19 +19,27 @@ const BlackjackActions = ({ disabled }) => {
   const buttons = [
     {
       label: "games.blackjack.actions.hit",
+      variant: "primary",
+      svg: <IconPlayCard />,
       onClick: hit,
     },
     {
       label: "games.blackjack.actions.stand",
+      variant: "secondary",
+      svg: <IconHandStop />,
       onClick: stand,
     },
     {
       label: "games.blackjack.actions.split",
+      variant: "neutral",
       onClick: split,
+      svg: <IconArrowsSplit />,
       disabled: Boolean(game?.split),
     },
     {
       label: "games.blackjack.actions.double",
+      variant: "accent",
+      svg: <IconMultiplier2x />,
       onClick: double,
     },
   ]
@@ -34,9 +49,10 @@ const BlackjackActions = ({ disabled }) => {
         <Button
           key={i}
           type="button"
-          variant="neutral"
+          variant={btn.variant}
           className={GAME_ACTION_BUTTON_FLEX_CLASS}
           onClick={btn.onClick}
+          svg={btn.svg ?? <></>}
           disabled={disabled || btn.disabled}>
           {t(btn.label)}
         </Button>

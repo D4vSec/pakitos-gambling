@@ -52,7 +52,7 @@ const RouletteControls = () => {
         {t(`games.roulette.types.${type}`)}
       </h2>
 
-      <form className="flex flex-col gap-1.5" onSubmit={handleSubmit}>
+      <form className="flex flex-col gap-4 " onSubmit={handleSubmit}>
         <BettingInput bet={{ betAmount, updateBetAmount }} readOnly />
 
         <BettingBtns

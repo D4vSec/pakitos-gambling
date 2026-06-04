@@ -37,7 +37,7 @@ const GameCard = ({ game }) => {
         ))}
       </div>
 
-      <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+      <div className="absolute inset-0 z-100 flex items-center justify-center bg-black/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
         <Button svg={<IconTriangle className="rotate-90 scale-75 stroke-2" />}>
           {t("pages.home.cards.playNow")}
         </Button>
