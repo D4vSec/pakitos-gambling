@@ -33,6 +33,7 @@ const BlackjackActions = ({ disabled }) => {
       {buttons.map((btn, i) => (
         <Button
           key={i}
+          type="button"
           variant="neutral"
           className={GAME_ACTION_BUTTON_FLEX_CLASS}
           onClick={btn.onClick}

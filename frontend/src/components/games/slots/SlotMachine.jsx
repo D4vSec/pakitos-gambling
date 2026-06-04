@@ -6,8 +6,8 @@ import SlotPaytable from "./SlotPaytable"
 import { DIMS_BY_TYPE } from "./slotConstants"
 import "./SlotMachine.css"
 
-const SlotMachine = ({ type = "3x3", theme = "starwars" }) => {
-  const { session, spins, isSpinning } = useSlots()
+const SlotMachine = ({ theme = "starwars" }) => {
+  const { type, session, spins, isSpinning } = useSlots()
   const { t } = useLocale()
 
   const lastSpin = spins[spins.length - 1] ?? null

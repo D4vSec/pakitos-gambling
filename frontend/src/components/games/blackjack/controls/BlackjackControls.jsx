@@ -7,19 +7,24 @@ import BettingBtns from "../../BettingBtns"
 const BlackjackControls = () => {
   const { startGame, betAmount, updateBetAmount, repeatBet, doubleBet, clearBet, game } =
     useBlackjack()
+  const hasOngoingGame = game?.status === "ongoing"
+  const disabled = !hasOngoingGame
 
   const handleStartGame = () => {
+    if (hasOngoingGame) return
     startGame()
   }
 
-  const hasOngoingGame = game?.status === "ongoing"
-  const disabled = !hasOngoingGame
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    handleStartGame()
+  }
 
   return (
     <div className="flex h-full w-full flex-col gap-1.5 p-2 sm:gap-1.5 sm:p-2 lg:gap-5 lg:p-4">
       <h2 className="m-0 p-0 text-center text-xl font-bold">Blackjack</h2>
 
-      <div className="flex flex-col gap-4 lg:hidden">
+      <form className="flex flex-col gap-4 lg:hidden" onSubmit={handleSubmit}>
         <BettingInput bet={{ betAmount, updateBetAmount }} readOnly={hasOngoingGame} />
 
         {hasOngoingGame ? (
@@ -35,9 +40,9 @@ const BlackjackControls = () => {
             disabled={false}
           />
         )}
-      </div>
+      </form>
 
-      <div className="hidden lg:flex lg:flex-col lg:gap-4">
+      <form className="hidden lg:flex lg:flex-col lg:gap-4" onSubmit={handleSubmit}>
         <BettingInput bet={{ betAmount, updateBetAmount }} readOnly={!disabled} />
 
         <BettingBtns
@@ -51,7 +56,7 @@ const BlackjackControls = () => {
         >
           <BlackjackActions disabled={disabled} />
         </BettingBtns>
-      </div>
+      </form>
     </div>
   )
 }

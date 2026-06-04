@@ -12,11 +12,11 @@ import { getAnimTotalMs, DIMS_BY_TYPE } from "./slotConstants"
 
 const NOTIF_DURATION = 2000
 
-const SlotControls = ({ type = "3x3", theme = "starwars", onTypeChange }) => {
+const SlotControls = ({ theme = "starwars" }) => {
+  const { type, setType, session, spins, loading, createSession, spin, endSession } =
+    useSlots()
   const dims = DIMS_BY_TYPE[type] ?? { rows: 3, cols: 3 }
   const NOTIF_DELAY_MS = getAnimTotalMs(dims.cols, dims.rows)
-  const { session, spins, loading, createSession, spin, endSession } =
-    useSlots()
   const { user, setUser } = useSession()
   const { addNotification } = useNotification()
   const { t } = useLocale()
@@ -40,6 +40,21 @@ const SlotControls = ({ type = "3x3", theme = "starwars", onTypeChange }) => {
     }, NOTIF_DELAY_MS)
   }
 
+  const adjustUserBalance = (delta) => {
+    const amount = Number(delta)
+    if (!Number.isFinite(amount) || amount === 0) return
+
+    setUser((prev) => {
+      const currentBalance = Number(prev?.balance ?? 0)
+      if (!Number.isFinite(currentBalance)) return prev
+
+      return {
+        ...prev,
+        balance: (currentBalance + amount).toFixed(2),
+      }
+    })
+  }
+
   const handleStart = async () => {
     if (isBusy) return
 
@@ -55,9 +70,12 @@ const SlotControls = ({ type = "3x3", theme = "starwars", onTypeChange }) => {
     setLastBet(betAmount)
     setVisibleHistorySpins([])
     setIsAnimating(true)
+    let hasAppliedSpinDeduction = false
 
     try {
       const sessionRes = await createSession({ type, amount })
+      adjustUserBalance(-Number(sessionRes.bet ?? amount))
+      hasAppliedSpinDeduction = true
       // Use gameId directly from response — state update is async and not ready yet
       const result = await spin(sessionRes)
       scheduleAnimEnd()
@@ -73,12 +91,20 @@ const SlotControls = ({ type = "3x3", theme = "starwars", onTypeChange }) => {
         )
       }, NOTIF_DELAY_MS)
       setTimeout(() => {
-        syncResultBalance(result.balance)
-      }, NOTIF_DELAY_MS + NOTIF_DURATION)
+        adjustUserBalance(result.isWinner ? Number(sessionRes.bet ?? amount) + Number(result.payout ?? 0) : 0)
+      }, NOTIF_DELAY_MS)
     } catch {
+      if (hasAppliedSpinDeduction) {
+        adjustUserBalance(Number(amount))
+      }
       setIsAnimating(false)
       clearTimeout(animTimerRef.current)
     }
+  }
+
+  const handleStartSubmit = async (e) => {
+    e.preventDefault()
+    await handleStart()
   }
 
   const handleSpin = async () => {
@@ -87,8 +113,10 @@ const SlotControls = ({ type = "3x3", theme = "starwars", onTypeChange }) => {
 
     setVisibleHistorySpins(spins)
     setIsAnimating(true)
+    adjustUserBalance(-Number(session.bet ?? 0))
     const result = await spin(session).catch(() => null)
     if (!result) {
+      adjustUserBalance(Number(session.bet ?? 0))
       setIsAnimating(false)
       return
     }
@@ -106,8 +134,8 @@ const SlotControls = ({ type = "3x3", theme = "starwars", onTypeChange }) => {
       )
     }, NOTIF_DELAY_MS)
     setTimeout(() => {
-      syncResultBalance(result.balance)
-    }, NOTIF_DELAY_MS + NOTIF_DURATION)
+      adjustUserBalance(result.isWinner ? Number(session.bet ?? 0) + Number(result.payout ?? 0) : 0)
+    }, NOTIF_DELAY_MS)
   }
 
   const handleEnd = async () => {
@@ -136,16 +164,6 @@ const SlotControls = ({ type = "3x3", theme = "starwars", onTypeChange }) => {
     setBetAmount("")
   }
 
-  const syncResultBalance = (balance) => {
-    const nextBalance = Number(balance)
-    if (!Number.isFinite(nextBalance)) return
-
-    setUser((prev) => ({
-      ...prev,
-      balance: nextBalance.toFixed(2),
-    }))
-  }
-
   useEffect(() => {
     setBetAmount("")
     setLastBet("")
@@ -162,17 +180,7 @@ const SlotControls = ({ type = "3x3", theme = "starwars", onTypeChange }) => {
       </h2>
 
       {!isActive && (
-        <div className="flex flex-col gap-2  lg:contents">
-          <SlotTypeSelector type={type} onTypeChange={onTypeChange} />
-
-          <BettingInput
-            bet={{
-              betAmount: displayedBetAmount,
-              updateBetAmount,
-            }}
-            readOnly={isActive || isBusy}
-          />
-
+        <>
           <SlotActions
             disabled={isBusy}
             theme={theme}
@@ -181,17 +189,29 @@ const SlotControls = ({ type = "3x3", theme = "starwars", onTypeChange }) => {
             bet={0}
           />
 
-          <BettingBtns
-            actions={{
-              repeat: repeatBet,
-              double: doubleBet,
-              clear: clearBet,
-              start: handleStart,
-              startLabel: "games.slots.controls.spin",
-              startSvg: isBusy ? <IconHourglass /> : <IconRotate360 />,
-            }}
-          />
-        </div>
+          <form className="flex flex-col gap-2  lg:contents" onSubmit={handleStartSubmit}>
+            <SlotTypeSelector type={type} onTypeChange={setType} />
+
+            <BettingInput
+              bet={{
+                betAmount: displayedBetAmount,
+                updateBetAmount,
+              }}
+              readOnly={isActive || isBusy}
+            />
+
+            <BettingBtns
+              actions={{
+                repeat: repeatBet,
+                double: doubleBet,
+                clear: clearBet,
+                start: handleStart,
+                startLabel: "games.slots.controls.spin",
+                startSvg: isBusy ? <IconHourglass /> : <IconRotate360 />,
+              }}
+            />
+          </form>
+        </>
       )}
 
       {isActive && (

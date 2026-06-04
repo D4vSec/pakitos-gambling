@@ -60,8 +60,6 @@ const NotificationProvider = ({ children }) => {
     "/roulette0",
     "/roulette00",
     "/slots",
-    "/slots3x5",
-    "/slots5x5",
     "/blackjack",
     "/capyroad",
   ]

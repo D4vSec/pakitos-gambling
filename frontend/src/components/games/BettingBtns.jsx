@@ -12,8 +12,8 @@ import {
   GAME_ACTION_BUTTON_FULL_CLASS,
 } from "./gameControlClasses"
 
-const BettingBtns = ({ children, actions, disabled }) => {
-  const { repeat, clear, double, start } = actions
+const BettingBtns = ({ children, actions, disabled, startButtonType = "submit" }) => {
+  const { repeat, clear, double } = actions
   const { t } = useLocale()
   const disabledMap =
     typeof disabled === "object" && disabled !== null ? disabled : {}
@@ -34,6 +34,7 @@ const BettingBtns = ({ children, actions, disabled }) => {
         <Button
           variant="primary"
           className={buttonClassName}
+          type="button"
           svg={<IconRepeat />}
           onClick={repeat}
           disabled={isDisabled("repeat")}>
@@ -43,6 +44,7 @@ const BettingBtns = ({ children, actions, disabled }) => {
         <Button
           variant="primary"
           className={buttonClassName}
+          type="button"
           onClick={double}
           svg={
             <span className="scale-125">
@@ -56,6 +58,7 @@ const BettingBtns = ({ children, actions, disabled }) => {
         <Button
           variant="primary"
           className={buttonClassName}
+          type="button"
           onClick={clear}
           svg={<IconArrowBackUp />}
           disabled={isDisabled("clear")}>
@@ -68,8 +71,9 @@ const BettingBtns = ({ children, actions, disabled }) => {
       <Button
         variant="secondary"
         className={startButtonClassName}
+        type={startButtonType}
+        onClick={startButtonType === "button" ? actions.start : undefined}
         svg={startSvg}
-        onClick={start}
         disabled={isDisabled("start")}>
         {t(startLabel)}
       </Button>

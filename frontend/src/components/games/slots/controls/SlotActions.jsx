@@ -148,6 +148,7 @@ const SlotActions = ({
       <div
         className={`grid w-full ${mobileActionsCols} ${mobileActionsGap} lg:hidden`}>
         <Button
+          type="button"
           variant="neutral"
           className={GAME_ACTION_BUTTON_BASIS_CLASS}
           onClick={() =>
@@ -159,6 +160,7 @@ const SlotActions = ({
         </Button>
         {showHistory && (
           <Button
+            type="button"
             variant="neutral"
             className={GAME_ACTION_BUTTON_BASIS_CLASS}
             onClick={() =>
@@ -175,6 +177,7 @@ const SlotActions = ({
         <>
           <div className="grid w-full grid-cols-1 gap-2 xl:grid-cols-2">
             <Button
+              type="button"
               variant="secondary"
               className={`${GAME_ACTION_BUTTON_FULL_CLASS} text-lg font-bold`}
               onClick={onSpin}
@@ -184,6 +187,7 @@ const SlotActions = ({
             </Button>
 
             <Button
+              type="button"
               variant="primary"
               className={GAME_ACTION_BUTTON_FULL_CLASS}
               onClick={onEndSession}

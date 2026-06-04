@@ -30,6 +30,7 @@ const CapyroadActions = ({
       {buttons.map((btn, i) => (
         <Button
           key={i}
+          type="button"
           variant={btn.variant}
           className={GAME_ACTION_BUTTON_FLEX_CLASS}
           onClick={btn.onClick}

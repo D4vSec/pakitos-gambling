@@ -41,24 +41,31 @@ const RouletteControls = () => {
     spin()
   }
 
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    handleStartGame()
+  }
+
   return (
     <div className="flex h-full w-full flex-col gap-1.5 p-2 sm:gap-1.5 sm:p-2 lg:gap-5 lg:p-4">
       <h2 className="text-center text-xl font-bold ">
         {t(`games.roulette.types.${type}`)}
       </h2>
 
-      <BettingInput bet={{ betAmount, updateBetAmount }} readOnly />
+      <form className="flex flex-col gap-1.5" onSubmit={handleSubmit}>
+        <BettingInput bet={{ betAmount, updateBetAmount }} readOnly />
 
-      <BettingBtns
-        actions={{
-          repeat: repeatBets,
-          clear: clearBets,
-          double: doubleBets,
-          start: handleStartGame,
-          startLabel: "games.slots.controls.spin",
-          startSvg: isBusy ? <IconHourglass /> : <IconRotate360 />,
-        }}
-        disabled={isBusy}></BettingBtns>
+        <BettingBtns
+          actions={{
+            repeat: repeatBets,
+            clear: clearBets,
+            double: doubleBets,
+            start: handleStartGame,
+            startLabel: "games.slots.controls.spin",
+            startSvg: isBusy ? <IconHourglass /> : <IconRotate360 />,
+          }}
+          disabled={isBusy}></BettingBtns>
+      </form>
 
       <ChipSelector
         selectedChip={selectedChip}

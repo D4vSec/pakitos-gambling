@@ -24,19 +24,19 @@ const ExploreGames = () => {
     {
       game: "slots.beer",
       img: BeerManImg,
-      route: "/slots5x5",
+      route: "/slots/beerman",
       badges: [<TeachersColabBadge />, <CreatorsFavBadge />],
     },
     {
       game: "slots.starwars",
       img: StarWarsImg,
-      route: "/slots",
+      route: "/slots/starwars",
       badges: [<TeachersColabBadge />],
     },
     {
       game: "slots.stardewValley",
       img: StardewValleyImg,
-      route: "/slots3x5",
+      route: "/slots/stardewvalley",
       badges: [<TeachersColabBadge />],
     },
     {

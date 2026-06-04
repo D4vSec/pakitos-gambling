@@ -33,19 +33,19 @@ const slides = [
   {
     id: 4,
     game: "slots.starwars",
-    route: "/slots",
+    route: "/slots/starwars",
     image: StarWarsImg,
   },
   {
     id: 5,
     game: "slots.stardewValley",
-    route: "/slots3x5",
+    route: "/slots/stardewvalley",
     image: StardewValleyImg,
   },
   {
     id: 6,
     game: "slots.beer",
-    route: "/slots5x5",
+    route: "/slots/beerman",
     image: BeerManImg,
   },
   {

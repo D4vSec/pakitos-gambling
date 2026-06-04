@@ -13,9 +13,9 @@ const RandomGame = () => {
     "/roulette00",
     "/roulette0",
     "/capyroad",
-    "/slots",
-    "/slots3x5",
-    "/slots5x5",
+    "/slots/starwars",
+    "/slots/stardewvalley",
+    "/slots/beerman",
   ]
 
   const handleRandomGame = () => {

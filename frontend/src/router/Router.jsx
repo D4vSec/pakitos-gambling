@@ -12,8 +12,6 @@ import Register from "@/pages/Register"
 import Roulette0Game from "@/pages/games/Roulette0Game"
 import Roulette00Game from "@/pages/games/Roulette00Game"
 import SlotsGame from "@/pages/games/SlotsGame"
-import Slots3x5Game from "@/pages/games/Slots3x5Game"
-import Slots5x5Game from "@/pages/games/Slots5x5Game"
 import CapyroadGame from "@/pages/games/CapyroadGame"
 import AllUsers from "@/pages/admin/AllUsers"
 import AdminLayout from "@/pages/admin/AdminLayout"
@@ -119,23 +117,31 @@ const Router = () => {
         path="/slots"
         element={
           <ProtectedRoute>
-            <SlotsGame />
+            <Navigate to="/slots/starwars" replace />
           </ProtectedRoute>
         }
       />
       <Route
-        path="/slots3x5"
+        path="/slots/starwars"
         element={
           <ProtectedRoute>
-            <Slots3x5Game />
+            <SlotsGame theme="starwars" type="3x3" />
           </ProtectedRoute>
         }
       />
       <Route
-        path="/slots5x5"
+        path="/slots/stardewvalley"
         element={
           <ProtectedRoute>
-            <Slots5x5Game />
+            <SlotsGame theme="stardewvalley" type="3x5" />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/slots/beerman"
+        element={
+          <ProtectedRoute>
+            <SlotsGame theme="beerman" type="5x5" />
           </ProtectedRoute>
         }
       />
