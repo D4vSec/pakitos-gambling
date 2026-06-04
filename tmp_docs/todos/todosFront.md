@@ -3,7 +3,7 @@
 [x] Responsive slots
 
 -- Alto
-[] Responsive capy
+[x] Responsive capy
 [] cierre de sesiones del usuario
 
 -- Medio
@@ -14,6 +14,9 @@
 [] mal pago al ganar un double
 [] revisar lo del 3 a 2 del bj
 [] ver bug del resize de las slots
+[] bloquear el split para que solo se haga cuando las cartas son del mismo value
+[] cambiar el highlight de la mano
+[] check el posicionamiento en el tablero 
 
 -- Bajo
 [x] create/edit user para modificar el balance y el rol

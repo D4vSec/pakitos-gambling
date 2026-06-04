@@ -1,4 +1,4 @@
-import React from "react"
+ import React from "react"
 import BettingInput from "../../BettingInput"
 import BettingBtns from "../../BettingBtns"
 import { useCapyroad } from "@/providers/CapyroadProvider"
@@ -36,7 +36,7 @@ const CapyroadStats = ({ game }) => {
           <IconRoad className="h-4 w-4" />
           {t("games.capyroad.board.currentRoad")}:
         </span>
-        <span className="font-bold">{currentRoad}</span>
+        <span className="font-bold">{currentRoad + 1}</span>
       </div>
 
       <div className="flex items-center justify-between gap-2">

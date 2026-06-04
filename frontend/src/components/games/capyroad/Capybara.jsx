@@ -1,13 +1,18 @@
 import React from "react"
-import capybaraImg from "@/assets/games/capybara.webp"
+import capybaraImg from "@/assets/games/capybara.png"
 
 const Capybara = ({ crashed = false }) => {
   return (
     <div
-      className={`z-10 w-20 transition-all sm:w-24 md:w-28 xl:w-32 2xl:w-36 ${
+      className={`relative z-10 flex items-end justify-center transition-all w-20 sm:w-24 md:w-28 xl:w-34 ${
         crashed ? "grayscale scale-90" : ""
-      }`}>
-      <img src={capybaraImg} alt="Capybara" />
+      }`}
+    >
+      <img
+        src={capybaraImg}
+        alt="Capybara"
+        className="block h-auto w-full max-w-none object-contain"
+      />
     </div>
   )
 }

@@ -1,29 +1,17 @@
 import React from "react"
-import {
-  IconArrowBackUp,
-  IconMultiplier2x,
-  IconRepeat,
-  IconTriangle,
-} from "@tabler/icons-react"
+import { IconMultiplier2x, IconRepeat, IconTrash, IconTriangle } from "@tabler/icons-react"
 import Button from "../buttons/Button"
 import { useLocale } from "@/providers/LocaleProvider"
-import {
-  GAME_ACTION_BUTTON_BASIS_CLASS,
-  GAME_ACTION_BUTTON_FULL_CLASS,
-} from "./gameControlClasses"
+import { GAME_ACTION_BUTTON_BASIS_CLASS, GAME_ACTION_BUTTON_FULL_CLASS } from "./gameControlClasses"
 
 const BettingBtns = ({ children, actions, disabled, startButtonType = "submit" }) => {
   const { repeat, clear, double } = actions
   const { t } = useLocale()
-  const disabledMap =
-    typeof disabled === "object" && disabled !== null ? disabled : {}
-  const isAllDisabled =
-    typeof disabled === "boolean" ? disabled : Boolean(disabledMap.all)
+  const disabledMap = typeof disabled === "object" && disabled !== null ? disabled : {}
+  const isAllDisabled = typeof disabled === "boolean" ? disabled : Boolean(disabledMap.all)
   const isDisabled = (action) => isAllDisabled || Boolean(disabledMap[action])
   const startLabel = actions.startLabel ?? "games.actions.bet"
-  const startSvg = actions.startSvg ?? (
-    <IconTriangle className="rotate-90 scale-75 stroke-2" />
-  )
+  const startSvg = actions.startSvg ?? <IconTriangle className="rotate-90 scale-75 stroke-2" />
   const rootClassName = "flex w-full flex-wrap gap-2 md:gap-4"
   const buttonClassName = GAME_ACTION_BUTTON_BASIS_CLASS
   const startButtonClassName = GAME_ACTION_BUTTON_FULL_CLASS
@@ -37,7 +25,8 @@ const BettingBtns = ({ children, actions, disabled, startButtonType = "submit" }
           type="button"
           svg={<IconRepeat />}
           onClick={repeat}
-          disabled={isDisabled("repeat")}>
+          disabled={isDisabled("repeat")}
+        >
           <span className="hidden sm:flex">{t("games.actions.repeatBet")}</span>
         </Button>
 
@@ -51,7 +40,8 @@ const BettingBtns = ({ children, actions, disabled, startButtonType = "submit" }
               <IconMultiplier2x />
             </span>
           }
-          disabled={isDisabled("double")}>
+          disabled={isDisabled("double")}
+        >
           <span className="hidden sm:flex">{t("games.actions.doubleBet")}</span>
         </Button>
 
@@ -60,8 +50,9 @@ const BettingBtns = ({ children, actions, disabled, startButtonType = "submit" }
           className={buttonClassName}
           type="button"
           onClick={clear}
-          svg={<IconArrowBackUp />}
-          disabled={isDisabled("clear")}>
+          svg={<IconTrash />}
+          disabled={isDisabled("clear")}
+        >
           <span className="hidden sm:flex">{t("games.actions.clearBet")}</span>
         </Button>
       </div>
@@ -74,7 +65,8 @@ const BettingBtns = ({ children, actions, disabled, startButtonType = "submit" }
         type={startButtonType}
         onClick={startButtonType === "button" ? actions.start : undefined}
         svg={startSvg}
-        disabled={isDisabled("start")}>
+        disabled={isDisabled("start")}
+      >
         {t(startLabel)}
       </Button>
     </div>

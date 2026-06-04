@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef } from "react"
+import React, { useEffect, useLayoutEffect, useMemo, useRef } from "react"
 import gsap from "gsap"
 import Road from "./roads/Road"
 import Capybara from "./Capybara"
@@ -9,7 +9,6 @@ import ufoImg from "@/assets/games/gatovni.png"
 import { useCapyroad } from "@/providers/CapyroadProvider"
 import { useState } from "react"
 
-const CAMERA_OFFSET = 2
 const BREAKPOINTS = {
   SM: 640,
   MD: 768,
@@ -20,6 +19,7 @@ const BREAKPOINTS = {
 const getBoardSettings = () => {
   if (typeof window === "undefined") {
     return {
+      cameraOffset: 2,
       roadStripeCount: 6,
       visibleRoads: 5,
     }
@@ -29,6 +29,7 @@ const getBoardSettings = () => {
 
   if (width >= BREAKPOINTS.XXL) {
     return {
+      cameraOffset: 2,
       roadStripeCount: 8,
       visibleRoads: 6,
     }
@@ -36,6 +37,7 @@ const getBoardSettings = () => {
 
   if (width >= BREAKPOINTS.XL) {
     return {
+      cameraOffset: 2,
       roadStripeCount: 7,
       visibleRoads: 5,
     }
@@ -43,6 +45,7 @@ const getBoardSettings = () => {
 
   if (width >= BREAKPOINTS.MD) {
     return {
+      cameraOffset: 2,
       roadStripeCount: 7,
       visibleRoads: 5,
     }
@@ -50,12 +53,14 @@ const getBoardSettings = () => {
 
   if (width >= BREAKPOINTS.SM) {
     return {
+      cameraOffset: 1,
       roadStripeCount: 7,
       visibleRoads: 4,
     }
   }
 
   return {
+    cameraOffset: 0,
     roadStripeCount: 7,
     visibleRoads: 3,
   }
@@ -97,43 +102,45 @@ const Capyroad = () => {
   const [boardSettings, setBoardSettings] = useState(getBoardSettings)
   const [renderWindowStart, setRenderWindowStart] = useState(0)
   const [completedRoad, setCompletedRoad] = useState(0)
-  const { roadStripeCount, visibleRoads } = boardSettings
-  const cameraOffset = Math.min(CAMERA_OFFSET, Math.max(visibleRoads - 2, 1))
+  const { cameraOffset: configuredCameraOffset, roadStripeCount, visibleRoads } = boardSettings
+  const cameraOffset = Math.min(configuredCameraOffset, Math.max(visibleRoads - 3, 0))
 
   const multipliers = useMemo(() => {
-    if (
-      Array.isArray(game?.info?.multipliers) &&
-      game.info.multipliers.length > 0
-    ) {
+    if (Array.isArray(game?.info?.multipliers) && game.info.multipliers.length > 0) {
       return game.info.multipliers
     }
 
     return FALLBACK_MULTIPLIERS
   }, [game?.info?.multipliers])
 
-  const currentRoad = Math.min(
-    Number(game?.info?.road || 0),
-    Math.max(multipliers.length - 1, 0),
-  )
+  const currentRoad = Math.min(Number(game?.info?.road || 0), Math.max(multipliers.length - 1, 0))
   const isCrashed = Boolean(game?.info?.isCrashed)
   const isCrashSequence = Boolean(game?.status === "finished" && isCrashed)
   const isWinSequence = Boolean(game?.status === "finished" && !isCrashed)
-  const highlightedRoad = isCrashSequence
-    ? Math.max(currentRoad - 1, 0)
-    : currentRoad
-  const barrierRoad = isCrashSequence ? highlightedRoad : completedRoad
   const maxWindowStart = Math.max(multipliers.length - visibleRoads, 0)
   const showStartSidewalk = renderWindowStart === 0
   const visibleRoadSlots = showStartSidewalk ? visibleRoads - 1 : visibleRoads
   const desiredWindowStart = hasActiveGame
     ? Math.min(Math.max(currentRoad - cameraOffset, 0), maxWindowStart)
     : 0
+  const previousRoad = previousRoadRef.current
+  const isCameraShiftPending =
+    !isCrashSequence &&
+    !isWinSequence &&
+    hasActiveGame &&
+    previousRoad !== null &&
+    currentRoad > previousRoad &&
+    desiredWindowStart > renderWindowStart
+  const visualRoad = isCameraShiftPending ? previousRoad : currentRoad
+  const highlightedRoad = isCrashSequence ? Math.max(currentRoad - 1, 0) : visualRoad
+  const barrierRoad = isCrashSequence
+    ? highlightedRoad
+    : isCameraShiftPending
+      ? Math.max(previousRoad ?? 0, completedRoad)
+      : completedRoad
   const hasHiddenNextRoad = renderWindowStart < maxWindowStart
   const renderedRoads = multipliers
-    .slice(
-      renderWindowStart,
-      renderWindowStart + visibleRoadSlots + (hasHiddenNextRoad ? 1 : 0),
-    )
+    .slice(renderWindowStart, renderWindowStart + visibleRoadSlots + (hasHiddenNextRoad ? 1 : 0))
     .map((multiplier, offset) => {
       const actualIndex = renderWindowStart + offset
 
@@ -148,8 +155,7 @@ const Capyroad = () => {
   )
   const sidewalkWidthPercent = 100 / visibleRoads
   const boardLeftPercent = showStartSidewalk ? sidewalkWidthPercent : 0
-  const boardWidthPercent =
-    (renderedRoads.length / visibleRoadSlots) * (100 - boardLeftPercent)
+  const boardWidthPercent = (renderedRoads.length / visibleRoadSlots) * (100 - boardLeftPercent)
 
   useEffect(() => {
     const updateBoardSettings = () => {
@@ -157,6 +163,7 @@ const Capyroad = () => {
         const nextSettings = getBoardSettings()
 
         if (
+          previousSettings.cameraOffset === nextSettings.cameraOffset &&
           previousSettings.visibleRoads === nextSettings.visibleRoads &&
           previousSettings.roadStripeCount === nextSettings.roadStripeCount
         ) {
@@ -190,11 +197,7 @@ const Capyroad = () => {
   useEffect(() => {
     const gameId = game?.gameId || null
 
-    if (
-      gameId &&
-      previousGameIdRef.current !== gameId &&
-      Number(game?.info?.road || 0) === 0
-    ) {
+    if (gameId && previousGameIdRef.current !== gameId && Number(game?.info?.road || 0) === 0) {
       previousRoadRef.current = null
       previousVisiblePositionRef.current = 0
       openingJumpRunningRef.current = false
@@ -213,7 +216,7 @@ const Capyroad = () => {
     }
   }, [hasActiveGame, renderWindowStart])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (
       !viewportRef.current ||
       !boardRef.current ||
@@ -238,13 +241,10 @@ const Capyroad = () => {
     const spriteWidth = capybaraRef.current.offsetWidth || 0
     const ducksWidth = ducksRef.current.offsetWidth || 0
     const ducksHeight = ducksRef.current.offsetHeight || 0
-    const sidewalkX = laneWidth * 0.18
-    const previousRoad = previousRoadRef.current
+    const startTargetX = laneWidth / 2 - spriteWidth / 2
     const previousVisiblePosition = previousVisiblePositionRef.current
-    const targetX =
-      roadOffset + laneWidth * visiblePosition + laneWidth / 2 - spriteWidth / 2
-    const isOpeningJump =
-      hasActiveGame && previousRoad === null && currentRoad === 0
+    const targetX = roadOffset + laneWidth * visiblePosition + laneWidth / 2 - spriteWidth / 2
+    const isOpeningJump = hasActiveGame && previousRoad === null && currentRoad === 0
     const shouldShiftCamera =
       hasActiveGame &&
       previousRoad !== null &&
@@ -266,7 +266,7 @@ const Capyroad = () => {
 
     if (!hasActiveGame) {
       gsap.set(capybaraRef.current, {
-        x: sidewalkX,
+        x: startTargetX,
         y: 0,
         rotation: 0,
         scaleX: 1,
@@ -298,11 +298,10 @@ const Capyroad = () => {
             openingJumpRunningRef.current = false
             previousRoadRef.current = currentRoad
             previousVisiblePositionRef.current = visiblePosition
-            setCompletedRoad(currentRoad)
           },
         })
         .set(capybaraRef.current, {
-          x: sidewalkX,
+          x: startTargetX,
           y: 0,
           rotation: -4,
           scaleX: 0.96,
@@ -346,6 +345,13 @@ const Capyroad = () => {
           },
           0.34,
         )
+        .call(
+          () => {
+            setCompletedRoad(currentRoad)
+          },
+          [],
+          0.24,
+        )
     } else if (previousRoad === null || currentRoad <= previousRoad) {
       gsap.set(capybaraRef.current, {
         x: targetX,
@@ -367,34 +373,35 @@ const Capyroad = () => {
       gsap.set(beamRef.current, { opacity: 0, scaleY: 0.2 })
     } else {
       const startX =
-        roadOffset +
-        laneWidth * previousVisiblePosition +
-        laneWidth / 2 -
-        spriteWidth / 2
+        roadOffset + laneWidth * previousVisiblePosition + laneWidth / 2 - spriteWidth / 2
       const jumpTargetPosition = Math.min(
         currentRoad - renderWindowStart,
         shouldShiftCamera ? renderedRoads.length - 1 : visibleRoadSlots - 1,
       )
       const jumpTargetX =
-        roadOffset +
-        laneWidth * jumpTargetPosition +
-        laneWidth / 2 -
-        spriteWidth / 2
+        roadOffset + laneWidth * jumpTargetPosition + laneWidth / 2 - spriteWidth / 2
       const finalVisiblePosition = Math.min(
         currentRoad - desiredWindowStart,
         desiredWindowStart === 0 ? visibleRoads - 2 : visibleRoads - 1,
       )
       const finalTargetX =
-        finalRoadOffset +
-        laneWidth * finalVisiblePosition +
-        laneWidth / 2 -
-        spriteWidth / 2
+        finalRoadOffset + laneWidth * finalVisiblePosition + laneWidth / 2 - spriteWidth / 2
       const jumpHeight = Math.min(88, Math.max(52, laneWidth * 0.55))
       animationRef.current = gsap
         .timeline({
           onComplete: () => {
             if (shouldShiftCamera) {
+              previousRoadRef.current = currentRoad
+              previousVisiblePositionRef.current = Math.min(
+                currentRoad - desiredWindowStart,
+                desiredWindowStart === 0 ? visibleRoads - 2 : visibleRoads - 1,
+              )
               setRenderWindowStart(desiredWindowStart)
+              requestAnimationFrame(() => {
+                setCompletedRoad(currentRoad)
+              })
+            } else {
+              setCompletedRoad(currentRoad)
             }
 
             gsap.set(boardRef.current, { x: 0 })
@@ -464,7 +471,9 @@ const Capyroad = () => {
         )
         .call(
           () => {
-            setCompletedRoad(currentRoad)
+            if (!shouldShiftCamera) {
+              setCompletedRoad(currentRoad)
+            }
           },
           [],
           0.24,
@@ -502,14 +511,9 @@ const Capyroad = () => {
       }
     }
 
-    if (!isOpeningJump) {
+    if (!isOpeningJump && !shouldShiftCamera) {
       previousRoadRef.current = currentRoad
-      previousVisiblePositionRef.current = shouldShiftCamera
-        ? Math.min(
-            currentRoad - desiredWindowStart,
-            desiredWindowStart === 0 ? visibleRoads - 2 : visibleRoads - 1,
-          )
-        : visiblePosition
+      previousVisiblePositionRef.current = visiblePosition
     }
   }, [
     currentRoad,
@@ -571,9 +575,7 @@ const Capyroad = () => {
           viewportHeight / Math.max(spriteHeight, 1),
         ) * 1.32
       const screenImpactX =
-        viewportWidth / 2 -
-        (spriteWidth * closeUpScale) / 2 +
-        viewportWidth * 0.2
+        viewportWidth / 2 - (spriteWidth * closeUpScale) / 2 + viewportWidth * 0.2
       const screenImpactY = -viewportHeight * 0.1
       const capybaraFallX = screenImpactX + viewportWidth * 0.06
       const capybaraFallY = viewportHeight * 0.8
@@ -595,10 +597,7 @@ const Capyroad = () => {
             crashAnimationRunningRef.current = false
             const latestGame = latestGameRef.current
 
-            if (
-              latestGame?.gameId &&
-              finishedCrashGameRef.current !== latestGame.gameId
-            ) {
+            if (latestGame?.gameId && finishedCrashGameRef.current !== latestGame.gameId) {
               finishedCrashGameRef.current = latestGame.gameId
               await finishGameRef.current(latestGame)
             }
@@ -801,10 +800,7 @@ const Capyroad = () => {
     if (remainingAnimationTime > 0.06) {
       crashAnimationQueuedRef.current = true
       crashDelayRef.current?.kill()
-      crashDelayRef.current = gsap.delayedCall(
-        remainingAnimationTime + 0.02,
-        startCrashAnimation,
-      )
+      crashDelayRef.current = gsap.delayedCall(remainingAnimationTime + 0.02, startCrashAnimation)
       return () => {
         crashDelayRef.current?.kill()
         crashDelayRef.current = null
@@ -869,8 +865,7 @@ const Capyroad = () => {
       const beamX = ufoHoverX + ufoWidth / 2 - beamWidth / 2
       const beamY = ufoHoverY + ufoHeight * 0.5
       const beamHeight = Math.max(120, viewportHeight - beamY - 18)
-      const abductX =
-        beamX + beamWidth / 2 - spriteWidth / 2 + spriteWidth * 0.04
+      const abductX = beamX + beamWidth / 2 - spriteWidth / 2 + spriteWidth * 0.04
       const abductY = ufoHoverY + ufoHeight * 0.42
       const ufoCarryX = ufoHoverX + viewportWidth * 0.08
       const ufoCarryY = -ufoHeight * 0.78
@@ -892,10 +887,7 @@ const Capyroad = () => {
             winAnimationRunningRef.current = false
             const latestGame = latestGameRef.current
 
-            if (
-              latestGame?.gameId &&
-              finishedWinGameRef.current !== latestGame.gameId
-            ) {
+            if (latestGame?.gameId && finishedWinGameRef.current !== latestGame.gameId) {
               finishedWinGameRef.current = latestGame.gameId
               await finishGameRef.current(latestGame)
             }
@@ -1048,10 +1040,7 @@ const Capyroad = () => {
     if (remainingAnimationTime > 0.06) {
       winAnimationQueuedRef.current = true
       winDelayRef.current?.kill()
-      winDelayRef.current = gsap.delayedCall(
-        remainingAnimationTime + 0.02,
-        startWinAnimation,
-      )
+      winDelayRef.current = gsap.delayedCall(remainingAnimationTime + 0.02, startWinAnimation)
       return () => {
         winDelayRef.current?.kill()
         winDelayRef.current = null
@@ -1064,6 +1053,10 @@ const Capyroad = () => {
 
   useEffect(() => {
     if (game?.gameId) return
+
+    const startLaneWidth = viewportRef.current ? viewportRef.current.clientWidth / visibleRoads : 0
+    const startSpriteWidth = capybaraRef.current?.offsetWidth || 0
+    const resetStartTargetX = startLaneWidth / 2 - startSpriteWidth / 2
 
     crashDelayRef.current?.kill()
     crashDelayRef.current = null
@@ -1087,7 +1080,7 @@ const Capyroad = () => {
     if (capybaraRef.current) {
       gsap.killTweensOf(capybaraRef.current)
       gsap.set(capybaraRef.current, {
-        x: 0,
+        x: resetStartTargetX,
         y: 0,
         rotation: 0,
         scaleX: 1,
@@ -1139,7 +1132,7 @@ const Capyroad = () => {
         scale: 1,
       })
     }
-  }, [game?.gameId, setOutcomeAnimationRunning])
+  }, [game?.gameId, setOutcomeAnimationRunning, visibleRoads])
 
   return (
     <div className="relative w-full h-full bg-base-200">
@@ -1147,7 +1140,8 @@ const Capyroad = () => {
         {showStartSidewalk && (
           <div
             className="pointer-events-none absolute bottom-0 left-0 top-0 z-0"
-            style={{ width: `${sidewalkWidthPercent}%` }}>
+            style={{ width: `${sidewalkWidthPercent}%` }}
+          >
             <SidewalkStart />
           </div>
         )}
@@ -1159,7 +1153,8 @@ const Capyroad = () => {
             left: `${boardLeftPercent}%`,
             width: `${boardWidthPercent}%`,
             gridTemplateColumns: `repeat(${renderedRoads.length}, minmax(0, 1fr))`,
-          }}>
+          }}
+        >
           {renderedRoads.map(({ actualIndex, multiplier }) => (
             <Road
               key={actualIndex}
@@ -1174,26 +1169,25 @@ const Capyroad = () => {
           ))}
         </div>
 
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 top-0 z-[5] overflow-hidden">
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 top-0 z- overflow-hidden">
           <div
             ref={capybaraRef}
-            className="absolute bottom-6 left-0 z-[5] will-change-transform">
+            className="absolute bottom-8 left-0 z-5 will-change-transform sm:bottom-10"
+          >
             <Capybara crashed={isCrashed} />
           </div>
         </div>
 
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 top-0 z-[6] overflow-hidden">
-          <div
-            ref={ducksRef}
-            className="absolute left-0 top-0 z-[6] will-change-transform opacity-0">
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 top-0 z-6 overflow-hidden">
+          <div ref={ducksRef} className="absolute left-0 top-0 z-6 will-change-transform opacity-0">
             <img src={ducksImg} alt="Ducks" className="w-28 md:w-32" />
           </div>
         </div>
 
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 top-0 z-[7] overflow-hidden">
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 top-0 z-7 overflow-hidden">
           <div
             ref={beamRef}
-            className="absolute left-0 top-0 z-[7] opacity-0 will-change-transform"
+            className="absolute left-0 top-0 z-7 opacity-0 will-change-transform"
             style={{
               clipPath: "polygon(50% 0%, 100% 100%, 0% 100%)",
               background:
@@ -1201,14 +1195,12 @@ const Capyroad = () => {
               filter: "blur(4px)",
             }}
           />
-          <div
-            ref={ufoRef}
-            className="absolute left-0 top-0 z-[7] will-change-transform opacity-0">
+          <div ref={ufoRef} className="absolute left-0 top-0 z-7 will-change-transform opacity-0">
             <img src={ufoImg} alt="UFO" className="w-48 md:w-56" />
           </div>
         </div>
 
-        <div className="pointer-events-none absolute inset-0 z-[8] overflow-hidden">
+        <div className="pointer-events-none absolute inset-0 z-8 overflow-hidden">
           <img
             ref={brokenScreenRef}
             src={brokenScreenImg}
