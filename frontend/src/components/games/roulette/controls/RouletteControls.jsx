@@ -47,7 +47,7 @@ const RouletteControls = () => {
   }
 
   return (
-    <div className="flex h-full w-full flex-col gap-1.5 p-2 sm:gap-1.5 sm:p-2 lg:gap-5 lg:p-4">
+    <div className="flex h-full w-full flex-col gap-4 p-2 sm:p-2 lg:gap-5 lg:p-4">
       <h2 className="text-center text-xl font-bold ">
         {t(`games.roulette.types.${type}`)}
       </h2>

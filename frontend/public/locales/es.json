@@ -300,6 +300,7 @@
         "cashout": "Cobrar"
       },
       "board": {
+        "start": "Inicio",
         "currentRoad": "Calle",
         "payout": "Cobro",
         "crashChance": "Riesgo"

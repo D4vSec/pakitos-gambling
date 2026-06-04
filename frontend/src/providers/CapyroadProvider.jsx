@@ -1,5 +1,11 @@
 /* eslint-disable react-refresh/only-export-components */
-import React, { createContext, useContext, useEffect, useRef, useState } from "react"
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react"
 import useAPI from "@/hooks/useAPI"
 import { useNotification } from "@/providers/NotificationProvider"
 import { useSession } from "./SessionProvider"
@@ -19,7 +25,8 @@ const CapyroadProvider = ({ children }) => {
   const [lastBetAmount, setLastBetAmount] = useState("")
   const [dealQueue, setDealQueue] = useState([])
   const [isActionPending, setIsActionPending] = useState(false)
-  const [isOutcomeAnimationRunning, setOutcomeAnimationRunning] = useState(false)
+  const [isOutcomeAnimationRunning, setOutcomeAnimationRunning] =
+    useState(false)
 
   const { user, getRefreshToken, getAccessToken, updateBalance } = useSession()
   const { balance } = user
@@ -29,6 +36,7 @@ const CapyroadProvider = ({ children }) => {
 
   const gameRef = useRef({})
   const clearGameTimeoutRef = useRef(null)
+  const finishingGameIdsRef = useRef(new Set())
 
   const updateBetAmount = (amount) => setBetAmount(amount)
   const clearBet = () => setBetAmount("")
@@ -126,6 +134,10 @@ const CapyroadProvider = ({ children }) => {
       clearGameTimeoutRef.current = null
     }
 
+    if (gameRef.current?.gameId) {
+      finishingGameIdsRef.current.delete(gameRef.current.gameId)
+    }
+
     try {
       const res = await post("/api/v1/capyroad/start", {
         headers: getAuthHeaders(),
@@ -165,7 +177,10 @@ const CapyroadProvider = ({ children }) => {
 
       const nextGame = formatGame(res)
 
-      if (getGameId() !== requestedGameId && gameRef.current?.gameId !== requestedGameId) {
+      if (
+        getGameId() !== requestedGameId &&
+        gameRef.current?.gameId !== requestedGameId
+      ) {
         return
       }
 
@@ -175,15 +190,12 @@ const CapyroadProvider = ({ children }) => {
 
       applyGameUpdate(nextGame, { animate: false })
       setBetAmount(formatMoney(nextGame.amount))
-
-      if (nextGame.status === "finished") {
-        await finishGame(nextGame, { syncBalance: false })
-      }
     } catch (error) {
       if (
         ["GAME_NOT_FOUND", "GAME_NOT_VALID"].includes(error.message) &&
         getGameId() === requestedGameId &&
-        (!gameRef.current?.gameId || gameRef.current?.gameId === requestedGameId)
+        (!gameRef.current?.gameId ||
+          gameRef.current?.gameId === requestedGameId)
       ) {
         removeGameId()
         gameRef.current = {}
@@ -201,11 +213,19 @@ const CapyroadProvider = ({ children }) => {
     const { type, message } = getRoundResult(formattedGame)
     const finishedGameId = formattedGame?.gameId
 
+    if (finishedGameId && finishingGameIdsRef.current.has(finishedGameId)) {
+      return
+    }
+
+    if (finishedGameId) {
+      finishingGameIdsRef.current.add(finishedGameId)
+    }
+
     setOutcomeAnimationRunning(false)
 
     addNotification(t(`games.result.${message}`), type, {
       scope: "games",
-      duration: 3000,
+      duration: 2000,
       payout: formattedGame?.payout,
     })
 
@@ -214,9 +234,12 @@ const CapyroadProvider = ({ children }) => {
     }
 
     try {
-      const res = await destroy(`/api/v1/capyroad/${finishedGameId || getCurrentGameId()}`, {
-        headers: getAuthHeaders(),
-      })
+      const res = await destroy(
+        `/api/v1/capyroad/${finishedGameId || getCurrentGameId()}`,
+        {
+          headers: getAuthHeaders(),
+        },
+      )
 
       if (res.code !== "GAME_DELETED_SUCCESSFULLY") {
         throw new Error(res.code)
@@ -228,11 +251,19 @@ const CapyroadProvider = ({ children }) => {
           setGame({})
         }
 
+        if (finishedGameId) {
+          finishingGameIdsRef.current.delete(finishedGameId)
+        }
+
         clearGameTimeoutRef.current = null
-      }, 3000)
+      }, 2000)
 
       removeGameId()
     } catch (error) {
+      if (finishedGameId) {
+        finishingGameIdsRef.current.delete(finishedGameId)
+      }
+
       addNotification(t(`message.error.${error.message}`), "error")
     }
   }
@@ -256,7 +287,6 @@ const CapyroadProvider = ({ children }) => {
 
       const nextGame = formatGame(res)
       applyGameUpdate(nextGame)
-
     } catch (error) {
       addNotification(t(`message.error.${error.message}`), "error")
     } finally {
@@ -277,6 +307,7 @@ const CapyroadProvider = ({ children }) => {
 
   useEffect(() => {
     if (!game?.gameId) {
+      finishingGameIdsRef.current.clear()
       gameRef.current = {}
       setGame({})
       setDealQueue([])

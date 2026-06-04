@@ -1,7 +1,16 @@
 import React from "react"
 import MultiplayerCircle from "./MultiplayerCircle"
 
-const Road = ({ start, text, isCurrent, isPassed, isCrashed, children }) => {
+const Road = ({
+  start,
+  text,
+  isCurrent,
+  isPassed,
+  isCrashed,
+  hasBarrier = false,
+  stripeCount = 6,
+  children,
+}) => {
   const stateOverlayClass = isCrashed
     ? "bg-error/20"
     : isCurrent
@@ -17,24 +26,37 @@ const Road = ({ start, text, isCurrent, isPassed, isCrashed, children }) => {
       <div className="absolute inset-y-0 left-0 w-[3px] bg-white/30" />
       <div className="absolute inset-y-0 right-0 w-[3px] bg-white/18" />
 
-      <div className="absolute inset-y-6 left-1/2 flex -translate-x-1/2 flex-col justify-between">
+      <div className="absolute inset-y-4 left-1/2 flex -translate-x-1/2 flex-col justify-between sm:inset-y-5 lg:inset-y-6">
         {Array.from({ length: 6 }).map((_, index) => (
-          <div key={index} className="h-8 w-1 rounded-full bg-white/55 shadow-[0_0_4px_rgba(255,255,255,0.12)]" />
+          <div
+            key={index}
+            className="h-5 w-0.5 rounded-full bg-white/55 shadow-[0_0_4px_rgba(255,255,255,0.12)] sm:h-7 sm:w-1 lg:h-8"
+          />
         ))}
       </div>
 
-      <div className="absolute inset-x-6 bottom-[6rem] flex items-end justify-between">
-        {Array.from({ length: 7 }).map((_, index) => (
+      <div className="absolute inset-x-3 bottom-6 flex items-end justify-between sm:inset-x-4 sm:bottom-8 lg:inset-x-6 lg:bottom-10">
+        {Array.from({ length: stripeCount }).map((_, index) => (
           <div
             key={index}
-            className={`h-20 w-2.5 rounded-sm shadow-[0_0_4px_rgba(255,255,255,0.18)] ${
+            className={`h-12 w-1.5 rounded-sm shadow-[0_0_4px_rgba(255,255,255,0.18)] sm:h-16 sm:w-2 lg:h-20 lg:w-2.5 ${
               start ? "bg-white/92" : "bg-white/78"
             }`}
           />
         ))}
       </div>
 
-      {stateOverlayClass && <div className={`absolute inset-0 ${stateOverlayClass}`} />}
+      {hasBarrier && (
+        <div className="absolute inset-x-3 top-30 z-4 flex items-center sm:inset-x-4 lg:inset-x-6">
+          <div className="h-5 w-2 rounded-sm bg-warning shadow-[0_2px_6px_rgba(0,0,0,0.3)] sm:h-6 sm:w-2.5" />
+          <div className="h-2 flex-1 border-y border-black/25 bg-[repeating-linear-gradient(135deg,rgba(250,204,21,0.96)_0px,rgba(250,204,21,0.96)_12px,rgba(24,24,27,0.9)_12px,rgba(24,24,27,0.9)_22px)] shadow-[0_2px_8px_rgba(0,0,0,0.28)] sm:h-2.5" />
+          <div className="h-5 w-2 rounded-sm bg-warning shadow-[0_2px_6px_rgba(0,0,0,0.3)] sm:h-6 sm:w-2.5" />
+        </div>
+      )}
+
+      {stateOverlayClass && (
+        <div className={`absolute inset-0 ${stateOverlayClass}`} />
+      )}
 
       <div className="relative grid h-full grid-cols-1 grid-rows-1 pb-4 pt-4">
         <div className="col-start-1 row-start-1 flex items-center justify-center">

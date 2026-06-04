@@ -4,21 +4,24 @@
 
 -- Alto
 [] Responsive capy
-[] cierre de sesiones del usuario (revisar 404)
+[] cierre de sesiones del usuario
 
 -- Medio
 [] drift the la bola de la ruleta en md
 [] fix paginacion bets
-[] hacer el betting input un form para dar enter y empezar
+[x] hacer el betting input un form para dar enter y empezar
 [] probar si las bets se pagan
+[] mal pago al ganar un double
+[] revisar lo del 3 a 2 del bj
+[] ver bug del resize de las slots
 
 -- Bajo
 [x] create/edit user para modificar el balance y el rol
 [x] llevar cuentas reales de la sesion de la slot
-[] poder repetir last bet
-[] actualizar rutas de las slots
+[x] poder repetir last bet
+[x] actualizar rutas de las slots
 [] mirar los botones de la landing xq no tienen sentido
-[] hightlight numero ganador ruleta
+[] hightlight numero ganador ruleta ??
 [] resize chips
+[] hover the los btns del explore estan por debajo
 [] añadir balance visible para < sm
-[] revisar lo del 3 a 2 del bj

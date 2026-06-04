@@ -300,6 +300,7 @@
         "cashout": "Cash out"
       },
       "board": {
+        "start": "Start",
         "currentRoad": "Road",
         "payout": "Payout",
         "crashChance": "Risk"
