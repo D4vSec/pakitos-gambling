@@ -558,6 +558,14 @@
         "deleteAccount": "Șterge contul"
       }
     },
+    "error": {
+      "message": {
+        "beforeHighlight": "Esti atat de",
+        "highlight": "dependent de jocuri",
+        "afterHighlight": "incat ai descoperit chiar si aceasta pagina, dar trebuie sa-ti spun ca aici nu exista niciun joc, din pacate ..."
+      },
+      "cta": "Inapoi la pagina principala"
+    },
     "addBalance": {
       "button": "Adaugă sold",
       "label": "Sumă",

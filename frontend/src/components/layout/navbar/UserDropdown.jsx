@@ -23,12 +23,16 @@ const UserDropdown = ({ vertical = false }) => {
       label: "navbar.userPill.balance",
       href: "/addBalance",
     },
-    {
-      key: "adminPanel",
-      label: "navbar.userPill.adminPanel",
-      href: "/admin/users",
-      className: `${user.role !== "admin" ? "hidden" : ""} text-warning`,
-    },
+    ...(user.role === "admin"
+      ? [
+          {
+            key: "adminPanel",
+            label: "navbar.userPill.adminPanel",
+            href: "/admin/users",
+            className: "text-warning",
+          },
+        ]
+      : []),
     {
       key: "logout",
       label: "navbar.userPill.logout",

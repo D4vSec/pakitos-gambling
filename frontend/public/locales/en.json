@@ -558,6 +558,14 @@
         "deleteAccount": "Delete account"
       }
     },
+    "error": {
+      "message": {
+        "beforeHighlight": "You are such a",
+        "highlight": "degenerate gambler",
+        "afterHighlight": "that you even discovered this page, but I have to tell you there is no game here, sadly ..."
+      },
+      "cta": "Return to home"
+    },
     "addBalance": {
       "button": "Add balance",
       "label": "Amount",

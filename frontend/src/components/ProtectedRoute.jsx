@@ -4,6 +4,7 @@ import GradientBg from "./layout/GradientBg"
 import NavigationBtn from "./buttons/NavigationBtn"
 import { useLocale } from "../providers/LocaleProvider"
 import { useSession } from "../providers/SessionProvider"
+import { IconLogin, IconHome } from "@tabler/icons-react"
 import Loading from "./Loading"
 
 const ProtectedRoute = ({ children, requireAdmin }) => {
@@ -17,7 +18,13 @@ const ProtectedRoute = ({ children, requireAdmin }) => {
     <GradientBg>
       <div className="flex flex-col gap-2 justify-center items-center">
         <Title>{t("message.error.noLogin")}</Title>
-        <NavigationBtn variant="primary" size="lg" to="/login">
+        <NavigationBtn
+          variant="primary"
+          size="lg"
+          to="/login"
+          svg={<IconLogin />}
+          className="shadow-xl"
+        >
           {t("ui.buttons.goLogin")}
         </NavigationBtn>
       </div>
@@ -29,7 +36,10 @@ const ProtectedRoute = ({ children, requireAdmin }) => {
         <NavigationBtn
           variant="primary"
           size="lg"
-          to={isLogged ? "/home" : "/"}>
+          to={isLogged ? "/home" : "/"}
+          svg={<IconHome />}
+          className="shadow-xl"
+        >
           {t("ui.buttons.returnHome")}
         </NavigationBtn>
       </div>

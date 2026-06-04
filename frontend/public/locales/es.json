@@ -558,6 +558,14 @@
         "deleteAccount": "Eliminar cuenta"
       }
     },
+    "error": {
+      "message": {
+        "beforeHighlight": "Eres tan",
+        "highlight": "ludopata",
+        "afterHighlight": "que hasta has descubierto esta pagina, pero he de decirte que aqui no hay ningun juego, desgraciadamente ..."
+      },
+      "cta": "Volver al inicio"
+    },
     "addBalance": {
       "button": "Añadir saldo",
       "label": "Cantidad",
