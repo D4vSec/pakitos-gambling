@@ -8,12 +8,10 @@ import useBets from "@/hooks/useBets"
 import { useLocale } from "@/providers/LocaleProvider"
 import Loading from "@/components/Loading"
 import Subtitle from "@/components/layout/fonts/Subtitle"
-import { useSession } from "@/providers/SessionProvider"
 
 const BetsPage = () => {
   const { t } = useLocale()
   const { getBets } = useBets()
-  const { isLogged, loading: sessionLoading } = useSession()
   const [bets, setBets] = useState([])
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(12)
@@ -46,12 +44,6 @@ const BetsPage = () => {
   }, [bets, safePage, pageSize])
 
   useEffect(() => {
-    if (sessionLoading) return
-
-    if (!isLogged) {
-      return
-    }
-
     let isActive = true
 
     const loadBets = async () => {
@@ -76,9 +68,9 @@ const BetsPage = () => {
     return () => {
       isActive = false
     }
-  }, [appliedFilters, getBets, isLogged, sessionLoading])
+  }, [appliedFilters, getBets])
 
-  if (loading || sessionLoading || !isLogged) {
+  if (loading) {
     return <Loading />
   }
 

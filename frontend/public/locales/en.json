@@ -660,8 +660,6 @@
       "AUTH_MISSING_FIELDS": "There's missing fields in the form",
       "AUTH_NO_DATA_PROVIDED": "No data provided in the form",
       "AUTH_NO_TOKEN_PROVIDED": "No auth token provided",
-      "AUTH_SESSION_EXPIRED": "Your session expired or was revoked. Please sign in again.",
-      "AUTH_SESSION_ENDED": "Your session expired or was revoked. Please sign in again.",
       "AUTH_USER_REGISTERED": "Username already registered",
       "INSUFFICIENT_BALANCE": "You don't have enough balance to place this bet",
       "INSUFFICIENT_FUNDS": "Insufficient funds to continue playing",
@@ -733,11 +731,6 @@
         "title": "Sure wanna leave gambling club :(?",
         "accept": "Sadly, yes",
         "cancel": "Nah, let's keep gambling"
-      },
-      "revokeSession": {
-        "title": "Are you sure you want to revoke this session?",
-        "accept": "Yes, revoke it",
-        "cancel": "No, keep it"
       }
     },
     "success": {

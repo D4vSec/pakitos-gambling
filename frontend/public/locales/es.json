@@ -660,8 +660,6 @@
       "AUTH_MISSING_FIELDS": "Faltan campos en el formulario",
       "AUTH_NO_DATA_PROVIDED": "No se han proporcionado datos en el formulario",
       "AUTH_NO_TOKEN_PROVIDED": "No se ha proporcionado token de autenticación",
-      "AUTH_SESSION_EXPIRED": "Tu sesión ha expirado o ha sido revocada. Vuelve a iniciar sesión.",
-      "AUTH_SESSION_ENDED": "Tu sesión ha expirado o ha sido revocada. Vuelve a iniciar sesión.",
       "AUTH_USER_REGISTERED": "Nombre de usuario ya registrado",
       "INSUFFICIENT_BALANCE": "No tienes suficiente saldo para realizar esta apuesta",
       "INSUFFICIENT_FUNDS": "Fondos insuficientes para continuar jugando",
@@ -733,11 +731,6 @@
         "title": "¿Seguro de dejar atrás el club del gambling :(?",
         "accept": "Tristemente, sí",
         "cancel": "Nah, quiero seguir apostando"
-      },
-      "revokeSession": {
-        "title": "¿Seguro que quieres revocar esta sesión?",
-        "accept": "Sí, revocarla",
-        "cancel": "No, mantenerla"
       }
     },
     "success": {
