@@ -1,7 +1,9 @@
-import React, { useEffect, useMemo, useState } from "react"
+import React, { useEffect, useMemo, useState, useCallback } from "react"
 import {
-  IconCircleCheck,
-  IconCircleX,
+  IconChevronLeft,
+  IconChevronLeftPipe,
+  IconChevronRightFilled,
+  IconChevronRightPipe,
   IconDevices,
   IconTrashX,
 } from "@tabler/icons-react"
@@ -10,6 +12,8 @@ import { useSession } from "@/providers/SessionProvider"
 import { useLocale } from "@/providers/LocaleProvider"
 import { useNotification } from "@/providers/NotificationProvider"
 import { buildUserAgent, fullDateFormatter } from "@/utils/adminUtils"
+import Button from "../buttons/Button"
+import SessionStatusBadge from "../badges/SessionStatusBadge"
 
 const safeBuildUserAgent = (deviceInfo) => {
   if (!deviceInfo) return "-"
@@ -29,31 +33,79 @@ const UserSessions = ({ userId, className = "", shadow = true }) => {
   const [sessions, setSessions] = useState([])
   const [loading, setLoading] = useState(true)
   const [revokingSessionId, setRevokingSessionId] = useState(null)
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(5)
 
-  const headers = useMemo(
-    () => ({
-      ...(getRefreshToken() ? { "x-refresh-token": getRefreshToken() } : {}),
-      ...(getAccessToken()
-        ? { Authorization: `Bearer ${getAccessToken()}` }
-        : {}),
-    }),
-    [getAccessToken, getRefreshToken],
-  )
+  const buildHeaders = useCallback(() => {
+    const accessToken = getAccessToken()
+    const refreshToken = getRefreshToken()
+
+    return {
+      ...(refreshToken ? { "x-refresh-token": refreshToken } : {}),
+      ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+    }
+  }, [getAccessToken, getRefreshToken])
 
   const sessionsUrl = userId
     ? `/api/v1/user/${userId}/sessions`
     : "/api/v1/user/me/sessions"
+
+  const totalPages = Math.max(1, Math.ceil(sessions.length / pageSize))
+  const safePage = Math.min(page, totalPages)
+  const paginatedSessions = useMemo(() => {
+    const start = (safePage - 1) * pageSize
+
+    return sessions.slice(start, start + pageSize)
+  }, [pageSize, safePage, sessions])
+  const iconOnlyButtonClass = "px-2 sm:px-3"
+
+  const paginationButtons = [
+    {
+      key: "first",
+      label: t("ui.tables.paginationBar.first"),
+      icon: <IconChevronLeftPipe />,
+      onClick: () => setPage(1),
+      disabled: safePage === 1,
+    },
+    {
+      key: "prev",
+      label: t("ui.tables.paginationBar.prev"),
+      icon: <IconChevronLeft />,
+      onClick: () => setPage((currentPage) => Math.max(1, currentPage - 1)),
+      disabled: safePage === 1,
+    },
+    {
+      key: "next",
+      label: t("ui.tables.paginationBar.next"),
+      icon: <IconChevronRightFilled />,
+      onClick: () =>
+        setPage((currentPage) => Math.min(totalPages, currentPage + 1)),
+      disabled: safePage === totalPages,
+    },
+    {
+      key: "last",
+      label: t("ui.tables.paginationBar.last"),
+      icon: <IconChevronRightPipe />,
+      onClick: () => setPage(totalPages),
+      disabled: safePage === totalPages,
+    },
+  ]
+
+  useEffect(() => {
+    setPage((currentPage) => Math.min(currentPage, totalPages))
+  }, [totalPages])
 
   useEffect(() => {
     let isActive = true
 
     const loadSessions = async () => {
       setLoading(true)
-      const res = await get(sessionsUrl, { headers })
+      const res = await get(sessionsUrl, { headers: buildHeaders() })
 
       if (!isActive) return
 
       setSessions(res?.sessions || [])
+      setPage(1)
       setLoading(false)
     }
 
@@ -62,13 +114,15 @@ const UserSessions = ({ userId, className = "", shadow = true }) => {
     return () => {
       isActive = false
     }
-  }, [get, headers, sessionsUrl])
+  }, [buildHeaders, get, sessionsUrl])
 
   const handleRevokeSession = async (sessionId) => {
     setRevokingSessionId(sessionId)
 
     try {
-      const res = await destroy(`${sessionsUrl}/${sessionId}`, { headers })
+      const res = await destroy(`${sessionsUrl}/${sessionId}`, {
+        headers: buildHeaders(),
+      })
 
       if (res?.code !== "SUCCESS") {
         throw new Error(res?.code || "UNKNOWN_ERROR")
@@ -87,10 +141,19 @@ const UserSessions = ({ userId, className = "", shadow = true }) => {
     }
   }
 
+  const confirmRevokeSession = (sessionId) => {
+    addNotification(t("message.modal.revokeSession.title"), "modal", {
+      onAccept: async () => {
+        await handleRevokeSession(sessionId)
+      },
+      acceptLabel: t("message.modal.revokeSession.accept"),
+      cancelLabel: t("message.modal.revokeSession.cancel"),
+    })
+  }
+
   return (
     <section
-      className={`card bg-base-100 ${shadow ? "shadow-xl" : ""} ${className}`}
-    >
+      className={`card bg-base-100 ${shadow ? "shadow-xl" : ""} ${className}`}>
       <div className="card-body">
         <h2 className="card-title text-xl">
           <IconDevices />
@@ -134,7 +197,7 @@ const UserSessions = ({ userId, className = "", shadow = true }) => {
                     </td>
                   </tr>
                 ) : (
-                  sessions.map((session) => {
+                  paginatedSessions.map((session) => {
                     const isExpired =
                       session.expires_at &&
                       new Date(session.expires_at) < new Date()
@@ -143,31 +206,15 @@ const UserSessions = ({ userId, className = "", shadow = true }) => {
                       : isExpired
                         ? "expired"
                         : "active"
-                    const statusClass = {
-                      active: "badge-success",
-                      expired: "badge-warning",
-                      revoked: "badge-error",
-                    }[statusKey]
-
                     return (
                       <tr
                         key={session.id}
-                        className="odd:bg-neutral hover:bg-base-300 transition-colors"
-                      >
+                        className="odd:bg-neutral hover:bg-base-300 transition-colors">
                         <td className="min-w-56">
                           {safeBuildUserAgent(session.device_info)}
                         </td>
                         <td className="whitespace-nowrap">
-                          <span className={`badge gap-1 ${statusClass}`}>
-                            {statusKey === "active" ? (
-                              <IconCircleCheck className="h-4 w-4" />
-                            ) : (
-                              <IconCircleX className="h-4 w-4" />
-                            )}
-                            {t(
-                              `adminPanel.userDetails.sessions.status.${statusKey}`,
-                            )}
-                          </span>
+                          <SessionStatusBadge status={statusKey} />
                         </td>
                         <td className="whitespace-nowrap">
                           {fullDateFormatter(session.created_at)}
@@ -176,24 +223,26 @@ const UserSessions = ({ userId, className = "", shadow = true }) => {
                           {fullDateFormatter(session.expires_at)}
                         </td>
                         <td className="whitespace-nowrap">
-                          <button
-                            type="button"
-                            className="btn btn-error btn-sm btn-square"
-                            aria-label={t(
+                          <div
+                            className={`tooltip tooltip-top cursor-pointer tooltip-error`}
+                            data-tip={t(
                               "adminPanel.userDetails.sessions.table.remove",
-                            )}
-                            disabled={
-                              session.revoked ||
-                              revokingSessionId === session.id
-                            }
-                            onClick={() => handleRevokeSession(session.id)}
-                          >
-                            {revokingSessionId === session.id ? (
-                              <span className="loading loading-spinner loading-xs"></span>
-                            ) : (
-                              <IconTrashX className="h-4 w-4" />
-                            )}
-                          </button>
+                            )}>
+                            <Button
+                              variant="error"
+                              size="sm"
+                              disabled={
+                                session.revoked ||
+                                revokingSessionId === session.id
+                              }
+                              onClick={() => confirmRevokeSession(session.id)}>
+                              {revokingSessionId === session.id ? (
+                                <span className="loading loading-spinner loading-xs"></span>
+                              ) : (
+                                <IconTrashX />
+                              )}
+                            </Button>
+                          </div>
                         </td>
                       </tr>
                     )
@@ -202,6 +251,64 @@ const UserSessions = ({ userId, className = "", shadow = true }) => {
               </tbody>
             </table>
           </div>
+
+          {!loading && sessions.length > 0 && (
+            <div className="mt-4 flex flex-col gap-3 md:flex-row w-full items-center md:justify-between">
+              <div className="flex flex-wrap items-center gap-2">
+                {paginationButtons.slice(0, 2).map((button) => (
+                  <Button
+                    key={button.key}
+                    type="button"
+                    variant="secondary"
+                    size="sm"
+                    className={`btn-outline ${iconOnlyButtonClass}`}
+                    onClick={button.onClick}
+                    disabled={button.disabled}>
+                    <span className="hidden sm:inline">{button.label}</span>
+                    <span className="sm:hidden">{button.icon}</span>
+                  </Button>
+                ))}
+
+                <span className="min-w-18 text-center text-sm font-medium sm:min-w-22">
+                  {safePage} / {totalPages || 1}
+                </span>
+
+                {paginationButtons.slice(2).map((button) => (
+                  <Button
+                    key={button.key}
+                    type="button"
+                    variant="secondary"
+                    size="sm"
+                    className={`btn-outline ${iconOnlyButtonClass}`}
+                    onClick={button.onClick}
+                    disabled={button.disabled}>
+                    <span className="hidden sm:inline">{button.label}</span>
+                    <span className="sm:hidden">{button.icon}</span>
+                  </Button>
+                ))}
+              </div>
+
+              <div className="flex flex-wrap items-center justify-between gap-2 sm:justify-start">
+                <span className="text-sm whitespace-nowrap">
+                  {t("ui.tables.paginationBar.rowsPerPage")}
+                </span>
+                <select
+                  className="select select-bordered select-sm w-full min-w-0 sm:w-auto sm:min-w-24 md:select-md"
+                  value={pageSize}
+                  onChange={(e) => {
+                    const nextSize = Number(e.target.value)
+                    setPageSize(nextSize)
+                    setPage(1)
+                  }}>
+                  {[1, 5, 10, 20, 50, 100].map((size) => (
+                    <option key={size} value={size}>
+                      {size}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </section>

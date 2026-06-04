@@ -660,6 +660,8 @@
       "AUTH_MISSING_FIELDS": "Lipsesc câmpuri",
       "AUTH_NO_DATA_PROVIDED": "Nu au fost furnizate date",
       "AUTH_NO_TOKEN_PROVIDED": "Lipsește token-ul",
+      "AUTH_SESSION_EXPIRED": "Sesiunea ta a expirat sau a fost revocată. Te rugăm să te autentifici din nou.",
+      "AUTH_SESSION_ENDED": "Sesiunea ta a expirat sau a fost revocată. Te rugăm să te autentifici din nou.",
       "AUTH_USER_REGISTERED": "Utilizator deja înregistrat",
       "INSUFFICIENT_BALANCE": "Sold insuficient pentru pariu",
       "INSUFFICIENT_FUNDS": "Fonduri insuficiente",
@@ -731,6 +733,11 @@
         "title": "Sigur că lăsați clubul de jocuri de noroc în urmă :(?",
         "accept": "Din regret, da",
         "cancel": "Nu, vreau să pariez în continuare"
+      },
+      "revokeSession": {
+        "title": "Sigur vrei să revoci această sesiune?",
+        "accept": "Da, revoc-o",
+        "cancel": "Nu, păstreaz-o"
       }
     },
     "success": {

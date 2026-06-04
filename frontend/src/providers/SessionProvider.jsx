@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useEffect, useState } from "react"
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react"
 import { useNotification } from "@/providers/NotificationProvider"
 import useAPI from "@/hooks/useAPI"
 import { useNavigate } from "react-router-dom"
@@ -18,40 +24,39 @@ const SessionProvider = ({ children }) => {
   const { get, post, put } = useAPI()
   const navigate = useNavigate()
 
-  const getTokens = () => {
+  const getAccessToken = useCallback(() => {
     const tokens = localStorage.getItem("tokens")
-    return tokens ? JSON.parse(tokens) : {}
-  }
-
-  const getAccessToken = () => {
-    const tokens = getTokens()
-    return tokens.accessToken || null
-  }
+    const parsedTokens = tokens ? JSON.parse(tokens) : {}
+    return parsedTokens.accessToken || null
+  }, [])
 
   const setAccessToken = (accessToken) => {
-    const tokens = getTokens()
+    const tokens = localStorage.getItem("tokens")
+    const parsedTokens = tokens ? JSON.parse(tokens) : {}
 
     localStorage.setItem(
       "tokens",
       JSON.stringify({
-        ...tokens,
+        ...parsedTokens,
         accessToken,
       }),
     )
   }
 
-  const getRefreshToken = () => {
-    const tokens = getTokens()
-    return tokens.refreshToken || null
-  }
+  const getRefreshToken = useCallback(() => {
+    const tokens = localStorage.getItem("tokens")
+    const parsedTokens = tokens ? JSON.parse(tokens) : {}
+    return parsedTokens.refreshToken || null
+  }, [])
 
   const setRefreshToken = (refreshToken) => {
-    const tokens = getTokens()
+    const tokens = localStorage.getItem("tokens")
+    const parsedTokens = tokens ? JSON.parse(tokens) : {}
 
     localStorage.setItem(
       "tokens",
       JSON.stringify({
-        ...tokens,
+        ...parsedTokens,
         refreshToken,
       }),
     )
@@ -59,6 +64,60 @@ const SessionProvider = ({ children }) => {
 
   const removeTokens = () => {
     localStorage.removeItem("tokens")
+  }
+
+  const clearSessionState = () => {
+    removeTokens()
+    setUser(defaultUser)
+    setIsLogged(false)
+  }
+
+  const isInvalidSessionCode = (code) =>
+    code === "AUTH_INVALID_TOKEN" ||
+    code === "AUTH_INVALID_SESSION" ||
+    code === "AUTH_SESSION_EXPIRED" ||
+    code === "AUTH_INVALID_REFRESH_TOKEN"
+
+  const handleExpiredOrRevokedSession = () => {
+    addNotification(t("message.error.AUTH_SESSION_ENDED"), "error")
+    clearSessionState()
+    navigate("/")
+  }
+
+  const refreshSession = async (refreshTokenOverride = null) => {
+    const refreshToken = refreshTokenOverride ?? getRefreshToken()
+
+    if (!refreshToken) {
+      clearSessionState()
+      return null
+    }
+
+    try {
+      const response = await post("/api/v1/auth/refresh", {
+        body: { refreshToken },
+      })
+
+      if (response?.code) {
+        throw new Error(response.code)
+      }
+
+      if (response?.accessToken) {
+        setAccessToken(response.accessToken)
+      }
+
+      if (response?.refreshToken) {
+        setRefreshToken(response.refreshToken)
+      }
+
+      return response
+    } catch (error) {
+      if (isInvalidSessionCode(error?.message)) {
+        handleExpiredOrRevokedSession()
+        return null
+      }
+
+      throw error
+    }
   }
 
   const register = async (data) => {
@@ -91,7 +150,11 @@ const SessionProvider = ({ children }) => {
 
       addNotification(t("message.success.AUTH_USER_LOGGED"), "success")
 
-      const userData = await getUserData()
+      const userData = await getUserData({ accessToken, refreshToken })
+      if (!userData) {
+        return
+      }
+
       setUser(userData)
       setIsLogged(true)
 
@@ -106,24 +169,20 @@ const SessionProvider = ({ children }) => {
   // TODO: Transicion brusca porque esta lo de protected route
   const logout = () => {
     navigate("/")
-    removeTokens()
-    setUser(defaultUser)
-    setIsLogged(false)
+    clearSessionState()
     addNotification(t("message.success.logout"), "success")
   }
 
-  const getUserData = async () => {
+  const getUserData = async (tokenOverrides = {}) => {
     try {
-      const accessToken = getAccessToken()
-      const refreshToken = getRefreshToken()
+      const accessToken = tokenOverrides.accessToken ?? getAccessToken()
+      const refreshToken = tokenOverrides.refreshToken ?? getRefreshToken()
       const response = await get("/api/v1/user/me", {
         headers: {
           ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
           ...(refreshToken ? { "x-refresh-token": refreshToken } : {}),
         },
       })
-
-      if (response.code === "AUTH_INVALID_TOKEN") return
 
       if (response.code) {
         throw new Error(response?.code)
@@ -133,6 +192,11 @@ const SessionProvider = ({ children }) => {
       setIsLogged(true)
       return response
     } catch (error) {
+      if (isInvalidSessionCode(error?.message)) {
+        handleExpiredOrRevokedSession()
+        return
+      }
+
       addNotification(t(`message.error.${error?.message}`), "error")
     } finally {
       setLoading(false)
@@ -259,15 +323,34 @@ const SessionProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    const token = getAccessToken()
+    const bootstrapSession = async () => {
+      try {
+        const accessToken = getAccessToken()
+        const refreshToken = getRefreshToken()
 
-    if (token) {
-      getUserData()
-    } else {
-      setLoading(false)
-      setIsLogged(false)
+        if (!accessToken && !refreshToken) {
+          setLoading(false)
+          setIsLogged(false)
+          return
+        }
+
+        if (refreshToken) {
+          const refreshedSession = await refreshSession(refreshToken)
+          if (!refreshedSession) {
+            return
+          }
+        }
+
+        await getUserData()
+      } catch (error) {
+        addNotification(t(`message.error.${error?.message}`), "error")
+        setLoading(false)
+        setIsLogged(false)
+      }
     }
-  }, [])
+
+    bootstrapSession()
+  }, [getAccessToken, getRefreshToken])
 
   const value = {
     register,
