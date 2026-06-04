@@ -1,5 +1,6 @@
 import express from "express"
 import {
+	createUserByAdmin,
 	getProfile,
 	getAllUsers,
 	deleteSelf,
@@ -31,6 +32,7 @@ userRoutes.get("/me/sessions", authMiddleware, getSessions)
 userRoutes.delete("/me/sessions/:sessionId", authMiddleware, revokeSession)
 userRoutes.post("/me/transactions", authMiddleware, createTransaction)
 
+userRoutes.post("/", authMiddleware, adminMiddleware, createUserByAdmin)
 userRoutes.get("/", authMiddleware, adminMiddleware, getAllUsers)
 userRoutes.get("/:id", authMiddleware, adminMiddleware, getUserById)
 userRoutes.put("/:id", authMiddleware, adminMiddleware, updateUserById)

@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, {
   createContext,
   useCallback,
@@ -71,7 +72,7 @@ const AdminProvider = ({ children }) => {
         addNotification(t(`message.error.${error.message}`), "error")
       }
     },
-    [addNotification, buildHeaders, buildQueryParams, get, t],
+    [addNotification, buildHeaders, get, t],
   )
 
   const getUserById = useCallback(
@@ -93,61 +94,96 @@ const AdminProvider = ({ children }) => {
     [addNotification, buildHeaders, get, t],
   )
 
-  const updateUser = async (userId, userData) => {
-    try {
-      const res = await put(`/api/v1/user/${userId}`, {
-        headers: buildHeaders(),
-        body: userData,
-      })
+  const createUser = useCallback(
+    async (userData) => {
+      try {
+        const res = await post("/api/v1/user", {
+          headers: buildHeaders(),
+          body: userData,
+        })
 
-      if (res.code !== "SUCCESS") {
-        throw new Error(res.code || "Error al obtener usuarios")
+        if (res.code !== "SUCCESS") {
+          throw new Error(res.code || "Error al crear usuario")
+        }
+
+        await getAllUsers()
+
+        addNotification("User created successfully", "success")
+        return res
+      } catch (error) {
+        addNotification(t(`message.error.${error.message}`), "error")
+        return null
       }
+    },
+    [addNotification, buildHeaders, getAllUsers, post, t],
+  )
 
-      getAllUsers()
+  const updateUser = useCallback(
+    async (userId, userData) => {
+      try {
+        const res = await put(`/api/v1/user/${userId}`, {
+          headers: buildHeaders(),
+          body: userData,
+        })
 
-      addNotification("User updated successfully", "success")
-    } catch (error) {
-      addNotification(t(`message.error.${error.message}`), "error")
-    }
-  }
+        if (res.code !== "SUCCESS") {
+          throw new Error(res.code || "Error al obtener usuarios")
+        }
 
-  const deleteUser = async (userId) => {
-    try {
-      const res = await destroy(`/api/v1/user/${userId}`, {
-        headers: buildHeaders(),
-      })
+        getAllUsers()
 
-      if (res.code !== "SUCCESS") {
-        throw new Error(res.code || "Error al borrar usuario")
+        addNotification("User updated successfully", "success")
+        return res
+      } catch (error) {
+        addNotification(t(`message.error.${error.message}`), "error")
+        return null
       }
+    },
+    [addNotification, buildHeaders, getAllUsers, put, t],
+  )
 
-      addNotification("User deleted successfully", "success")
-      return true
-    } catch (error) {
-      addNotification(t(`message.error.${error.message}`), "error", {
-        duration: 10000,
-      })
-      return false
-    }
-  }
+  const deleteUser = useCallback(
+    async (userId) => {
+      try {
+        const res = await destroy(`/api/v1/user/${userId}`, {
+          headers: buildHeaders(),
+        })
 
-  const deleteModal = (userId, onAfterSuccess) => {
-    if (userId === user?.id) {
-      addNotification(t("message.warning.deleteYourself"), "warning")
-    } else {
-      addNotification(t("message.modal.deleteUser.title"), "modal", {
-        onAccept: async () => {
-          const deleted = await deleteUser(userId)
-          if (deleted) {
-            onAfterSuccess?.()
-          }
-        },
-        acceptLabel: t("message.modal.deleteUser.accept"),
-        cancelLabel: t("message.modal.deleteUser.cancel"),
-      })
-    }
-  }
+        if (res.code !== "SUCCESS") {
+          throw new Error(res.code || "Error al borrar usuario")
+        }
+
+        addNotification("User deleted successfully", "success")
+        return true
+      } catch (error) {
+        addNotification(t(`message.error.${error.message}`), "error", {
+          duration: 10000,
+        })
+        return false
+      }
+    },
+    [addNotification, buildHeaders, destroy, t],
+  )
+
+  const deleteModal = useCallback(
+    (userId, onAfterSuccess) => {
+      if (userId === user?.id) {
+        addNotification(t("message.warning.deleteYourself"), "warning")
+      } else {
+        addNotification(t("message.modal.deleteUser.title"), "modal", {
+          onAccept: async () => {
+            const deleted = await deleteUser(userId)
+            if (deleted) {
+              onAfterSuccess?.()
+            }
+          },
+          acceptLabel: t("message.modal.deleteUser.accept"),
+          cancelLabel: t("message.modal.deleteUser.cancel"),
+        })
+      }
+    },
+    [addNotification, deleteUser, t, user?.id],
+  )
 
   const getTransactionsById = useCallback(
     async (userId, options = {}) => {
@@ -440,6 +476,7 @@ const AdminProvider = ({ children }) => {
       loading,
       getAllUsers,
       getUserById,
+      createUser,
       updateUser,
       deleteUser,
       deleteModal,
@@ -463,6 +500,7 @@ const AdminProvider = ({ children }) => {
       loading,
       getAllUsers,
       getUserById,
+      createUser,
       updateUser,
       deleteUser,
       deleteModal,

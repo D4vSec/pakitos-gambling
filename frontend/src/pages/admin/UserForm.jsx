@@ -8,22 +8,24 @@ import Title from "@/components/layout/fonts/Title"
 import Button from "@/components/buttons/Button"
 import NavigationBtn from "@/components/buttons/NavigationBtn"
 import { useAdmin } from "@/providers/AdminProvider"
-import { userSchema } from "@/schemas/userSchemas"
-import { useSession } from "@/providers/SessionProvider"
+import {
+  createAdminUserSchema,
+  updateAdminUserSchema,
+} from "@/schemas/adminUserSchema"
 
 import Loading from "@/components/Loading"
 
 const UserForm = () => {
   const { id } = useParams()
   const navigate = useNavigate()
-  const { register } = useSession()
   const { t } = useLocale()
-  const { users, getUserById, updateUser } = useAdmin()
+  const { users, getUserById, createUser, updateUser } = useAdmin()
   const isEdit = Boolean(id)
   const [loading, setLoading] = useState(isEdit)
+  const schema = isEdit ? updateAdminUserSchema : createAdminUserSchema
 
   const methods = useForm({
-    resolver: zodResolver(userSchema),
+    resolver: zodResolver(schema),
     defaultValues: {
       username: "",
       email: "",
@@ -80,90 +82,97 @@ const UserForm = () => {
           },
         ]
 
-    const rest = [
-      {
-        name: "balance",
-        type: "number",
-        label: t("forms.fields.balance.label"),
-        placeholder: t("forms.fields.balance.placeholder"),
-      },
-      {
-        name: "role",
-        type: "text",
-        label: t("forms.fields.role.label"),
-        placeholder: t("forms.fields.role.placeholder"),
-        as: "select",
-        options: [
-          { label: t("forms.fields.role.options.user"), value: "user" },
-          { label: t("forms.fields.role.options.admin"), value: "admin" },
-        ],
-      },
-    ]
+    const roleField = {
+      name: "role",
+      type: "text",
+      label: t("forms.fields.role.label"),
+      placeholder: t("forms.fields.role.placeholder"),
+      as: "select",
+      options: [
+        { label: t("forms.fields.role.options.user"), value: "user" },
+        { label: t("forms.fields.role.options.admin"), value: "admin" },
+      ],
+    }
 
-    return [...baseFields, ...passwordFields, ...rest]
+    const balanceField = !isEdit
+      ? [
+          {
+            name: "balance",
+            type: "number",
+            label: t("forms.fields.balance.label"),
+            placeholder: t("forms.fields.balance.placeholder"),
+          },
+        ]
+      : []
+
+    return [...baseFields, ...passwordFields, ...balanceField, roleField]
   }, [isEdit, t])
 
-  const fetchUser = async () => {
-    if (!isEdit) {
-      setLoading(false)
-      return
-    }
-
-    if (!users) {
-      setLoading(true)
-      return
-    }
-
-    const user = await getUserById(id)
-
-    if (!user) {
-      setLoading(false)
-      return
-    }
-
-    methods.reset({
-      username: user.username ?? "",
-      email: user.email ?? "",
-      role: user.role ?? "user",
-      balance: user.balance ?? "0.00",
-      password: "",
-      confirmPassword: "",
-    })
-
-    setLoading(false)
-  }
-
   useEffect(() => {
+    if (!isEdit) return
+
+    let cancelled = false
+
+    const fetchUser = async () => {
+      if (!users) return
+
+      const user = await getUserById(id)
+
+      if (!user || cancelled) {
+        if (!cancelled) setLoading(false)
+        return
+      }
+
+      methods.reset({
+        username: user.username ?? "",
+        email: user.email ?? "",
+        role: user.role ?? "user",
+        password: "",
+        confirmPassword: "",
+      })
+
+      if (!cancelled) {
+        setLoading(false)
+      }
+    }
+
     fetchUser()
-  }, [users, id, isEdit])
+
+    return () => {
+      cancelled = true
+    }
+  }, [users, id, isEdit, getUserById, methods])
 
   const onSubmit = async (data) => {
-    let payload = { ...data }
-
-    delete payload.confirmPassword
-
-    if (isEdit && !payload.password) {
-      delete payload.password
-    }
-
-    if (!isEdit) {
-      // Reutiliza /user/register, de momento
-      payload = {
+    if (isEdit) {
+      const payload = {
         username: data.username,
-        email: payload.email,
-        password: payload.password,
+        email: data.email,
+        role: data.role,
       }
-      await register(payload)
-      console.log("register", payload)
+
+      if (data.password) {
+        payload.password = data.password
+      }
+
+      const updated = await updateUser(id, payload)
+      if (updated) {
+        navigate("/admin/users")
+      }
     } else {
-      payload = {
+      const payload = {
         username: data.username,
-        email: payload.email,
-        role: payload.role,
+        email: data.email,
+        password: data.password,
+        role: data.role,
+        balance: data.balance,
       }
-      await updateUser(id, payload)
+
+      const created = await createUser(payload)
+      if (created) {
+        navigate("/admin/users")
+      }
     }
-    navigate("/admin/users")
   }
 
   return loading ? (

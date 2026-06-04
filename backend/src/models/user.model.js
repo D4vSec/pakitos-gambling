@@ -199,12 +199,18 @@ const buildTransactionFilters = (userId, rawFilters = {}) => {
 	return { where: `WHERE ${clauses.join(" AND ")}`, values }
 }
 
-const createUser = async ({ username, email, password }) => {
+const createUser = async ({ username, email, password, role = "user", balance = 0 }) => {
 	const hashedPassword = await hashPassword(password)
+	const numericBalance = Number(balance)
+	const normalizedBalance = Number.isFinite(numericBalance) && numericBalance >= 0 ? numericBalance : 0
+	const normalizedRole = role === "admin" ? "admin" : "user"
 	let result
 
 	try {
-		result = await db.query("INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING id", [username, email, hashedPassword])
+		result = await db.query(
+			"INSERT INTO users (username, email, password, role, balance) VALUES ($1, $2, $3, $4, $5) RETURNING id",
+			[username, email, hashedPassword, normalizedRole, normalizedBalance],
+		)
 	} catch (error) {
 		result = error
 		throw error
