@@ -41,7 +41,7 @@ const Card = ({ card, forceHidden = false, isActive = false, flipped }) => {
           className={`absolute w-full h-full bg-white ${
             isHidden ? "" : color[suit]
           } flex flex-col gap-0.5 rounded-lg border border-gray-200 p-1.5 font-bold text-[clamp(0.875rem,2.2vw,1.25rem)] shadow-md backface-hidden md:gap-1 md:p-2 ${
-            isActive ? "ring-2 ring-green-400 md:ring-4" : ""
+            isActive ? "ring-3 ring-orange-400 md:ring-5" : ""
           }`}
           style={{ backfaceVisibility: "hidden" }}>
           {!isHidden && (

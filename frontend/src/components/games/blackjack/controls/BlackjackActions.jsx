@@ -15,6 +15,16 @@ import {
 const BlackjackActions = ({ disabled }) => {
   const { game, hit, stand, double, split } = useBlackjack()
   const { t } = useLocale()
+  const playerHands = Array.isArray(game?.player) ? game.player : []
+  const activeHandIndex =
+    game?.status === "finished"
+      ? -1
+      : playerHands.length > 1
+        ? playerHands.findIndex((hand) => !hand?.resolved)
+        : 0
+  const currentHand = playerHands[activeHandIndex] ?? playerHands[0]
+  const currentHandCards = Array.isArray(currentHand?.hand) ? currentHand.hand : []
+  const doubleDisabled = currentHandCards.length > 2
 
   const buttons = [
     {
@@ -41,6 +51,7 @@ const BlackjackActions = ({ disabled }) => {
       variant: "accent",
       svg: <IconMultiplier2x />,
       onClick: double,
+      disabled: doubleDisabled,
     },
   ]
   return (
