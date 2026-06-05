@@ -97,7 +97,7 @@ const SlotGrid = ({
           style={{ gridTemplateColumns: `repeat(${cols}, ${reelSize}px)` }}>
           {Array.from({ length: cols }, (_, c) => (
             <SlotReel
-              key={c}
+              key={`${theme}-${machineType}-${rows}-${cols}-${reelSize}-${c}`}
               colIndex={c}
               rows={rows}
               reelSize={reelSize}

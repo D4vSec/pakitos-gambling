@@ -1,21 +1,15 @@
 import React, { useRef, useEffect } from "react"
 import gsap from "gsap"
-import cherryImg from "@/assets/games/cherry3x3.jpg"
-import lemonImg from "@/assets/games/lemon3x3.jpg"
-import orangeImg from "@/assets/games/orange3x3.jpg"
-import plumImg from "@/assets/games/plum3x3.jpg"
-import bellImg from "@/assets/games/bell3x3.jpg"
-import barImg from "@/assets/games/bar3x3.jpg"
-import sevenImg from "@/assets/games/seven3x3.jpg"
+import { SLOT_SYMBOLS_BY_THEME } from "./slotThemeAssets"
 
 const SYMBOL_DISPLAY = {
-  cherry: cherryImg,
-  lemon: lemonImg,
-  orange: orangeImg,
-  plum: plumImg,
-  bell: bellImg,
-  bar: barImg,
-  seven: sevenImg,
+  cherry: SLOT_SYMBOLS_BY_THEME.starwars.cherry,
+  lemon: SLOT_SYMBOLS_BY_THEME.starwars.lemon,
+  orange: SLOT_SYMBOLS_BY_THEME.starwars.orange,
+  plum: SLOT_SYMBOLS_BY_THEME.starwars.plum,
+  bell: SLOT_SYMBOLS_BY_THEME.starwars.bell,
+  bar: SLOT_SYMBOLS_BY_THEME.starwars.bar,
+  seven: SLOT_SYMBOLS_BY_THEME.starwars.seven,
 }
 
 const SlotCell = ({ symbol, isWinning = false, animKey, isLanding = false }) => {

@@ -1,54 +1,58 @@
 import React from "react"
 import { useLocale } from "@/providers/LocaleProvider"
-import cherry3x3Img from "@/assets/games/cherry3x3.jpg"
-import lemon3x3Img from "@/assets/games/lemon3x3.jpg"
-import orange3x3Img from "@/assets/games/orange3x3.jpg"
-import plum3x3Img from "@/assets/games/plum3x3.jpg"
-import bell3x3Img from "@/assets/games/bell3x3.jpg"
-import bar3x3Img from "@/assets/games/bar3x3.jpg"
-import seven3x3Img from "@/assets/games/seven3x3.jpg"
-import cherry3x5Img from "@/assets/games/cherry3x5.png"
-import lemon3x5Img from "@/assets/games/lemon3x5.png"
-import orange3x5Img from "@/assets/games/orange3x5.png"
-import plum3x5Img from "@/assets/games/plum3x5.png"
-import bell3x5Img from "@/assets/games/bell3x5.png"
-import bar3x5Img from "@/assets/games/bar3x5.png"
-import seven3x5Img from "@/assets/games/seven3x5.png"
-import cherry5x5Img from "@/assets/games/cherry5x5.jpg"
-import lemon5x5Img from "@/assets/games/lemon5x5.jpg"
-import orange5x5Img from "@/assets/games/orange5x5.png"
-import plum5x5Img from "@/assets/games/plum5x5.png"
-import bell5x5Img from "@/assets/games/bell5x5.png"
-import bar5x5Img from "@/assets/games/bar5x5.png"
-import seven5x5Img from "@/assets/games/seven5x5.png"
+import { SLOT_SYMBOLS_BY_THEME } from "./slotThemeAssets"
 
 const PAYTABLE = {
   starwars: [
-    { symbol: "seven", img: seven3x3Img, payout: 100 },
-    { symbol: "bar", img: bar3x3Img, payout: 30 },
-    { symbol: "bell", img: bell3x3Img, payout: 10 },
-    { symbol: "plum", img: plum3x3Img, payout: 5 },
-    { symbol: "orange", img: orange3x3Img, payout: 1.8 },
-    { symbol: "lemon", img: lemon3x3Img, payout: 0.8 },
-    { symbol: "cherry", img: cherry3x3Img, payout: 0.5 },
+    { symbol: "seven", img: SLOT_SYMBOLS_BY_THEME.starwars.seven, payout: 100 },
+    { symbol: "bar", img: SLOT_SYMBOLS_BY_THEME.starwars.bar, payout: 30 },
+    { symbol: "bell", img: SLOT_SYMBOLS_BY_THEME.starwars.bell, payout: 10 },
+    { symbol: "plum", img: SLOT_SYMBOLS_BY_THEME.starwars.plum, payout: 5 },
+    { symbol: "orange", img: SLOT_SYMBOLS_BY_THEME.starwars.orange, payout: 1.8 },
+    { symbol: "lemon", img: SLOT_SYMBOLS_BY_THEME.starwars.lemon, payout: 0.8 },
+    { symbol: "cherry", img: SLOT_SYMBOLS_BY_THEME.starwars.cherry, payout: 0.5 },
   ],
   stardewvalley: [
-    { symbol: "seven", img: seven3x5Img, payout: 100 },
-    { symbol: "bar", img: bar3x5Img, payout: 30 },
-    { symbol: "bell", img: bell3x5Img, payout: 10 },
-    { symbol: "plum", img: plum3x5Img, payout: 5 },
-    { symbol: "orange", img: orange3x5Img, payout: 1.8 },
-    { symbol: "lemon", img: lemon3x5Img, payout: 0.8 },
-    { symbol: "cherry", img: cherry3x5Img, payout: 0.5 },
+    {
+      symbol: "seven",
+      img: SLOT_SYMBOLS_BY_THEME.stardewvalley.seven,
+      payout: 100,
+    },
+    { symbol: "bar", img: SLOT_SYMBOLS_BY_THEME.stardewvalley.bar, payout: 30 },
+    {
+      symbol: "bell",
+      img: SLOT_SYMBOLS_BY_THEME.stardewvalley.bell,
+      payout: 10,
+    },
+    {
+      symbol: "plum",
+      img: SLOT_SYMBOLS_BY_THEME.stardewvalley.plum,
+      payout: 5,
+    },
+    {
+      symbol: "orange",
+      img: SLOT_SYMBOLS_BY_THEME.stardewvalley.orange,
+      payout: 1.8,
+    },
+    {
+      symbol: "lemon",
+      img: SLOT_SYMBOLS_BY_THEME.stardewvalley.lemon,
+      payout: 0.8,
+    },
+    {
+      symbol: "cherry",
+      img: SLOT_SYMBOLS_BY_THEME.stardewvalley.cherry,
+      payout: 0.5,
+    },
   ],
   beerman: [
-    { symbol: "seven", img: seven5x5Img, payout: 100 },
-    { symbol: "bar", img: bar5x5Img, payout: 30 },
-    { symbol: "bell", img: bell5x5Img, payout: 10 },
-    { symbol: "plum", img: plum5x5Img, payout: 5 },
-    { symbol: "orange", img: orange5x5Img, payout: 1.8 },
-    { symbol: "lemon", img: lemon5x5Img, payout: 0.8 },
-    { symbol: "cherry", img: cherry5x5Img, payout: 0.5 },
+    { symbol: "seven", img: SLOT_SYMBOLS_BY_THEME.beerman.seven, payout: 100 },
+    { symbol: "bar", img: SLOT_SYMBOLS_BY_THEME.beerman.bar, payout: 30 },
+    { symbol: "bell", img: SLOT_SYMBOLS_BY_THEME.beerman.bell, payout: 10 },
+    { symbol: "plum", img: SLOT_SYMBOLS_BY_THEME.beerman.plum, payout: 5 },
+    { symbol: "orange", img: SLOT_SYMBOLS_BY_THEME.beerman.orange, payout: 1.8 },
+    { symbol: "lemon", img: SLOT_SYMBOLS_BY_THEME.beerman.lemon, payout: 0.8 },
+    { symbol: "cherry", img: SLOT_SYMBOLS_BY_THEME.beerman.cherry, payout: 0.5 },
   ],
 }
 

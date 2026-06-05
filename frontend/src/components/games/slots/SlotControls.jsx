@@ -21,7 +21,7 @@ const SlotControls = ({ theme = "starwars" }) => {
     loading,
     createSession,
     spin,
-    endSession,
+    closeSession,
   } = useSlots()
   const dims = DIMS_BY_TYPE[type] ?? { rows: 3, cols: 3 }
   const NOTIF_DELAY_MS = getAnimTotalMs(dims.cols, dims.rows)
@@ -158,7 +158,7 @@ const SlotControls = ({ theme = "starwars" }) => {
     if (isBusy) return
     if (!session?.gameId) return
 
-    await endSession(session.gameId)
+    await closeSession(session.gameId)
     setVisibleHistorySpins([])
     setBetAmount("")
     setLastBet("")

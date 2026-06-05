@@ -1,4 +1,11 @@
-import React, { createContext, useCallback, useContext, useEffect, useState } from "react"
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react"
 import useAPI from "@/hooks/useAPI"
 import { useSession } from "@/providers/SessionProvider"
 import { useNotification } from "@/providers/NotificationProvider"
@@ -6,60 +13,38 @@ import { useLocale } from "@/providers/LocaleProvider"
 
 const SlotsContext = createContext()
 
-const selectedTypeKey = (slotKey) => `slotsSelectedType_${slotKey}`
-const gameIdKey = (type) => `slotsGameId_${type}`
-const paylinesKey = (type) => `slotsPaylines_${type}`
-
-const getStoredSelectedType = (slotKey) => localStorage.getItem(selectedTypeKey(slotKey))
-const setStoredSelectedType = (slotKey, type) =>
-  localStorage.setItem(selectedTypeKey(slotKey), type)
-const getStoredGameId = (type) => localStorage.getItem(gameIdKey(type))
-const setStoredGameId = (type, id) => localStorage.setItem(gameIdKey(type), id)
-const removeStoredGameId = (type) => localStorage.removeItem(gameIdKey(type))
-
-const getStoredPaylines = (type) => {
-  try {
-    const raw = localStorage.getItem(paylinesKey(type))
-    return raw ? JSON.parse(raw) : null
-  } catch {
-    return null
-  }
-}
-const setStoredPaylines = (type, paylines) =>
-  localStorage.setItem(paylinesKey(type), JSON.stringify(paylines))
-const removeStoredPaylines = (type) => localStorage.removeItem(paylinesKey(type))
-
-const getDimensionsFromType = (machineType) => {
-  const map = {
-    "3x3": { rows: 3, cols: 3 },
-    "3x5": { rows: 3, cols: 5 },
-    "5x5": { rows: 5, cols: 5 },
-  }
-  return map[machineType] ?? { rows: 3, cols: 5 }
-}
-
-const SlotsProvider = ({ type: defaultType = "3x3", slotKey = "default", children }) => {
-  const { post, get, destroy, loading: apiLoading } = useAPI()
+const SlotsProvider = ({
+  type: defaultType = "3x3",
+  slotKey = "default",
+  children,
+}) => {
+  const { post, destroy, loading: apiLoading } = useAPI()
   const { getAccessToken, getRefreshToken, setUser } = useSession()
   const { addNotification } = useNotification()
   const { t } = useLocale()
 
-  const [type, setType] = useState(
-    () => getStoredSelectedType(slotKey) ?? defaultType,
-  )
+  const [type, setType] = useState(defaultType)
   const [session, setSession] = useState(null)
   const [spins, setSpins] = useState([])
   const [loading, setLoading] = useState(false)
   const [isSpinning, setIsSpinning] = useState(false)
   const [error, setError] = useState(null)
+  const sessionRef = useRef(null)
+  const destroyRef = useRef(destroy)
+  const authHeadersRef = useRef(() => ({}))
+  const previousSlotKeyRef = useRef(slotKey)
 
   useEffect(() => {
-    setType(getStoredSelectedType(slotKey) ?? defaultType)
+    setType(defaultType)
   }, [defaultType, slotKey])
 
   useEffect(() => {
-    setStoredSelectedType(slotKey, type)
-  }, [slotKey, type])
+    sessionRef.current = session
+  }, [session])
+
+  useEffect(() => {
+    destroyRef.current = destroy
+  }, [destroy])
 
   const authHeaders = useCallback(() => {
     const accessToken = getAccessToken()
@@ -69,6 +54,10 @@ const SlotsProvider = ({ type: defaultType = "3x3", slotKey = "default", childre
       ...(refreshToken ? { "x-refresh-token": refreshToken } : {}),
     }
   }, [getAccessToken, getRefreshToken])
+
+  useEffect(() => {
+    authHeadersRef.current = authHeaders
+  }, [authHeaders])
 
   const syncUserBalance = useCallback(
     (balance) => {
@@ -83,10 +72,50 @@ const SlotsProvider = ({ type: defaultType = "3x3", slotKey = "default", childre
     [setUser],
   )
 
+  const clearLocalSession = useCallback(() => {
+    setSession(null)
+    setSpins([])
+  }, [])
+
+  const closeSession = useCallback(
+    async (gameId) => {
+      if (!gameId) return null
+
+      setLoading(true)
+      setError(null)
+      try {
+        const res = await destroy(`/api/v1/slots/${gameId}`, {
+          headers: authHeaders(),
+        })
+        if (!res || res.code) throw new Error(res?.code || "UNKNOWN_ERROR")
+
+        clearLocalSession()
+        return res
+      } catch (err) {
+        setError(err.message)
+        addNotification(
+          t(`message.error.${err.message}`) || err.message,
+          "error",
+        )
+        throw err
+      } finally {
+        setLoading(false)
+      }
+    },
+    [addNotification, authHeaders, clearLocalSession, destroy, t],
+  )
+
   const createSession = async ({ type: sessionType = type, amount }) => {
     setLoading(true)
     setError(null)
     try {
+      if (sessionRef.current?.gameId) {
+        await destroy(`/api/v1/slots/${sessionRef.current.gameId}`, {
+          headers: authHeaders(),
+        })
+        clearLocalSession()
+      }
+
       const res = await post("/api/v1/slots/create", {
         headers: authHeaders(),
         body: { type: sessionType, amount },
@@ -107,8 +136,6 @@ const SlotsProvider = ({ type: defaultType = "3x3", slotKey = "default", childre
       setSession(newSession)
       setSpins([])
       setType(res.machineType)
-      setStoredGameId(res.machineType, res.gameId)
-      setStoredPaylines(res.machineType, res.paylines)
       syncUserBalance(res.balance)
 
       return res
@@ -162,20 +189,6 @@ const SlotsProvider = ({ type: defaultType = "3x3", slotKey = "default", childre
         winningLines: res.winningLines,
       })
 
-      if (!Number.isFinite(Number(res.payout ?? 0))) {
-        console.warn("[SlotsProvider] unexpected payout value", {
-          gameId,
-          payout: res.payout,
-        })
-      }
-
-      if (!Number.isFinite(Number(res.balance ?? 0))) {
-        console.warn("[SlotsProvider] unexpected balance value", {
-          gameId,
-          balance: res.balance,
-        })
-      }
-
       const spinResult = {
         spinNumber: res.spinNumber,
         grid: res.grid,
@@ -201,94 +214,50 @@ const SlotsProvider = ({ type: defaultType = "3x3", slotKey = "default", childre
     }
   }
 
-  const getSession = async (gameId) => {
-    setLoading(true)
-    setError(null)
-    try {
-      const res = await get(`/api/v1/slots/${gameId}`, { headers: authHeaders() })
-      if (!res || res.code) throw new Error(res?.code || "UNKNOWN_ERROR")
+  useEffect(() => {
+    if (previousSlotKeyRef.current === slotKey) return
 
-      const { rows, cols } = getDimensionsFromType(res.machineType)
-      const paylines = getStoredPaylines(res.machineType)
+    previousSlotKeyRef.current = slotKey
+    if (!sessionRef.current?.gameId) return
 
-      setSession({
-        gameId: res.gameId,
-        machineType: res.machineType,
-        bet: res.bet,
-        rows,
-        cols,
-        paylines,
-        totalSpins: res.totalSpins,
-        totalPayout: res.totalPayout,
-        createdAt: res.createdAt,
-      })
-      setType(res.machineType)
-      setSpins(res.spins || [])
-
-      return res
-    } catch (err) {
-      setError(err.message)
-      addNotification(t(`message.error.${err.message}`) || err.message, "error")
-      throw err
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const endSession = async (gameId) => {
-    setLoading(true)
-    setError(null)
-    try {
-      const res = await destroy(`/api/v1/slots/${gameId}`, { headers: authHeaders() })
-      if (!res || res.code) throw new Error(res?.code || "UNKNOWN_ERROR")
-
-      setSession(null)
-      setSpins([])
-      removeStoredGameId(type)
-      removeStoredPaylines(type)
-
-      return res
-    } catch (err) {
-      setError(err.message)
-      addNotification(t(`message.error.${err.message}`) || err.message, "error")
-      throw err
-    } finally {
-      setLoading(false)
-    }
-  }
+    closeSession(sessionRef.current.gameId).catch(() => {
+      clearLocalSession()
+    })
+  }, [clearLocalSession, closeSession, slotKey])
 
   useEffect(() => {
-    const storedId = getStoredGameId(type)
-    if (!storedId) {
-      setSession(null)
-      setSpins([])
-      return
-    }
-
-    let isMounted = true
-
-    if (storedId) {
-      getSession(storedId).catch(() => {
-        if (!isMounted) return
-        removeStoredGameId(type)
-        removeStoredPaylines(type)
-        setSession(null)
-        setSpins([])
-      })
-    }
     return () => {
-      isMounted = false
+      const activeGameId = sessionRef.current?.gameId
+      if (!activeGameId) return
+
+      destroyRef.current(`/api/v1/slots/${activeGameId}`, {
+        headers: authHeadersRef.current(),
+      }).catch(() => null)
     }
-  }, [type])
+  }, [])
+
+  const changeType = useCallback(
+    async (nextType) => {
+      if (nextType === type) return
+
+      if (sessionRef.current?.gameId) {
+        await closeSession(sessionRef.current.gameId).catch(() => {
+          clearLocalSession()
+        })
+      }
+
+      setType(nextType)
+    },
+    [clearLocalSession, closeSession, type],
+  )
 
   const value = {
     type,
-    setType,
+    setType: changeType,
     defaultType,
     createSession,
     spin,
-    getSession,
-    endSession,
+    closeSession,
     session,
     spins,
     isSpinning,

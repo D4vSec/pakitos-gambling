@@ -1,10 +1,9 @@
-import React, { useCallback, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { useSlots } from "@/providers/SlotsProvider"
 import { useLocale } from "@/providers/LocaleProvider"
 import SlotGrid from "./SlotGrid"
 import SlotPaytable from "./SlotPaytable"
 import { DIMS_BY_TYPE } from "./slotConstants"
-import "./SlotMachine.css"
 
 const SlotMachine = ({ theme = "starwars" }) => {
   const { type, session, spins, isSpinning } = useSlots()
@@ -22,6 +21,11 @@ const SlotMachine = ({ theme = "starwars" }) => {
   const handleGridSizeChange = useCallback(({ width }) => {
     setGridFrameWidth((prevWidth) => (prevWidth === width ? prevWidth : width))
   }, [])
+
+  useEffect(() => {
+    setGridFrameWidth(null)
+  }, [theme, type, rows, cols])
+
   return (
     <div className="flex h-full w-full flex-row items-stretch gap-2 p-1.5 md:gap-3 md:p-3">
       <div className="hidden lg:flex">
@@ -49,6 +53,7 @@ const SlotMachine = ({ theme = "starwars" }) => {
 
           <div className="flex min-h-0 w-full items-center justify-center">
             <SlotGrid
+              key={`${theme}-${type}-${rows}x${cols}`}
               className="max-h-full max-w-full"
               grid={lastSpin?.grid ?? null}
               winningLines={lastSpin?.winningLines ?? []}

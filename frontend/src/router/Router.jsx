@@ -60,8 +60,7 @@ const Router = () => {
           <ProtectedRoute requireAdmin>
             <AdminLayout />
           </ProtectedRoute>
-        }
-      >
+        }>
         <Route index element={<Navigate to="users" replace />} />
         <Route path="users" element={<AllUsers />} />
         <Route path="users/:id" element={<UserDetails />} />
@@ -125,7 +124,7 @@ const Router = () => {
         path="/slots/starwars"
         element={
           <ProtectedRoute>
-            <SlotsGame theme="starwars" type="3x3" />
+            <SlotsGame theme="starwars" />
           </ProtectedRoute>
         }
       />
@@ -133,7 +132,7 @@ const Router = () => {
         path="/slots/stardewvalley"
         element={
           <ProtectedRoute>
-            <SlotsGame theme="stardewvalley" type="3x5" />
+            <SlotsGame theme="stardewvalley" />
           </ProtectedRoute>
         }
       />
@@ -141,7 +140,7 @@ const Router = () => {
         path="/slots/beerman"
         element={
           <ProtectedRoute>
-            <SlotsGame theme="beerman" type="5x5" />
+            <SlotsGame theme="beerman" />
           </ProtectedRoute>
         }
       />

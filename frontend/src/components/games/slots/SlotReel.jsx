@@ -1,66 +1,12 @@
 import React, { useEffect, useRef, useState } from "react"
 import gsap from "gsap"
 import { WIN_REVEAL_DELAY_MS } from "./slotConstants"
-import imagenInicio3x3Img from "@/assets/games/imagenInicio3x3.jpg"
-import imagenInicio3x5Img from "@/assets/games/imagenInicio3x5.jpg"
-import beermanImg from "@/assets/home/cards/beerman.jpeg"
-import cherry3x3Img from "@/assets/games/cherry3x3.jpg"
-import lemon3x3Img from "@/assets/games/lemon3x3.jpg"
-import orange3x3Img from "@/assets/games/orange3x3.jpg"
-import plum3x3Img from "@/assets/games/plum3x3.jpg"
-import bell3x3Img from "@/assets/games/bell3x3.jpg"
-import bar3x3Img from "@/assets/games/bar3x3.jpg"
-import seven3x3Img from "@/assets/games/seven3x3.jpg"
-import cherry3x5Img from "@/assets/games/cherry3x5.png"
-import lemon3x5Img from "@/assets/games/lemon3x5.png"
-import orange3x5Img from "@/assets/games/orange3x5.png"
-import plum3x5Img from "@/assets/games/plum3x5.png"
-import bell3x5Img from "@/assets/games/bell3x5.png"
-import bar3x5Img from "@/assets/games/bar3x5.png"
-import seven3x5Img from "@/assets/games/seven3x5.png"
-import cherry5x5Img from "@/assets/games/cherry5x5.jpg"
-import lemon5x5Img from "@/assets/games/lemon5x5.jpg"
-import orange5x5Img from "@/assets/games/orange5x5.png"
-import plum5x5Img from "@/assets/games/plum5x5.png"
-import bell5x5Img from "@/assets/games/bell5x5.png"
-import bar5x5Img from "@/assets/games/bar5x5.png"
-import seven5x5Img from "@/assets/games/seven5x5.png"
+import {
+  SLOT_PLACEHOLDERS_BY_THEME,
+  SLOT_SYMBOLS_BY_THEME,
+} from "./slotThemeAssets"
 
 const SYMBOLS = ["cherry", "lemon", "orange", "plum", "bell", "bar", "seven"]
-const DISPLAY_BY_THEME = {
-  starwars: {
-    cherry: cherry3x3Img,
-    lemon: lemon3x3Img,
-    orange: orange3x3Img,
-    plum: plum3x3Img,
-    bell: bell3x3Img,
-    bar: bar3x3Img,
-    seven: seven3x3Img,
-  },
-  stardewvalley: {
-    cherry: cherry3x5Img,
-    lemon: lemon3x5Img,
-    orange: orange3x5Img,
-    plum: plum3x5Img,
-    bell: bell3x5Img,
-    bar: bar3x5Img,
-    seven: seven3x5Img,
-  },
-  beerman: {
-    cherry: cherry5x5Img,
-    lemon: lemon5x5Img,
-    orange: orange5x5Img,
-    plum: plum5x5Img,
-    bell: bell5x5Img,
-    bar: bar5x5Img,
-    seven: seven5x5Img,
-  },
-}
-const PLACEHOLDER_BY_THEME = {
-  starwars: imagenInicio3x3Img,
-  stardewvalley: imagenInicio3x5Img,
-  beerman: beermanImg,
-}
 const rand = () => SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)]
 
 // Full cell traversal duration (y: -100% → 100%). Two images are staggered by
@@ -79,7 +25,9 @@ const SlotReel = ({
   winningCells,
   onSettled,
 }) => {
-  const DISPLAY = DISPLAY_BY_THEME[theme] ?? DISPLAY_BY_THEME["starwars"]
+  const DISPLAY = SLOT_SYMBOLS_BY_THEME[theme] ?? SLOT_SYMBOLS_BY_THEME.starwars
+  const placeholderImg =
+    SLOT_PLACEHOLDERS_BY_THEME[theme] ?? SLOT_PLACEHOLDERS_BY_THEME.starwars
   const imgARefs = useRef([]) // primary img per row — used for spin, landing, idle
   const imgBRefs = useRef([]) // secondary img per row — only active during spin
   const cellRefs = useRef([])
@@ -305,9 +253,9 @@ const SlotReel = ({
               }
             `}
           >
-            {!sym && phase === "idle" && PLACEHOLDER_BY_THEME[theme] && (
+            {!sym && phase === "idle" && placeholderImg && (
               <img
-                src={PLACEHOLDER_BY_THEME[theme]}
+                src={placeholderImg}
                 alt=""
                 className="absolute inset-0 w-full h-full object-cover pointer-events-none"
                 onError={(e) => {
@@ -315,7 +263,7 @@ const SlotReel = ({
                 }}
               />
             )}
-            {!sym && phase === "idle" && !PLACEHOLDER_BY_THEME[theme] && (
+            {!sym && phase === "idle" && !placeholderImg && (
               <span className="absolute inset-0 flex items-center justify-center text-xl opacity-20 text-neutral-400 pointer-events-none">
                 ?
               </span>
