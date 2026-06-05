@@ -111,7 +111,7 @@ export const startGame = async (req, res) => {
             } else {
                 game.winners.push(winners.player)
             }
-            let result = blackJack.getPayout(game, FIRST_HAND)
+            let result = blackJack.getPayout(game, FIRST_HAND, true)
             game.payout = result ? result.payout : 0
             if (game.payout > 0)
                 await User.updateUserBalance(id, game.payout, { type: result.type })
@@ -438,15 +438,17 @@ export const double = async (req, res) => {
         }
 
         await User.updateUserBalance(id, -game.player[FIRST_HAND].bet, { type: "BET" })
-        game.player[FIRST_HAND].bet *= 2
+        
         //If the game is not split we do the usual thing
         if (!game.split) {
             if (game.player[FIRST_HAND].hand.length !== 2) {
                 await User.updateUserBalance(id, game.player[FIRST_HAND].bet / 2, {
                     type: "REFUND",
                 })
-                return res.status(400).json({ code: "CANNOT_DOUBLE not split" })
+                return res.status(400).json({ code: "CANNOT_DOUBLE" })
             }
+
+            game.player[FIRST_HAND].bet *= 2
 
             game.player[FIRST_HAND].hand = blackJack.hit(game.deck, game.player[FIRST_HAND].hand)
             game.player[FIRST_HAND].doubled = true
@@ -469,7 +471,7 @@ export const double = async (req, res) => {
                 game.winners.push(winner)
                 game.status = GAME_STATUSES.finished
 
-                let result = blackJack.getPayout(game, FIRST_HAND)
+                let result = blackJack.getPayout(game, FIRST_HAND, false)
                 game.payout = result ? result.payout : 0
                 if (game.payout > 0)
                     await User.updateUserBalance(id, game.payout, { type: result.type })
@@ -484,8 +486,10 @@ export const double = async (req, res) => {
                     await User.updateUserBalance(id, game.player[SECOND_HAND].bet / 2, {
                         type: "REFUND",
                     })
-                    return res.status(400).json({ code: "CANNOT_DOUBLE split resolved 1" })
+                    return res.status(400).json({ code: "CANNOT_DOUBLE" })
                 }
+
+                game.player[SECOND_HAND].bet *= 2
 
                 game.player[SECOND_HAND].hand = blackJack.hit(
                     game.deck,
@@ -501,17 +505,23 @@ export const double = async (req, res) => {
                         game.player[SECOND_HAND].hand,
                     )
                     game.dealer[DEALER_HAND] = blackJack.setHand(game.dealer[DEALER_HAND])
-
+                    //TODO: NOSE
                     const winner = blackJack.determinateWinner(
                         game.player[FIRST_HAND].value,
                         game.dealer[DEALER_HAND].value,
                     )
 
+                    const winner2 = blackJack.determinateWinner(
+                        game.player[SECOND_HAND].value,
+                        game.dealer[DEALER_HAND].value,
+                    )
+
                     game.winners.push(winner)
+                    game.winners.push(winner2)
                     game.status = GAME_STATUSES.finished
 
-                    const results = blackJack.getPayout(game, FIRST_HAND)
-                    const results2 = blackJack.getPayout(game, SECOND_HAND)
+                    const results = blackJack.getPayout(game, FIRST_HAND, false)
+                    const results2 = blackJack.getPayout(game, SECOND_HAND, false)
                     game.payout = (results ? results.payout : 0) + (results2 ? results2.payout : 0)
                     if (results.payout > 0)
                         await User.updateUserBalance(id, results.payout, { type: results.type })
@@ -528,8 +538,10 @@ export const double = async (req, res) => {
                     await User.updateUserBalance(id, game.player[FIRST_HAND].bet / 2, {
                         type: "REFUND",
                     })
-                    return res.status(400).json({ code: "CANNOT_DOUBLE split resolved 2" })
+                    return res.status(400).json({ code: "CANNOT_DOUBLE" })
                 }
+
+                game.player[FIRST_HAND].bet *= 2
                 // If the player decides to double with the first hand we have to check a few things too
                 game.player[FIRST_HAND].hand = blackJack.hit(
                     game.deck,
