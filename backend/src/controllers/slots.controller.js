@@ -1,10 +1,13 @@
 import createSlots from "#services/slots.service"
 import User from "#models/user.model"
 import { MACHINE_TYPES } from "#config/slots.config"
+import { GAME_SESSION_TTL_MS } from "#config/cache.config"
+import createCache from "#utils/cache.utils"
 import logger from "#utils/logger.utils"
 import { randomUUID } from "#utils/rng.utils"
 
-const activeGames = new Map()
+const activeGames = createCache()
+const SLOT_SESSION_TTL_MS = GAME_SESSION_TTL_MS.slots
 
 /**
  * POST /slots/create
@@ -50,7 +53,7 @@ const createSlot = async (req, res) => {
 			createdAt: new Date().toISOString(),
 			spins: [],
 			totalPayout: 0,
-		})
+		}, SLOT_SESSION_TTL_MS)
 
 		return res.json({
 			gameId,
