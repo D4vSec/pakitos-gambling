@@ -25,6 +25,18 @@ const BlackjackActions = ({ disabled }) => {
   const currentHand = playerHands[activeHandIndex] ?? playerHands[0]
   const currentHandCards = Array.isArray(currentHand?.hand) ? currentHand.hand : []
   const doubleDisabled = currentHandCards.length > 2
+  const getCardValue = (rank) => {
+    if (!rank || rank === "hidden") return null
+    if (rank === "A") return 1
+    if (["J", "Q", "K"].includes(rank)) return 10
+
+    const numericRank = Number(rank)
+    return Number.isNaN(numericRank) ? null : numericRank
+  }
+  const splitDisabled =
+    Boolean(game?.split) ||
+    currentHandCards.length !== 2 ||
+    getCardValue(currentHandCards[0]?.rank) !== getCardValue(currentHandCards[1]?.rank)
 
   const buttons = [
     {
@@ -44,7 +56,7 @@ const BlackjackActions = ({ disabled }) => {
       variant: "neutral",
       onClick: split,
       svg: <IconArrowsSplit />,
-      disabled: Boolean(game?.split),
+      disabled: splitDisabled,
     },
     {
       label: "games.blackjack.actions.double",
@@ -64,7 +76,8 @@ const BlackjackActions = ({ disabled }) => {
           className={GAME_ACTION_BUTTON_FLEX_CLASS}
           onClick={btn.onClick}
           svg={btn.svg ?? <></>}
-          disabled={disabled || btn.disabled}>
+          disabled={disabled || btn.disabled}
+        >
           {t(btn.label)}
         </Button>
       ))}

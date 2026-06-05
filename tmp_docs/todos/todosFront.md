@@ -19,12 +19,12 @@
 
 [] probar si las bets se pagan
 
-[] mal pago al ganar un double: 10 d-> 20 -> win = 60 <> 40
-[] revisar lo del 3 a 2 del bj
-[] bloquear el split para que solo se haga cuando las cartas son del mismo value
+[x] mal pago al ganar un double: 10 d-> 20 -> win = 60 <> 40
+[x] revisar lo del 3 a 2 del bj
+[x] bloquear el split para que solo se haga cuando las cartas son del mismo value
 [x] cambiar el highlight de la mano
 [x] bloquear el double si has mas de 2 cartas en la mano
-[] revisar win / lose / tie
+[x] revisar win / lose / tie
 
 -- Bajo
 [x] create/edit user para modificar el balance y el rol
