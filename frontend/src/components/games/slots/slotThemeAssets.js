@@ -18,8 +18,8 @@ import sevenStardewValleyImg from "@/assets/games/slots/stardewvalley/seven-star
 
 import barBeermanImg from "@/assets/games/slots/beerman/bar-beerman.png"
 import bellBeermanImg from "@/assets/games/slots/beerman/bell-beerman.png"
-import cherryBeermanImg from "@/assets/games/slots/beerman/cherry-beerman.jpg"
-import lemonBeermanImg from "@/assets/games/slots/beerman/lemon-beerman.jpg"
+import cherryBeermanImg from "@/assets/games/slots/beerman/cherry-beerman.png"
+import lemonBeermanImg from "@/assets/games/slots/beerman/lemon-beerman.png"
 import orangeBeermanImg from "@/assets/games/slots/beerman/orange-beerman.png"
 import placeholderBeermanImg from "@/assets/games/slots/beerman/placeholder-beerman.jpeg"
 import plumBeermanImg from "@/assets/games/slots/beerman/plum-beerman.png"
