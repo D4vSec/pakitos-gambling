@@ -132,7 +132,8 @@ const createBlackJack = () => {
 
     const getPayout = (game, handNumber, natural) => {
         if (natural && game.player[handNumber].blackjack) return { payout: game.player[handNumber].bet * 1.5 + game.player[handNumber].bet, type: "WIN" }
-        if (game.player[handNumber].resolved && game.status === "finished" && game.winners[handNumber] === "player") return { payout: game.player[handNumber].bet * 2, type: "WIN" }
+        if (game.player[handNumber].resolved && game.player[handNumber].doubled && game.status === "finished" && game.winners[handNumber] === "player") return { payout: game.player[handNumber].bet * 2, type: "WIN" }
+        if (game.player[handNumber].resolved && !game.player[handNumber].doubled && game.status === "finished" && game.winners[handNumber] === "player") return { payout: game.player[handNumber].bet * 2, type: "WIN" }
         if (game.winners[handNumber] === "tie") return { payout: game.player[handNumber].bet, type: "REFUND" }
         return { payout: 0, type: "LOSE" }
     }

@@ -29,7 +29,7 @@ vi.mock('#utils/rng.utils', () => ({
 	randomUUID: vi.fn(),
 }))
 
-import { getGame, hit, startGame } from '../../../src/controllers/blackjack.controller.js'
+import { getGame, hit, split, stand, startGame } from '../../../src/controllers/blackjack.controller.js'
 import Audit from '#services/audit.service'
 import User from '#models/user.model'
 import createBlackJack from '#services/blackjack.service'
@@ -294,5 +294,77 @@ describe('blackjack.controller', () => {
 			rank: 'hidden',
 			suit: 'hidden',
 		})
+	})
+
+	it('charges the second bet on split and settles each split hand with the correct payout', async () => {
+		User.updateUserBalance
+			.mockResolvedValueOnce(90)
+			.mockResolvedValueOnce(80)
+			.mockResolvedValueOnce(100)
+			.mockResolvedValueOnce(110)
+		createBlackJack.mockReturnValue(
+			buildBlackjackMock([card('8'), card('8'), card('10'), card('7'), card('10'), card('9')]),
+		)
+
+		await startGame(
+			{
+				user: { id: 'user-1' },
+				body: { amount: 10 },
+			},
+			createResponse(),
+		)
+
+		const splitRes = createResponse()
+		await split(
+			{
+				user: { id: 'user-1' },
+				params: { gameId: 'blackjack-game-id' },
+			},
+			splitRes,
+		)
+
+		expect(User.updateUserBalance).toHaveBeenNthCalledWith(2, 'user-1', -10, {
+			type: 'BET',
+		})
+		expect(splitRes.json).toHaveBeenCalledWith(
+			expect.objectContaining({
+				split: true,
+				player: [
+					expect.objectContaining({ value: 18, bet: 10 }),
+					expect.objectContaining({ value: 17, bet: 10 }),
+				],
+			}),
+		)
+
+		await stand(
+			{
+				user: { id: 'user-1' },
+				params: { gameId: 'blackjack-game-id' },
+			},
+			createResponse(),
+		)
+
+		const finalRes = createResponse()
+		await stand(
+			{
+				user: { id: 'user-1' },
+				params: { gameId: 'blackjack-game-id' },
+			},
+			finalRes,
+		)
+
+		expect(User.updateUserBalance).toHaveBeenNthCalledWith(3, 'user-1', 20, {
+			type: 'WIN',
+		})
+		expect(User.updateUserBalance).toHaveBeenNthCalledWith(4, 'user-1', 10, {
+			type: 'REFUND',
+		})
+		expect(finalRes.json).toHaveBeenCalledWith(
+			expect.objectContaining({
+				status: 'finished',
+				payout: 30,
+				winners: ['player', 'tie'],
+			}),
+		)
 	})
 })

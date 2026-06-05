@@ -80,20 +80,24 @@ describe('blackjack service', () => {
 		)
 	})
 
-	it('returns the correct payout for natural blackjack, ties and losses', () => {
+	it('returns the correct payout for natural blackjack, standard wins, ties and losses', () => {
 		const blackJack = createBlackJack()
 		const game = {
 			status: 'finished',
 			player: [
 				{ bet: 20, blackjack: true, resolved: true },
-				{ bet: 15, blackjack: false, resolved: true },
+				{ bet: 15, blackjack: false, doubled: false, resolved: true },
+				{ bet: 30, blackjack: false, doubled: true, resolved: true },
+				{ bet: 12, blackjack: false, doubled: false, resolved: true },
 				{ bet: 30, blackjack: false, resolved: true },
 			],
-			winners: ['player', 'tie', 'dealer'],
+			winners: ['player', 'player', 'player', 'tie', 'dealer'],
 		}
 
 		expect(blackJack.getPayout(game, 0, true)).toEqual({ payout: 50, type: 'WIN' })
-		expect(blackJack.getPayout(game, 1)).toEqual({ payout: 15, type: 'REFUND' })
-		expect(blackJack.getPayout(game, 2)).toEqual({ payout: 0, type: 'LOSE' })
+		expect(blackJack.getPayout(game, 1)).toEqual({ payout: 30, type: 'WIN' })
+		expect(blackJack.getPayout(game, 2)).toEqual({ payout: 60, type: 'WIN' })
+		expect(blackJack.getPayout(game, 3)).toEqual({ payout: 12, type: 'REFUND' })
+		expect(blackJack.getPayout(game, 4)).toEqual({ payout: 0, type: 'LOSE' })
 	})
 })
