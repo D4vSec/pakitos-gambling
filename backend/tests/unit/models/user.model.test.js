@@ -107,8 +107,8 @@ describe('user model basic accessors', () => {
 
 		expect(hashPassword).toHaveBeenCalledWith('secret123')
 		expect(db.query).toHaveBeenCalledWith(
-			'INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING id',
-			['demo', 'demo@example.com', 'hashed-password'],
+			'INSERT INTO users (username, email, password, role, balance) VALUES ($1, $2, $3, $4, $5) RETURNING id',
+			['demo', 'demo@example.com', 'hashed-password', 'user', 0],
 		)
 	})
 

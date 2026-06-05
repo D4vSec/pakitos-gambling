@@ -40,6 +40,13 @@ const createResponse = () => ({
 })
 
 const createRouletteMock = (winningNumber = 7) => ({
+	isAllowedRoulette: vi.fn((type) => ['Zero', 'ZeroZero'].includes(type)),
+	isValidBetShape: vi.fn((bet) => bet && typeof bet === 'object' && Number.isFinite(bet.amount) && bet.amount > 0),
+	invalidBetTypeFor: vi.fn((bet, rouletteType) => {
+		if (bet.type === 'number') return !Number.isInteger(bet.bet) || bet.bet < 0 || bet.bet > (rouletteType === 'Zero' ? 36 : 37)
+		if (bet.type === 'color') return !['red', 'black'].includes(bet.bet)
+		return false
+	}),
 	spinRoulette: vi.fn(() => winningNumber),
 	isNumberBet: vi.fn((type) => type === 'number'),
 	isColorBet: vi.fn((type) => type === 'color'),
@@ -56,6 +63,13 @@ const createRouletteMock = (winningNumber = 7) => ({
 	getColor: vi.fn(() => 'red'),
 	isZero: vi.fn((value) => value === 0),
 	isZeroZero: vi.fn((value) => value === 37),
+	evaluateBet: vi.fn((bet, result) => ({
+		...bet,
+		singleBet: bet.bet,
+		isWinner: bet.type === 'number' ? bet.bet === result : false,
+		payout: bet.type === 'number' && bet.bet === result ? bet.amount * 36 : 0,
+		multiplier: bet.type === 'number' ? 36 : 0,
+	})),
 })
 
 describe('roulette.controller', () => {
@@ -73,6 +87,7 @@ describe('roulette.controller', () => {
 
 		await spinRoulette(
 			{
+				user: { id: 'user-1' },
 				body: {
 					rouletteType: 'TripleZero',
 					bets: [{ type: 'number', bet: 7, amount: 10 }],
@@ -90,6 +105,7 @@ describe('roulette.controller', () => {
 
 		await spinRoulette(
 			{
+				user: { id: 'user-1' },
 				body: {
 					rouletteType: 'Zero',
 					bets: [{ type: 'color', bet: 'blue', amount: 10 }],
@@ -156,6 +172,7 @@ describe('roulette.controller', () => {
 					winningNumber: 7,
 					color: 'red',
 					payout: 360,
+					bets: [{ type: 'number', bet: 7, amount: 10 }],
 				}),
 				ip_address: '203.0.113.25',
 				user_agent: JSON.stringify({ browser: 'Vitest' }),

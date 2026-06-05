@@ -29,6 +29,7 @@ vi.mock('#middlewares/auth.middleware', () => ({
 
 vi.mock('#models/user.model', () => ({
 	default: {
+		createUser: vi.fn(),
 		findAllUsers: vi.fn(),
 		findUserById: vi.fn(),
 		updateUser: vi.fn(),
@@ -95,6 +96,7 @@ const adminRoutes = getDiscoveredRoutes().filter((route) => route.isAdmin)
 const getExpectedStatus = ({ method, path }) => {
 	if (method === 'delete' && normalizeAdminPath(path) === `/v1/user/${TARGET_USER_ID}`) return 204
 	if (method === 'post' && path === '/v1/bets/admin') return 201
+	if (method === 'post' && path === '/v1/user') return 201
 
 	return 200
 }
@@ -130,6 +132,16 @@ const getRequestBody = ({ method, path }) => {
 		}
 	}
 
+	if (method === 'post' && path === '/v1/user') {
+		return {
+			username: 'demo',
+			email: 'demo@example.com',
+			password: 'secret123',
+			role: 'user',
+			balance: 0,
+		}
+	}
+
 	return {}
 }
 
@@ -138,6 +150,7 @@ describe('admin routes', () => {
 		vi.clearAllMocks()
 
 		User.findAllUsers.mockResolvedValue([{ id: ADMIN_ID, username: 'admin', email: 'admin@example.com', role: 'admin', balance: 100 }])
+		User.createUser.mockResolvedValue(TARGET_USER_ID)
 		User.findUserById.mockResolvedValue({
 			id: TARGET_USER_ID,
 			username: 'demo',

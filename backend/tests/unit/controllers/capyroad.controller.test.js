@@ -24,7 +24,6 @@ vi.mock("#utils/logger.utils", () => ({
 import { startGame } from "../../../src/controllers/capyroad.controller.js"
 import createCapyRoad from "#services/capyroad.service"
 import User from "#models/user.model"
-import { randomId } from "#utils/rng.utils"
 
 const createResponse = () => ({
     status: vi.fn().mockReturnThis(),
@@ -34,10 +33,10 @@ const createResponse = () => ({
 describe("capyroad.controller", () => {
     beforeEach(() => {
         vi.clearAllMocks()
+        vi.spyOn(globalThis.crypto, "randomUUID").mockReturnValue("capyroad-game-id")
 
         User.getUserBalance.mockResolvedValue(100)
         User.updateUserBalance.mockResolvedValue(90)
-        randomId.mockReturnValue("capyroad-game-id")
         createCapyRoad.mockReturnValue({
             createMultiplierPath: vi.fn(() => [1, 1.5, 2]),
         })
@@ -92,7 +91,6 @@ describe("capyroad.controller", () => {
 
         expect(User.updateUserBalance).toHaveBeenCalledWith("user-1", -10, { type: "BET" })
         expect(createCapyRoad).not.toHaveBeenCalled()
-        expect(randomId).not.toHaveBeenCalled()
         expect(res.status).toHaveBeenCalledWith(400)
         expect(res.json).toHaveBeenCalledWith({ code: "INSUFFICIENT_BALANCE" })
     })
@@ -111,7 +109,7 @@ describe("capyroad.controller", () => {
         expect(User.getUserBalance).toHaveBeenCalledWith("user-1")
         expect(User.updateUserBalance).toHaveBeenCalledWith("user-1", -10, { type: "BET" })
         expect(createCapyRoad).toHaveBeenCalledTimes(1)
-        expect(randomId).toHaveBeenCalledTimes(1)
+        expect(globalThis.crypto.randomUUID).toHaveBeenCalledTimes(1)
         expect(res.status).toHaveBeenCalledWith(200)
         expect(res.json).toHaveBeenCalledWith(
             expect.objectContaining({
