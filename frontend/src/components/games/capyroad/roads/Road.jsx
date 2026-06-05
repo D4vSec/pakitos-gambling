@@ -23,8 +23,8 @@ const Road = ({
     <div className="relative h-full w-full overflow-hidden border-r border-white/15 transition-all duration-300">
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(84,84,84,0.98)_0%,rgba(42,42,42,1)_24%,rgba(50,50,50,1)_50%,rgba(38,38,38,1)_100%)]" />
       <div className="absolute inset-0 opacity-20 bg-[linear-gradient(135deg,transparent_0%,transparent_42%,rgba(255,255,255,0.1)_50%,transparent_58%,transparent_100%)]" />
-      <div className="absolute inset-y-0 left-0 w-[3px] bg-white/30" />
-      <div className="absolute inset-y-0 right-0 w-[3px] bg-white/18" />
+      <div className="absolute inset-y-0 left-0 w-0.75 bg-white/30" />
+      <div className="absolute inset-y-0 right-0 w-0.75 bg-white/18" />
 
       <div className="absolute inset-y-4 left-1/2 flex -translate-x-1/2 flex-col justify-between sm:inset-y-5 lg:inset-y-6">
         {Array.from({ length: 6 }).map((_, index) => (

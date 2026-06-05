@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useEffect } from "react"
-import roulette00 from "@/assets/games/roulette00.png"
-import roulette0 from "@/assets/games/roulette0.png"
+import roulette00 from "@/assets/games/roulette/roulette00.png"
+import roulette0 from "@/assets/games/roulette/roulette0.png"
 import { useRouletteAnimation } from "@/providers/RouletteProvider"
 import { ROULETTE_0_ORDER, ROULETTE_00_ORDER } from "../rouletteConsts"
 import gsap from "gsap"

@@ -1,5 +1,5 @@
 import React from "react"
-import capybaraImg from "@/assets/games/capybara.png"
+import capybaraImg from "@/assets/games/capyroad/capybara.png"
 
 const Capybara = ({ crashed = false }) => {
   return (
