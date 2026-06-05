@@ -22,10 +22,12 @@ const IDLE_WHEEL_DURATION = 14.4
 const IDLE_ROTATION_SPEED = 360 / IDLE_WHEEL_DURATION
 const SPINNING_BALL_TOP = "5%"
 const SPINNING_BALL_TOP_PERCENT = 5
+const BALL_TRACK_INSET_PERCENT = 15
 const SPIN_DURATION = 3.2
 
 const RouletteWheel = ({ type = "Zero" }) => {
-  const { rouletteRef, spinData, settledNumber, handleFinish } = useRouletteAnimation()
+  const { rouletteRef, spinData, settledNumber, handleFinish } =
+    useRouletteAnimation()
   const ballRef = useRef(null)
   const ballDotRef = useRef(null)
   const spinTimelineRef = useRef(null)
@@ -43,20 +45,25 @@ const RouletteWheel = ({ type = "Zero" }) => {
   const getPocketAngle = useCallback(
     (number) => {
       const index = ORDER.indexOf(number)
-      return Math.max(index, 0) * ANGLE_STEP + ANGLE_STEP / 2 + config.VISUAL_OFFSET
+      return (
+        Math.max(index, 0) * ANGLE_STEP + ANGLE_STEP / 2 + config.VISUAL_OFFSET
+      )
     },
     [ANGLE_STEP, ORDER, config.VISUAL_OFFSET],
   )
 
   const getRestingBallY = useCallback(() => {
-    if (!ballRef.current) return 0
+    if (!rouletteRef.current) return 0
 
-    const restingTopPercent =
-      Number(getComputedStyle(ballRef.current).getPropertyValue("--roulette-ball-resting-top")) ||
-      16
-    const travelPercent = restingTopPercent - SPINNING_BALL_TOP_PERCENT
-    return (ballRef.current.offsetHeight * travelPercent) / 100
-  }, [])
+    const wheelSize = rouletteRef.current.offsetHeight
+    const wheelRadius = wheelSize / 2
+    const initialBallRadius =
+      wheelSize * ((50 - SPINNING_BALL_TOP_PERCENT) / 100)
+    const restingBallRadius =
+      wheelRadius - wheelSize * (BALL_TRACK_INSET_PERCENT / 100)
+
+    return initialBallRadius - restingBallRadius
+  }, [rouletteRef])
 
   useEffect(() => {
     handleFinishRef.current = handleFinish
@@ -101,7 +108,8 @@ const RouletteWheel = ({ type = "Zero" }) => {
       const syncBallToWheel = () => {
         if (!rouletteRef.current || !ballRef.current) return
 
-        const wheelRotation = Number(gsap.getProperty(rouletteRef.current, "rotation")) || 0
+        const wheelRotation =
+          Number(gsap.getProperty(rouletteRef.current, "rotation")) || 0
 
         gsap.set(ballRef.current, {
           rotation: wheelRotation + pocketAngle,
@@ -165,20 +173,35 @@ const RouletteWheel = ({ type = "Zero" }) => {
       gsap.killTweensOf(ball)
       stopLockedBallSync()
     }
-  }, [settledNumber, spinData, startLockedBallSync, stopLockedBallSync, updateRestingBallRadius])
+  }, [
+    settledNumber,
+    spinData,
+    startLockedBallSync,
+    stopLockedBallSync,
+    updateRestingBallRadius,
+  ])
 
   useEffect(() => {
-    if (!spinData || !rouletteRef.current || !ballRef.current || !ballDotRef.current) return
+    if (
+      !spinData ||
+      !rouletteRef.current ||
+      !ballRef.current ||
+      !ballDotRef.current
+    )
+      return
 
     const wheel = rouletteRef.current
     const ball = ballRef.current
     const ballDot = ballDotRef.current
     const ballSpins = 6
-    const currentWheelRotation = Number(gsap.getProperty(wheel, "rotation")) || 0
+    const currentWheelRotation =
+      Number(gsap.getProperty(wheel, "rotation")) || 0
     const currentBallRotation = Number(gsap.getProperty(ball, "rotation")) || 0
     const winningPocketAngle = getPocketAngle(spinData.winningNumber)
-    const predictedWheelRotation = currentWheelRotation + IDLE_ROTATION_SPEED * SPIN_DURATION
-    const finalBallRotation = predictedWheelRotation + winningPocketAngle - 360 * ballSpins
+    const predictedWheelRotation =
+      currentWheelRotation + IDLE_ROTATION_SPEED * SPIN_DURATION
+    const finalBallRotation =
+      predictedWheelRotation + winningPocketAngle - 360 * ballSpins
 
     gsap.killTweensOf(ball)
     gsap.killTweensOf(ballDot)
@@ -193,7 +216,8 @@ const RouletteWheel = ({ type = "Zero" }) => {
     const timeline = gsap.timeline({
       onComplete: () => {
         if (rouletteRef.current && ballRef.current) {
-          const wheelRotation = Number(gsap.getProperty(rouletteRef.current, "rotation")) || 0
+          const wheelRotation =
+            Number(gsap.getProperty(rouletteRef.current, "rotation")) || 0
 
           gsap.set(ballRef.current, {
             rotation: wheelRotation + winningPocketAngle,
@@ -241,7 +265,7 @@ const RouletteWheel = ({ type = "Zero" }) => {
   ])
 
   return (
-    <div className="relative mx-auto aspect-square w-[min(72vmin,20rem)] max-h-full max-w-full sm:w-full sm:max-w-56 md:max-w-64 lg:max-w-74">
+    <div className="relative mx-auto aspect-square w-[min(72vmin,20rem)] max-h-full max-w-full sm:w-full sm:max-w-56 lg:max-w-74">
       <img
         ref={rouletteRef}
         src={config.image}
@@ -252,9 +276,8 @@ const RouletteWheel = ({ type = "Zero" }) => {
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <div
           ref={ballRef}
-          className="absolute w-full h-full [--roulette-ball-resting-top:16] sm:[--roulette-ball-resting-top:19] md:[--roulette-ball-resting-top:17] lg:[--roulette-ball-resting-top:17.4] xl:[--roulette-ball-resting-top:18.8] 2xl:[--roulette-ball-resting-top:18.8]"
-          style={{ transformOrigin: "50% 50%" }}
-        >
+          className="absolute w-full h-full"
+          style={{ transformOrigin: "50% 50%" }}>
           <div
             ref={ballDotRef}
             className="absolute w-[clamp(0.5rem,2.5vmin,0.75rem)] h-[clamp(0.5rem,2.5vmin,0.75rem)] bg-white rounded-full shadow-md"

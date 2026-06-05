@@ -6,7 +6,7 @@ const BettingInput = ({ bet, readOnly }) => {
   const { t } = useLocale()
   return (
     <div className="flex flex-col items-baseline gap-1 md:flex-row">
-      <div className="flex w-full flex-row items-center gap-2 md:flex-col md:items-stretch md:gap-1">
+      <div className="flex w-full flex-row items-center gap-2 lg:flex-col lg:items-stretch md:gap-1">
         <p className="fieldset-legend shrink-0 text-sm sm:text-md">
           {t("games.betAmount.label")}:
         </p>

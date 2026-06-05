@@ -8,7 +8,7 @@ const Roulette = () => {
   const { type, showSpinView } = useRoulette()
 
   return (
-    <div className="relative h-full w-full overflow-hidden sm:grid sm:grid-cols-2 sm:grid-rows-[45%_55%] sm:gap-3 md:gap-4">
+    <div className="relative h-full w-full overflow-hidden sm:grid sm:grid-cols-2 sm:grid-rows-[45%_55%] sm:gap-1 lg:gap-2 xl:gap-6">
       <div
         className={`absolute inset-0 flex items-center justify-center transition-all duration-500 ease-out sm:flex sm:opacity-100 sm:scale-100 sm:pointer-events-auto sm:static ${
           showSpinView
