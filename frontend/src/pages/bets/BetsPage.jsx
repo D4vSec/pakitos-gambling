@@ -9,12 +9,15 @@ import { useLocale } from "@/providers/LocaleProvider"
 import Loading from "@/components/Loading"
 import Subtitle from "@/components/layout/fonts/Subtitle"
 
+const PAGE_SIZE_OPTIONS = [4, 8, 12, 16]
+const DEFAULT_PAGE_SIZE = PAGE_SIZE_OPTIONS[1]
+
 const BetsPage = () => {
   const { t } = useLocale()
   const { getBets } = useBets()
   const [bets, setBets] = useState([])
   const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState(12)
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE)
   const [loading, setLoading] = useState(true)
   const [isRefreshing, setIsRefreshing] = useState(false)
   const hasLoadedRef = useRef(false)
@@ -125,6 +128,7 @@ const BetsPage = () => {
               totalBets={bets.length}
               page={safePage}
               pageSize={pageSize}
+              pageSizeOptions={PAGE_SIZE_OPTIONS}
               totalPages={totalPages}
               onPageChange={setPage}
               onPageSizeChange={(nextPageSize) => {
@@ -137,16 +141,17 @@ const BetsPage = () => {
             <div
               className={`rounded-4xl border border-dashed border-base-300 bg-base-100 p-8 text-center shadow-xl transition-opacity duration-200 ${
                 isRefreshing ? "opacity-45" : "opacity-100"
-              }`}
-            >
-              <h2 className="text-xl md:text-2xl font-bold">{t("pages.bets.list.emptyTitle")}</h2>
+              }`}>
+              <h2 className="text-xl md:text-2xl font-bold">
+                {t("pages.bets.list.emptyTitle")}
+              </h2>
               <p className="mt-3 text-sm md:text-md text-base-content/70">
                 {t("pages.bets.list.emptyDescription")}
               </p>
             </div>
           )}
 
-          {isRefreshing && <Loading />}
+          {isRefreshing && <Loading clear />}
         </section>
       </div>
     </GradientBg>
