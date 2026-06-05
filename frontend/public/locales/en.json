@@ -286,7 +286,8 @@
         "paytable": "Paytable",
         "showPaytable": "Show paytable",
         "hidePaytable": "Hide paytable",
-        "totalPayout": "Total payout"
+        "totalPayout": "Total payout",
+        "insufficientBalanceCurrentBet": "You need at least {{bet}} to keep spinning this session."
       }
     },
     "capyroad": {

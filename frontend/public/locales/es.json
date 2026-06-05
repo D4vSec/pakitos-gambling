@@ -286,7 +286,8 @@
         "paytable": "Pagos",
         "showPaytable": "Ver pagos",
         "hidePaytable": "Ocultar pagos",
-        "totalPayout": "Ganancia total"
+        "totalPayout": "Ganancia total",
+        "insufficientBalanceCurrentBet": "Necesitas al menos {{bet}} para seguir girando en esta sesión."
       }
     },
     "capyroad": {

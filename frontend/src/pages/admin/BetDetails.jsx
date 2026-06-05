@@ -87,7 +87,7 @@ const BetDetails = () => {
   ]
 
   return loading ? (
-    <Loading />
+    <Loading clear />
   ) : !bet ? (
     <div className="flex w-full max-w-6xl flex-col gap-6">
       <GoBackBtn link="/admin/bets" className="w-full" />

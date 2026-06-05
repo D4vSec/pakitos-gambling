@@ -134,16 +134,26 @@ const SlotActions = ({
   spins = [],
   historySpins = spins,
   bet = 0,
+  canAffordNextSpin = true,
   showSessionActions = true,
   showHistory = true,
 }) => {
   const { t } = useLocale()
   const mobileActionsCols = showHistory ? "grid-cols-2" : "grid-cols-1"
   const mobileActionsGap = "gap-2"
+  const spinDisabled = disabled || !canAffordNextSpin
 
   return (
     <>
       {showSessionActions && <SlotSessionSummary spins={spins} bet={bet} />}
+
+      {showSessionActions && !canAffordNextSpin && (
+        <div className="rounded-xl border border-error/40 bg-error/10 mt-2 px-3 py-2 text-sm font-medium text-error">
+          {t("games.slots.controls.insufficientBalanceCurrentBet", {
+            bet: Number(bet || 0).toFixed(2),
+          })}
+        </div>
+      )}
 
       <div
         className={`py-2 grid w-full ${mobileActionsCols} ${mobileActionsGap} lg:hidden`}>
@@ -181,7 +191,7 @@ const SlotActions = ({
               variant="secondary"
               className={`${GAME_ACTION_BUTTON_FULL_CLASS} text-lg font-bold`}
               onClick={onSpin}
-              disabled={disabled}
+              disabled={spinDisabled}
               svg={disabled ? <IconHourglass /> : <IconRotate360 />}>
               {!disabled && t("games.slots.controls.spin")}
             </Button>

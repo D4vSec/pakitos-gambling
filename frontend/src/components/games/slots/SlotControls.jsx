@@ -40,6 +40,7 @@ const SlotControls = ({ theme = "starwars" }) => {
   const isBusy = loading || isAnimating
   const displayedBetAmount = isActive ? session.bet : betAmount
   const displayedSpins = isAnimating ? visibleHistorySpins : spins
+  const canAffordNextSpin = !isActive || balance >= Number(session?.bet ?? 0)
 
   const scheduleAnimEnd = () => {
     clearTimeout(animTimerRef.current)
@@ -122,6 +123,10 @@ const SlotControls = ({ theme = "starwars" }) => {
   const handleSpin = async () => {
     if (isBusy) return
     if (!session?.gameId) return
+    if (!canAffordNextSpin) {
+      addNotification(t("message.error.INSUFFICIENT_BALANCE"), "error")
+      return
+    }
 
     setVisibleHistorySpins(spins)
     setIsAnimating(true)
@@ -242,6 +247,7 @@ const SlotControls = ({ theme = "starwars" }) => {
             spins={displayedSpins}
             historySpins={displayedSpins}
             bet={session?.bet ?? 0}
+            canAffordNextSpin={canAffordNextSpin}
           />
         </div>
       )}

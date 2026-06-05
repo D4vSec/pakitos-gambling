@@ -170,7 +170,7 @@ const BetDetailsPage = () => {
   }
 
   return loading ? (
-    <Loading />
+    <Loading clear />
   ) : !bet ? (
     <GradientBg>
       <div className="flex w-full max-w-5xl min-w-0 flex-col gap-6 overflow-x-hidden">

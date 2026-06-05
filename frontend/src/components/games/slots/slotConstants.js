@@ -11,15 +11,15 @@ export const getStopDelays = (cols) =>
 // Extra pause between landing and showing winning effects, so the reveal feels gradual
 export const WIN_REVEAL_DELAY_MS = 500
 
-const REEL_LANDING_MS = 340
-const REEL_ROW_STAGGER_MS = 25
+const REEL_ROW_STAGGER_MS = 50
+const REEL_LANDING_MS_ACTUAL = 550
 
 // Total reveal time after the spin phase finishes = stop stagger + landing + row stagger + win reveal delay
 export const getAnimTotalMs = (cols, rows = 3) => {
   const delays = getStopDelays(cols)
   return (
     delays[delays.length - 1] +
-    REEL_LANDING_MS +
+    REEL_LANDING_MS_ACTUAL +
     (rows - 1) * REEL_ROW_STAGGER_MS +
     WIN_REVEAL_DELAY_MS
   )

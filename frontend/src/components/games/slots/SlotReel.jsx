@@ -34,6 +34,7 @@ const SlotReel = ({
   const spinTweensRef = useRef([])
   const winTweensRef = useRef([])
   const stopTimerRef = useRef(null)
+  const settleTimerRef = useRef(null)
   const spinRafRef = useRef(null)
   const landRafRef = useRef(null)
   const phaseRef = useRef("idle")
@@ -55,6 +56,8 @@ const SlotReel = ({
     spinTweensRef.current = []
     clearTimeout(stopTimerRef.current)
     stopTimerRef.current = null
+    clearTimeout(settleTimerRef.current)
+    settleTimerRef.current = null
   }
 
   const clearWinTweens = () => {
@@ -165,9 +168,11 @@ const SlotReel = ({
               onComplete:
                 r === rows - 1
                   ? () => {
-                      setIdleSymbols([...finalSyms])
+                    setIdleSymbols([...finalSyms])
                       // Brief pause so the symbols are visible before winning effects appear
-                      setTimeout(() => {
+                      settleTimerRef.current = setTimeout(() => {
+                        settleTimerRef.current = null
+                        if (phaseRef.current !== "decelerating") return
                         phaseRef.current = "stopped"
                         setPhase("stopped")
                         onSettled?.()

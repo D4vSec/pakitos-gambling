@@ -15,9 +15,10 @@
 [x] drift the la bola de la ruleta en md
 [x] resize chips
 
-[x] ver bug del resize de las slots
+[] ver bug del resize de las slots
+[] ttl cerrando a los 5 min
 
-[] probar si las bets se pagan
+[x] probar si las bets se pagan
 
 [x] mal pago al ganar un double: 10 d-> 20 -> win = 60 <> 40
 [x] revisar lo del 3 a 2 del bj

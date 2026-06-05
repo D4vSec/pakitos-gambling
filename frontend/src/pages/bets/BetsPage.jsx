@@ -79,7 +79,7 @@ const BetsPage = () => {
   }, [appliedFilters])
 
   if (loading) {
-    return <Loading />
+    return <Loading clear />
   }
 
   return (
