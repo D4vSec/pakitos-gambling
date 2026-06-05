@@ -35,13 +35,13 @@ const Notification = ({ notification }) => {
         ${typeClasses[notification.type] || ""}
         shadow-lg max-w-md
         transition-all duration-300 ease-out
-        mt-4
+        pointer-events-auto
         ${
           notification.leaving
-            ? "opacity-0 -translate-y-4 scale-95"
+            ? "opacity-0 translate-x-8 scale-95"
             : show
-              ? "opacity-100 translate-y-0 scale-100"
-              : "opacity-0 -translate-y-4 scale-95"
+              ? "opacity-100 translate-x-0 scale-100"
+              : "opacity-0 translate-x-8 scale-95"
         }
       `}
     >
