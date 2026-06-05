@@ -713,6 +713,11 @@
         "cancel": "Seguir jugando :)",
         "title": "¿Seguro que quieres salir?"
       },
+      "sessionExpired": {
+        "accept": "Ir al login",
+        "cancel": "Cerrar sesión",
+        "title": "Tu sesión ha expirado. Vuelve a iniciar sesión."
+      },
       "logDetail": {
         "jsonDetail": "Detalles JSON"
       },
@@ -739,7 +744,12 @@
       "deleteAccount": {
         "title": "¿Seguro de dejar atrás el club del gambling :(?",
         "accept": "Tristemente, sí",
-        "cancel": "Nah, quiero seguir apostando"
+        "cancel": "Nah, me quedo"
+      },
+      "revokeSession": {
+        "title": "¿Seguro que quieres revocar esta sesión?",
+        "accept": "Sí, revocarla",
+        "cancel": "No, mantenerla"
       }
     },
     "success": {

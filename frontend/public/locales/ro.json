@@ -713,6 +713,11 @@
         "cancel": "Continuă jocul :)",
         "title": "Sigur vrei să ieși?"
       },
+      "sessionExpired": {
+        "accept": "Mergi la autentificare",
+        "cancel": "Închide sesiunea",
+        "title": "Sesiunea ta a expirat. Autentifică-te din nou."
+      },
       "logDetail": {
         "jsonDetail": "Detalii JSON"
       },
@@ -740,6 +745,11 @@
         "title": "Sigur că lăsați clubul de jocuri de noroc în urmă :(?",
         "accept": "Din regret, da",
         "cancel": "Nu, vreau să pariez în continuare"
+      },
+      "revokeSession": {
+        "title": "Sigur vrei să revoci această sesiune?",
+        "accept": "Da, revoc-o",
+        "cancel": "Nu, păstreaz-o"
       }
     },
     "success": {

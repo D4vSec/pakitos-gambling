@@ -18,12 +18,17 @@ const BetsPage = () => {
   const [loading, setLoading] = useState(true)
   const [isRefreshing, setIsRefreshing] = useState(false)
   const hasLoadedRef = useRef(false)
+  const getBetsRef = useRef(getBets)
   const [filters, setFilters] = useState({
     name: "",
     status: "",
     fromEndsAt: "",
     toEndsAt: "",
   })
+
+  useEffect(() => {
+    getBetsRef.current = getBets
+  }, [getBets])
 
   const appliedFilters = useMemo(
     () => ({
@@ -53,7 +58,7 @@ const BetsPage = () => {
         setIsRefreshing(true)
       }
 
-      const nextBets = await getBets(appliedFilters)
+      const nextBets = await getBetsRef.current(appliedFilters)
 
       if (!isActive) return
 
@@ -68,7 +73,7 @@ const BetsPage = () => {
     return () => {
       isActive = false
     }
-  }, [appliedFilters, getBets])
+  }, [appliedFilters])
 
   if (loading) {
     return <Loading />

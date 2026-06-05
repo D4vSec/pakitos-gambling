@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useEffect, useState } from "react"
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react"
 import { useNotification } from "@/providers/NotificationProvider"
 import useAPI from "@/hooks/useAPI"
 import { useNavigate } from "react-router-dom"
@@ -12,6 +18,8 @@ const SessionProvider = ({ children }) => {
   const [user, setUser] = useState(defaultUser)
   const [isLogged, setIsLogged] = useState(false)
   const [loading, setLoading] = useState(true)
+  const hasShownSessionExpiredModalRef = useRef(false)
+  const sessionValidationRequestRef = useRef(null)
 
   const { addNotification } = useNotification()
   const { t } = useLocale()
@@ -19,8 +27,16 @@ const SessionProvider = ({ children }) => {
   const navigate = useNavigate()
 
   const getTokens = () => {
-    const tokens = localStorage.getItem("tokens")
-    return tokens ? JSON.parse(tokens) : {}
+    try {
+      const tokens = localStorage.getItem("tokens")
+      const parsedTokens = tokens ? JSON.parse(tokens) : {}
+      return parsedTokens && typeof parsedTokens === "object"
+        ? parsedTokens
+        : {}
+    } catch {
+      removeTokens()
+      return {}
+    }
   }
 
   const getAccessToken = () => {
@@ -43,6 +59,13 @@ const SessionProvider = ({ children }) => {
   const getRefreshToken = () => {
     const tokens = getTokens()
     return tokens.refreshToken || null
+  }
+
+  const areCurrentTokens = (accessToken, refreshToken) => {
+    const tokens = getTokens()
+    return (
+      tokens.accessToken === accessToken && tokens.refreshToken === refreshToken
+    )
   }
 
   const setRefreshToken = (refreshToken) => {
@@ -88,10 +111,13 @@ const SessionProvider = ({ children }) => {
 
       setAccessToken(accessToken)
       setRefreshToken(refreshToken)
+      hasShownSessionExpiredModalRef.current = false
 
       addNotification(t("message.success.AUTH_USER_LOGGED"), "success")
 
-      const userData = await getUserData()
+      const userData = await getUserData({ syncSession: false })
+      if (!userData) return
+
       setUser(userData)
       setIsLogged(true)
 
@@ -103,40 +129,152 @@ const SessionProvider = ({ children }) => {
     }
   }
 
-  // TODO: Transicion brusca porque esta lo de protected route
-  const logout = () => {
-    navigate("/")
+  const logout = (options = {}) => {
+    const { notify = true, redirectTo = "/" } = options
+    navigate(redirectTo)
     removeTokens()
     setUser(defaultUser)
     setIsLogged(false)
-    addNotification(t("message.success.logout"), "success")
+    sessionValidationRequestRef.current = null
+    hasShownSessionExpiredModalRef.current = false
+
+    if (notify) {
+      addNotification(t("message.success.logout"), "success")
+    }
   }
 
-  const getUserData = async () => {
+  const showSessionExpiredModal = () => {
+    if (hasShownSessionExpiredModalRef.current) return
+    hasShownSessionExpiredModalRef.current = true
+    addNotification(t("message.modal.sessionExpired.title"), "modal", {
+      onAccept: () => logout({ notify: false, redirectTo: "/login" }),
+      acceptLabel: t("message.modal.sessionExpired.accept"),
+      showCancel: false,
+    })
+  }
+
+  const isSessionEndedCode = (code) =>
+    code === "AUTH_INVALID_SESSION" ||
+    code === "AUTH_SESSION_EXPIRED" ||
+    code === "AUTH_INVALID_REFRESH_TOKEN" ||
+    code === "AUTH_NO_TOKEN_PROVIDED" ||
+    code === "AUTH_INVALID_TOKEN"
+
+  const finishSession = ({ notify = true } = {}) => {
+    removeTokens()
+    setUser(defaultUser)
+    setIsLogged(false)
+    sessionValidationRequestRef.current = null
+
+    if (notify) {
+      showSessionExpiredModal()
+    }
+  }
+
+  const getTokenExpirationMs = (token) => {
+    if (!token) return null
+
     try {
-      const accessToken = getAccessToken()
-      const refreshToken = getRefreshToken()
+      const [, payload] = token.split(".")
+
+      if (!payload) return null
+
+      const normalizedPayload = payload.replace(/-/g, "+").replace(/_/g, "/")
+      const paddedPayload = normalizedPayload.padEnd(
+        normalizedPayload.length + ((4 - (normalizedPayload.length % 4)) % 4),
+        "=",
+      )
+      const decodedPayload = JSON.parse(atob(paddedPayload))
+
+      if (!decodedPayload?.exp) return null
+
+      return decodedPayload.exp * 1000
+    } catch {
+      return null
+    }
+  }
+
+  const getAccessTokenExpirationMs = () =>
+    getTokenExpirationMs(getAccessToken())
+
+  const getRefreshTokenExpirationMs = () =>
+    getTokenExpirationMs(getRefreshToken())
+
+  const getUserData = async ({
+    notifySessionEnded = true,
+    syncSession = true,
+  } = {}) => {
+    const accessToken = getAccessToken()
+    const refreshToken = getRefreshToken()
+
+    try {
+      if (!accessToken || !refreshToken) {
+        finishSession({
+          notify:
+            notifySessionEnded &&
+            isLogged &&
+            Boolean(accessToken || refreshToken),
+        })
+        return null
+      }
+
       const response = await get("/api/v1/user/me", {
+        cache: "no-store",
         headers: {
-          ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
-          ...(refreshToken ? { "x-refresh-token": refreshToken } : {}),
+          Authorization: `Bearer ${accessToken}`,
+          "x-refresh-token": refreshToken,
         },
       })
 
-      if (response.code === "AUTH_INVALID_TOKEN") return
+      if (isSessionEndedCode(response?.code)) {
+        if (areCurrentTokens(accessToken, refreshToken)) {
+          finishSession({ notify: notifySessionEnded })
+        }
+        return null
+      }
 
       if (response.code) {
         throw new Error(response?.code)
       }
 
-      setUser(response)
-      setIsLogged(true)
+      if (syncSession) {
+        setUser(response)
+        setIsLogged(true)
+      }
       return response
     } catch (error) {
+      if (isSessionEndedCode(error?.message)) {
+        if (areCurrentTokens(accessToken, refreshToken)) {
+          finishSession({ notify: notifySessionEnded })
+        }
+        return null
+      }
+
       addNotification(t(`message.error.${error?.message}`), "error")
+      return null
     } finally {
       setLoading(false)
     }
+  }
+
+  const validateCurrentSession = async ({ notifySessionEnded = true } = {}) => {
+    if (sessionValidationRequestRef.current) {
+      return sessionValidationRequestRef.current
+    }
+
+    sessionValidationRequestRef.current = getUserData({ notifySessionEnded })
+      .finally(() => {
+        sessionValidationRequestRef.current = null
+      })
+
+    return sessionValidationRequestRef.current
+  }
+
+  const handleSessionEndedResponse = (code) => {
+    if (!isSessionEndedCode(code)) return false
+
+    finishSession()
+    return true
   }
 
   const updateProfile = async (data) => {
@@ -166,6 +304,8 @@ const SessionProvider = ({ children }) => {
         body: body,
       })
 
+      if (handleSessionEndedResponse(response?.code)) return null
+
       if (!response || response.code !== "SUCCESS") {
         const message =
           response?.message ||
@@ -187,10 +327,10 @@ const SessionProvider = ({ children }) => {
 
       return userData
     } catch (error) {
-      addNotification(
-        t ? t(`message.error.${error?.message}`) : "Error updating profile",
-        "error",
-      )
+      if (handleSessionEndedResponse(error?.message)) return null
+
+      addNotification(t(`message.error.${error?.message}`), "error")
+      return null
     } finally {
       setLoading(false)
     }
@@ -209,6 +349,8 @@ const SessionProvider = ({ children }) => {
         },
       })
 
+      if (handleSessionEndedResponse(response?.code)) return
+
       if (response.code) {
         throw new Error(response?.code)
       }
@@ -222,6 +364,8 @@ const SessionProvider = ({ children }) => {
         "success",
       )
     } catch (error) {
+      if (handleSessionEndedResponse(error?.message)) return
+
       addNotification(t(`message.error.${error?.message}`), "error")
     } finally {
       setLoading(false)
@@ -259,15 +403,61 @@ const SessionProvider = ({ children }) => {
   }
 
   useEffect(() => {
-    const token = getAccessToken()
+    const accessToken = getAccessToken()
+    const refreshToken = getRefreshToken()
 
-    if (token) {
-      getUserData()
+    if (accessToken && refreshToken) {
+      validateCurrentSession()
+    } else if (accessToken || refreshToken) {
+      finishSession({ notify: false })
+      setLoading(false)
     } else {
       setLoading(false)
       setIsLogged(false)
     }
+    // Session restoration should only run once when the provider mounts.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    if (!isLogged) return
+
+    const checkTokenExpiration = async () => {
+      const accessToken = getAccessToken()
+      const refreshToken = getRefreshToken()
+      const accessExpirationMs = getAccessTokenExpirationMs()
+      const refreshExpirationMs = getRefreshTokenExpirationMs()
+
+      if (!accessToken || !refreshToken) {
+        finishSession()
+        return
+      }
+
+      if (!accessExpirationMs || !refreshExpirationMs) {
+        finishSession()
+        return
+      }
+
+      if (Date.now() >= refreshExpirationMs) {
+        finishSession()
+        return
+      }
+
+      if (Date.now() < accessExpirationMs) return
+
+      await validateCurrentSession()
+    }
+
+    const intervalId = window.setInterval(() => {
+      checkTokenExpiration()
+    }, 1000)
+
+    return () => {
+      window.clearInterval(intervalId)
+    }
+    // The watcher lifecycle is controlled by the logged-in state.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLogged])
 
   const value = {
     register,
@@ -283,6 +473,7 @@ const SessionProvider = ({ children }) => {
     getAccessToken,
     getRefreshToken,
     getUserData,
+    showSessionExpiredModal,
     setUser,
   }
 

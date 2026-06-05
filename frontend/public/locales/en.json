@@ -713,6 +713,11 @@
         "cancel": "Keep Gambing :)",
         "title": "Are you sure you want to exit?"
       },
+      "sessionExpired": {
+        "accept": "Go to login",
+        "cancel": "Close session",
+        "title": "Your session has expired. Please log in again."
+      },
       "logDetail": {
         "jsonDetail": "JSON Details"
       },
@@ -740,6 +745,11 @@
         "title": "Sure wanna leave gambling club :(?",
         "accept": "Sadly, yes",
         "cancel": "Nah, let's keep gambling"
+      },
+      "revokeSession": {
+        "title": "Are you sure you want to revoke this session?",
+        "accept": "Yes, revoke it",
+        "cancel": "No, keep it"
       }
     },
     "success": {

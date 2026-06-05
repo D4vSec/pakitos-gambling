@@ -52,6 +52,7 @@ const useAPI = () => {
 
       const response = await fetch(url, {
         method: options.method,
+        ...(options.cache ? { cache: options.cache } : {}),
         headers: {
           ...(isPayloadMethod(options.method) && {
             "Content-Type": "application/json",
