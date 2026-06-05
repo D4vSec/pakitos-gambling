@@ -46,7 +46,7 @@ const NavbarBtns = ({ className = "", vertical = false }) => {
         )}
       </div>
 
-      <UserDropdown vertical={vertical} />
+      {isLogged && <UserDropdown vertical={vertical} />}
       <LangDropdown vertical={vertical} />
     </div>
   )
