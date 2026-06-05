@@ -32,8 +32,8 @@ const SlotMachine = ({ theme = "starwars" }) => {
         <SlotPaytable theme={theme} />
       </div>
 
-      <div className="flex h-full min-w-0 flex-1   items-center justify-center">
-        <div className="flex h-full max-h-full w-full min-w-0 flex-col items-center justify-center gap-3 md:gap-4">
+      <div className="flex h-full min-w-0 flex-1 items-stretch justify-center">
+        <div className="flex h-full max-h-full w-full min-w-0 flex-col items-center gap-3 md:gap-4">
           <div
             className="flex max-w-full shrink-0 flex-col items-center gap-0.5"
             style={{
@@ -51,7 +51,7 @@ const SlotMachine = ({ theme = "starwars" }) => {
             </span>
           </div>
 
-          <div className="flex min-h-0 w-full items-center justify-center">
+          <div className="flex min-h-0 flex-1 w-full items-stretch justify-center">
             <SlotGrid
               key={`${theme}-${type}-${rows}x${cols}`}
               className="max-h-full max-w-full"

@@ -15,11 +15,12 @@
 [x] drift the la bola de la ruleta en md
 [x] resize chips
 
+[] ver bug del resize de las slots
+
 [] probar si las bets se pagan
 
 [] mal pago al ganar un double
 [] revisar lo del 3 a 2 del bj
-[] ver bug del resize de las slots
 [] bloquear el split para que solo se haga cuando las cartas son del mismo value
 [] cambiar el highlight de la mano
 
