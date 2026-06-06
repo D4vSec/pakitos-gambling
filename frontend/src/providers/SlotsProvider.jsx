@@ -1,11 +1,4 @@
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react"
+import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from "react"
 import useAPI from "@/hooks/useAPI"
 import { useSession } from "@/providers/SessionProvider"
 import { useNotification } from "@/providers/NotificationProvider"
@@ -18,21 +11,14 @@ const resolveApiErrorCode = (responseOrError, fallback = "SERVER_ERROR") => {
     return responseOrError.code
   }
 
-  if (
-    typeof responseOrError?.message === "string" &&
-    responseOrError.message.trim()
-  ) {
+  if (typeof responseOrError?.message === "string" && responseOrError.message.trim()) {
     return responseOrError.message
   }
 
   return fallback
 }
 
-const SlotsProvider = ({
-  type: defaultType = "3x3",
-  slotKey = "default",
-  children,
-}) => {
+const SlotsProvider = ({ type: defaultType = "3x3", slotKey = "default", children }) => {
   const { post, destroy, loading: apiLoading } = useAPI()
   const { getAccessToken, getRefreshToken, setUser } = useSession()
   const { addNotification } = useNotification()
@@ -175,17 +161,11 @@ const SlotsProvider = ({
 
   const spin = async (gameInput) => {
     const gameId =
-      typeof gameInput === "object" && gameInput !== null
-        ? gameInput.gameId
-        : gameInput
+      typeof gameInput === "object" && gameInput !== null ? gameInput.gameId : gameInput
     const sessionBet =
-      typeof gameInput === "object" && gameInput !== null
-        ? gameInput.bet
-        : undefined
+      typeof gameInput === "object" && gameInput !== null ? gameInput.bet : undefined
     const sessionMachineType =
-      typeof gameInput === "object" && gameInput !== null
-        ? gameInput.machineType
-        : undefined
+      typeof gameInput === "object" && gameInput !== null ? gameInput.machineType : undefined
 
     setLoading(true)
     setIsSpinning(true)
@@ -201,18 +181,6 @@ const SlotsProvider = ({
       if (!res || res.code) {
         throw new Error(resolveApiErrorCode(res))
       }
-
-      console.log("[SlotsProvider] incoming game info", {
-        gameId,
-        machineType: sessionMachineType ?? session?.machineType,
-        bet: sessionBet ?? session?.bet,
-        betAmount,
-        spinNumber: res.spinNumber,
-        payout: res.payout,
-        isWinner: res.isWinner,
-        balance: res.balance,
-        winningLines: res.winningLines,
-      })
 
       const spinResult = {
         spinNumber: res.spinNumber,
@@ -255,9 +223,11 @@ const SlotsProvider = ({
       const activeGameId = sessionRef.current?.gameId
       if (!activeGameId) return
 
-      destroyRef.current(`/api/v1/slots/${activeGameId}`, {
-        headers: authHeadersRef.current(),
-      }).catch(() => null)
+      destroyRef
+        .current(`/api/v1/slots/${activeGameId}`, {
+          headers: authHeadersRef.current(),
+        })
+        .catch(() => null)
     }
   }, [])
 

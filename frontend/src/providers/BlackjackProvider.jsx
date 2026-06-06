@@ -422,10 +422,6 @@ const BlackjackProvider = ({ children }) => {
   }, [])
 
   useEffect(() => {
-    console.log("GAME UPDATED", game)
-  }, [game])
-
-  useEffect(() => {
     if (!game?.gameId) {
       gameRef.current = {}
       setGame({})

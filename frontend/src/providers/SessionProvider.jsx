@@ -398,8 +398,6 @@ const SessionProvider = ({ children }) => {
 
       updateBalance("deposit", amount)
 
-      console.log("balance", response)
-
       addNotification(
         t(`message.success.BALANCE_ADDED_SUCCESSFULLY`),
         "success",

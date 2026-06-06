@@ -1,11 +1,4 @@
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useState,
-  useMemo,
-  useRef,
-} from "react"
+import React, { createContext, useCallback, useContext, useState, useMemo, useRef } from "react"
 import useAPI from "@/hooks/useAPI"
 import { useNotification } from "@/providers/NotificationProvider"
 import { useSession } from "./SessionProvider"
@@ -37,9 +30,7 @@ const normalizeWinningNumber = (number) => {
 
 const formatWinningNumber = (number) => {
   const normalizedNumber = normalizeWinningNumber(number)
-  return normalizedNumber === DOUBLE_ZERO_SENTINEL
-    ? "00"
-    : String(normalizedNumber)
+  return normalizedNumber === DOUBLE_ZERO_SENTINEL ? "00" : String(normalizedNumber)
 }
 
 const RouletteProvider = ({ children }) => {
@@ -128,9 +119,7 @@ const RouletteProvider = ({ children }) => {
       updateBalance("withdrawal", selectedChip)
 
       setGame((prev) => {
-        const existingIndex = prev.bets.findIndex(
-          (b) => b.type === bet.type && b.bet === bet.bet,
-        )
+        const existingIndex = prev.bets.findIndex((b) => b.type === bet.type && b.bet === bet.bet)
 
         let updatedBets = []
 
@@ -197,15 +186,7 @@ const RouletteProvider = ({ children }) => {
     const lastAmount = getTotalBet(lastBet)
     setBetAmount(lastAmount)
     updateBalance("withdrawal", lastAmount)
-  }, [
-    addNotification,
-    balance,
-    clearBets,
-    getTotalBet,
-    lastBet,
-    t,
-    updateBalance,
-  ])
+  }, [addNotification, balance, clearBets, getTotalBet, lastBet, t, updateBalance])
 
   const doubleBets = useCallback(() => {
     const totalCurrent = betAmount
@@ -303,8 +284,6 @@ const RouletteProvider = ({ children }) => {
       setIsSpinning(true)
       setShowSpinView(true)
 
-      console.log("Roulette spin payload:", game)
-
       const res = await post("/api/v1/roulette/spin", {
         headers: {
           "x-refresh-token": getRefreshToken(),
@@ -378,11 +357,7 @@ const RouletteProvider = ({ children }) => {
       `${t("message.info.winningNumber")}: ${formatWinningNumber(data.winningNumber)} | ${t(
         `games.roulette.board.${data.color}`,
       )}`,
-      data.outcome === "win"
-        ? "success"
-        : data.outcome === "lose"
-          ? "error"
-          : "info",
+      data.outcome === "win" ? "success" : data.outcome === "lose" ? "error" : "info",
       {
         scope: "games",
         duration: 4000,
@@ -469,9 +444,7 @@ const RouletteProvider = ({ children }) => {
 
   return (
     <RouletteContext value={value}>
-      <RouletteAnimationContext value={animationValue}>
-        {children}
-      </RouletteAnimationContext>
+      <RouletteAnimationContext value={animationValue}>{children}</RouletteAnimationContext>
     </RouletteContext>
   )
 }
