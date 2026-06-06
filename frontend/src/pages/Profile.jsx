@@ -1,15 +1,35 @@
 import React, { useEffect, useState } from "react"
 import { useForm, FormProvider } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
 import FormField from "@/components/forms/FormField"
 import { useSession } from "@/providers/SessionProvider"
 import { useNotification } from "@/providers/NotificationProvider"
 import { useLocale } from "@/providers/LocaleProvider"
 import useAPI from "@/hooks/useAPI"
+import {
+  profileInfoSchema,
+  profilePasswordSchema,
+} from "@/schemas/profileSchema"
 import Title from "@/components/layout/fonts/Title"
 import Button from "@/components/buttons/Button"
 import GradientBg from "@/components/layout/GradientBg"
 import UserSessions from "@/components/profile/UserSessions"
 import { IconAlertTriangle, IconShield, IconUser } from "@tabler/icons-react"
+
+const resolveApiErrorCode = (responseOrError, fallback = "SERVER_ERROR") => {
+  if (typeof responseOrError?.code === "string" && responseOrError.code.trim()) {
+    return responseOrError.code
+  }
+
+  if (
+    typeof responseOrError?.message === "string" &&
+    responseOrError.message.trim()
+  ) {
+    return responseOrError.message
+  }
+
+  return fallback
+}
 
 const Profile = () => {
   const { user, updateProfile, logout, getAccessToken, getRefreshToken } =
@@ -20,7 +40,18 @@ const Profile = () => {
   const [profileLoading, setProfileLoading] = useState(false)
   const [passwordLoading, setPasswordLoading] = useState(false)
 
+  const getErrorMessage = (responseOrError) => {
+    const code = resolveApiErrorCode(responseOrError)
+    const translationKey = `message.error.${code}`
+    const translatedMessage = t(translationKey)
+
+    return translatedMessage === translationKey
+      ? t("message.error.SERVER_ERROR")
+      : translatedMessage
+  }
+
   const profileMethods = useForm({
+    resolver: zodResolver(profileInfoSchema),
     defaultValues: {
       username: "",
       email: "",
@@ -28,14 +59,13 @@ const Profile = () => {
   })
 
   const passwordMethods = useForm({
+    resolver: zodResolver(profilePasswordSchema),
     defaultValues: {
       currentPassword: "",
       newPassword: "",
       confirmPassword: "",
     },
   })
-
-  const newPasswordValue = passwordMethods.watch("newPassword")
 
   useEffect(() => {
     if (user) {
@@ -60,7 +90,8 @@ const Profile = () => {
   const handlePasswordSubmit = async (data) => {
     setPasswordLoading(true)
     try {
-      await updateProfile({ password: data.newPassword })
+      const updated = await updateProfile({ password: data.newPassword })
+      if (!updated) return
       passwordMethods.reset()
       logout()
     } catch {
@@ -72,15 +103,20 @@ const Profile = () => {
 
   const handleDeleteAccount = async () => {
     try {
-      await destroy("/api/v1/user/me", {
+      const response = await destroy("/api/v1/user/me", {
         headers: {
           Authorization: `Bearer ${getAccessToken()}`,
           "x-refresh-token": getRefreshToken(),
         },
       })
+
+      if (!response || response.code !== "SUCCESS") {
+        throw new Error(resolveApiErrorCode(response))
+      }
+
       logout()
-    } catch {
-      addNotification(t("message.error.UNKNOWN_ERROR"), "error")
+    } catch (error) {
+      addNotification(getErrorMessage(error), "error")
     }
   }
 
@@ -122,18 +158,12 @@ const Profile = () => {
                         name="username"
                         type="text"
                         label={t("forms.fields.username.label")}
-                        rules={{
-                          required: t("forms.fields.username.required"),
-                        }}
                       />
 
                       <FormField
                         name="email"
                         type="email"
-                        label={t("forms.email.label")}
-                        rules={{
-                          required: t("forms.email.required"),
-                        }}
+                        label={t("forms.fields.email.label")}
                       />
 
                       <Button
@@ -171,31 +201,18 @@ const Profile = () => {
                     name="currentPassword"
                     type="password"
                     label={t("forms.fields.password.current")}
-                    rules={{ required: t("forms.fields.password.required") }}
                   />
 
                   <FormField
                     name="newPassword"
                     type="password"
                     label={t("forms.fields.password.new")}
-                    rules={{
-                      required: t("forms.fields.password.required"),
-                      minLength: {
-                        value: 8,
-                        message: t("forms.fields.password.minLength"),
-                      },
-                    }}
                   />
 
                   <FormField
                     name="confirmPassword"
                     type="password"
                     label={t("forms.fields.password.confirm")}
-                    rules={{
-                      validate: (value) =>
-                        value === newPasswordValue ||
-                        t("forms.confirmPassword.match"),
-                    }}
                   />
 
                   <Button

@@ -1,11 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useMemo,
-  useState,
-} from "react"
+import React, { createContext, useCallback, useContext, useMemo, useState } from "react"
 import useAPI from "@/hooks/useAPI"
 import { useSession } from "./SessionProvider"
 import { useNotification } from "./NotificationProvider"
@@ -21,11 +15,7 @@ const buildQueryParams = (options = {}) => {
   })
 
   Object.keys(filters).forEach((key) => {
-    if (
-      filters[key] !== undefined &&
-      filters[key] !== null &&
-      filters[key] !== ""
-    ) {
+    if (filters[key] !== undefined && filters[key] !== null && filters[key] !== "") {
       queryParams.append(key, filters[key])
     }
   })
@@ -33,7 +23,6 @@ const buildQueryParams = (options = {}) => {
   return queryParams
 }
 
-// TODO: Reducir peticiones a ser posible
 const AdminProvider = ({ children }) => {
   const [users, setUsers] = useState([])
   const [bets, setBets] = useState([])
@@ -108,7 +97,7 @@ const AdminProvider = ({ children }) => {
 
         await getAllUsers()
 
-        addNotification("User created successfully", "success")
+        addNotification(t(`message.success.${res.code}`), "success")
         return res
       } catch (error) {
         addNotification(t(`message.error.${error.message}`), "error")
@@ -132,7 +121,7 @@ const AdminProvider = ({ children }) => {
 
         getAllUsers()
 
-        addNotification("User updated successfully", "success")
+        addNotification(t(`message.success.${res.code}`), "success")
         return res
       } catch (error) {
         addNotification(t(`message.error.${error.message}`), "error")
@@ -153,7 +142,7 @@ const AdminProvider = ({ children }) => {
           throw new Error(res.code || "Error al borrar usuario")
         }
 
-        addNotification("User deleted successfully", "success")
+        addNotification(t(`message.success.${res.code}`), "success")
         return true
       } catch (error) {
         addNotification(t(`message.error.${error.message}`), "error", {
@@ -363,13 +352,10 @@ const AdminProvider = ({ children }) => {
   const getBetSettlementPreview = useCallback(
     async (betId, winningOptionId) => {
       try {
-        const res = await post(
-          `/api/v1/bets/admin/${betId}/settlement-preview`,
-          {
-            headers: buildHeaders(),
-            body: { winningOptionId },
-          },
-        )
+        const res = await post(`/api/v1/bets/admin/${betId}/settlement-preview`, {
+          headers: buildHeaders(),
+          body: { winningOptionId },
+        })
 
         if (res.code) {
           throw new Error(res.code || "Error al obtener preview")
@@ -408,40 +394,32 @@ const AdminProvider = ({ children }) => {
 
   const deleteBetModal = useCallback(
     (betId, betLabel, onAfterSuccess) => {
-      addNotification(
-        t("message.modal.deleteBet.title", { label: betLabel }),
-        "modal",
-        {
-          onAccept: async () => {
-            const deleted = await deleteBet(betId)
-            if (deleted) {
-              onAfterSuccess?.()
-            }
-          },
-          acceptLabel: t("message.modal.deleteBet.accept"),
-          cancelLabel: t("message.modal.deleteBet.cancel"),
+      addNotification(t("message.modal.deleteBet.title", { label: betLabel }), "modal", {
+        onAccept: async () => {
+          const deleted = await deleteBet(betId)
+          if (deleted) {
+            onAfterSuccess?.()
+          }
         },
-      )
+        acceptLabel: t("message.modal.deleteBet.accept"),
+        cancelLabel: t("message.modal.deleteBet.cancel"),
+      })
     },
     [addNotification, deleteBet, t],
   )
 
   const closeBetModal = useCallback(
     (betId, betLabel, onAfterSuccess) => {
-      addNotification(
-        t("message.modal.closeBet.title", { label: betLabel }),
-        "modal",
-        {
-          onAccept: async () => {
-            const closed = await closeBet(betId)
-            if (closed) {
-              onAfterSuccess?.()
-            }
-          },
-          acceptLabel: t("message.modal.closeBet.accept"),
-          cancelLabel: t("message.modal.closeBet.cancel"),
+      addNotification(t("message.modal.closeBet.title", { label: betLabel }), "modal", {
+        onAccept: async () => {
+          const closed = await closeBet(betId)
+          if (closed) {
+            onAfterSuccess?.()
+          }
         },
-      )
+        acceptLabel: t("message.modal.closeBet.accept"),
+        cancelLabel: t("message.modal.closeBet.cancel"),
+      })
     },
     [addNotification, closeBet, t],
   )

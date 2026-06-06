@@ -15,7 +15,7 @@ const Notifications = () => {
   return (
     <>
       {toasts.length > 0 && (
-        <div className="pointer-events-none fixed right-4 top-[4.5rem] z-9999 flex w-[calc(100vw-2rem)] max-w-md flex-col items-end gap-2 sm:top-20">
+        <div className="pointer-events-none fixed left-4 top-[4.5rem] z-9999 flex w-[calc(100vw-2rem)] max-w-md flex-col items-start gap-2 sm:top-20">
           {toasts.map((notification) => (
             <Notification key={notification.id} notification={notification} />
           ))}

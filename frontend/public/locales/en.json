@@ -99,33 +99,33 @@
         "actions": "Actions"
       },
       "detail": {
-        "summary": "Manage the market, review the pool, and estimate the projected payout before settling it.",
-        "noBet": "This bet could not be found.",
+        "summary": "Manage the market, review the pool, and estimate the projected payout before settling it",
+        "noBet": "This bet could not be found",
         "refresh": "Refresh",
         "editBet": "Edit bet",
         "closeBet": "Force close",
         "deleteBet": "Delete bet",
         "totalPool": "Total pool",
         "poolDistribution": "Pool distribution",
-        "poolHint": "Current capital split across every option in this market.",
+        "poolHint": "Current capital split across every option in this market",
         "option": "Option",
         "poolAmount": "Amount",
         "odds": "Odds",
         "settlementPreview": "Settlement preview",
         "settledResult": "Settled result",
         "settledAt": "Settled at",
-        "settledHint": "This bet has already been settled and the payout was already executed.",
-        "previewHint": "Pick the winning option to preview the projected payout using the current odds.",
+        "settledHint": "This bet has already been settled and the payout was already executed",
+        "previewHint": "Pick the winning option to preview the projected payout using the current odds",
         "selectWinningOption": "Winning option",
         "generatePreview": "Generate preview",
         "settleBet": "Settle bet",
-        "noPreview": "Pick an option and generate the preview to inspect the projected distribution.",
+        "noPreview": "Pick an option and generate the preview to inspect the projected distribution",
         "winningOption": "Winning option",
         "totalWinningAmount": "Winning capital",
         "totalProjectedPayout": "Projected payout",
         "userId": "User",
         "payout": "Payout",
-        "emptyWinners": "There are no winners for this option."
+        "emptyWinners": "There are no winners for this option"
       }
     },
     "logs": {
@@ -210,8 +210,8 @@
       "title": "Blackjack",
       "bkPays": "Blackjack pays 3 to 2",
       "imageAlt": "Blackjack table illustration",
-      "summary": "<p><b>Beat the dealer, not the table.</b></p><p>Blackjack is a fast card game where your goal is to finish closer to <b>21</b> than the dealer without going over.</p><ul><li>Quick tactical decisions</li><li>Strong hands can pay immediately</li><li>Every extra card changes the risk</li></ul>",
-      "howToPlay": "<p><b>Round flow</b></p><ul><li>Place your bet and start the hand</li><li><b>Hit</b> to draw another card</li><li><b>Stand</b> to keep your total</li><li><b>Double</b> to raise the stake for one last card</li><li><b>Split</b> when you receive a pair</li></ul><p>If your hand beats the dealer without busting, you win.</p>",
+      "summary": "<p><b>Beat the dealer, not the table</b></p><p>Blackjack is a fast card game where your goal is to finish closer to <b>21</b> than the dealer without going over</p><ul><li>Quick tactical decisions</li><li>Strong hands can pay immediately</li><li>Every extra card changes the risk</li></ul>",
+      "howToPlay": "<p><b>Round flow</b></p><ul><li>Place your bet and start the hand</li><li><b>Hit</b> to draw another card</li><li><b>Stand</b> to keep your total</li><li><b>Double</b> to raise the stake for one last card</li><li><b>Split</b> when you receive a pair</li></ul><p>If your hand beats the dealer without busting, you win</p>",
       "actions": {
         "double": "Double",
         "hit": "Hit",
@@ -227,9 +227,9 @@
       },
       "imageAltZero": "European roulette wheel",
       "imageAltZeroZero": "American roulette wheel",
-      "summaryZero": "<p><b>The classic single-zero table.</b></p><p>European roulette is the cleaner version of roulette, built around one green zero and a wide range of betting styles.</p><ul><li>Bet on exact numbers</li><li>Cover colors, odds, evens, or ranges</li><li>Mix safer bets with high-payout picks</li></ul>",
-      "summaryZeroZero": "<p><b>Same thrill, extra edge on the wheel.</b></p><p>American roulette adds both <b>0</b> and <b>00</b>, keeping the same core flow while shifting the odds slightly.</p><ul><li>More green pockets</li><li>Same inside and outside bets</li><li>Classic casino feel</li></ul>",
-      "howToPlay": "<p><b>How a spin works</b></p><ul><li>Pick your chip value</li><li>Place bets on numbers or board sections</li><li>Spin the wheel and watch where the ball lands</li><li>Winning bets pay automatically</li></ul><p>You can combine cautious and risky bets in the same round.</p>",
+      "summaryZero": "<p><b>The classic single-zero table</b></p><p>European roulette is the cleaner version of roulette, built around one green zero and a wide range of betting styles</p><ul><li>Bet on exact numbers</li><li>Cover colors, odds, evens, or ranges</li><li>Mix safer bets with high-payout picks</li></ul>",
+      "summaryZeroZero": "<p><b>Same thrill, extra edge on the wheel</b></p><p>American roulette adds both <b>0</b> and <b>00</b>, keeping the same core flow while shifting the odds slightly</p><ul><li>More green pockets</li><li>Same inside and outside bets</li><li>Classic casino feel</li></ul>",
+      "howToPlay": "<p><b>How a spin works</b></p><ul><li>Pick your chip value</li><li>Place bets on numbers or board sections</li><li>Spin the wheel and watch where the ball lands</li><li>Winning bets pay automatically</li></ul><p>You can combine cautious and risky bets in the same round</p>",
       "board": {
         "black": "Black",
         "even": "Even",
@@ -269,13 +269,13 @@
           "title": "Slot Beer-Man"
         }
       },
-      "description": "Classic slot machine. Match symbols across paylines to win. The rarer the symbol, the higher the payout!",
+      "description": "Classic slot machine Match symbols across paylines to win The rarer the symbol, the higher the payout!",
       "summary": {
-        "3x3": "<p><b>Compact and classic.</b></p><p>This 3x3 machine keeps the action clean and readable, perfect for quick spins and straightforward wins.</p><ul><li>Fast sessions</li><li>Simple reel layout</li><li>Easy to read at a glance</li></ul>",
-        "3x5": "<p><b>More reels, more routes to win.</b></p><p>The 3x5 setup opens the board with extra paylines and more room for symbol combinations.</p><ul><li>Wider than 3x3</li><li>More active line variety</li><li>A bit more strategic</li></ul>",
-        "5x5": "<p><b>Big grid, loud energy.</b></p><p>This 5x5 version fills the screen with a denser reel field and a more chaotic spin pattern.</p><ul><li>Largest visual board</li><li>High-action feel</li><li>Best for a busier machine</li></ul>"
+        "3x3": "<p><b>Compact and classic</b></p><p>This 3x3 machine keeps the action clean and readable, perfect for quick spins and straightforward wins</p><ul><li>Fast sessions</li><li>Simple reel layout</li><li>Easy to read at a glance</li></ul>",
+        "3x5": "<p><b>More reels, more routes to win</b></p><p>The 3x5 setup opens the board with extra paylines and more room for symbol combinations</p><ul><li>Wider than 3x3</li><li>More active line variety</li><li>A bit more strategic</li></ul>",
+        "5x5": "<p><b>Big grid, loud energy</b></p><p>This 5x5 version fills the screen with a denser reel field and a more chaotic spin pattern</p><ul><li>Largest visual board</li><li>High-action feel</li><li>Best for a busier machine</li></ul>"
       },
-      "howToPlay": "<p><b>Spin sequence</b></p><ul><li>Choose the machine type</li><li>Set your bet amount</li><li>Spin the reels and watch the symbols land</li><li>Matching symbols on active paylines create payouts</li></ul><p>Keep spinning or end the session whenever you want.</p>",
+      "howToPlay": "<p><b>Spin sequence</b></p><ul><li>Choose the machine type</li><li>Set your bet amount</li><li>Spin the reels and watch the symbols land</li><li>Matching symbols on active paylines create payouts</li></ul><p>Keep spinning or end the session whenever you want</p>",
       "controls": {
         "selectType": "Machine type",
         "startSession": "Start game",
@@ -287,15 +287,15 @@
         "showPaytable": "Show paytable",
         "hidePaytable": "Hide paytable",
         "totalPayout": "Total payout",
-        "insufficientBalanceCurrentBet": "You need at least {{bet}} to keep spinning this session."
+        "insufficientBalanceCurrentBet": "You need at least {{bet}} to keep spinning this session"
       }
     },
     "capyroad": {
       "title": "Capyroad",
       "imageAlt": "Capyroad placeholder card",
-      "description": "Cross one road at a time to raise your multiplier. Every jump increases the potential payout, but also the crash risk. Cash out whenever you want to secure the winnings.",
-      "summary": "<p><b>Crossy Road energy with betting pressure.</b></p><p>Capyroad is a risk-and-cashout game inspired by <b>Crossy Road</b> and <b>Chicken Road</b>. Each safe lane pushes your capybara forward and raises the multiplier.</p><ul><li>Safe crosses build the reward</li><li>Each new lane adds tension</li><li>You choose when to stop and secure the run</li></ul>",
-      "howToPlay": "<p><b>Push your luck</b></p><ul><li>Start a round to enter the road</li><li>Press <b>Cross</b> to move to the next lane</li><li>Each success increases the payout multiplier</li><li>The crash chance also rises as you keep going</li><li>Use <b>Cash out</b> before a crash to lock the reward</li></ul><p>Longer runs can pay more, but one mistake can wipe the round.</p>",
+      "description": "Cross one road at a time to raise your multiplier Every jump increases the potential payout, but also the crash risk Cash out whenever you want to secure the winnings",
+      "summary": "<p><b>Crossy Road energy with betting pressure</b></p><p>Capyroad is a risk-and-cashout game inspired by <b>Crossy Road</b> and <b>Chicken Road</b> Each safe lane pushes your capybara forward and raises the multiplier</p><ul><li>Safe crosses build the reward</li><li>Each new lane adds tension</li><li>You choose when to stop and secure the run</li></ul>",
+      "howToPlay": "<p><b>Push your luck</b></p><ul><li>Start a round to enter the road</li><li>Press <b>Cross</b> to move to the next lane</li><li>Each success increases the payout multiplier</li><li>The crash chance also rises as you keep going</li><li>Use <b>Cash out</b> before a crash to lock the reward</li></ul><p>Longer runs can pay more, but one mistake can wipe the round</p>",
       "actions": {
         "cross": "Cross",
         "cashout": "Cash out"
@@ -383,7 +383,7 @@
       },
       "betLabel": {
         "label": "Market",
-        "placeholder": "Real Madrid wins the Champions League",
+        "placeholder": "Do we approve the TFG?",
         "minLength": "Minimum 3 characters",
         "maxLength": "Maximum 120 characters"
       },
@@ -405,10 +405,10 @@
       },
       "betOptions": {
         "label": "Bet options",
-        "hint": "Define at least two options for this market.",
+        "hint": "Define at least two options for this market",
         "addOption": "Add option",
         "option": "Option {{index}}",
-        "locked": "You cannot edit the options because this bet already has activity. You can still update the name or closing date.",
+        "locked": "You cannot edit the options because this bet already has activity You can still update the name or closing date",
         "minItems": "You must add at least 2 options",
         "maxItems": "You cannot add more than 20 options"
       }
@@ -439,7 +439,7 @@
       "cards": {
         "blackjack": {
           "title": "Blackjack",
-          "description": "Classic blackjack game."
+          "description": "Classic blackjack game"
         },
         "capyroad": {
           "title": "Capyroad",
@@ -449,26 +449,26 @@
           "title": "Roulette",
           "classic": {
             "title": "European Roulette",
-            "description": "European roulette game."
+            "description": "European roulette game"
           },
           "american": {
             "title": "American Roulette",
-            "description": "American roulette game."
+            "description": "American roulette game"
           }
         },
         "slots": {
           "title": "Slots",
           "beer": {
             "title": "Beer-Man",
-            "description": "Slot game inspired by the best drink in the world."
+            "description": "Slot game inspired by the best drink in the world"
           },
           "starwars": {
             "title": "Star Wars",
-            "description": "Star Wars themed slot game."
+            "description": "Star Wars themed slot game"
           },
           "stardewValley": {
             "title": "Stardew Valley",
-            "description": "Stardew Valley themed slot game."
+            "description": "Stardew Valley themed slot game"
           }
         },
         "playNow": "Play now"
@@ -477,49 +477,49 @@
     "landingPage": {
       "hero": {
         "title": "Welcome to Pakito's Gambling",
-        "text": "The best online casino experience with hundreds of games, bonuses and big prizes.",
+        "text": "The best online casino experience with hundreds of games, bonuses and big prizes",
         "join": "Join",
         "seeGames": "View games"
       },
       "cta": {
         "title": "Ready to start your adventure?",
-        "text": "Join thousands of players enjoying the best online casino experience. Get your 200% welcome bonus today.",
+        "text": "Join thousands of players enjoying the best online casino experience Get your 200% welcome bonus today",
         "exploreGames": "Explore games",
         "join": "Join now"
       },
       "features": {
         "title": "Why choose Pakito's Gambling?",
-        "text": "We offer a premium casino experience with top features and full commitment to player satisfaction.",
+        "text": "We offer a premium casino experience with top features and full commitment to player satisfaction",
         "items": {
           "1": {
             "title": "Game variety",
-            "description": "Over 100 premium casino games including slots, roulette, blackjack and more."
+            "description": "Over 100 premium casino games including slots, roulette, blackjack and more"
           },
           "2": {
             "title": "Safe and reliable",
-            "description": "Secure platform with top encryption and protection technologies."
+            "description": "Secure platform with top encryption and protection technologies"
           },
           "3": {
             "title": "Big prizes",
-            "description": "Win big prizes with progressive jackpots and exclusive tournaments."
+            "description": "Win big prizes with progressive jackpots and exclusive tournaments"
           },
           "4": {
             "title": "Fast experience",
-            "description": "Optimized games for smooth experience on any device."
+            "description": "Optimized games for smooth experience on any device"
           },
           "5": {
             "title": "Active community",
-            "description": "Join thousands of players in our casino community."
+            "description": "Join thousands of players in our casino community"
           },
           "6": {
             "title": "Exclusive bonuses",
-            "description": "Receive welcome bonuses and special promotions regularly."
+            "description": "Receive welcome bonuses and special promotions regularly"
           }
         }
       },
       "imagesGrid": {
         "title": "Play anywhere",
-        "text": "Access your games from any device.",
+        "text": "Access your games from any device",
         "items": {
           "win": {
             "title": "Celebrate your wins",
@@ -531,7 +531,7 @@
           },
           "mobile": {
             "title": "Play anywhere",
-            "text": "Access your games from any device. Responsive design."
+            "text": "Access your games from any device Responsive design"
           }
         }
       },
@@ -555,7 +555,7 @@
       },
       "danger": {
         "title": "Danger zone",
-        "description": "This action is irreversible. All your data will be deleted.",
+        "description": "This action is irreversible All your data will be deleted",
         "deleteAccount": "Delete account"
       }
     },
@@ -591,9 +591,9 @@
       },
       "list": {
         "title": "Markets worth watching",
-        "description": "Discover open and closed markets across all kinds of stories, with a cleaner view built to compare options and jump in at a glance.",
+        "description": "Discover open and closed markets across all kinds of stories, with a cleaner view built to compare options and jump in at a glance",
         "emptyTitle": "No bets match the current filters",
-        "emptyDescription": "Try another name or change the selected status.",
+        "emptyDescription": "Try another name or change the selected status",
         "marketCount": "{{count}} markets",
         "showing": "Showing {{start}}-{{end}} of {{total}}",
         "cards": "Cards",
@@ -608,11 +608,11 @@
         "market": "Market",
         "endsAt": "Closing time",
         "viewMarket": "View market",
-        "noOptions": "There are no options loaded for this market yet."
+        "noOptions": "There are no options loaded for this market yet"
       },
       "detail": {
         "market": "Market details",
-        "hint": "Pick an option, enter your amount and place the bet directly from this screen.",
+        "hint": "Pick an option, enter your amount and place the bet directly from this screen",
         "selection": "Bet slip",
         "options": "Options",
         "betStatusLabel": "Your market status",
@@ -628,12 +628,12 @@
         "amountPlaceholder": "Enter your bet amount",
         "placeBet": "Place bet",
         "refresh": "Refresh market",
-        "alreadyPlacedMessage": "You already placed a bet on this market.",
-        "alreadyPlacedBlock": "You already placed a bet on this market. A second bet is not allowed.",
-        "alreadyPlacedWithOption": "You already bet on this market with option: {{option}}.",
-        "closedMessage": "This market is already closed and no longer accepts new positions.",
-        "noMarket": "This bet could not be found.",
-        "noOptions": "This market has no available options yet."
+        "alreadyPlacedMessage": "You already placed a bet on this market",
+        "alreadyPlacedBlock": "You already placed a bet on this market A second bet is not allowed",
+        "alreadyPlacedWithOption": "You already bet on this market with option: {{option}}",
+        "closedMessage": "This market is already closed and no longer accepts new positions",
+        "noMarket": "This bet could not be found",
+        "noOptions": "This market has no available options yet"
       }
     }
   },
@@ -693,7 +693,44 @@
       "Update_User": "Error updating profile",
       "bet0": "The bet can't be 0",
       "noAdmin": "You don't have access to this",
-      "noLogin": "You need to be logged to access this"
+      "noLogin": "You need to be logged to access this",
+      "ALREADY_SPLIT": "This hand has already been split",
+      "AUTH_INVALID_INPUT": "The submitted data is invalid",
+      "AUTH_INVALID_USERNAME": "Invalid username",
+      "AUTH_PASSWORD_TOO_SHORT": "Password too short",
+      "AUTH_SESSION_EXPIRED": "Your session has expired",
+      "AUTH_SLOTS_DATA_PROVIDED": "Invalid slot session data provided",
+      "BET_LABEL_REQUIRED": "The bet label is required",
+      "BET_UPDATE_REQUIRED": "At least one bet field must be updated",
+      "CANNOT_DOUBLE": "You cannot double this hand right now",
+      "CANNOT_SPLIT": "You cannot split this hand",
+      "ERROR_UPDATING_BALANCE": "There was an error updating the balance",
+      "FILTER_FIELD_REQUIRED": "A filter field is required",
+      "FORBIDDEN": "You are not allowed to access this resource",
+      "INTERNAL_SERVER_ERROR": "Internal server error",
+      "INVALID_AMOUNT": "Invalid amount",
+      "INVALID_BET": "Invalid bet",
+      "INVALID_BETS_FORMAT": "The bets format is invalid",
+      "INVALID_BET_TYPE": "Invalid bet type",
+      "INVALID_DATE_RANGE": "The selected date range is invalid",
+      "INVALID_FILTER_FIELD": "The selected filter field is invalid",
+      "INVALID_FILTER_VALUE": "The selected filter value is invalid",
+      "INVALID_FROM_CREATED_AT": "The created-from date is invalid",
+      "INVALID_FROM_DATE": "The from date is invalid",
+      "INVALID_FROM_ENDS_AT": "The closing-from date is invalid",
+      "INVALID_MACHINE_TYPE": "Invalid machine type",
+      "INVALID_ROULETTE_TYPE": "Invalid roulette type",
+      "INVALID_TO_CREATED_AT": "The created-to date is invalid",
+      "INVALID_TO_DATE": "The to date is invalid",
+      "INVALID_TO_ENDS_AT": "The closing-to date is invalid",
+      "INVALID_TRANSACTION_DATA": "The transaction data is invalid",
+      "INVALID_UUID": "The provided identifier is invalid",
+      "NOT_FOUND": "The requested route was not found",
+      "NO_PERMISSION": "You do not have permission to perform this action",
+      "TOO_MANY_GAMES": "Too many game requests Please wait a moment and try again",
+      "TOO_MANY_HISTORY_REQUESTS": "Too many history requests Please try again later",
+      "TOO_MANY_REGISTRATIONS": "Too many registration attempts Please try again later",
+      "TOO_MANY_REQUESTS": "Too many requests Please try again later"
     },
     "info": {
       "loading": "Loading...",
@@ -717,7 +754,7 @@
       "sessionExpired": {
         "accept": "Go to login",
         "cancel": "Close session",
-        "title": "Your session has expired. Please log in again."
+        "title": "Your session has expired Please log in again"
       },
       "logDetail": {
         "jsonDetail": "JSON Details"
@@ -766,7 +803,9 @@
       "BET_PLACED": "Bet placed successfully",
       "LANGUAGE_CHANGED": "Language changed successfully",
       "USER_UPDATED": "Profile updated",
-      "logout": "Logout successfully"
+      "logout": "Logout successfully",
+      "GAME_DELETED_SUCCESSFULLY": "Game deleted successfully",
+      "SUCCESS": "Operation completed successfully"
     },
     "warning": {
       "cantDouble": "You don't have the currency to double",

@@ -69,12 +69,45 @@ const compareSessionValues = (leftValue, rightValue) => {
   return 0
 }
 
-const UserSessions = ({ userId, className = "", shadow = true }) => {
+const resolveApiErrorCode = (responseOrError, fallback = "SERVER_ERROR") => {
+  if (typeof responseOrError?.code === "string" && responseOrError.code.trim()) {
+    return responseOrError.code
+  }
+
+  if (
+    typeof responseOrError?.message === "string" &&
+    responseOrError.message.trim()
+  ) {
+    return responseOrError.message
+  }
+
+  return fallback
+}
+
+const UserSessions = ({
+  userId,
+  className = "",
+  shadow = true,
+  emptyStateMessage = null,
+}) => {
   const { get, destroy } = useAPI()
   const { getAccessToken, getRefreshToken } = useSession()
   const { t } = useLocale()
   const { addNotification } = useNotification()
   const [revokingSessionId, setRevokingSessionId] = useState(null)
+
+  const getErrorMessage = useCallback(
+    (responseOrError) => {
+      const code = resolveApiErrorCode(responseOrError)
+      const translationKey = `message.error.${code}`
+      const translatedMessage = t(translationKey)
+
+      return translatedMessage === translationKey
+        ? t("message.error.SERVER_ERROR")
+        : translatedMessage
+    },
+    [t],
+  )
 
   const headers = useMemo(
     () => ({
@@ -92,37 +125,49 @@ const UserSessions = ({ userId, className = "", shadow = true }) => {
 
   const fetchSessions = useCallback(
     async (params = {}) => {
-      const res = await get(sessionsUrl, { headers })
-      const allSessions = res?.sessions || []
-      const { page = 1, limit = 5, sortBy, sortOrder = "none" } = params
+      try {
+        const res = await get(sessionsUrl, { headers })
+        if (res?.code) {
+          throw new Error(res.code)
+        }
 
-      const sortedSessions =
-        sortBy && sortOrder !== "none"
-          ? [...allSessions].sort((leftSession, rightSession) => {
-              const result = compareSessionValues(
-                getSessionSortValue(leftSession, sortBy),
-                getSessionSortValue(rightSession, sortBy),
-              )
+        const allSessions = res?.sessions || []
+        const { page = 1, limit = 5, sortBy, sortOrder = "none" } = params
 
-              return sortOrder === "desc" ? -result : result
-            })
-          : allSessions
+        const sortedSessions =
+          sortBy && sortOrder !== "none"
+            ? [...allSessions].sort((leftSession, rightSession) => {
+                const result = compareSessionValues(
+                  getSessionSortValue(leftSession, sortBy),
+                  getSessionSortValue(rightSession, sortBy),
+                )
 
-      const currentPage = Math.max(1, page)
-      const pageSize = Math.max(1, limit)
-      const totalPages = Math.max(
-        1,
-        Math.ceil(sortedSessions.length / pageSize),
-      )
-      const normalizedPage = Math.min(currentPage, totalPages)
-      const start = (normalizedPage - 1) * pageSize
+                return sortOrder === "desc" ? -result : result
+              })
+            : allSessions
 
-      return {
-        sessions: sortedSessions.slice(start, start + pageSize),
-        totalPages,
+        const currentPage = Math.max(1, page)
+        const pageSize = Math.max(1, limit)
+        const totalPages = Math.max(
+          1,
+          Math.ceil(sortedSessions.length / pageSize),
+        )
+        const normalizedPage = Math.min(currentPage, totalPages)
+        const start = (normalizedPage - 1) * pageSize
+
+        return {
+          sessions: sortedSessions.slice(start, start + pageSize),
+          totalPages,
+        }
+      } catch (error) {
+        addNotification(getErrorMessage(error), "error")
+        return {
+          sessions: [],
+          totalPages: 1,
+        }
       }
     },
-    [get, headers, sessionsUrl],
+    [addNotification, get, getErrorMessage, headers, sessionsUrl],
   )
 
   const {
@@ -142,19 +187,19 @@ const UserSessions = ({ userId, className = "", shadow = true }) => {
       try {
         const res = await destroy(`${sessionsUrl}/${sessionId}`, { headers })
 
-        if (res?.code !== "SUCCESS") {
-          throw new Error(res?.code || "UNKNOWN_ERROR")
+        if (!res || res.code !== "SUCCESS") {
+          throw new Error(resolveApiErrorCode(res))
         }
 
         await refresh()
         addNotification(t("message.success.SESSION_REVOKED"), "success")
       } catch (error) {
-        addNotification(t(`message.error.${error.message}`), "error")
+        addNotification(getErrorMessage(error), "error")
       } finally {
         setRevokingSessionId(null)
       }
     },
-    [addNotification, destroy, headers, refresh, sessionsUrl, t],
+    [addNotification, destroy, getErrorMessage, headers, refresh, sessionsUrl, t],
   )
 
   const confirmRevokeSession = useCallback(
@@ -258,16 +303,22 @@ const UserSessions = ({ userId, className = "", shadow = true }) => {
           {t("adminPanel.userDetails.sessions.title")}
         </h2>
 
-        <Table
-          data={data?.sessions || []}
-          columns={columns}
-          pageCount={data?.totalPages || 0}
-          isLoading={isLoading}
-          pagination={pagination}
-          setPagination={setPagination}
-          sorting={sorting}
-          setSorting={setSorting}
-        />
+        {emptyStateMessage ? (
+          <h3 className="text-center text-lg sm:text-2xl font-semibold">
+            {emptyStateMessage}
+          </h3>
+        ) : (
+          <Table
+            data={data?.sessions || []}
+            columns={columns}
+            pageCount={data?.totalPages || 0}
+            isLoading={isLoading}
+            pagination={pagination}
+            setPagination={setPagination}
+            sorting={sorting}
+            setSorting={setSorting}
+          />
+        )}
       </div>
     </section>
   )

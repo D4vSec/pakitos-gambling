@@ -47,16 +47,14 @@ const UserDetails = () => {
         <div className="w-full lg:max-w-sm">
           <UserCard user={user} />
         </div>
-        {user ? (
-          <UserSessions userId={id} shadow={false} className="min-w-0 w-full" />
-        ) : (
-          <div className="card bg-base-100 p-6 min-w-0 w-full">
-            <h2 className="mb-3 text-xl sm:text-2xl font-bold">
-              {t("adminPanel.userDetails.sessions.title")}
-            </h2>
-            <h3 className="text-center text-md sm:lg font-semibold">{t("ui.tables.noData")}</h3>
-          </div>
-        )}
+        <UserSessions
+          userId={id}
+          shadow={false}
+          className="min-w-0 w-full"
+          emptyStateMessage={
+            user ? null : t("adminPanel.userDetails.detailsCard.noUser")
+          }
+        />
         <div className="card bg-base-100 p-6 min-w-0 w-full lg:col-span-2">
           <h2 className="mb-3 text-xl card-title">
             <IconCreditCard />

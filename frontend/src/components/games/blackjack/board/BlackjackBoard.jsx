@@ -100,7 +100,6 @@ const BlackjackBoard = () => {
   )
 
   const finishedAndShown = game?.status === "finished" && dealQueue.length === 0
-  // TODO: Ir jugando con los paddings de Hands en lugar de con el grid, porque se descuadra mucho
   return (
     <div className="w-full h-full grid grid-cols-[1fr_3fr_1fr] grid-rows-[1fr_0.2fr_1fr] sm:grid-rows-[1fr_0.3fr_1fr] md:grid-rows-[1fr_0.3fr_1fr]  lg:grid-rows-[1fr_0.3fr_1fr] gap-1 sm:gap-2 md:gap-3 lg:gap-4 bg-linear-to-b from-emerald-900 via-green-800 to-green-900">
       <div className="dealer flex justify-center items-end">

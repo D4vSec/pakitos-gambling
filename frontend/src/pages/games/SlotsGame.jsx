@@ -5,19 +5,20 @@ import { useLocale } from "@/providers/LocaleProvider"
 import SlotsProvider, { useSlots } from "@/providers/SlotsProvider"
 import SlotMachine from "@/components/games/slots/SlotMachine"
 import SlotControls from "@/components/games/slots/SlotControls"
-import slots3x3Image from "@/assets/home/cards/starwars.webp"
-import slots3x5Image from "@/assets/home/cards/stardewvalley.webp"
-import slots5x5Image from "@/assets/home/cards/beerman.jpeg"
+import starwarsImage from "@/assets/home/cards/starwars.webp"
+import stardewValleyImage from "@/assets/home/cards/stardewvalley.webp"
+import beermanImage from "@/assets/home/cards/beerman.jpeg"
 
-const slotImages = {
-  "3x3": slots3x3Image,
-  "3x5": slots3x5Image,
-  "5x5": slots5x5Image,
+const slotImagesByTheme = {
+  starwars: starwarsImage,
+  stardewvalley: stardewValleyImage,
+  beerman: beermanImage,
 }
 
 const SlotsGameContent = ({ theme = "starwars" }) => {
   const { t } = useLocale()
   const { type } = useSlots()
+  const slotImage = slotImagesByTheme[theme] ?? slotImagesByTheme.starwars
 
   return (
     <GameTemplate
@@ -26,7 +27,7 @@ const SlotsGameContent = ({ theme = "starwars" }) => {
       description={
         <GameDescription
           title={t("games.slots.title")}
-          image={slotImages[type]}
+          image={slotImage}
           imageAlt={t(`games.slots.imageAlt.${type}`)}
           summaryTitle={t("games.description.summaryTitle")}
           summary={t(`games.slots.summary.${type}`)}

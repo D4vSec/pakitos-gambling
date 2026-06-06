@@ -1,7 +1,7 @@
 {
   "app": {
     "name": "Pakito's Gambling",
-    "copyright": "Todos los derechos reservados por la mafia de atrás"
+    "copyright": "Todos los derechos reservados por la mafia del fondo"
   },
   "ui": {
     "buttons": {
@@ -99,33 +99,33 @@
         "actions": "Acciones"
       },
       "detail": {
-        "summary": "Gestiona el mercado, revisa el pool y calcula el reparto proyectado antes de liquidar.",
-        "noBet": "No se ha encontrado esta apuesta.",
+        "summary": "Gestiona el mercado, revisa el pool y calcula el reparto proyectado antes de liquidar",
+        "noBet": "No se ha encontrado esta apuesta",
         "refresh": "Refrescar",
         "editBet": "Editar apuesta",
         "closeBet": "Forzar cierre",
         "deleteBet": "Eliminar apuesta",
         "totalPool": "Pool total",
         "poolDistribution": "Distribución del pool",
-        "poolHint": "Así está repartido actualmente el capital entre las opciones de esta apuesta.",
+        "poolHint": "Así está repartido actualmente el capital entre las opciones de esta apuesta",
         "option": "Opción",
         "poolAmount": "Capital",
         "odds": "Cuota",
         "settlementPreview": "Preview de liquidación",
         "settledResult": "Resultado liquidado",
         "settledAt": "Liquidada el",
-        "settledHint": "Esta apuesta ya se ha liquidado y el reparto efectivo ya fue ejecutado.",
-        "previewHint": "Selecciona la opción ganadora para ver cuánto capital se repartiría con las cuotas actuales.",
+        "settledHint": "Esta apuesta ya se ha liquidado y el reparto efectivo ya fue ejecutado",
+        "previewHint": "Selecciona la opción ganadora para ver cuánto capital se repartiría con las cuotas actuales",
         "selectWinningOption": "Opción ganadora",
         "generatePreview": "Generar preview",
         "settleBet": "Liquidar apuesta",
-        "noPreview": "Selecciona una opción y genera el preview para ver el reparto proyectado.",
+        "noPreview": "Selecciona una opción y genera el preview para ver el reparto proyectado",
         "winningOption": "Opción ganadora",
         "totalWinningAmount": "Capital ganador",
         "totalProjectedPayout": "Pago proyectado",
         "userId": "Usuario",
         "payout": "Pago",
-        "emptyWinners": "No hay usuarios ganadores para esta opción."
+        "emptyWinners": "No hay usuarios ganadores para esta opción"
       }
     },
     "logs": {
@@ -210,8 +210,8 @@
       "title": "Blackjack",
       "bkPays": "El blackjack paga 3 a 2",
       "imageAlt": "Ilustración de una mesa de blackjack",
-      "summary": "<p><b>Gana al crupier, no a la mesa.</b></p><p>Blackjack es un juego de cartas en el que buscas acercarte a <b>21</b> más que el crupier sin pasarte.</p><ul><li>Decisiones rápidas</li><li>Las manos fuertes pagan muy bien</li><li>Cada carta extra cambia el riesgo</li></ul>",
-      "howToPlay": "<p><b>Flujo de la ronda</b></p><ul><li>Haz tu apuesta y comienza la mano</li><li><b>Pedir</b> añade otra carta</li><li><b>Plantarse</b> conserva tu total</li><li><b>Doblar</b> sube la apuesta a cambio de una última carta</li><li><b>Separar</b> divide la mano cuando recibes una pareja</li></ul><p>Si acabas mejor que el crupier sin pasarte, ganas.</p>",
+      "summary": "<p><b>Gana al crupier, no a la mesa</b></p><p>Blackjack es un juego de cartas en el que buscas acercarte a <b>21</b> más que el crupier sin pasarte</p><ul><li>Decisiones rápidas</li><li>Las manos fuertes pagan muy bien</li><li>Cada carta extra cambia el riesgo</li></ul>",
+      "howToPlay": "<p><b>Flujo de la ronda</b></p><ul><li>Haz tu apuesta y comienza la mano</li><li><b>Pedir</b> añade otra carta</li><li><b>Plantarse</b> conserva tu total</li><li><b>Doblar</b> sube la apuesta a cambio de una última carta</li><li><b>Separar</b> divide la mano cuando recibes una pareja</li></ul><p>Si acabas mejor que el crupier sin pasarte, ganas</p>",
       "actions": {
         "double": "Doblar",
         "hit": "Pedir carta",
@@ -227,9 +227,9 @@
       },
       "imageAltZero": "Rueda de ruleta europea",
       "imageAltZeroZero": "Rueda de ruleta americana",
-      "summaryZero": "<p><b>La mesa clásica de un solo cero.</b></p><p>La ruleta europea es la versión más limpia de la ruleta, con un único cero verde y muchas formas distintas de apostar.</p><ul><li>Apuesta a números exactos</li><li>Cubre colores, pares, impares o rangos</li><li>Combina apuestas seguras con otras de pago alto</li></ul>",
-      "summaryZeroZero": "<p><b>La misma emoción, con un extra en la rueda.</b></p><p>La ruleta americana añade <b>0</b> y <b>00</b>, manteniendo la esencia del juego pero cambiando ligeramente las probabilidades.</p><ul><li>Más casillas verdes</li><li>La misma mezcla de apuestas interiores y exteriores</li><li>Sensación de casino clásico</li></ul>",
-      "howToPlay": "<p><b>Cómo funciona una tirada</b></p><ul><li>Elige el valor de tu ficha</li><li>Coloca apuestas en números o zonas del tablero</li><li>Pulsa girar y espera a que la bola se detenga</li><li>Las apuestas ganadoras se pagan automáticamente</li></ul><p>Puedes mezclar apuestas conservadoras y arriesgadas en la misma ronda.</p>",
+      "summaryZero": "<p><b>La mesa clásica de un solo cero</b></p><p>La ruleta europea es la versión más limpia de la ruleta, con un único cero verde y muchas formas distintas de apostar</p><ul><li>Apuesta a números exactos</li><li>Cubre colores, pares, impares o rangos</li><li>Combina apuestas seguras con otras de pago alto</li></ul>",
+      "summaryZeroZero": "<p><b>La misma emoción, con un extra en la rueda</b></p><p>La ruleta americana añade <b>0</b> y <b>00</b>, manteniendo la esencia del juego pero cambiando ligeramente las probabilidades</p><ul><li>Más casillas verdes</li><li>La misma mezcla de apuestas interiores y exteriores</li><li>Sensación de casino clásico</li></ul>",
+      "howToPlay": "<p><b>Cómo funciona una tirada</b></p><ul><li>Elige el valor de tu ficha</li><li>Coloca apuestas en números o zonas del tablero</li><li>Pulsa girar y espera a que la bola se detenga</li><li>Las apuestas ganadoras se pagan automáticamente</li></ul><p>Puedes mezclar apuestas conservadoras y arriesgadas en la misma ronda</p>",
       "board": {
         "black": "Negro",
         "even": "Par",
@@ -269,13 +269,13 @@
           "title": "Tragamonedas Beer-Man"
         }
       },
-      "description": "Tragamonedas clásica. Alinea símbolos en las líneas de pago para ganar. ¡Cuanto más raro sea el símbolo, mayor será el premio!",
+      "description": "Tragamonedas clásica Alinea símbolos en las líneas de pago para ganar. ¡Cuanto más raro sea el símbolo, mayor será el premio!",
       "summary": {
-        "3x3": "<p><b>Compacta y clásica.</b></p><p>La máquina 3x3 mantiene la acción simple y clara, ideal para tiradas rápidas y premios fáciles de leer.</p><ul><li>Sesiones ágiles</li><li>Distribución sencilla</li><li>Muy fácil de entender</li></ul>",
-        "3x5": "<p><b>Más rodillos, más caminos para ganar.</b></p><p>La versión 3x5 abre el tablero con más líneas activas y más espacio para formar combinaciones.</p><ul><li>Formato más ancho</li><li>Mayor variedad de líneas</li><li>Un poco más estratégica</li></ul>",
-        "5x5": "<p><b>Cuadrícula grande, energía alta.</b></p><p>La 5x5 llena la pantalla con una máquina más densa y un ritmo visual más caótico.</p><ul><li>El tablero más grande</li><li>Sensación de mucha acción</li><li>Ideal si quieres algo intenso</li></ul>"
+        "3x3": "<p><b>Compacta y clásica</b></p><p>La máquina 3x3 mantiene la acción simple y clara, ideal para tiradas rápidas y premios fáciles de leer</p><ul><li>Sesiones ágiles</li><li>Distribución sencilla</li><li>Muy fácil de entender</li></ul>",
+        "3x5": "<p><b>Más rodillos, más caminos para ganar</b></p><p>La versión 3x5 abre el tablero con más líneas activas y más espacio para formar combinaciones</p><ul><li>Formato más ancho</li><li>Mayor variedad de líneas</li><li>Un poco más estratégica</li></ul>",
+        "5x5": "<p><b>Cuadrícula grande, energía alta</b></p><p>La 5x5 llena la pantalla con una máquina más densa y un ritmo visual más caótico</p><ul><li>El tablero más grande</li><li>Sensación de mucha acción</li><li>Ideal si quieres algo intenso</li></ul>"
       },
-      "howToPlay": "<p><b>Secuencia de juego</b></p><ul><li>Elige el tipo de máquina</li><li>Selecciona la cantidad de apuesta</li><li>Gira los rodillos y espera a que caigan los símbolos</li><li>Las coincidencias en las líneas activas generan premios</li></ul><p>Puedes seguir tirando o cerrar la sesión cuando quieras.</p>",
+      "howToPlay": "<p><b>Secuencia de juego</b></p><ul><li>Elige el tipo de máquina</li><li>Selecciona la cantidad de apuesta</li><li>Gira los rodillos y espera a que caigan los símbolos</li><li>Las coincidencias en las líneas activas generan premios</li></ul><p>Puedes seguir tirando o cerrar la sesión cuando quieras</p>",
       "controls": {
         "selectType": "Tipo de máquina",
         "startSession": "Iniciar partida",
@@ -287,15 +287,15 @@
         "showPaytable": "Ver pagos",
         "hidePaytable": "Ocultar pagos",
         "totalPayout": "Ganancia total",
-        "insufficientBalanceCurrentBet": "Necesitas al menos {{bet}} para seguir girando en esta sesión."
+        "insufficientBalanceCurrentBet": "Necesitas al menos {{bet}} para seguir girando en esta sesión"
       }
     },
     "capyroad": {
       "title": "Capyroad",
       "imageAlt": "Tarjeta provisional de Capyroad",
-      "description": "Cruza carretera por carretera para aumentar el multiplicador. Cada salto aumenta el premio potencial, pero también el riesgo de choque. Planta cuando quieras asegurar la ganancia.",
-      "summary": "<p><b>Energía de Crossy Road con presión de apuesta.</b></p><p>Capyroad es un juego de riesgo y cashout inspirado en <b>Crossy Road</b> y <b>Chicken Road</b>. Cada cruce seguro hace avanzar a tu capibara y sube el multiplicador.</p><ul><li>Los cruces seguros aumentan el premio</li><li>Cada carril nuevo mete más tensión</li><li>Tú decides cuándo cerrar la carrera</li></ul>",
-      "howToPlay": "<p><b>Aprieta o cobra</b></p><ul><li>Empieza una ronda para entrar en la carretera</li><li>Pulsa <b>Cruzar</b> para pasar al siguiente carril</li><li>Cada éxito aumenta el multiplicador</li><li>La probabilidad de choque también sube</li><li>Usa <b>Cobrar</b> antes de chocar para asegurar el premio</li></ul><p>Si te alargas demasiado, una sola caída puede borrar toda la ronda.</p>",
+      "description": "Cruza carretera por carretera para aumentar el multiplicador Cada salto aumenta el premio potencial, pero también el riesgo de choque Planta cuando quieras asegurar la ganancia",
+      "summary": "<p><b>Energía de Crossy Road con presión de apuesta</b></p><p>Capyroad es un juego de riesgo y cashout inspirado en <b>Crossy Road</b> y <b>Chicken Road</b> Cada cruce seguro hace avanzar a tu capibara y sube el multiplicador</p><ul><li>Los cruces seguros aumentan el premio</li><li>Cada carril nuevo mete más tensión</li><li>Tú decides cuándo cerrar la carrera</li></ul>",
+      "howToPlay": "<p><b>Aprieta o cobra</b></p><ul><li>Empieza una ronda para entrar en la carretera</li><li>Pulsa <b>Cruzar</b> para pasar al siguiente carril</li><li>Cada éxito aumenta el multiplicador</li><li>La probabilidad de choque también sube</li><li>Usa <b>Cobrar</b> antes de chocar para asegurar el premio</li></ul><p>Si te alargas demasiado, una sola caída puede borrar toda la ronda</p>",
       "actions": {
         "cross": "Cruzar",
         "cashout": "Cobrar"
@@ -383,7 +383,7 @@
       },
       "betLabel": {
         "label": "Mercado",
-        "placeholder": "Real Madrid gana la Champions",
+        "placeholder": "¿Aprobamos el TFG?",
         "minLength": "Mínimo 3 caracteres",
         "maxLength": "Máximo 120 caracteres"
       },
@@ -405,10 +405,10 @@
       },
       "betOptions": {
         "label": "Opciones de la apuesta",
-        "hint": "Define al menos dos opciones para el mercado.",
+        "hint": "Define al menos dos opciones para el mercado",
         "addOption": "Añadir opción",
         "option": "Opción {{index}}",
-        "locked": "No puedes editar las opciones porque esta apuesta ya tiene actividad. Solo puedes cambiar el nombre o la fecha de cierre.",
+        "locked": "No puedes editar las opciones porque esta apuesta ya tiene actividad Solo puedes cambiar el nombre o la fecha de cierre",
         "minItems": "Debes añadir al menos 2 opciones",
         "maxItems": "No puedes añadir más de 20 opciones"
       }
@@ -439,7 +439,7 @@
       "cards": {
         "blackjack": {
           "title": "Blackjack",
-          "description": "Juego clásico de blackjack."
+          "description": "Juego clásico de blackjack"
         },
         "capyroad": {
           "title": "Capyroad",
@@ -449,26 +449,26 @@
           "title": "Ruleta",
           "classic": {
             "title": "Ruleta Europea",
-            "description": "Juego de ruleta europea."
+            "description": "Juego de ruleta europea"
           },
           "american": {
             "title": "Ruleta Americana",
-            "description": "Juego de ruleta americana."
+            "description": "Juego de ruleta americana"
           }
         },
         "slots": {
           "title": "Tragamonedas",
           "beer": {
             "title": "Beer-Man",
-            "description": "Juego de tragamonedas inspirado en la mejor bebida del mundo."
+            "description": "Juego de tragamonedas inspirado en la mejor bebida del mundo"
           },
           "starwars": {
             "title": "Star Wars",
-            "description": "Juego de tragamonedas con temática de Star Wars."
+            "description": "Juego de tragamonedas con temática de Star Wars"
           },
           "stardewValley": {
             "title": "Stardew Valley",
-            "description": "Juego de tragamonedas con temática de Stardew Valley."
+            "description": "Juego de tragamonedas con temática de Stardew Valley"
           }
         },
         "playNow": "Jugar ahora"
@@ -477,49 +477,49 @@
     "landingPage": {
       "hero": {
         "title": "Bienvenido a Pakito's Gambling",
-        "text": "La mejor experiencia de casino online con cientos de juegos, bonos y grandes premios.",
+        "text": "La mejor experiencia de casino online con cientos de juegos, bonos y grandes premios",
         "join": "Unirse",
         "seeGames": "Ver juegos"
       },
       "cta": {
         "title": "¿Listo para empezar tu aventura?",
-        "text": "Únete a miles de jugadores disfrutando de la mejor experiencia de casino online. Consigue hoy tu bono de bienvenida del 200%.",
+        "text": "Únete a miles de jugadores disfrutando de la mejor experiencia de casino online Consigue hoy tu bono de bienvenida del 200%",
         "exploreGames": "Explorar juegos",
         "join": "Unirse ahora"
       },
       "features": {
         "title": "¿Por qué elegir Pakito's Gambling?",
-        "text": "Ofrecemos una experiencia de casino premium con las mejores funciones y un compromiso total con la satisfacción del jugador.",
+        "text": "Ofrecemos una experiencia de casino premium con las mejores funciones y un compromiso total con la satisfacción del jugador",
         "items": {
           "1": {
             "title": "Variedad de juegos",
-            "description": "Más de 100 juegos premium de casino, incluyendo tragamonedas, ruleta, blackjack y más."
+            "description": "Más de 100 juegos premium de casino, incluyendo tragamonedas, ruleta, blackjack y más"
           },
           "2": {
             "title": "Seguro y fiable",
-            "description": "Plataforma segura con tecnologías de cifrado y protección avanzadas."
+            "description": "Plataforma segura con tecnologías de cifrado y protección avanzadas"
           },
           "3": {
             "title": "Grandes premios",
-            "description": "Gana grandes premios con jackpots progresivos y torneos exclusivos."
+            "description": "Gana grandes premios con jackpots progresivos y torneos exclusivos"
           },
           "4": {
             "title": "Experiencia rápida",
-            "description": "Juegos optimizados para una experiencia fluida en cualquier dispositivo."
+            "description": "Juegos optimizados para una experiencia fluida en cualquier dispositivo"
           },
           "5": {
             "title": "Comunidad activa",
-            "description": "Únete a miles de jugadores en nuestra comunidad de casino."
+            "description": "Únete a miles de jugadores en nuestra comunidad de casino"
           },
           "6": {
             "title": "Bonos exclusivos",
-            "description": "Recibe bonos de bienvenida y promociones especiales regularmente."
+            "description": "Recibe bonos de bienvenida y promociones especiales regularmente"
           }
         }
       },
       "imagesGrid": {
         "title": "Juega en cualquier lugar",
-        "text": "Accede a tus juegos desde cualquier dispositivo.",
+        "text": "Accede a tus juegos desde cualquier dispositivo",
         "items": {
           "win": {
             "title": "Celebra tus victorias",
@@ -531,7 +531,7 @@
           },
           "mobile": {
             "title": "Juega en cualquier lugar",
-            "text": "Accede a tus juegos desde cualquier dispositivo. Diseño adaptable."
+            "text": "Accede a tus juegos desde cualquier dispositivo Diseño adaptable"
           }
         }
       },
@@ -555,7 +555,7 @@
       },
       "danger": {
         "title": "Zona de peligro",
-        "description": "Esta acción es irreversible. Todos tus datos serán eliminados.",
+        "description": "Esta acción es irreversible Todos tus datos serán eliminados",
         "deleteAccount": "Eliminar cuenta"
       }
     },
@@ -591,9 +591,9 @@
       },
       "list": {
         "title": "Mercados para seguir cada historia",
-        "description": "Descubre apuestas abiertas y cerradas sobre temas de todo tipo, con una vista más limpia para comparar opciones y entrar al mercado de un vistazo.",
+        "description": "Descubre apuestas abiertas y cerradas sobre temas de todo tipo, con una vista más limpia para comparar opciones y entrar al mercado de un vistazo",
         "emptyTitle": "No hay apuestas que coincidan con los filtros",
-        "emptyDescription": "Prueba con otro nombre o cambia el estado seleccionado.",
+        "emptyDescription": "Prueba con otro nombre o cambia el estado seleccionado",
         "marketCount": "{{count}} mercados",
         "showing": "Mostrando {{start}}-{{end}} de {{total}}",
         "cards": "Tarjetas",
@@ -608,11 +608,11 @@
         "market": "Mercado",
         "endsAt": "Cierre",
         "viewMarket": "Ver mercado",
-        "noOptions": "Todavía no hay opciones cargadas para esta apuesta."
+        "noOptions": "Todavía no hay opciones cargadas para esta apuesta"
       },
       "detail": {
         "market": "Detalle del mercado",
-        "hint": "Selecciona una opción, introduce tu cantidad y coloca la apuesta desde esta misma vista.",
+        "hint": "Selecciona una opción, introduce tu cantidad y coloca la apuesta desde esta misma vista",
         "selection": "Slip de apuesta",
         "options": "Opciones",
         "betStatusLabel": "Estado en este mercado",
@@ -628,12 +628,12 @@
         "amountPlaceholder": "Introduce la cantidad a apostar",
         "placeBet": "Apostar ahora",
         "refresh": "Refrescar mercado",
-        "alreadyPlacedMessage": "Ya realizaste una apuesta en este mercado.",
-        "alreadyPlacedBlock": "Ya tienes una apuesta en este mercado. No se permite una segunda apuesta.",
-        "alreadyPlacedWithOption": "Ya apostaste en este mercado con la opción: {{option}}.",
-        "closedMessage": "Esta apuesta ya está cerrada y no admite nuevas posiciones.",
-        "noMarket": "No se ha encontrado esta apuesta.",
-        "noOptions": "Este mercado todavía no tiene opciones disponibles."
+        "alreadyPlacedMessage": "Ya realizaste una apuesta en este mercado",
+        "alreadyPlacedBlock": "Ya tienes una apuesta en este mercado No se permite una segunda apuesta",
+        "alreadyPlacedWithOption": "Ya apostaste en este mercado con la opción: {{option}}",
+        "closedMessage": "Esta apuesta ya está cerrada y no admite nuevas posiciones",
+        "noMarket": "No se ha encontrado esta apuesta",
+        "noOptions": "Este mercado todavía no tiene opciones disponibles"
       }
     }
   },
@@ -693,7 +693,44 @@
       "Update_User": "Error al actualizar el perfil",
       "bet0": "La apuesta no puede ser 0",
       "noAdmin": "No tienes acceso a esto",
-      "noLogin": "Debes iniciar sesión para acceder"
+      "noLogin": "Debes iniciar sesión para acceder",
+      "ALREADY_SPLIT": "Esta mano ya ha sido separada",
+      "AUTH_INVALID_INPUT": "Los datos enviados no son validos",
+      "AUTH_INVALID_USERNAME": "Nombre de usuario invalido",
+      "AUTH_PASSWORD_TOO_SHORT": "Contrasena demasiado corta",
+      "AUTH_SESSION_EXPIRED": "Tu sesion ha expirado",
+      "AUTH_SLOTS_DATA_PROVIDED": "Los datos de la sesion de slots no son validos",
+      "BET_LABEL_REQUIRED": "La etiqueta de la apuesta es obligatoria",
+      "BET_UPDATE_REQUIRED": "Debes actualizar al menos un campo de la apuesta",
+      "CANNOT_DOUBLE": "No puedes doblar esta mano ahora mismo",
+      "CANNOT_SPLIT": "No puedes separar esta mano",
+      "ERROR_UPDATING_BALANCE": "Se produjo un error al actualizar el saldo",
+      "FILTER_FIELD_REQUIRED": "Debes indicar un campo de filtro",
+      "FORBIDDEN": "No tienes permiso para acceder a este recurso",
+      "INTERNAL_SERVER_ERROR": "Error interno del servidor",
+      "INVALID_AMOUNT": "Cantidad invalida",
+      "INVALID_BET": "Apuesta invalida",
+      "INVALID_BETS_FORMAT": "El formato de las apuestas no es valido",
+      "INVALID_BET_TYPE": "Tipo de apuesta invalido",
+      "INVALID_DATE_RANGE": "El rango de fechas seleccionado no es valido",
+      "INVALID_FILTER_FIELD": "El campo del filtro no es valido",
+      "INVALID_FILTER_VALUE": "El valor del filtro no es valido",
+      "INVALID_FROM_CREATED_AT": "La fecha inicial de creacion no es valida",
+      "INVALID_FROM_DATE": "La fecha desde no es valida",
+      "INVALID_FROM_ENDS_AT": "La fecha inicial de cierre no es valida",
+      "INVALID_MACHINE_TYPE": "El tipo de maquina no es valido",
+      "INVALID_ROULETTE_TYPE": "El tipo de ruleta no es valido",
+      "INVALID_TO_CREATED_AT": "La fecha final de creacion no es valida",
+      "INVALID_TO_DATE": "La fecha hasta no es valida",
+      "INVALID_TO_ENDS_AT": "La fecha final de cierre no es valida",
+      "INVALID_TRANSACTION_DATA": "Los datos de la transaccion no son validos",
+      "INVALID_UUID": "El identificador proporcionado no es valido",
+      "NOT_FOUND": "La ruta solicitada no existe",
+      "NO_PERMISSION": "No tienes permiso para realizar esta accion",
+      "TOO_MANY_GAMES": "Demasiadas solicitudes de juego Espera un momento e intentalo de nuevo",
+      "TOO_MANY_HISTORY_REQUESTS": "Demasiadas solicitudes de historial Intentalo mas tarde",
+      "TOO_MANY_REGISTRATIONS": "Demasiados intentos de registro Intentalo mas tarde",
+      "TOO_MANY_REQUESTS": "Demasiadas solicitudes Intentalo mas tarde"
     },
     "info": {
       "loading": "Cargando...",
@@ -717,7 +754,7 @@
       "sessionExpired": {
         "accept": "Ir al login",
         "cancel": "Cerrar sesión",
-        "title": "Tu sesión ha expirado. Vuelve a iniciar sesión."
+        "title": "Tu sesión ha expirado Vuelve a iniciar sesión"
       },
       "logDetail": {
         "jsonDetail": "Detalles JSON"
@@ -766,7 +803,9 @@
       "BET_PLACED": "Apuesta realizada correctamente",
       "LANGUAGE_CHANGED": "Idioma cambiado correctamente",
       "USER_UPDATED": "Perfil actualizado",
-      "logout": "Sesión cerrada correctamente"
+      "logout": "Sesión cerrada correctamente",
+      "GAME_DELETED_SUCCESSFULLY": "Partida eliminada correctamente",
+      "SUCCESS": "Operacion completada correctamente"
     },
     "warning": {
       "cantDouble": "No tienes saldo para doblar",

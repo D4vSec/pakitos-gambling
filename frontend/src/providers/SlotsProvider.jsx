@@ -13,6 +13,21 @@ import { useLocale } from "@/providers/LocaleProvider"
 
 const SlotsContext = createContext()
 
+const resolveApiErrorCode = (responseOrError, fallback = "SERVER_ERROR") => {
+  if (typeof responseOrError?.code === "string" && responseOrError.code.trim()) {
+    return responseOrError.code
+  }
+
+  if (
+    typeof responseOrError?.message === "string" &&
+    responseOrError.message.trim()
+  ) {
+    return responseOrError.message
+  }
+
+  return fallback
+}
+
 const SlotsProvider = ({
   type: defaultType = "3x3",
   slotKey = "default",
@@ -59,6 +74,19 @@ const SlotsProvider = ({
     authHeadersRef.current = authHeaders
   }, [authHeaders])
 
+  const getErrorMessage = useCallback(
+    (responseOrError) => {
+      const code = resolveApiErrorCode(responseOrError)
+      const translationKey = `message.error.${code}`
+      const translatedMessage = t(translationKey)
+
+      return translatedMessage === translationKey
+        ? t("message.error.SERVER_ERROR")
+        : translatedMessage
+    },
+    [t],
+  )
+
   const syncUserBalance = useCallback(
     (balance) => {
       const nextBalance = Number(balance)
@@ -87,22 +115,19 @@ const SlotsProvider = ({
         const res = await destroy(`/api/v1/slots/${gameId}`, {
           headers: authHeaders(),
         })
-        if (!res || res.code) throw new Error(res?.code || "UNKNOWN_ERROR")
+        if (!res || res.code) throw new Error(resolveApiErrorCode(res))
 
         clearLocalSession()
         return res
       } catch (err) {
         setError(err.message)
-        addNotification(
-          t(`message.error.${err.message}`) || err.message,
-          "error",
-        )
+        addNotification(getErrorMessage(err), "error")
         throw err
       } finally {
         setLoading(false)
       }
     },
-    [addNotification, authHeaders, clearLocalSession, destroy, t],
+    [addNotification, authHeaders, clearLocalSession, destroy, getErrorMessage],
   )
 
   const createSession = async ({ type: sessionType = type, amount }) => {
@@ -122,7 +147,7 @@ const SlotsProvider = ({
       })
 
       if (!res || res.code) {
-        throw new Error(res?.code || "UNKNOWN_ERROR")
+        throw new Error(resolveApiErrorCode(res))
       }
 
       const newSession = {
@@ -141,7 +166,7 @@ const SlotsProvider = ({
       return res
     } catch (err) {
       setError(err.message)
-      addNotification(t(`message.error.${err.message}`) || err.message, "error")
+      addNotification(getErrorMessage(err), "error")
       throw err
     } finally {
       setLoading(false)
@@ -174,7 +199,7 @@ const SlotsProvider = ({
       })
 
       if (!res || res.code) {
-        throw new Error(res?.code || "UNKNOWN_ERROR")
+        throw new Error(resolveApiErrorCode(res))
       }
 
       console.log("[SlotsProvider] incoming game info", {
@@ -203,7 +228,7 @@ const SlotsProvider = ({
       return res
     } catch (err) {
       setError(err.message)
-      addNotification(t(`message.error.${err.message}`) || err.message, "error")
+      addNotification(getErrorMessage(err), "error")
       throw err
     } finally {
       const elapsed = Date.now() - t0

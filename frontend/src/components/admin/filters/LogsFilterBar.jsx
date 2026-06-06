@@ -6,7 +6,6 @@ import FilterPill from "./FilterPill"
 import DateRangeInput from "./DateRangeInput"
 import DynamicSearch from "./DynamicSearch"
 
-// TODO: Añadir el filtro win/lose del payout
 const LogsFilterBar = ({ filters, onChange }) => {
   const { t } = useLocale()
   const [draftFilters, setDraftFilters] = useState(filters)

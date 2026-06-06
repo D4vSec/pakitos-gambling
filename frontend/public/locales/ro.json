@@ -99,33 +99,33 @@
         "actions": "Acțiuni"
       },
       "detail": {
-        "summary": "Gestionează piața, verifică pool-ul și estimează distribuția înainte de lichidare.",
-        "noBet": "Acest pariu nu a fost găsit.",
+        "summary": "Gestionează piața, verifică pool-ul și estimează distribuția înainte de lichidare",
+        "noBet": "Acest pariu nu a fost găsit",
         "refresh": "Reîncarcă",
         "editBet": "Editează pariul",
         "closeBet": "Forțează închiderea",
         "deleteBet": "Șterge pariul",
         "totalPool": "Pool total",
         "poolDistribution": "Distribuția pool-ului",
-        "poolHint": "Așa este împărțit în acest moment capitalul între opțiunile pariului.",
+        "poolHint": "Așa este împărțit în acest moment capitalul între opțiunile pariului",
         "option": "Opțiune",
         "poolAmount": "Capital",
         "odds": "Cotă",
         "settlementPreview": "Previzualizare lichidare",
         "settledResult": "Rezultat lichidat",
         "settledAt": "Lichidat la",
-        "settledHint": "Acest pariu a fost deja lichidat, iar plata a fost executată.",
-        "previewHint": "Selectează opțiunea câștigătoare pentru a vedea plata proiectată cu cotele actuale.",
+        "settledHint": "Acest pariu a fost deja lichidat, iar plata a fost executată",
+        "previewHint": "Selectează opțiunea câștigătoare pentru a vedea plata proiectată cu cotele actuale",
         "selectWinningOption": "Opțiune câștigătoare",
         "generatePreview": "Generează previzualizarea",
         "settleBet": "Lichidează pariul",
-        "noPreview": "Selectează o opțiune și generează previzualizarea pentru a vedea distribuția proiectată.",
+        "noPreview": "Selectează o opțiune și generează previzualizarea pentru a vedea distribuția proiectată",
         "winningOption": "Opțiune câștigătoare",
         "totalWinningAmount": "Capital câștigător",
         "totalProjectedPayout": "Plată proiectată",
         "userId": "Utilizator",
         "payout": "Plată",
-        "emptyWinners": "Nu există câștigători pentru această opțiune."
+        "emptyWinners": "Nu există câștigători pentru această opțiune"
       }
     },
     "logs": {
@@ -210,8 +210,8 @@
       "title": "Blackjack",
       "bkPays": "Blackjack plătește 3 la 2",
       "imageAlt": "Ilustrație cu masă de blackjack",
-      "summary": "<p><b>Bate dealerul, nu masa.</b></p><p>Blackjack este un joc de cărți în care încerci să ajungi mai aproape de <b>21</b> decât dealerul, fără să depășești limita.</p><ul><li>Decizii rapide</li><li>Mâinile bune pot plăti imediat</li><li>Fiecare alegere schimbă riscul</li></ul>",
-      "howToPlay": "<p><b>Cum curge runda</b></p><ul><li>Plasează pariul și începe mâna</li><li><b>Hit</b> adaugă o carte nouă</li><li><b>Stand</b> păstrează totalul curent</li><li><b>Double</b> mărește pariul pentru o ultimă carte</li><li><b>Split</b> împarte mâna când primești o pereche</li></ul><p>Dacă termini mai bine decât dealerul fără să bustuiești, câștigi.</p>",
+      "summary": "<p><b>Bate dealerul, nu masa</b></p><p>Blackjack este un joc de cărți în care încerci să ajungi mai aproape de <b>21</b> decât dealerul, fără să depășești limita</p><ul><li>Decizii rapide</li><li>Mâinile bune pot plăti imediat</li><li>Fiecare alegere schimbă riscul</li></ul>",
+      "howToPlay": "<p><b>Cum curge runda</b></p><ul><li>Plasează pariul și începe mâna</li><li><b>Hit</b> adaugă o carte nouă</li><li><b>Stand</b> păstrează totalul curent</li><li><b>Double</b> mărește pariul pentru o ultimă carte</li><li><b>Split</b> împarte mâna când primești o pereche</li></ul><p>Dacă termini mai bine decât dealerul fără să bustuiești, câștigi</p>",
       "actions": {
         "double": "Dubleză",
         "hit": "Trage carte",
@@ -227,9 +227,9 @@
       },
       "imageAltZero": "Roată de ruletă europeană",
       "imageAltZeroZero": "Roată de ruletă americană",
-      "summaryZero": "<p><b>Masa clasică cu un singur zero.</b></p><p>Ruleta europeană este varianta mai curată a ruletei, construită în jurul unui singur zero verde și a mai multor stiluri de pariere.</p><ul><li>Pariază pe numere exacte</li><li>Acoperă culori, par/impar sau intervale</li><li>Combină pariuri sigure cu payout mare</li></ul>",
-      "summaryZeroZero": "<p><b>Aceeași tensiune, cu un plus pe roată.</b></p><p>Ruleta americană adaugă <b>0</b> și <b>00</b>, păstrând senzația clasică de cazino, dar schimbând puțin șansele.</p><ul><li>Mai multe buzunare verzi</li><li>Aceleași pariuri inside și outside</li><li>Atmosferă clasică de cazino</li></ul>",
-      "howToPlay": "<p><b>Cum funcționează o rotire</b></p><ul><li>Alege valoarea jetonului</li><li>Pune pariuri pe numere sau pe zone ale mesei</li><li>Apasă spin și urmărește unde se oprește bila</li><li>Pariurile câștigătoare sunt plătite automat</li></ul><p>Poți combina pariuri mai sigure cu unele mai riscante în aceeași rundă.</p>",
+      "summaryZero": "<p><b>Masa clasică cu un singur zero</b></p><p>Ruleta europeană este varianta mai curată a ruletei, construită în jurul unui singur zero verde și a mai multor stiluri de pariere</p><ul><li>Pariază pe numere exacte</li><li>Acoperă culori, par/impar sau intervale</li><li>Combină pariuri sigure cu payout mare</li></ul>",
+      "summaryZeroZero": "<p><b>Aceeași tensiune, cu un plus pe roată</b></p><p>Ruleta americană adaugă <b>0</b> și <b>00</b>, păstrând senzația clasică de cazino, dar schimbând puțin șansele</p><ul><li>Mai multe buzunare verzi</li><li>Aceleași pariuri inside și outside</li><li>Atmosferă clasică de cazino</li></ul>",
+      "howToPlay": "<p><b>Cum funcționează o rotire</b></p><ul><li>Alege valoarea jetonului</li><li>Pune pariuri pe numere sau pe zone ale mesei</li><li>Apasă spin și urmărește unde se oprește bila</li><li>Pariurile câștigătoare sunt plătite automat</li></ul><p>Poți combina pariuri mai sigure cu unele mai riscante în aceeași rundă</p>",
       "board": {
         "black": "Negru",
         "even": "Par",
@@ -269,13 +269,13 @@
           "title": "Slot Beer-Man"
         }
       },
-      "description": "Slot clasic. Potrivește simbolurile pe liniile de plată pentru a câștiga. Cu cât simbolul este mai rar, cu atât câștigul este mai mare!",
+      "description": "Slot clasic Potrivește simbolurile pe liniile de plată pentru a câștiga Cu cât simbolul este mai rar, cu atât câștigul este mai mare!",
       "summary": {
-        "3x3": "<p><b>Compact și clasic.</b></p><p>Slotul 3x3 păstrează jocul simplu și clar, perfect pentru rotiri rapide și combinații ușor de urmărit.</p><ul><li>Sesiuni rapide</li><li>Layout simplu</li><li>Ușor de citit</li></ul>",
-        "3x5": "<p><b>Mai multe role, mai multe rute spre câștig.</b></p><p>Versiunea 3x5 deschide tabla cu mai multe linii active și mai mult spațiu pentru combinații.</p><ul><li>Layout mai lat</li><li>Mai multă varietate</li><li>Puțin mai strategic</li></ul>",
-        "5x5": "<p><b>Grilă mare, energie ridicată.</b></p><p>Modelul 5x5 umple ecranul cu o mașină mai densă și o senzație mai haotică la fiecare rotire.</p><ul><li>Cea mai mare tablă</li><li>Senzație de acțiune continuă</li><li>Ideal pentru intensitate</li></ul>"
+        "3x3": "<p><b>Compact și clasic</b></p><p>Slotul 3x3 păstrează jocul simplu și clar, perfect pentru rotiri rapide și combinații ușor de urmărit</p><ul><li>Sesiuni rapide</li><li>Layout simplu</li><li>Ușor de citit</li></ul>",
+        "3x5": "<p><b>Mai multe role, mai multe rute spre câștig</b></p><p>Versiunea 3x5 deschide tabla cu mai multe linii active și mai mult spațiu pentru combinații</p><ul><li>Layout mai lat</li><li>Mai multă varietate</li><li>Puțin mai strategic</li></ul>",
+        "5x5": "<p><b>Grilă mare, energie ridicată</b></p><p>Modelul 5x5 umple ecranul cu o mașină mai densă și o senzație mai haotică la fiecare rotire</p><ul><li>Cea mai mare tablă</li><li>Senzație de acțiune continuă</li><li>Ideal pentru intensitate</li></ul>"
       },
-      "howToPlay": "<p><b>Secvența unui spin</b></p><ul><li>Alege tipul mașinii</li><li>Setează suma pariată</li><li>Învârte rolele și urmărește simbolurile</li><li>Simbolurile aliniate pe liniile active aduc payout</li></ul><p>Poți continua sau poți opri sesiunea când vrei.</p>",
+      "howToPlay": "<p><b>Secvența unui spin</b></p><ul><li>Alege tipul mașinii</li><li>Setează suma pariată</li><li>Învârte rolele și urmărește simbolurile</li><li>Simbolurile aliniate pe liniile active aduc payout</li></ul><p>Poți continua sau poți opri sesiunea când vrei</p>",
       "controls": {
         "selectType": "Tipul mașinii",
         "startSession": "Începe jocul",
@@ -286,15 +286,16 @@
         "paytable": "Tabel plăți",
         "showPaytable": "Arată plățile",
         "hidePaytable": "Ascunde plățile",
-        "totalPayout": "Câștig total"
+        "totalPayout": "Câștig total",
+        "insufficientBalanceCurrentBet": "Ai nevoie de cel puțin {{bet}} pentru a continua să învârți în această sesiune"
       }
     },
     "capyroad": {
       "title": "Capyroad",
       "imageAlt": "Card provizoriu Capyroad",
-      "description": "Traversează șosea după șosea pentru a crește multiplicatorul. Fiecare salt mărește câștigul posibil, dar și riscul de accident. Oprește-te când vrei să securizezi premiul.",
-      "summary": "<p><b>Energie de Crossy Road cu presiune de cashout.</b></p><p>Capyroad este un joc de risc inspirat de <b>Crossy Road</b> și <b>Chicken Road</b>. Fiecare bandă trecută cu bine împinge capibara înainte și crește multiplicatorul.</p><ul><li>Traversările sigure cresc recompensa</li><li>Fiecare bandă nouă adaugă tensiune</li><li>Tu alegi când securizezi cursa</li></ul>",
-      "howToPlay": "<p><b>Riști sau încasezi</b></p><ul><li>Pornește runda și intră pe drum</li><li>Apasă <b>Traversează</b> ca să mergi pe banda următoare</li><li>Fiecare succes crește multiplicatorul</li><li>Șansa de crash urcă pe măsură ce continui</li><li>Folosește <b>Încasează</b> înainte de crash ca să blochezi premiul</li></ul><p>Dacă forțezi prea mult, o singură greșeală poate șterge toată runda.</p>",
+      "description": "Traversează șosea după șosea pentru a crește multiplicatorul Fiecare salt mărește câștigul posibil, dar și riscul de accident Oprește-te când vrei să securizezi premiul",
+      "summary": "<p><b>Energie de Crossy Road cu presiune de cashout</b></p><p>Capyroad este un joc de risc inspirat de <b>Crossy Road</b> și <b>Chicken Road</b> Fiecare bandă trecută cu bine împinge capibara înainte și crește multiplicatorul</p><ul><li>Traversările sigure cresc recompensa</li><li>Fiecare bandă nouă adaugă tensiune</li><li>Tu alegi când securizezi cursa</li></ul>",
+      "howToPlay": "<p><b>Riști sau încasezi</b></p><ul><li>Pornește runda și intră pe drum</li><li>Apasă <b>Traversează</b> ca să mergi pe banda următoare</li><li>Fiecare succes crește multiplicatorul</li><li>Șansa de crash urcă pe măsură ce continui</li><li>Folosește <b>Încasează</b> înainte de crash ca să blochezi premiul</li></ul><p>Dacă forțezi prea mult, o singură greșeală poate șterge toată runda</p>",
       "actions": {
         "cross": "Traversează",
         "cashout": "Încasează"
@@ -382,7 +383,7 @@
       },
       "betLabel": {
         "label": "Piață",
-        "placeholder": "Real Madrid câștigă Liga Campionilor",
+        "placeholder": "Aprobăm proiectul de licență?",
         "minLength": "Minimum 3 caractere",
         "maxLength": "Maximum 120 caractere"
       },
@@ -404,10 +405,10 @@
       },
       "betOptions": {
         "label": "Opțiuni pariu",
-        "hint": "Definește cel puțin două opțiuni pentru această piață.",
+        "hint": "Definește cel puțin două opțiuni pentru această piață",
         "addOption": "Adaugă opțiune",
         "option": "Opțiunea {{index}}",
-        "locked": "Nu poți edita opțiunile deoarece pariul are deja activitate. Poți modifica doar numele sau data închiderii.",
+        "locked": "Nu poți edita opțiunile deoarece pariul are deja activitate Poți modifica doar numele sau data închiderii",
         "minItems": "Trebuie să adaugi cel puțin 2 opțiuni",
         "maxItems": "Nu poți adăuga mai mult de 20 de opțiuni"
       }
@@ -438,7 +439,7 @@
       "cards": {
         "blackjack": {
           "title": "Blackjack",
-          "description": "Joc clasic de blackjack."
+          "description": "Joc clasic de blackjack"
         },
         "capyroad": {
           "title": "Capyroad",
@@ -448,26 +449,26 @@
           "title": "Ruletă",
           "classic": {
             "title": "Ruletă Europeană",
-            "description": "Joc de ruletă europeană."
+            "description": "Joc de ruletă europeană"
           },
           "american": {
             "title": "Ruletă Americană",
-            "description": "Joc de ruletă americană."
+            "description": "Joc de ruletă americană"
           }
         },
         "slots": {
           "title": "Sloturi",
           "beer": {
             "title": "Beer-Man",
-            "description": "Slot inspirat de cea mai bună băutură din lume."
+            "description": "Slot inspirat de cea mai bună băutură din lume"
           },
           "starwars": {
             "title": "Star Wars",
-            "description": "Slot tematic Star Wars."
+            "description": "Slot tematic Star Wars"
           },
           "stardewValley": {
             "title": "Stardew Valley",
-            "description": "Slot tematic Stardew Valley."
+            "description": "Slot tematic Stardew Valley"
           }
         },
         "playNow": "Joacă acum"
@@ -476,49 +477,49 @@
     "landingPage": {
       "hero": {
         "title": "Bine ai venit la Pakito's Gambling",
-        "text": "Cea mai bună experiență de cazinou online cu sute de jocuri, bonusuri și premii mari.",
+        "text": "Cea mai bună experiență de cazinou online cu sute de jocuri, bonusuri și premii mari",
         "join": "Alătură-te",
         "seeGames": "Vezi jocurile"
       },
       "cta": {
         "title": "Gata să începi aventura?",
-        "text": "Alătură-te miilor de jucători și bucură-te de cea mai bună experiență de cazinou online. Primește bonusul de bun venit de 200% astăzi.",
+        "text": "Alătură-te miilor de jucători și bucură-te de cea mai bună experiență de cazinou online Primește bonusul de bun venit de 200% astăzi",
         "exploreGames": "Explorează jocurile",
         "join": "Alătură-te acum"
       },
       "features": {
         "title": "De ce să alegi Pakito's Gambling?",
-        "text": "Oferim o experiență premium de cazinou cu funcții de top și angajament total pentru satisfacția jucătorilor.",
+        "text": "Oferim o experiență premium de cazinou cu funcții de top și angajament total pentru satisfacția jucătorilor",
         "items": {
           "1": {
             "title": "Varietate de jocuri",
-            "description": "Peste 100 de jocuri premium, inclusiv sloturi, ruletă, blackjack și altele."
+            "description": "Peste 100 de jocuri premium, inclusiv sloturi, ruletă, blackjack și altele"
           },
           "2": {
             "title": "Sigur și de încredere",
-            "description": "Platformă securizată cu tehnologii avansate de criptare."
+            "description": "Platformă securizată cu tehnologii avansate de criptare"
           },
           "3": {
             "title": "Premii mari",
-            "description": "Câștigă premii mari cu jackpoturi progresive și turnee exclusive."
+            "description": "Câștigă premii mari cu jackpoturi progresive și turnee exclusive"
           },
           "4": {
             "title": "Experiență rapidă",
-            "description": "Jocuri optimizate pentru orice dispozitiv."
+            "description": "Jocuri optimizate pentru orice dispozitiv"
           },
           "5": {
             "title": "Comunitate activă",
-            "description": "Alătură-te comunității noastre de jucători."
+            "description": "Alătură-te comunității noastre de jucători"
           },
           "6": {
             "title": "Bonusuri exclusive",
-            "description": "Primește bonusuri și promoții regulate."
+            "description": "Primește bonusuri și promoții regulate"
           }
         }
       },
       "imagesGrid": {
         "title": "Joacă oriunde",
-        "text": "Accesează jocurile de pe orice dispozitiv.",
+        "text": "Accesează jocurile de pe orice dispozitiv",
         "items": {
           "win": {
             "title": "Sărbătorește câștigurile",
@@ -554,7 +555,7 @@
       },
       "danger": {
         "title": "Zonă periculoasă",
-        "description": "Această acțiune este ireversibilă. Toate datele vor fi șterse.",
+        "description": "Această acțiune este ireversibilă Toate datele vor fi șterse",
         "deleteAccount": "Șterge contul"
       }
     },
@@ -590,9 +591,9 @@
       },
       "list": {
         "title": "Piețe care merită urmărite",
-        "description": "Descoperă piețe deschise și închise pe tot felul de subiecte, într-o interfață mai curată pentru a compara opțiunile și a intra rapid în piață.",
+        "description": "Descoperă piețe deschise și închise pe tot felul de subiecte, într-o interfață mai curată pentru a compara opțiunile și a intra rapid în piață",
         "emptyTitle": "Nu există pariuri pentru filtrele curente",
-        "emptyDescription": "Încearcă alt nume sau schimbă starea selectată.",
+        "emptyDescription": "Încearcă alt nume sau schimbă starea selectată",
         "marketCount": "{{count}} piețe",
         "showing": "Se afișează {{start}}-{{end}} din {{total}}",
         "cards": "Carduri",
@@ -607,11 +608,11 @@
         "market": "Piață",
         "endsAt": "Închidere",
         "viewMarket": "Vezi piața",
-        "noOptions": "Nu există încă opțiuni disponibile pentru această piață."
+        "noOptions": "Nu există încă opțiuni disponibile pentru această piață"
       },
       "detail": {
         "market": "Detalii piață",
-        "hint": "Alege o opțiune, introdu suma și plasează pariul direct din acest ecran.",
+        "hint": "Alege o opțiune, introdu suma și plasează pariul direct din acest ecran",
         "selection": "Slip de pariu",
         "options": "Opțiuni",
         "betStatusLabel": "Statusul tău pe piață",
@@ -627,12 +628,12 @@
         "amountPlaceholder": "Introdu suma pariului",
         "placeBet": "Pariază acum",
         "refresh": "Reîncarcă piața",
-        "alreadyPlacedMessage": "Ai deja un pariu pe această piață: {{option}}.",
-        "alreadyPlacedBlock": "Ai deja un pariu pe această piață. Un al doilea pariu nu este permis.",
-        "alreadyPlacedWithOption": "Ai pariat deja pe această piață cu opțiunea: {{option}}.",
-        "closedMessage": "Această piață este închisă și nu mai acceptă poziții noi.",
-        "noMarket": "Acest pariu nu a fost găsit.",
-        "noOptions": "Această piață nu are încă opțiuni disponibile."
+        "alreadyPlacedMessage": "Ai deja un pariu pe această piață: {{option}}",
+        "alreadyPlacedBlock": "Ai deja un pariu pe această piață Un al doilea pariu nu este permis",
+        "alreadyPlacedWithOption": "Ai pariat deja pe această piață cu opțiunea: {{option}}",
+        "closedMessage": "Această piață este închisă și nu mai acceptă poziții noi",
+        "noMarket": "Acest pariu nu a fost găsit",
+        "noOptions": "Această piață nu are încă opțiuni disponibile"
       }
     }
   },
@@ -692,7 +693,44 @@
       "Update_User": "Eroare la actualizare",
       "bet0": "Pariul nu poate fi 0",
       "noAdmin": "Nu ai acces",
-      "noLogin": "Trebuie să fii autentificat"
+      "noLogin": "Trebuie să fii autentificat",
+      "ALREADY_SPLIT": "Aceasta mana a fost deja impartita",
+      "AUTH_INVALID_INPUT": "Datele trimise nu sunt valide",
+      "AUTH_INVALID_USERNAME": "Numele de utilizator este invalid",
+      "AUTH_PASSWORD_TOO_SHORT": "Parola este prea scurta",
+      "AUTH_SESSION_EXPIRED": "Sesiunea ta a expirat",
+      "AUTH_SLOTS_DATA_PROVIDED": "Datele sesiunii de slot nu sunt valide",
+      "BET_LABEL_REQUIRED": "Eticheta pariului este obligatorie",
+      "BET_UPDATE_REQUIRED": "Trebuie actualizat cel putin un camp al pariului",
+      "CANNOT_DOUBLE": "Nu poti dubla aceasta mana acum",
+      "CANNOT_SPLIT": "Nu poti imparti aceasta mana",
+      "ERROR_UPDATING_BALANCE": "A aparut o eroare la actualizarea soldului",
+      "FILTER_FIELD_REQUIRED": "Trebuie selectat un camp de filtrare",
+      "FORBIDDEN": "Nu ai permisiunea sa accesezi aceasta resursa",
+      "INTERNAL_SERVER_ERROR": "Eroare interna de server",
+      "INVALID_AMOUNT": "Suma este invalida",
+      "INVALID_BET": "Pariul este invalid",
+      "INVALID_BETS_FORMAT": "Formatul pariurilor este invalid",
+      "INVALID_BET_TYPE": "Tipul pariului este invalid",
+      "INVALID_DATE_RANGE": "Intervalul de date selectat este invalid",
+      "INVALID_FILTER_FIELD": "Campul filtrului este invalid",
+      "INVALID_FILTER_VALUE": "Valoarea filtrului este invalida",
+      "INVALID_FROM_CREATED_AT": "Data initiala de creare este invalida",
+      "INVALID_FROM_DATE": "Data de inceput este invalida",
+      "INVALID_FROM_ENDS_AT": "Data initiala de inchidere este invalida",
+      "INVALID_MACHINE_TYPE": "Tipul masinii este invalid",
+      "INVALID_ROULETTE_TYPE": "Tipul ruletei este invalid",
+      "INVALID_TO_CREATED_AT": "Data finala de creare este invalida",
+      "INVALID_TO_DATE": "Data de sfarsit este invalida",
+      "INVALID_TO_ENDS_AT": "Data finala de inchidere este invalida",
+      "INVALID_TRANSACTION_DATA": "Datele tranzactiei nu sunt valide",
+      "INVALID_UUID": "Identificatorul furnizat este invalid",
+      "NOT_FOUND": "Ruta solicitata nu a fost gasita",
+      "NO_PERMISSION": "Nu ai permisiunea pentru aceasta actiune",
+      "TOO_MANY_GAMES": "Prea multe cereri de joc Incearca din nou in cateva momente",
+      "TOO_MANY_HISTORY_REQUESTS": "Prea multe cereri de istoric Incearca din nou mai tarziu",
+      "TOO_MANY_REGISTRATIONS": "Prea multe incercari de inregistrare Incearca din nou mai tarziu",
+      "TOO_MANY_REQUESTS": "Prea multe cereri Incearca din nou mai tarziu"
     },
     "info": {
       "loading": "Se încarcă...",
@@ -716,7 +754,7 @@
       "sessionExpired": {
         "accept": "Mergi la autentificare",
         "cancel": "Închide sesiunea",
-        "title": "Sesiunea ta a expirat. Autentifică-te din nou."
+        "title": "Sesiunea ta a expirat Autentifică-te din nou"
       },
       "logDetail": {
         "jsonDetail": "Detalii JSON"
@@ -765,7 +803,9 @@
       "BET_PLACED": "Pariul a fost plasat cu succes",
       "LANGUAGE_CHANGED": "Limba schimbată",
       "USER_UPDATED": "Profil actualizat",
-      "logout": "Deconectare reușită"
+      "logout": "Deconectare reușită",
+      "GAME_DELETED_SUCCESSFULLY": "Jocul a fost sters cu succes",
+      "SUCCESS": "Operatiunea s-a incheiat cu succes"
     },
     "warning": {
       "cantDouble": "Nu ai fonduri pentru dublare",

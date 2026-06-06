@@ -2,12 +2,26 @@ import React, { createContext, useContext, useEffect, useState } from "react"
 
 const LocaleContext = createContext()
 
+const getTranslation = (messages, key, vars = {}) => {
+  let text = key
+    .split(".")
+    .reduce((obj, i) => (obj !== undefined && obj !== null ? obj[i] : null), messages)
+
+  if (!text || typeof text !== "string") return key
+
+  Object.keys(vars).forEach((v) => {
+    text = text.replace(new RegExp(`{{${v}}}`, "g"), vars[v])
+  })
+
+  return text
+}
+
 const LocaleProvider = ({ children }) => {
   const [localeData, setLocaleData] = useState({})
   const [loading, setLoading] = useState(true)
 
   const [lang, setLang] = useState(() => {
-    return localStorage.getItem("lang") || "en"
+    return localStorage.getItem("lang") || "es"
   })
 
   const loadLocale = async (newLang) => {
@@ -24,36 +38,21 @@ const LocaleProvider = ({ children }) => {
 
       setLang(newLang)
 
-      return true
+      return data
     } catch (err) {
       console.error("Error loading locale", err)
-      return false
+      return null
     }
   }
 
-  const t = (key, vars = {}) => {
-    let text = key
-      .split(".")
-      .reduce(
-        (obj, i) => (obj !== undefined && obj !== null ? obj[i] : null),
-        localeData,
-      )
-
-    if (!text || typeof text !== "string") return key
-
-    Object.keys(vars).forEach((v) => {
-      text = text.replace(new RegExp(`{{${v}}}`, "g"), vars[v])
-    })
-
-    return text
-  }
+  const t = (key, vars = {}) => getTranslation(localeData, key, vars)
 
   useEffect(() => {
     loadLocale(lang)
   }, [])
 
   return (
-    <LocaleContext.Provider value={{ t, loadLocale, loading, lang }}>
+    <LocaleContext.Provider value={{ t, loadLocale, loading, lang, getTranslation }}>
       {children}
     </LocaleContext.Provider>
   )

@@ -3,23 +3,50 @@
 import { z } from "zod"
 import { passwordSchema } from "./passwordSchema"
 
-export const profileSchema = z
+const profileBaseSchema = z.object({
+  username: z
+    .string()
+    .trim()
+    .min(1, { error: "forms.fields.username.required" })
+    .min(3, { error: "forms.fields.username.minLength" })
+    .max(25, { error: "forms.fields.username.maxLength" }),
+
+  email: z
+    .string()
+    .trim()
+    .min(1, { error: "forms.fields.email.required" })
+    .email({ error: "forms.fields.email.pattern" }),
+
+  password: passwordSchema.optional().or(z.literal("")),
+
+  confirmPassword: z.string().optional(),
+})
+
+export const profileSchema = profileBaseSchema.refine(
+  (data) => {
+    if (!data.password) return true
+    return data.password === data.confirmPassword
+  },
+  {
+    error: "forms.fields.confirmPassword.match",
+    path: ["confirmPassword"],
+  },
+)
+
+export const profileInfoSchema = profileBaseSchema.pick({
+  username: true,
+  email: true,
+})
+
+export const profilePasswordSchema = z
   .object({
-    username: z.string().min(1, { error: "forms.fields.username.required" }),
-
-    email: z.email({ error: "forms.email.pattern" }),
-
-    password: passwordSchema.optional().or(z.literal("")),
-
-    confirmPassword: z.string().optional(),
+    currentPassword: z.string().optional().or(z.literal("")),
+    newPassword: passwordSchema,
+    confirmPassword: z
+      .string()
+      .min(1, { error: "forms.fields.confirmPassword.required" }),
   })
-  .refine(
-    (data) => {
-      if (!data.password) return true
-      return data.password === data.confirmPassword
-    },
-    {
-      error: "forms.fields.password.pattern",
-      path: ["confirmPassword"],
-    },
-  )
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    error: "forms.fields.confirmPassword.match",
+    path: ["confirmPassword"],
+  })

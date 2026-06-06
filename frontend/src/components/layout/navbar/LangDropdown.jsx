@@ -7,7 +7,7 @@ import RomainanFlagSVG from "@/components/svg/flags/RomainanFlagSVG"
 import Button from "@/components/buttons/Button"
 
 const LangDropdown = ({ vertical = false }) => {
-  const { t, loadLocale, lang } = useLocale()
+  const { loadLocale, lang, getTranslation } = useLocale()
   const { addNotification } = useNotification()
 
   const languages = [
@@ -16,10 +16,16 @@ const LangDropdown = ({ vertical = false }) => {
     { key: "ro", label: "Romanian", svg: <RomainanFlagSVG /> },
   ]
 
-  const handleChangeLanguage = (newLang) => {
+  const handleChangeLanguage = async (newLang) => {
     if (newLang === lang) return
-    loadLocale(newLang)
-    addNotification(t("message.success.LANGUAGE_CHANGED"), "success")
+
+    const localeMessages = await loadLocale(newLang)
+    if (!localeMessages) return
+
+    addNotification(
+      getTranslation(localeMessages, "message.success.LANGUAGE_CHANGED"),
+      "success",
+    )
   }
 
   return (

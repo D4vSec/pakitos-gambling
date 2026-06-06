@@ -11,6 +11,7 @@ const FormField = ({
   placeholder,
   as = "input",
   options = [],
+  rules,
   ...rest
 }) => {
   const {
@@ -33,7 +34,7 @@ const FormField = ({
 
   const commonProps = {
     className: baseClass,
-    ...register(name),
+    ...register(name, rules),
     ...rest,
   }
 

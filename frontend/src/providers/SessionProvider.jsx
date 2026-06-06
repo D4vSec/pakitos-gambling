@@ -277,6 +277,51 @@ const SessionProvider = ({ children }) => {
     return true
   }
 
+  const resolveProfileValidationKey = (issue) => {
+    const field = issue?.path?.[0]
+
+    if (field === "username") {
+      if (issue?.code === "too_small") return "forms.fields.username.minLength"
+      if (issue?.code === "too_big") return "forms.fields.username.maxLength"
+    }
+
+    if (field === "email") {
+      return "forms.fields.email.pattern"
+    }
+
+    if (field === "password" && issue?.code === "too_small") {
+      return "forms.fields.password.minLength"
+    }
+
+    return null
+  }
+
+  const resolveProfileUpdateErrorMessage = (responseOrError) => {
+    const issues = responseOrError?.errors
+
+    if (Array.isArray(issues) && issues.length > 0) {
+      const validationKey = resolveProfileValidationKey(issues[0])
+      if (validationKey) return t(validationKey)
+
+      if (typeof issues[0]?.message === "string" && issues[0].message.trim()) {
+        return issues[0].message
+      }
+    }
+
+    if (responseOrError?.code) {
+      return t(`message.error.${responseOrError.code}`)
+    }
+
+    if (
+      typeof responseOrError?.message === "string" &&
+      responseOrError.message.trim()
+    ) {
+      return responseOrError.message
+    }
+
+    return t("message.error.SERVER_ERROR")
+  }
+
   const updateProfile = async (data) => {
     try {
       const accessToken = getAccessToken()
@@ -307,14 +352,7 @@ const SessionProvider = ({ children }) => {
       if (handleSessionEndedResponse(response?.code)) return null
 
       if (!response || response.code !== "SUCCESS") {
-        const message =
-          response?.message ||
-          (response?.errors
-            ? response.errors
-                .map((e) => e.message || JSON.stringify(e))
-                .join(" \n")
-            : response?.code || "UNKNOWN_ERROR")
-        throw new Error(message)
+        throw response || new Error("SERVER_ERROR")
       }
 
       addNotification(
@@ -327,9 +365,12 @@ const SessionProvider = ({ children }) => {
 
       return userData
     } catch (error) {
-      if (handleSessionEndedResponse(error?.message)) return null
+      if (handleSessionEndedResponse(error?.code || error?.message)) return null
 
-      addNotification(t(`message.error.${error?.message}`), "error")
+      addNotification(
+        resolveProfileUpdateErrorMessage(error),
+        "error",
+      )
       return null
     } finally {
       setLoading(false)
