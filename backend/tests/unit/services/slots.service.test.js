@@ -17,7 +17,7 @@ describe('slots service', () => {
 	})
 
 	it('retries reel generation when the excluded symbol is selected again', () => {
-		randomInt.mockReturnValueOnce(0).mockReturnValueOnce(40)
+		randomInt.mockReturnValueOnce(0).mockReturnValueOnce(22)
 		const slots = createSlots('3x3')
 
 		expect(slots.spinReel('cherry')).toBe('lemon')
@@ -67,14 +67,14 @@ describe('slots service', () => {
 	it('spins a full grid and reports winners from the evaluated paylines', () => {
 		randomInt
 			.mockReturnValueOnce(0)
-			.mockReturnValueOnce(40)
-			.mockReturnValueOnce(68)
+			.mockReturnValueOnce(22)
+			.mockReturnValueOnce(42)
 			.mockReturnValueOnce(0)
-			.mockReturnValueOnce(40)
-			.mockReturnValueOnce(68)
+			.mockReturnValueOnce(22)
+			.mockReturnValueOnce(42)
 			.mockReturnValueOnce(0)
-			.mockReturnValueOnce(40)
-			.mockReturnValueOnce(68)
+			.mockReturnValueOnce(22)
+			.mockReturnValueOnce(42)
 
 		const slots = createSlots('3x3')
 		const result = slots.spin(10)
@@ -117,5 +117,45 @@ describe('slots service', () => {
 			payout: 29,
 			isWinner: true,
 		})
+	})
+
+	it('boosts near-complete paylines into full winning patterns', () => {
+		randomInt
+			.mockReturnValueOnce(0)
+			.mockReturnValueOnce(22)
+			.mockReturnValueOnce(42)
+			.mockReturnValueOnce(0)
+			.mockReturnValueOnce(22)
+			.mockReturnValueOnce(42)
+			.mockReturnValueOnce(0)
+			.mockReturnValueOnce(22)
+			.mockReturnValueOnce(42)
+			.mockReturnValueOnce(0)
+			.mockReturnValueOnce(22)
+			.mockReturnValueOnce(42)
+			.mockReturnValueOnce(22)
+			.mockReturnValueOnce(59)
+			.mockReturnValueOnce(73)
+			.mockReturnValueOnce(0)
+			.mockReturnValueOnce(99)
+			.mockReturnValueOnce(99)
+
+		const slots = createSlots('3x5')
+		const result = slots.spin(10)
+
+		expect(result.grid).toEqual([
+			['cherry', 'cherry', 'cherry', 'cherry', 'cherry'],
+			['lemon', 'lemon', 'lemon', 'lemon', 'plum'],
+			['orange', 'orange', 'orange', 'orange', 'bell'],
+		])
+		expect(result.winningLines).toContainEqual({
+			paylineId: 'H_ROW0',
+			symbol: 'cherry',
+			consecutive: 5,
+			basePayout: 0.5,
+			consecutiveScale: 1,
+			lineMultiplier: 0.5,
+		})
+		expect(result.isWinner).toBe(true)
 	})
 })
