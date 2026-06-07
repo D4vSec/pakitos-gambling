@@ -7,7 +7,6 @@ import Roulette0BannerImg from "@/assets/home/carrousel/roulette0Banner.png"
 import CapybaraBannerImg from "@/assets/home/carrousel/capybaraBanner.webp"
 import StarWarsBannerImg from "@/assets/home/carrousel/starWarsBanner.webp"
 import StardewValleyBannerImg from "@/assets/home/carrousel/stardewValleyBanner.webp"
-import BeerManBannerImg from "@/assets/home/carrousel/beermanBanner.webp"
 
 import BlackjackCardImg from "@/assets/home/cards/blackjack.png"
 import Roulette00CardImg from "@/assets/home/cards/roulette00banner.jpg"
@@ -24,7 +23,6 @@ const homeImages = [
   CapybaraBannerImg,
   StarWarsBannerImg,
   StardewValleyBannerImg,
-  BeerManBannerImg,
   BlackjackCardImg,
   Roulette00CardImg,
   Roulette0CardImg,

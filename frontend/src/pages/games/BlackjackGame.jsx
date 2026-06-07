@@ -5,7 +5,7 @@ import GameDescription from "@/components/games/GameDescription"
 import GameTemplate from "@/components/games/GameTemplate"
 import BlackjackProvider from "@/providers/BlackjackProvider"
 import { useLocale } from "@/providers/LocaleProvider"
-import blackjackImage from "@/assets/home/cards/blackjack.png"
+import blackjackImage from "@/assets/home/carrousel/blackjackBanner.jpg"
 
 const BlackjackGame = () => {
   const { t } = useLocale()

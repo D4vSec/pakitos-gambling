@@ -5,7 +5,7 @@ import React from "react"
 import RouletteControls from "@/components/games/roulette/controls/RouletteControls"
 import RouletteProvider from "@/providers/RouletteProvider"
 import { useLocale } from "@/providers/LocaleProvider"
-import roulette00Image from "@/assets/home/cards/roulette00banner.jpg"
+import roulette00Image from "@/assets/home/carrousel/roulette00Banner.webp"
 
 const Roulette00Game = () => {
   const { t } = useLocale()

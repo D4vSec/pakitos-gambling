@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react"
-import { IconCherry, IconMenu2, IconX } from "@tabler/icons-react"
+import { IconMenu2, IconX } from "@tabler/icons-react"
 import NavigationBtn from "@/components/buttons/NavigationBtn"
 import NavbarLinks from "./NavbarLinks"
 import NavbarBtns from "./NavbarBtns"
@@ -7,6 +7,7 @@ import UserBalance from "./UserBalance"
 import { useLocale } from "@/providers/LocaleProvider"
 import { useSession } from "@/providers/SessionProvider"
 import { useLocation } from "react-router-dom"
+import logoImg from "@/assets/brand/logo.png"
 
 const Navbar = () => {
   const { t } = useLocale()
@@ -26,25 +27,18 @@ const Navbar = () => {
 
   return (
     <div className="drawer drawer-end sticky top-0 z-999">
-      <input
-        id="main-drawer"
-        ref={drawerRef}
-        type="checkbox"
-        className="drawer-toggle"
-      />
+      <input id="main-drawer" ref={drawerRef} type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col">
         <div className="navbar bg-base-100 shadow-sm flex justify-between items-center">
           {/* Left */}
           <div className="flex items-center justify-between w-full md:w-fit gap-3">
             <div className="flex gap-0 sm:gap-2 items-center">
-              <div className="w-fit bg-primary rounded-xl p-2">
-                <IconCherry />
-              </div>
-              <NavigationBtn
-                variant="ghost"
-                size="lg"
-                className="text-xl hidden sm:inline"
-                to="/">
+              <img
+                src={logoImg}
+                alt="Pakito's Gambling"
+                className="h-10 w-10 rounded-xl object-contain"
+              />
+              <NavigationBtn variant="ghost" size="lg" className="text-xl hidden sm:inline" to="/">
                 Pakito's Gambling
               </NavigationBtn>
             </div>
@@ -69,17 +63,12 @@ const Navbar = () => {
 
       {/* SIDEBAR (mobile) */}
       <div className="drawer-side">
-        <label
-          htmlFor="main-drawer"
-          aria-label="close sidebar"
-          className="drawer-overlay"></label>
+        <label htmlFor="main-drawer" aria-label="close sidebar" className="drawer-overlay"></label>
 
         <div className="bg-base-200 h-full w-65 p-4 flex flex-col">
           {/* Header */}
           <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-bold text-base-content">
-              {t("navbar.menu")}
-            </h2>
+            <h2 className="text-2xl font-bold text-base-content">{t("navbar.menu")}</h2>
             <label htmlFor="main-drawer" className="btn btn-ghost btn-circle">
               <IconX />
             </label>

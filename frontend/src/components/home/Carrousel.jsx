@@ -9,7 +9,7 @@ import Roulette0Img from "@/assets/home/carrousel/roulette0Banner.png"
 import CapybaraImg from "@/assets/home/carrousel/capybaraBanner.webp"
 import StarWarsImg from "@/assets/home/carrousel/starWarsBanner.webp"
 import StardewValleyImg from "@/assets/home/carrousel/stardewValleyBanner.webp"
-import BeerManImg from "@/assets/home/carrousel/beermanBanner.webp"
+import BeerManImg from "@/assets/home/cards/beerman.jpeg"
 
 const slides = [
   {

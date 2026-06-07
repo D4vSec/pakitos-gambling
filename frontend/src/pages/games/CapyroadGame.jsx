@@ -5,7 +5,7 @@ import CapyroadProvider from "@/providers/CapyroadProvider"
 import Capyroad from "@/components/games/capyroad/Capyroad"
 import { useLocale } from "@/providers/LocaleProvider"
 import CapyroadControls from "@/components/games/capyroad/controls/CapyroadControls"
-import capyroadImage from "@/assets/home/cards/capybara_packet_tracer.jpeg"
+import capyroadImage from "@/assets/home/carrousel/capybaraBanner.webp"
 
 const CapyroadGame = () => {
   const { t } = useLocale()
