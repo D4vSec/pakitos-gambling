@@ -46,6 +46,25 @@ describe('audit service', () => {
 		expect(auditService.getClientIp(req)).toBe('127.0.0.1')
 	})
 
+	it('falls back to the socket when the proxy sends an invalid ip', () => {
+		const req = {
+			headers: {
+				'x-forwarded-for': '%{REMOTE_ADDR}s',
+			},
+			socket: {
+				remoteAddress: '::ffff:127.0.0.1',
+			},
+		}
+
+		expect(auditService.getClientIp(req)).toBe('127.0.0.1')
+	})
+
+	it('normalizes proxy ip formats accepted in production', () => {
+		expect(auditService.normalizeIpAddress('203.0.113.10:443')).toBe('203.0.113.10')
+		expect(auditService.normalizeIpAddress('[2001:db8::1]:443')).toBe('2001:db8::1')
+		expect(auditService.normalizeIpAddress('not-an-ip')).toBeNull()
+	})
+
 	it('uses Unknown as default user agent', () => {
 		expect(auditService.getUserAgent({ headers: {} })).toBe('Unknown')
 	})
@@ -121,6 +140,24 @@ describe('audit service', () => {
 		})
 
 		expect(Audit.logAction).toHaveBeenCalledWith(7, 'LOGIN', { source: 'test' }, '127.0.0.1', 'Vitest')
+	})
+
+	it('stores null instead of passing an invalid ip to postgres inet', async () => {
+		await auditService.createAudit({
+			user_id: 7,
+			action: 'LOGIN',
+			details: { source: 'proxy' },
+			ip_address: '%{REMOTE_ADDR}s',
+			user_agent: 'Vitest',
+		})
+
+		expect(Audit.logAction).toHaveBeenCalledWith(
+			7,
+			'LOGIN',
+			{ source: 'proxy' },
+			null,
+			'Vitest',
+		)
 	})
 
 	it('logs errors when audit creation fails', async () => {

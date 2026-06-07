@@ -1,4 +1,5 @@
 import { Pool } from "pg"
+import { AUDIT_TYPES } from "#config/audit.config"
 import logger from "#utils/logger.utils"
 
 const pool = new Pool({
@@ -9,15 +10,30 @@ const pool = new Pool({
 	database: process.env.DB_NAME,
 })
 
+const ensureAuditActionTypes = async (client) => {
+	const typeResult = await client.query(
+		"SELECT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'audit_action') AS exists",
+	)
+
+	if (!typeResult.rows[0]?.exists) return
+
+	for (const action of AUDIT_TYPES) {
+		await client.query(`ALTER TYPE audit_action ADD VALUE IF NOT EXISTS '${action}'`)
+	}
+}
+
 const db = {
 	connect: async () => {
+		let client
 		try {
-			const client = await pool.connect()
-			client.release()
+			client = await pool.connect()
+			await ensureAuditActionTypes(client)
 			logger.info("Database connected")
 		} catch (err) {
 			logger.fatal("DB connection error:", err)
 			throw err
+		} finally {
+			client?.release()
 		}
 	},
 	getClient: () => pool.connect(),
@@ -25,3 +41,4 @@ const db = {
 }
 
 export default db
+export { ensureAuditActionTypes }

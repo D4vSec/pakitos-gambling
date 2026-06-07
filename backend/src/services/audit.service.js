@@ -1,13 +1,40 @@
 import Audit from "#models/audit.model"
-import useragent from 'express-useragent';
+import { isIP } from "node:net"
 import logger from "#utils/logger.utils"
+
+const normalizeIpAddress = (value) => {
+	if (typeof value !== "string") return null
+
+	let candidate = value.trim()
+	if (!candidate) return null
+
+	if (candidate.startsWith("[") && candidate.includes("]")) {
+		candidate = candidate.slice(1, candidate.indexOf("]"))
+	}
+
+	if (candidate.startsWith("::ffff:") && isIP(candidate.slice(7)) === 4) {
+		return candidate.slice(7)
+	}
+
+	if (isIP(candidate)) return candidate
+
+	const ipv4WithPort = candidate.match(/^(\d{1,3}(?:\.\d{1,3}){3}):\d+$/)
+	if (ipv4WithPort && isIP(ipv4WithPort[1]) === 4) return ipv4WithPort[1]
+
+	return null
+}
 
 const getClientIp = (req) => {
 	const xForwardedFor = req.headers["x-forwarded-for"]
 
-	if (xForwardedFor) return xForwardedFor.split(",")[0].trim()
+	if (typeof xForwardedFor === "string") {
+		for (const forwardedIp of xForwardedFor.split(",")) {
+			const normalizedIp = normalizeIpAddress(forwardedIp)
+			if (normalizedIp) return normalizedIp
+		}
+	}
 
-	return req.socket?.remoteAddress || null
+	return normalizeIpAddress(req.socket?.remoteAddress)
 }
 
 const getUserAgentRaw = (req) => {
@@ -37,9 +64,18 @@ const createAudit = async (auditData) => {
 
 		if (!user_id || !action) return
 
-		await Audit.logAction(user_id, action, details, ip_address, user_agent)
+		await Audit.logAction(
+			user_id,
+			action,
+			details,
+			normalizeIpAddress(ip_address),
+			user_agent,
+		)
 	} catch (err) {
-		logger.error({ message: "Error creating audit log:", error: err })
+		logger.error(
+			{ err, audit: { user_id: auditData?.user_id, action: auditData?.action } },
+			"Error creating audit log",
+		)
 	}
 }
 
@@ -50,6 +86,7 @@ const getAuditLogs = async (page = 1, limit = 20, filters = {}) => await Audit.g
 export default {
 	createAudit,
 	getClientIp,
+	normalizeIpAddress,
 	getUserAgentRaw,
 	getUserAgent,
 	countAuditLogs,

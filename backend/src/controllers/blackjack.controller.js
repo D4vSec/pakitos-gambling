@@ -135,7 +135,7 @@ export const startGame = async (req, res) => {
 
         if (game.status === GAME_STATUSES.finished) {
             const deviceInfo = Audit.getUserAgentRaw(req)
-            Audit.createAudit({
+            await Audit.createAudit({
                 user_id: id,
                 action: "GAME_RESULT",
                 details: {
@@ -280,7 +280,7 @@ export const hit = async (req, res) => {
 
         if (game.status === GAME_STATUSES.finished) {
             const deviceInfo = Audit.getUserAgentRaw(req)
-            Audit.createAudit({
+            await Audit.createAudit({
                 user_id: id,
                 action: "GAME_RESULT",
                 details: {
@@ -391,7 +391,7 @@ export const stand = async (req, res) => {
 
         if (game.status === GAME_STATUSES.finished) {
             const deviceInfo = Audit.getUserAgentRaw(req)
-            Audit.createAudit({
+            await Audit.createAudit({
                 user_id: id,
                 action: "GAME_RESULT",
                 details: {
@@ -570,7 +570,7 @@ export const double = async (req, res) => {
 
         if (game.status === GAME_STATUSES.finished) {
             const deviceInfo = Audit.getUserAgentRaw(req)
-            Audit.createAudit({
+            await Audit.createAudit({
                 user_id: id,
                 action: "GAME_RESULT",
                 details: {
@@ -703,7 +703,7 @@ export const split = async (req, res) => {
 
             if (game.status === GAME_STATUSES.finished) {
                 const deviceInfo = Audit.getUserAgentRaw(req)
-                Audit.createAudit({
+                await Audit.createAudit({
                     user_id: id,
                     action: "GAME_RESULT",
                     details: {

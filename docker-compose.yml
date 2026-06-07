@@ -43,7 +43,7 @@ services:
             target: ${NODE_ENV:-development}
         container_name: node_backend
         healthcheck:
-          test: ["CMD-SHELL", "wget --spider -q http://localhost:${API_PORT:-3000}/health || exit 1"]
+          test: ["CMD-SHELL", "wget --spider -q http://127.0.0.1:${API_PORT:-3000}/health || exit 1"]
           interval: 10s
           timeout: 5s
           retries: 5

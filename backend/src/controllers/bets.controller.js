@@ -148,9 +148,9 @@ const parseBetListQuery = (query = {}) => {
 
 const getBetLabel = (data = {}) => data.label ?? data.name
 
-const createAdminAudit = (req, details) => {
+const createAdminAudit = async (req, details) => {
     const deviceInfo = Audit.getUserAgentRaw(req)
-    Audit.createAudit({
+    await Audit.createAudit({
         user_id: req.user.id,
         action: "ADMIN_ACTION",
         details: {
@@ -237,7 +237,7 @@ const createBet = async (req, res) => {
             options: parsedBody.data.options,
         })
 
-        createAdminAudit(req, {
+        await createAdminAudit(req, {
             type: "BET_CREATED",
             betId: createdBet.id,
             optionCount: createdBet.options?.length ?? 0,
@@ -263,7 +263,7 @@ const deleteBet = async (req, res) => {
         const deleted = await BetService.deleteBet(betId)
         if (!deleted) return res.status(404).json({ code: "BET_NOT_FOUND" })
 
-        createAdminAudit(req, {
+        await createAdminAudit(req, {
             type: "BET_DELETED",
             betId,
         })
@@ -299,7 +299,7 @@ const updateBet = async (req, res) => {
         })
         if (!updatedBet) return res.status(404).json({ code: "BET_NOT_FOUND" })
 
-        createAdminAudit(req, {
+        await createAdminAudit(req, {
             type: "BET_UPDATED",
             betId,
             changes: Object.keys(parsedBody.data),
@@ -321,7 +321,7 @@ const closeBet = async (req, res) => {
         const closedBet = await BetService.closeBet(betId)
         if (!closedBet) return res.status(404).json({ code: "BET_NOT_FOUND" })
 
-        createAdminAudit(req, {
+        await createAdminAudit(req, {
             type: "BET_CLOSED_BY_ADMIN",
             betId,
         })
@@ -437,7 +437,7 @@ const placeBet = async (req, res) => {
         }
 
         const deviceInfo = Audit.getUserAgentRaw(req)
-        Audit.createAudit({
+        await Audit.createAudit({
             user_id: userId,
             action: "BET_PLACED",
             details: {
