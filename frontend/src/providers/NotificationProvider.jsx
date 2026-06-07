@@ -3,6 +3,9 @@ import { useLocation } from "react-router-dom"
 import { useEffect } from "react"
 
 const NotificationContext = createContext()
+let notificationId = 0
+
+const createNotificationId = () => `${Date.now()}-${notificationId++}`
 
 const NotificationProvider = ({ children }) => {
   const [notifications, setNotifications] = useState({
@@ -29,7 +32,7 @@ const NotificationProvider = ({ children }) => {
   }, [])
 
   const addNotification = useCallback((message, type = "info", options = {}) => {
-    const id = crypto.randomUUID()
+    const id = createNotificationId()
     const duration = options.duration || 5000
     const scope = options.scope || "global"
 
