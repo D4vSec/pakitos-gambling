@@ -46,7 +46,7 @@ const register = async (req, res) => {
 		const userId = await User.createUser({ username, email, password })
 
 		const deviceInfo = Audit.getUserAgentRaw(req)
-		Audit.createAudit({
+		await Audit.createAudit({
 			user_id: userId,
 			action: "USER_REGISTER",
 			details: { username, email, date: new Date().toISOString() },
@@ -90,7 +90,7 @@ const login = async (req, res) => {
 		await Session.createSession(user.id, tokens.refreshToken, deviceInfo ? JSON.stringify(deviceInfo.raw) : null)
 
 		if (user.role === "admin") {
-			Audit.createAudit({
+			await Audit.createAudit({
 				user_id: user.id,
 				action: "ADMIN_ACTION",
 				details: { type: "ADMIN_LOGIN", date: new Date().toISOString(), username: user.username },

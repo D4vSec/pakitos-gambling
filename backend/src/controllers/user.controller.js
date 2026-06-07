@@ -228,7 +228,7 @@ const createUserByAdmin = async (req, res) => {
     const createdUser = await User.findUserById(userId)
     const deviceInfo = Audit.getUserAgentRaw(req)
 
-    Audit.createAudit({
+    await Audit.createAudit({
       user_id: req.user.id,
       action: "ADMIN_ACTION",
       details: {
@@ -377,7 +377,7 @@ const updateUserById = async (req, res) => {
     if (!updated) return res.status(404).json({ code: "USER_NOT_FOUND" })
 
     const deviceInfo = Audit.getUserAgentRaw(req)
-    Audit.createAudit({
+    await Audit.createAudit({
       user_id: req.user.id,
       action: "ADMIN_ACTION",
       details: {
@@ -411,7 +411,7 @@ const deleteUserById = async (req, res) => {
     if (!deleted) return res.status(404).json({ code: "USER_NOT_FOUND" })
 
     const deviceInfo = Audit.getUserAgentRaw(req)
-    Audit.createAudit({
+    await Audit.createAudit({
       user_id: req.user.id,
       action: "ADMIN_ACTION",
       details: {
@@ -553,7 +553,7 @@ const createTransaction = async (req, res) => {
     }
 
     const deviceInfo = Audit.getUserAgentRaw(req)
-    Audit.createAudit({
+    await Audit.createAudit({
       user_id: userId,
       action: "BALANCE_UPDATED",
       details: {

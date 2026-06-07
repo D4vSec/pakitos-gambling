@@ -39,7 +39,7 @@ const spinRoulette = async (req, res) => {
         const color = roulette.getColor(winningNumber)
 
         const deviceInfo = Audit.getUserAgentRaw(req)
-        Audit.createAudit({
+        await Audit.createAudit({
             user_id: id,
             action: "GAME_RESULT",
             details: {
