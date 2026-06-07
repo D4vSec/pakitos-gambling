@@ -198,7 +198,6 @@ export const hit = async (req, res) => {
                         game.dealer[DEALER_HAND].hand = blackJack.dealerPlay(
                             game.deck,
                             game.dealer[DEALER_HAND].hand,
-                            game.player[SECOND_HAND].hand,
                         )
                         game.dealer[DEALER_HAND] = blackJack.setHand(game.dealer[DEALER_HAND])
                     }
@@ -257,7 +256,6 @@ export const hit = async (req, res) => {
                 game.dealer[DEALER_HAND].hand = blackJack.dealerPlay(
                     game.deck,
                     game.dealer[DEALER_HAND].hand,
-                    game.player[FIRST_HAND].hand,
                 )
                 game.dealer[DEALER_HAND] = blackJack.setHand(game.dealer[DEALER_HAND])
 
@@ -329,8 +327,7 @@ export const stand = async (req, res) => {
             
                 game.dealer[DEALER_HAND].hand = blackJack.dealerPlay(
                     game.deck,
-                    game.dealer[DEALER_HAND].hand,
-                    game.player[SECOND_HAND].hand,
+                    game.dealer[DEALER_HAND].hand
                 )
                 game.dealer[DEALER_HAND] = blackJack.setHand(game.dealer[DEALER_HAND])
 
@@ -366,8 +363,7 @@ export const stand = async (req, res) => {
 
             game.dealer[DEALER_HAND].hand = blackJack.dealerPlay(
                 game.deck,
-                game.dealer[DEALER_HAND].hand,
-                game.player[FIRST_HAND].hand,
+                game.dealer[DEALER_HAND].hand
             )
             game.dealer[DEALER_HAND] = blackJack.setHand(game.dealer[DEALER_HAND])
 
@@ -462,7 +458,6 @@ export const double = async (req, res) => {
                 game.dealer[DEALER_HAND].hand = blackJack.dealerPlay(
                     game.deck,
                     game.dealer[DEALER_HAND].hand,
-                    game.player[FIRST_HAND].hand,
                 )
                 game.dealer[DEALER_HAND] = blackJack.setHand(game.dealer[DEALER_HAND])
 
@@ -507,7 +502,6 @@ export const double = async (req, res) => {
                     game.dealer[DEALER_HAND].hand = blackJack.dealerPlay(
                         game.deck,
                         game.dealer[DEALER_HAND].hand,
-                        game.player[SECOND_HAND].hand,
                     )
                     game.dealer[DEALER_HAND] = blackJack.setHand(game.dealer[DEALER_HAND])
                     //TODO: NOSE
@@ -626,7 +620,7 @@ export const split = async (req, res) => {
         }
         //DEV: I am skipping the check for the split condition for now, but in a real game the player can only split if the first two cards have the same rank
         if (
-            /*game.player.hand.length === 2 && game.player.hand[0].value === game.player.hand[1].value*/ true
+            game.player[FIRST_HAND].hand.length === 2 && game.player[FIRST_HAND].hand[0].rank === game.player[FIRST_HAND].hand[1].rank
         ) {
             await User.updateUserBalance(id, -game.player[FIRST_HAND].bet, { type: "BET" })
             game.split = true
@@ -668,8 +662,7 @@ export const split = async (req, res) => {
 
                 game.dealer[DEALER_HAND].hand = blackJack.dealerPlay(
                     game.deck,
-                    game.dealer[DEALER_HAND].hand,
-                    game.player[SECOND_HAND].hand,
+                    game.dealer[DEALER_HAND].hand
                 )
                 game.dealer[DEALER_HAND] = blackJack.setHand(game.dealer[DEALER_HAND])
 

@@ -70,14 +70,14 @@ const createBlackJack = () => {
     }
     //DEV: The split function is currently allowing to split any hand, but in a real game the player can only split if the first two cards have the same rank, this will be implemented in the future
     const split = (hand) => {
-        if (/*hand[0].rank === hand[1].rank*/ true) {
+        if (hand[0].rank === hand[1].rank) {
             return [[{ ...hand[0] }], [{ ...hand[1] }]]
         }
         return null
     }
 
     //Dealer logic
-    const dealerPlay = (deck, dealerHand, playerHand) => { //TODO: Change this method it doesn't need the playerHand parameter, the dealer will play the same regardless of the player's hand
+    const dealerPlay = (deck, dealerHand) => {
         while (calculateHandValue(dealerHand) < 17) {
             dealerHand = [...dealerHand, deck[0]]
             deck.shift()
@@ -85,13 +85,6 @@ const createBlackJack = () => {
         return dealerHand
     }
 
-    const dealerPlaySplit = (deck, dealerHand, playerHand1, playerHand2) => { //TODO: Remove this method, the dealer will play the same regardless of the player's hand, this method is not necessary   
-        while (calculateHandValue(dealerHand) < 17) {
-            dealerHand = [...dealerHand, deck[0]]
-            deck.shift()
-        }
-        return dealerHand
-    }
     //The function determinate the winner based on the hand values of the player and the dealer
     const determinateWinner = (playerHandValue, dealerHandValue) => {
         if (playerHandValue > 21) return "dealer"
