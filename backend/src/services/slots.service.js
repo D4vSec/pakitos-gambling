@@ -1,5 +1,5 @@
 import { randomInt } from "#utils/rng.utils"
-import { SYMBOLS, MACHINE_TYPES, generatePaylines } from "#config/slots.config"
+import { SYMBOLS, MACHINE_TYPES, PATTERN_BOOST, generatePaylines } from "#config/slots.config"
 
 const createSlots = (machineType = "3x5") => {
 	if (!MACHINE_TYPES[machineType]) {
@@ -10,6 +10,9 @@ const createSlots = (machineType = "3x5") => {
 
 	const { rows: ROWS, cols: COLS, minConsecutive: MIN_CONSECUTIVE } = MACHINE_TYPES[machineType]
 	const PAYLINES = generatePaylines(ROWS, COLS)
+	const MAX_FORCED_LINES = PATTERN_BOOST.maxForcedLinesByType[machineType] ?? 0
+	const COMPLETION_CHANCE_BY_MISSING =
+		PATTERN_BOOST.completionChanceByMissingByType[machineType] ?? {}
 
 	const symbolPool = SYMBOLS.flatMap((symbol) =>
 		Array(Math.round(symbol.weight)).fill(symbol.name),
@@ -38,7 +41,7 @@ const createSlots = (machineType = "3x5") => {
 
 	const getLineSymbols = (grid, payline) => payline.positions.map(([row, col]) => grid[row][col])
 
-	const evaluateLine = (grid, payline) => {
+	const getLeadingMatch = (grid, payline) => {
 		const symbols = getLineSymbols(grid, payline)
 		const first = symbols[0]
 		let consecutive = 1
@@ -47,6 +50,17 @@ const createSlots = (machineType = "3x5") => {
 			if (symbols[i] === first) consecutive++
 			else break
 		}
+
+		return {
+			symbols,
+			first,
+			consecutive,
+			missing: Math.max(0, MIN_CONSECUTIVE - consecutive),
+		}
+	}
+
+	const evaluateLine = (grid, payline) => {
+		const { first, consecutive } = getLeadingMatch(grid, payline)
 
 		if (consecutive < MIN_CONSECUTIVE) return null
 
@@ -88,8 +102,58 @@ const createSlots = (machineType = "3x5") => {
 		return Math.max(1, Math.floor(Math.min(afterEdge, maxPayout)))
 	}
 
+	const maybeBoostWinningPatterns = (grid) => {
+		if (MAX_FORCED_LINES <= 0) return grid
+
+		const boostedGrid = grid.map((row) => [...row])
+		let forcedLines = 0
+
+		while (forcedLines < MAX_FORCED_LINES) {
+			const candidates = PAYLINES
+				.map((payline) => {
+					const { first, consecutive, missing } = getLeadingMatch(boostedGrid, payline)
+
+					return {
+						payline,
+						symbol: first,
+						consecutive,
+						missing,
+						chance: COMPLETION_CHANCE_BY_MISSING[missing] ?? 0,
+					}
+				})
+				.filter(
+					(candidate) =>
+						candidate.consecutive < MIN_CONSECUTIVE &&
+						candidate.missing > 0 &&
+						candidate.chance > 0,
+				)
+				.sort((a, b) => a.missing - b.missing || b.consecutive - a.consecutive)
+
+			if (candidates.length === 0) break
+
+			let boostedAnyLine = false
+
+			for (const candidate of candidates) {
+				if (randomInt(0, 100) >= candidate.chance) continue
+
+				for (let i = candidate.consecutive; i < candidate.payline.positions.length; i++) {
+					const [row, col] = candidate.payline.positions[i]
+					boostedGrid[row][col] = candidate.symbol
+				}
+
+				forcedLines++
+				boostedAnyLine = true
+				break
+			}
+
+			if (!boostedAnyLine) break
+		}
+
+		return boostedGrid
+	}
+
 	const spin = (bet) => {
-		const grid = spinGrid()
+		const grid = maybeBoostWinningPatterns(spinGrid())
 		const winningLines = evaluateGrid(grid)
 		const payout = calculatePayout(winningLines, bet)
 		const isWinner = winningLines.length > 0
@@ -114,8 +178,10 @@ const createSlots = (machineType = "3x5") => {
 		spinReel,
 		spinGrid,
 		getLineSymbols,
+		getLeadingMatch,
 		evaluateLine,
 		evaluateGrid,
+		maybeBoostWinningPatterns,
 		calculatePayout,
 		spin,
 	}

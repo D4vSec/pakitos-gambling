@@ -156,8 +156,8 @@ export const startGame = async (req, res) => {
             Object.fromEntries(Object.entries(responseGame).filter(([key]) => key !== "deck")),
         )
     } catch (error) {
-        console.log(error)
-        logger.error("Error starting game: ", error)
+        console.error(error)
+        //logger.error("Error starting game: ", error)
         res.status(500).json({ code: "INTERNAL_SERVER_ERROR" })
     }
 }

@@ -40,11 +40,6 @@ const createSlot = async (req, res) => {
 			return res.status(400).json({ code: "INSUFFICIENT_FUNDS" })
 		}
 
-		const newBalance = await User.updateUserBalance(userId, -amount, { type: "BET" })
-		if (newBalance === null) {
-			return res.status(400).json({ code: "INSUFFICIENT_FUNDS" })
-		}
-
 		const game = createSlots(type)
 		const gameId = randomUUID()
 
@@ -66,7 +61,7 @@ const createSlot = async (req, res) => {
 			cols: game.COLS,
 			bet: amount,
 			paylines: game.PAYLINES,
-			balance: newBalance,
+			balance: balance,
 		})
 	} catch (error) {
 		logger.error(error)
