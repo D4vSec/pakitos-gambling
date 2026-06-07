@@ -173,7 +173,7 @@ const BetDetailsPage = () => {
     <Loading clear />
   ) : !bet ? (
     <GradientBg>
-      <div className="flex w-full max-w-5xl min-w-0 flex-col gap-6 overflow-x-hidden">
+      <div className="mx-auto flex w-full max-w-5xl min-w-0 flex-col gap-6 overflow-x-hidden">
         <GoBackBtn link="/bets" />
         <section className="rounded-2xl border border-dashed border-base-300 bg-base-100 p-8 text-center shadow-xl">
           <Subtitle>{t("pages.bets.detail.noMarket")}</Subtitle>
@@ -182,7 +182,7 @@ const BetDetailsPage = () => {
     </GradientBg>
   ) : (
     <GradientBg>
-      <div className="flex w-full max-w-7xl min-w-0 flex-col gap-6 overflow-x-hidden">
+      <div className="mx-auto flex w-full max-w-7xl min-w-0 flex-col gap-6 overflow-x-hidden">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <GoBackBtn link="/bets" />
           <Button

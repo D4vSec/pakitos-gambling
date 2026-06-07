@@ -2,6 +2,7 @@ import React from "react"
 import { IconCopy } from "@tabler/icons-react"
 import { useNotification } from "@/providers/NotificationProvider"
 import { useLocale } from "@/providers/LocaleProvider"
+import { copyTextToClipboard } from "@/utils/clipboardUtils"
 
 const TruncateId = ({ id }) => {
   const { t } = useLocale()
@@ -18,7 +19,7 @@ const TruncateId = ({ id }) => {
     event.stopPropagation()
 
     try {
-      await navigator.clipboard.writeText(id)
+      await copyTextToClipboard(id)
       addNotification(t("message.info.uuidCopiedToClipboard"), "info")
     } catch {
       addNotification(t("message.error.UNEXPECTED_ERROR"), "error")
