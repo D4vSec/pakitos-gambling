@@ -140,7 +140,6 @@ const createBlackJack = () => {
         double,
         split,
         dealerPlay,
-        dealerPlaySplit,
         determinateWinner,
         hideDealerCard,
         setHand,
