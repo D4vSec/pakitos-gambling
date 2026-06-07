@@ -201,6 +201,22 @@ describe('slots.controller', () => {
 		expect(User.updateUserBalance).toHaveBeenNthCalledWith(1, 'user-1', -10, { type: 'BET' })
 		expect(User.updateUserBalance).toHaveBeenNthCalledWith(2, 'user-1', 60, { type: 'WIN' })
 		expect(game.spin).toHaveBeenCalledWith(10)
+		expect(fakeCache.set).toHaveBeenCalledWith(
+			'slots-game-id',
+			expect.objectContaining({
+				userId: 'user-1',
+				totalPayout: 50,
+				spins: [
+					expect.objectContaining({
+						spinNumber: 1,
+						grid: [['seven', 'seven', 'seven']],
+						payout: 50,
+						isWinner: true,
+					}),
+				],
+			}),
+			expect.any(Number),
+		)
 		expect(sessions.get('slots-game-id')).toEqual(
 			expect.objectContaining({
 				totalPayout: 50,
@@ -260,6 +276,15 @@ describe('slots.controller', () => {
 			res,
 		)
 
+		expect(fakeCache.set).toHaveBeenCalledWith(
+			'slots-game-id',
+			expect.objectContaining({
+				userId: 'user-1',
+				machineType: '3x3',
+				bet: 5,
+			}),
+			expect.any(Number),
+		)
 		expect(res.json).toHaveBeenCalledWith({
 			gameId: 'slots-game-id',
 			game: 'slots',

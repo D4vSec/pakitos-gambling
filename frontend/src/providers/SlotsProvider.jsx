@@ -18,6 +18,8 @@ const resolveApiErrorCode = (responseOrError, fallback = "SERVER_ERROR") => {
   return fallback
 }
 
+const isClosedSlotSessionCode = (code) => code === "GAME_NOT_FOUND"
+
 const SlotsProvider = ({ type: defaultType = "3x3", slotKey = "default", children }) => {
   const { post, destroy, loading: apiLoading } = useAPI()
   const { getAccessToken, getRefreshToken, setUser } = useSession()
@@ -101,11 +103,24 @@ const SlotsProvider = ({ type: defaultType = "3x3", slotKey = "default", childre
         const res = await destroy(`/api/v1/slots/${gameId}`, {
           headers: authHeaders(),
         })
-        if (!res || res.code) throw new Error(resolveApiErrorCode(res))
+        const errorCode = resolveApiErrorCode(res)
+        if (!res || res.code) {
+          if (isClosedSlotSessionCode(errorCode)) {
+            clearLocalSession()
+            return { gameId, code: "SUCCESS" }
+          }
+
+          throw new Error(errorCode)
+        }
 
         clearLocalSession()
         return res
       } catch (err) {
+        if (isClosedSlotSessionCode(err.message)) {
+          clearLocalSession()
+          return { gameId, code: "SUCCESS" }
+        }
+
         setError(err.message)
         addNotification(getErrorMessage(err), "error")
         throw err

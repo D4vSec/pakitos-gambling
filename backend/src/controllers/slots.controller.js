@@ -9,6 +9,9 @@ import { randomUUID } from "#utils/rng.utils"
 const activeGames = createCache()
 const SLOT_SESSION_TTL_MS = GAME_SESSION_TTL_MS.slots
 
+const persistSlotSession = (gameId, session) =>
+	activeGames.set(gameId, session, SLOT_SESSION_TTL_MS)
+
 /**
  * POST /slots/create
  * Body: { type: "3x3" | "3x5" | "5x5", amount: number }
@@ -45,7 +48,7 @@ const createSlot = async (req, res) => {
 		const game = createSlots(type)
 		const gameId = randomUUID()
 
-		activeGames.set(gameId, {
+		persistSlotSession(gameId, {
 			userId,
 			game,
 			machineType: type,
@@ -53,7 +56,7 @@ const createSlot = async (req, res) => {
 			createdAt: new Date().toISOString(),
 			spins: [],
 			totalPayout: 0,
-		}, SLOT_SESSION_TTL_MS)
+		})
 
 		return res.json({
 			gameId,
@@ -119,6 +122,7 @@ const spinSlot = async (req, res) => {
 			timestamp: new Date().toISOString(),
 		})
 		session.totalPayout += result.payout
+		persistSlotSession(gameId, session)
 
 		return res.json({
 			gameId,
@@ -156,6 +160,8 @@ const getSlotSession = async (req, res) => {
 		if (session.userId !== userId) {
 			return res.status(403).json({ code: "NO_PERMISSION" })
 		}
+
+		persistSlotSession(gameId, session)
 
 		return res.json({
 			gameId,
