@@ -174,7 +174,7 @@ export const hit = async (req, res) => {
         if (!isUserGameValid(game, id)) {
             return res.status(403).json({ code: "FORBIDDEN" })
         }
-        //TODO: HIT WITH SPLIT IS NOT WORKING
+        
         if (game.split) {
             if (game.player[FIRST_HAND].resolved) {
                 game.player[SECOND_HAND].hand = blackJack.hit(
@@ -182,7 +182,7 @@ export const hit = async (req, res) => {
                     game.player[SECOND_HAND].hand,
                 )
 
-                game.player[SECOND_HAND] = blackJack.setHand(game.player[SECOND_HAND]) //TODO: Maybe I can abstract this logic since it is repeated a lot of times in the code
+                game.player[SECOND_HAND] = blackJack.setHand(game.player[SECOND_HAND]) 
 
                 if (game.player[SECOND_HAND].bust) {
                     game.status = GAME_STATUSES.finished
@@ -504,7 +504,6 @@ export const double = async (req, res) => {
                         game.dealer[DEALER_HAND].hand,
                     )
                     game.dealer[DEALER_HAND] = blackJack.setHand(game.dealer[DEALER_HAND])
-                    //TODO: NOSE
                     const winner = blackJack.determinateWinner(
                         game.player[FIRST_HAND].value,
                         game.dealer[DEALER_HAND].value,
@@ -618,9 +617,11 @@ export const split = async (req, res) => {
         if (game.player[FIRST_HAND].hand.length !== 2) {
             return res.status(400).json({ code: "CANNOT_SPLIT" })
         }
-        //DEV: I am skipping the check for the split condition for now, but in a real game the player can only split if the first two cards have the same rank
+
+        const firstHandValue = blackJack.calculateHandValue([game.player[FIRST_HAND].hand[0]])
+        const secondHandValue = blackJack.calculateHandValue([game.player[FIRST_HAND].hand[1]])
         if (
-            game.player[FIRST_HAND].hand.length === 2 && game.player[FIRST_HAND].hand[0].rank === game.player[FIRST_HAND].hand[1].rank
+            game.player[FIRST_HAND].hand.length === 2 && firstHandValue === secondHandValue
         ) {
             await User.updateUserBalance(id, -game.player[FIRST_HAND].bet, { type: "BET" })
             game.split = true

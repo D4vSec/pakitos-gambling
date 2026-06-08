@@ -68,9 +68,12 @@ const createBlackJack = () => {
         deck.shift()
         return playerHand
     }
-    //DEV: The split function is currently allowing to split any hand, but in a real game the player can only split if the first two cards have the same rank, this will be implemented in the future
+    
     const split = (hand) => {
-        if (hand[0].rank === hand[1].rank) {
+        const value1 = calculateHandValue([hand[0]])
+        const value2 = calculateHandValue([hand[1]])
+
+        if (value1 === value2) {
             return [[{ ...hand[0] }], [{ ...hand[1] }]]
         }
         return null
