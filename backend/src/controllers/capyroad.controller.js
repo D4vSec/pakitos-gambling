@@ -22,7 +22,6 @@ const isUserGameValid = (game, userId) => {
     return true
 }
 
-//TODO: Test the game
 const startGame = async (req, res) => {
     try {
         const id = req.user.id
