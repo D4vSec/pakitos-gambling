@@ -293,6 +293,10 @@ const SessionProvider = ({ children }) => {
       return "forms.fields.password.minLength"
     }
 
+    if (field === "currentPassword" && issue?.code === "too_small") {
+      return "forms.fields.password.currentRequired"
+    }
+
     return null
   }
 

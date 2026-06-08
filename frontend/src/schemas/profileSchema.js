@@ -40,7 +40,9 @@ export const profileInfoSchema = profileBaseSchema.pick({
 
 export const profilePasswordSchema = z
   .object({
-    currentPassword: z.string().optional().or(z.literal("")),
+    currentPassword: z
+      .string()
+      .min(1, { error: "forms.fields.password.currentRequired" }),
     newPassword: passwordSchema,
     confirmPassword: z
       .string()

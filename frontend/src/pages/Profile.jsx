@@ -90,7 +90,11 @@ const Profile = () => {
   const handlePasswordSubmit = async (data) => {
     setPasswordLoading(true)
     try {
-      const updated = await updateProfile({ password: data.newPassword })
+      const { currentPassword, newPassword } = data
+      const updated = await updateProfile({
+        password: newPassword,
+        currentPassword,
+      })
       if (!updated) return
       passwordMethods.reset()
       logout()

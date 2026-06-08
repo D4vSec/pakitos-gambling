@@ -231,6 +231,13 @@ const findUserById = async (id) => {
 	return result.rows[0] || null
 }
 
+const findUserPasswordById = async (id) => {
+	if (!isValidUuid(String(id))) return null
+
+	const result = await db.query("SELECT password FROM users WHERE id = $1", [id])
+	return result.rows[0]?.password || null
+}
+
 const findAllUsers = async () => {
 	const result = await db.query("SELECT id, username, email, role, balance FROM users")
 	return result.rows
@@ -368,6 +375,7 @@ export default {
 	createUser,
 	findUserByEmail,
 	findUserById,
+	findUserPasswordById,
 	findAllUsers,
 	verifyPassword,
 	deleteUser,

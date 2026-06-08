@@ -305,6 +305,8 @@ const deleteSelf = async (req, res) => {
 
 const updateSelf = async (req, res) => {
   try {
+    if (!req.body) return res.status(400).json({ code: "AUTH_NO_DATA_PROVIDED" })
+
     const userId = req.user.id
 
     const schema = z
@@ -312,13 +314,51 @@ const updateSelf = async (req, res) => {
         username: z.string().min(3).max(50).optional(),
         email: z.string().email().optional(),
         password: z.string().min(8).optional(),
+        currentPassword: z.string().optional(),
       })
       .strict()
 
     const data = schema.parse(req.body)
-    const updated = await User.updateUser(userId, data)
+    const { currentPassword, password, ...updateData } = data
+
+    if (password !== undefined) {
+      if (!currentPassword || currentPassword.trim() === "") {
+        return res.status(400).json({
+          code: "AUTH_CURRENT_PASSWORD_REQUIRED",
+        })
+      }
+
+      const storedPassword = await User.findUserPasswordById(userId)
+      if (!storedPassword) return res.status(404).json({ code: "USER_NOT_FOUND" })
+
+      const isCurrentPasswordValid = await User.verifyPassword(
+        storedPassword,
+        currentPassword,
+      )
+
+      if (!isCurrentPasswordValid) {
+        return res.status(401).json({
+          code: "AUTH_INVALID_CURRENT_PASSWORD",
+        })
+      }
+    }
+
+    if (Object.keys(updateData).length === 0 && password === undefined) {
+      return res.status(400).json({
+        code: "AUTH_MISSING_FIELDS",
+      })
+    }
+
+    const updated = await User.updateUser(userId, {
+      ...updateData,
+      ...(password !== undefined ? { password } : {}),
+    })
 
     if (!updated) return res.status(404).json({ code: "USER_NOT_FOUND" })
+
+    if (password !== undefined) {
+      await Session.revokeSessionsByUserId(userId)
+    }
 
     res.status(200).json({ code: "SUCCESS" })
   } catch (err) {
@@ -375,6 +415,10 @@ const updateUserById = async (req, res) => {
     const updated = await User.updateUser(id, data)
 
     if (!updated) return res.status(404).json({ code: "USER_NOT_FOUND" })
+
+    if (data.password !== undefined) {
+      await Session.revokeSessionsByUserId(id)
+    }
 
     const deviceInfo = Audit.getUserAgentRaw(req)
     await Audit.createAudit({

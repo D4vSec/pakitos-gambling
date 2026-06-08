@@ -76,6 +76,10 @@ const revokeSessionByUserId = async (userId, sessionId) => {
 	return rowCount > 0
 }
 
+const revokeSessionsByUserId = async (userId) => {
+	await db.query("UPDATE sessions SET revoked = true WHERE user_id = $1 AND revoked = false", [userId])
+}
+
 const verifyTokenMatch = async (sessions, refreshToken) => {
 	for (const session of sessions) {
 		const isMatch = await comparePassword(session.refresh_token_hash, refreshToken)
@@ -84,4 +88,12 @@ const verifyTokenMatch = async (sessions, refreshToken) => {
 	return null
 }
 
-export default { createSession, getActiveSessionsByUserId, getSessionsByUserId, revokeSession, revokeSessionByUserId, verifyTokenMatch }
+export default {
+	createSession,
+	getActiveSessionsByUserId,
+	getSessionsByUserId,
+	revokeSession,
+	revokeSessionByUserId,
+	revokeSessionsByUserId,
+	verifyTokenMatch,
+}
